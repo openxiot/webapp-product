@@ -1,0 +1,168 @@
+@if (service) {
+  <nz-card nzSize="small" class="menu" [nzBodyStyle]="{ padding: 0}" nzBorderless>
+<!--    <div class="group-bar">-->
+<!--      <nz-space class="group-title">-->
+<!--        <span *nzSpaceItem><span nz-icon nzType="database" nzTheme="outline"></span></span>-->
+<!--        <span *nzSpaceItem>{{ service.description.get(language) }}</span>-->
+<!--      </nz-space>-->
+
+<!--      <span style="float: right">-->
+<!--        <button nz-button nzType="primary" nzSize="small">详情</button>-->
+<!--      </span>-->
+<!--    </div>-->
+
+    <ul nz-menu nzMode="inline" nzTheme="light">
+      <li nz-menu-item (click)="onClickTitle(service)" class="title-bar">
+        <nz-space>
+          <span *nzSpaceItem><span nz-icon nzType="database" nzTheme="outline"></span></span>
+<!--          <span *nzSpaceItem>{{ service.description.get(language) }}</span>-->
+          <span *nzSpaceItem class="menu-title">{{ service.description.get(language) }}</span>
+        </nz-space>
+<!--        <nz-tag [nzColor]="'blue'">{{ service.iid }}</nz-tag>-->
+<!--        <span class="menu-title">{{ service.description.get(language) }}</span>-->
+<!--        @if (version) {-->
+<!--          <span style="float: right"><nz-tag nzColor="blue">版本 {{ service.type.version }}</nz-tag></span>-->
+<!--        }-->
+      </li>
+
+      <li nz-menu-group [nzTitle]="properties">
+        <ul>
+          @for (p of service.getProperties(); track p.iid) {
+            <li nz-menu-item (click)="onClickProperty(p)">
+              <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
+              <span class="menu-item">{{ p.description.get(language) }}</span>
+              @if (version) {
+                <span style="float: right"><nz-tag nzColor="blue">版本 {{ p.type.version }}</nz-tag></span>
+              }
+            </li>
+          }
+        </ul>
+      </li>
+
+      <li nz-menu-divider style="margin-left: 16px; margin-right: 16px"></li>
+
+      <li nz-menu-group [nzTitle]="actions">
+        <ul>
+          @for (a of service.getActions(); track a.iid) {
+            <li nz-menu-item (click)="onClickAction(a)">
+              <nz-tag [nzColor]="'blue'">{{ a.iid }}</nz-tag>
+              <span class="menu-item">{{ a.description.get(language) }}</span>
+              @if (version) {
+                <span style="float: right"><nz-tag nzColor="blue">版本 {{ a.type.version }}</nz-tag></span>
+              }
+            </li>
+          }
+        </ul>
+      </li>
+
+      <li nz-menu-divider style="margin-left: 16px; margin-right: 16px"></li>
+
+      <li nz-menu-group [nzTitle]="events">
+        <ul>
+          @for (e of service.getEvents(); track e.iid) {
+            <li nz-menu-item (click)="onClickEvent(e)">
+              <nz-tag [nzColor]="'blue'">{{ e.iid }}</nz-tag>
+              <span class="menu-item">{{ e.description.get(language) }}</span>
+              @if (version) {
+                <span style="float: right"><nz-tag nzColor="blue">版本 {{ e.type.version }}</nz-tag></span>
+              }
+            </li>
+          }
+        </ul>
+      </li>
+
+      <ng-template #properties>
+        <div>
+          <nz-space style="font-size: 14px; font-weight: bold;">
+            <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>
+            <span *nzSpaceItem>属性({{ service.properties.size }}个)</span>
+          </nz-space>
+
+          <span style="float: right">
+            <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuAddProperty">添加</button>
+          </span>
+
+          <nz-dropdown-menu #menuAddProperty="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item (click)="onAddProperty()">
+                <nz-space>
+                  <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>
+                  <span *nzSpaceItem>标准属性</span>
+                </nz-space>
+              </li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="onAddProperty()">
+                <nz-space>
+                  <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>
+                  <span *nzSpaceItem>自定义属性</span>
+                </nz-space>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </ng-template>
+
+      <ng-template #actions>
+        <div>
+          <nz-space style="font-size: 14px; font-weight: bold;">
+            <span *nzSpaceItem nz-icon nzType="thunderbolt" nzTheme="outline"></span>
+            <span *nzSpaceItem>方法({{ service.actions.size }}个)</span>
+          </nz-space>
+
+          <span style="float: right">
+            <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuAddAction">添加</button>
+          </span>
+
+          <nz-dropdown-menu #menuAddAction="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item (click)="onAddAction()">
+                <nz-space>
+                  <span *nzSpaceItem nz-icon nzType="thunderbolt" nzTheme="outline"></span>
+                  <span *nzSpaceItem>标准方法</span>
+                </nz-space>
+              </li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="onAddAction()">
+                <nz-space>
+                  <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>
+                  <span *nzSpaceItem>自定义方法</span>
+                </nz-space>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </ng-template>
+
+      <ng-template #events>
+        <div>
+          <nz-space style="font-size: 14px; font-weight: bold;">
+            <span *nzSpaceItem nz-icon nzType="fire" nzTheme="outline"></span>
+            <span *nzSpaceItem>事件({{ service.events.size }}个)</span>
+          </nz-space>
+
+          <span style="float: right">
+            <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuAddEvent">添加</button>
+          </span>
+
+          <nz-dropdown-menu #menuAddEvent="nzDropdownMenu">
+            <ul nz-menu nzSelectable>
+              <li nz-menu-item (click)="onAddEvent()">
+                <nz-space>
+                  <span *nzSpaceItem nz-icon nzType="fire" nzTheme="outline"></span>
+                  <span *nzSpaceItem>标准事件</span>
+                </nz-space>
+              </li>
+              <li nz-menu-divider></li>
+              <li nz-menu-item (click)="onAddEvent()">
+                <nz-space>
+                  <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>
+                  <span *nzSpaceItem>自定义事件</span>
+                </nz-space>
+              </li>
+            </ul>
+          </nz-dropdown-menu>
+        </div>
+      </ng-template>
+    </ul>
+  </nz-card>
+}

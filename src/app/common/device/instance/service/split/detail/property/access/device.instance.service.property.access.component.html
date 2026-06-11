@@ -1,0 +1,25 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <label nz-checkbox [(ngModel)]="_value.isReadable" (ngModelChange)="onReadableChanged($event)">读</label>
+  <label nz-checkbox [(ngModel)]="_value.isWritable" (ngModelChange)="onWritableChanged($event)">写</label>
+  <label nz-checkbox [(ngModel)]="_value.isNotifiable" (ngModelChange)="onNotifiableChanged($event)">通知</label>
+} @else {
+  <nz-space>
+    @if (_value.isReadable) {
+      <div *nzSpaceItem>
+        <nz-tag nzColor="green">读</nz-tag>
+      </div>
+    }
+
+    @if (_value.isWritable) {
+      <div *nzSpaceItem>
+        <nz-tag nzColor="red">写</nz-tag>
+      </div>
+    }
+
+    @if (_value.isNotifiable) {
+      <div *nzSpaceItem>
+        <nz-tag nzColor="blue">通知</nz-tag>
+      </div>
+    }
+  </nz-space>
+}

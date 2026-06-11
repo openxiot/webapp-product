@@ -1,0 +1,169 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-layout class="inner-layout">
+    <nz-sider nzWidth="200px" nzTheme="light" class="sider">
+      <ul nz-menu nzMode="inline" nzTheme="light">
+        <li nz-menu-item (click)="onClickProperty(data)">
+          <span class="property-title">{{ data.description.get('zh-CN') }}</span>
+        </li>
+
+        <li nz-menu-divider></li>
+
+        @for (s of properties; track s.type.name) {
+          <li nz-menu-item (click)="onClickProperty(s)">
+            <span class="property-title">{{ s.description.get('zh-CN') }}</span>
+          </li>
+        }
+      </ul>
+    </nz-sider>
+
+    <nz-content class="inner-content">
+      <div style="width: 100%">
+        <form nz-form [formGroup]="form">
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+            <nz-form-control>
+              <device-instance-id
+                formControlName="iid"
+                [lifecycle]="LifeCycle.PREVIEW"
+                (changed)="onIIDChanged()"
+              ></device-instance-id>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+            <nz-form-control>
+              <device-instance-namespace formControlName="ns"></device-instance-namespace>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+            <nz-form-control>
+              <device-instance-name
+                formControlName="code"
+                [lifecycle]="form.controls.ns.value === current.type.organization ? LifeCycle.DEVELOPMENT : LifeCycle.PREVIEW"
+                [updatable]="true"
+                (changed)="onCodeChanged()"
+              ></device-instance-name>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+            <nz-form-control>
+              <device-instance-description
+                formControlName="description"
+                [lifecycle]="LifeCycle.DEVELOPMENT"
+                (changed)="onDescriptionChanged()"
+              ></device-instance-description>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>访问方式</nz-form-label>
+            <nz-form-control>
+              <device-instance-service-property-access
+                formControlName="access"
+                [lifecycle]="LifeCycle.DEVELOPMENT"
+                (changed)="onAccessChanged()"
+              ></device-instance-service-property-access>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>数据格式</nz-form-label>
+            <nz-form-control>
+              <device-instance-service-property-format
+                formControlName="format"
+                [lifecycle]="LifeCycle.DEVELOPMENT"
+                (changed)="onFormatChanged()"
+              ></device-instance-service-property-format>
+            </nz-form-control>
+          </nz-form-item>
+
+          @if (constrainable) {
+            <nz-form-item nz-flex>
+              <nz-form-label [style.width.px]="120" nzRequired>取值约束</nz-form-label>
+              <nz-form-control>
+                <device-instance-service-property-constraint
+                  formControlName="constraint"
+                  [lifecycle]="LifeCycle.DEVELOPMENT"
+                  (changed)="onConstraintTypeChanged()"
+                ></device-instance-service-property-constraint>
+              </nz-form-control>
+            </nz-form-item>
+
+            @switch (form.controls.constraint.value) {
+              @case (ConstraintType.RANGE) {
+                <nz-form-item nz-flex>
+                  <nz-form-label [style.width.px]="120" nzRequired>取值范围</nz-form-label>
+                  <nz-form-control>
+                    <device-instance-service-property-range
+                      formControlName="range"
+                      [lifecycle]="LifeCycle.DEVELOPMENT"
+                      (changed)="onConstraintRangeChanged()"
+                    ></device-instance-service-property-range>
+                  </nz-form-control>
+                </nz-form-item>
+              }
+              @case (ConstraintType.LIST) {
+                <nz-form-item nz-flex>
+                  <nz-form-label [style.width.px]="120" nzRequired>取值列表</nz-form-label>
+                  <nz-form-control>
+                    <device-instance-service-property-list
+                      formControlName="list"
+                      [lifecycle]="LifeCycle.DEVELOPMENT"
+                      (changed)="onConstraintListChanged()"
+                    ></device-instance-service-property-list>
+                  </nz-form-control>
+                </nz-form-item>
+              }
+            }
+          }
+
+<!--          @if (combinationValue) {-->
+<!--            <nz-form-item nz-flex>-->
+<!--              <nz-form-label [style.width.px]="120" nzRequired>成员列表</nz-form-label>-->
+<!--              <nz-form-control>-->
+<!--                <device-instance-service-property-members-->
+<!--                  formControlName="members"-->
+<!--                  [lifecycle]="LifeCycle.DEVELOPMENT"-->
+<!--                  [service]="service"-->
+<!--                  [property]="property"-->
+<!--                  [language]="language"-->
+<!--                  (changed)="onMembersChanged()"-->
+<!--                ></device-instance-service-property-members>-->
+<!--              </nz-form-control>-->
+<!--            </nz-form-item>-->
+<!--          }-->
+
+          @if (current.formatNumber()) {
+            <nz-form-item nz-flex>
+              <nz-form-label [style.width.px]="120" nzRequired>单位</nz-form-label>
+              <nz-form-control>
+                <device-instance-service-property-unit
+                  formControlName="unit"
+                  (changed)="onUnitChanged()"
+                ></device-instance-service-property-unit>
+              </nz-form-control>
+            </nz-form-item>
+          }
+
+          @if (current.format !== DataFormat.COMBINATION) {
+            <nz-form-item nz-flex>
+              <nz-form-label [style.width.px]="120" nzRequired>缺省值</nz-form-label>
+              <nz-form-control>
+                <device-instance-service-property-default-value
+                  formControlName="defaultValue"
+                  [property]="current"
+                  (changed)="onDefaultValueChanged()"
+                ></device-instance-service-property-default-value>
+              </nz-form-control>
+            </nz-form-item>
+          }
+        </form>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-spin>

@@ -1,0 +1,11 @@
+@switch (lifecycle) {
+  @case (LifeCycle.DEVELOPMENT) {
+    <nz-cascader [nzOptions]="nzOptions" [(ngModel)]="value"></nz-cascader>
+  }
+  @case (LifeCycle.PREVIEW) {
+    {{ protocolCategory }} <nz-divider nzType="vertical"></nz-divider> {{ protocolName}};
+  }
+  @case (LifeCycle.RELEASED) {
+    {{ protocolCategory }} <nz-divider nzType="vertical"></nz-divider> {{ protocolName}};
+  }
+}

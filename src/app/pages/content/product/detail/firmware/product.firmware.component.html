@@ -1,0 +1,124 @@
+<nz-row [nzGutter]="[8, 8]">
+  <nz-col [nzSpan]="24">
+    <nz-spin [nzSpinning]="loadingFirmwares || loadingProductInstances">
+      <toolbar>
+        @if (firmwares.length > 0) {
+          <nz-select [(ngModel)]="currentFirmware" style="width: 140px" (ngModelChange)="onCurrentFirmwareChanged($event)">
+            @for (firmware of firmwares; track firmware.name) {
+              <nz-option [nzValue]="firmware.name" [nzLabel]="firmware.description"></nz-option>
+            }
+          </nz-select>
+
+          <a (click)="onEdit()">编辑</a>
+        }
+
+        @if (firmwares.length > 0) {
+          <a (click)="onCreate()">创建</a>
+
+          <div style="margin-left: auto;">
+            <button nz-button nzType="primary" (click)="onUpload()">上传固件</button>
+          </div>
+        } @else {
+          <div style="margin-left: auto;">
+            <button nz-button nzType="primary" nzDanger (click)="onCreate()">创建固件</button>
+          </div>
+        }
+      </toolbar>
+    </nz-spin>
+  </nz-col>
+
+  @if (firmwares.length > 0) {
+    <nz-col [nzSpan]="24">
+      <nz-table
+        nzShowSizeChanger
+        nzSize="small"
+        nzBordered
+        [nzData]="firmwareInstances"
+        [nzLoading]="loadingFirmwareInstances"
+        [nzFrontPagination]="false"
+      >
+        <thead>
+        <tr>
+          <th>
+            版本名称
+          </th>
+          <th>
+            版本编码
+          </th>
+          <th>
+            备注
+          </th>
+          <th>
+            固件大小
+          </th>
+          <th>
+            固件地址
+          </th>
+          <th>
+            固件MD5值
+          </th>
+          <th>
+            最小可升级版本
+          </th>
+          <th>
+            固件状态
+          </th>
+          <th>
+            提交人
+          </th>
+          <th>
+            时间
+          </th>
+          <th>
+            操作
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (item of firmwareInstances; track item.version.code) {
+            <tr>
+              <td>{{ item.version.name }}</td>
+              <td>{{ item.version.code }}</td>
+              <td>{{ item.simple?.memo }}</td>
+              <td>{{ item.simple?.size }}</td>
+              <td><a [href]="item.simple?.url" target="_blank">下载</a></td>
+              <td>{{ item.simple?.md5 }}</td>
+              <td>{{ item.minUpgradeVersionCode }}</td>
+              <td>
+                @switch (item.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <nz-tag nzColor="red">开发中</nz-tag>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <nz-tag nzColor="blue">上线中</nz-tag>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    <nz-tag nzColor="green">已上线</nz-tag>
+                  }
+                }
+              </td>
+              <td>{{ item.creator?.name }}</td>
+              <td>{{ item.creator?.timestamp }}</td>
+              <td>
+                @switch (item.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <a (click)="onView(item)">查看</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a (click)="onPreview(item)">上线</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a (click)="onDelete(item)">删除</a>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <a (click)="onView(item)">查看</a>
+                    <nz-divider nzType="vertical"></nz-divider>
+                    <a (click)="cancelPreview(item)">取消上线</a>
+                  }
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </nz-table>
+    </nz-col>
+  }
+</nz-row>

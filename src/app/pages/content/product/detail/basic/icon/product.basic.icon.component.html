@@ -1,0 +1,44 @@
+@switch (lifecycle) {
+  @case (LifeCycle.DEVELOPMENT) {
+    <nz-row [nzGutter]="[8, 8]">
+      <nz-col [nzSpan]="24">
+        <div style="color: darkgray; font-size: 12px;">
+          请上传jpeg图片，512*512像素，大小不超过512KB。
+        </div>
+      </nz-col>
+      <nz-col [nzSpan]="24">
+        <nz-upload
+          class="icon-uploader"
+          nzType="drag"
+          nzListType="picture-card"
+          [nzCustomRequest]="customUpload"
+          [nzBeforeUpload]="beforeUpload"
+          [nzFileType]="supportFileType"
+          [nzMultiple]="false"
+          (nzChange)="handleChange($event)"
+          [nzShowUploadList]="false"
+          [nzDisabled]="loading"
+        >
+          @if (!value) {
+            <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'upload'"></span>
+            <div class="ant-upload-text">上传</div>
+          } @else {
+            <div class="preview-wrapper">
+              <img [src]="value" class="preview-img" alt="上传的图标"/>
+              <button
+                class="delete-btn"
+                nz-icon nzType="delete"
+                (click)="handleDelete($event)"
+              ></button>
+            </div>
+          }
+        </nz-upload>
+      </nz-col>
+    </nz-row>
+  }
+  @default {
+    <div class="preview">
+      <img [src]="value" style="width: 100%; height: 100%;"/>
+    </div>
+  }
+}

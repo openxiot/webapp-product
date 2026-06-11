@@ -1,0 +1,53 @@
+<nz-page-header nzTitle="产品规范" [nzGhost]="false">
+  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+
+<!--  <nz-page-header-content>-->
+<!--    <nz-descriptions nzSize="small">-->
+<!--      <nz-descriptions-item nzTitle="描述">-->
+<!--        <nz-radio-group [(ngModel)]="language" nzButtonStyle="solid" nzSize="small">-->
+<!--          <label nz-radio-button nzValue="zh-CN">简体中文</label>-->
+<!--          <label nz-radio-button nzValue="zh-TW">繁体中文</label>-->
+<!--          <label nz-radio-button nzValue="en-US">英文</label>-->
+<!--        </nz-radio-group>-->
+<!--      </nz-descriptions-item>-->
+<!--    </nz-descriptions>-->
+<!--  </nz-page-header-content>-->
+
+  <nz-page-header-footer>
+    <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
+      <nz-tab nzTitle="设备类型"></nz-tab>
+      <nz-tab nzTitle="功能"></nz-tab>
+      <nz-tab nzTitle="属性"></nz-tab>
+      <nz-tab nzTitle="方法"></nz-tab>
+      <nz-tab nzTitle="事件"></nz-tab>
+      <nz-tab nzTitle="格式"></nz-tab>
+      <nz-tab nzTitle="单位"></nz-tab>
+    </nz-tabset>
+  </nz-page-header-footer>
+</nz-page-header>
+
+<div style="padding: 20px 20px">
+  @switch (tabIndex) {
+    @case (0) {
+      <spec-device></spec-device>
+    }
+    @case (1) {
+      <spec-service></spec-service>
+    }
+    @case (2) {
+      <spec-property></spec-property>
+    }
+    @case (3) {
+      <spec-action></spec-action>
+    }
+    @case (4) {
+      <spec-event></spec-event>
+    }
+    @case (5) {
+      <spec-format></spec-format>
+    }
+    @case (6) {
+      <spec-unit></spec-unit>
+    }
+  }
+</div>

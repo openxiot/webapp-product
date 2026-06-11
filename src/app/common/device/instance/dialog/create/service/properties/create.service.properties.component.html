@@ -1,0 +1,15 @@
+@if (disabled) {
+  @for (p of properties; track p.iid) {
+    <nz-tag nzColor="blue">{{ p.description.get('zh-CN') }}</nz-tag>
+  }
+} @else {
+  @for (p of properties; track p.iid) {
+    <nz-tag
+      nzMode="checkable"
+      [nzChecked]="p.type._checked"
+      (nzCheckedChange)="onTagCheckedChange(p, $event)"
+    >
+      {{ p.description.get('zh-CN') }}
+    </nz-tag>
+  }
+}

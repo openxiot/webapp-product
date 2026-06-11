@@ -1,0 +1,26 @@
+<nz-card nzSize="small" class="group" [nzBodyStyle]="{ padding: 0}" nzBorderless>
+  <div class="group-bar">
+    <nz-space class="group-title">
+      <span *nzSpaceItem><span nz-icon nzType="appstore" nzTheme="outline"></span></span>
+      <span *nzSpaceItem>功能({{ services.length }})</span>
+    </nz-space>
+
+    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+      <span style="float: right">
+          <button nz-button nzType="primary" nzSize="small" (click)="onAddService()">添加</button>
+        </span>
+    }
+  </div>
+
+  <ul nz-menu nzMode="inline" nzTheme="light" class="service-group">
+    @for (s of services; track s.iid) {
+      <li nz-menu-item (click)="onClickService(s)">
+        <nz-tag [nzColor]="'blue'">{{ s.iid }}</nz-tag>
+        <span class="service-title">{{ s.description.get(language) }}</span>
+        @if (version) {
+          <span style="float: right"><nz-tag nzColor="blue">版本 {{ s.type.version }}</nz-tag></span>
+        }
+      </li>
+    }
+  </ul>
+</nz-card>

@@ -1,0 +1,19 @@
+<nz-tabset nzSize="small">
+  @if (service.properties.size > 0) {
+    <nz-tab nzTitle="属性({{service.properties.size}})">
+      <editor-properties [service]="service" [language]="language"></editor-properties>
+    </nz-tab>
+  }
+
+  @if (service.actions.size > 0) {
+    <nz-tab nzTitle="方法({{service.actions.size}})">
+      <editor-actions [service]="service" [language]="language"></editor-actions>
+    </nz-tab>
+  }
+
+  @if (service.events.size > 0) {
+    <nz-tab nzTitle="事件({{service.events.size}})">
+      <editor-events [service]="service" [language]="language"></editor-events>
+    </nz-tab>
+  }
+</nz-tabset>

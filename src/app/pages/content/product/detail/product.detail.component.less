@@ -1,0 +1,10 @@
+.fixed-header {
+  margin: 64px 0 0 200px; // 让出主界面header的高度，让出左侧菜单的宽度
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100; /* 确保在内容上方 */
+  background: white; /* 避免透明导致内容穿透 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06); /* 可选：添加阴影区分页头和内容 */
+}

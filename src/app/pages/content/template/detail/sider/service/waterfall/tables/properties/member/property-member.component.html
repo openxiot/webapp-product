@@ -1,0 +1,9 @@
+@if (property.formatCombination()) {
+  @for (memberId of property.members; track memberId) {
+    <div>
+      <nz-tag>{{ getProperty(memberId)?.description!.get(language) }}</nz-tag>
+    </div>
+  }
+}
+
+

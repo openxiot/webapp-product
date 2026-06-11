@@ -1,0 +1,85 @@
+.main-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 64px; /* 留出 header 高度，防止内容被遮挡 */
+}
+
+// 大屏幕水平菜单：默认显示
+.desktop-menu {
+  margin-bottom: 0; // 清除 nz-menu 默认 margin
+}
+
+// 小屏幕汉堡按钮：默认隐藏
+.mobile-menu-trigger {
+  display: none;
+}
+
+// 响应式断点：小屏幕（<1024px）
+@media (max-width: 1023px) {
+  // 隐藏大屏幕水平菜单
+  .desktop-menu {
+    display: none;
+  }
+
+  // 显示汉堡按钮
+  .mobile-menu-trigger {
+    display: block;
+  }
+
+  // 优化小屏幕下拉菜单样式（可选）
+  .ant-dropdown-menu {
+    min-width: 160px; // 限制下拉菜单宽度
+  }
+
+  // 可选：缩小 logo 字体，避免挤压
+  .logo {
+    span {
+      font-size: 16px;
+    }
+  }
+}
+
+.ant-layout-header {
+  padding: 0 0px;
+}
+
+/* 固定顶部 header */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100; /* 确保在内容之上 */
+  width: 100%;
+  height: 64px; /* NG-ZORRO 默认 header 高度 */
+  background: #001529; /* 深色主题背景 */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 可选：添加阴影提升层次感 */
+}
+
+/* 滚动内容区域 */
+.scrollable-content {
+  flex: 1;
+  overflow-y: auto; /* 内容超出时显示滚动条 */
+  max-height: calc(100vh - 64px); /* 最大高度 = 视口高度 - header 高度 */
+}
+
+.logo {
+  position: relative;
+  height: 30px;
+  width: 140px;
+  padding-left: 16px;
+  overflow: hidden;
+  line-height: 32px;
+  margin: 16px 30px 16px 30px;
+  float: left;
+}
+
+.header-menu {
+  line-height: 64px;
+}
+
+/* 修复 badge 内图标颜色 */
+.ant-menu-dark .ant-badge .anticon {
+  color: rgba(255, 255, 255, 0.65) !important;
+}

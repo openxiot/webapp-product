@@ -1,0 +1,166 @@
+<nz-card
+  [nzBodyStyle]="{ padding: 0 }"
+>
+  <div class="title-bar">
+    <nz-space class="title">
+      <span *nzSpaceItem><span nz-icon nzType="setting" nzTheme="outline"></span></span>
+      <span *nzSpaceItem>属性详情</span>
+    </nz-space>
+
+    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+      <span style="float: right">
+        <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()">删除</button>
+      </span>
+    }
+  </div>
+
+  <form class="content" nz-form [formGroup]="form">
+    <nz-form-item nz-flex>
+      <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+      <nz-form-control>
+        <device-instance-id
+          formControlName="iid"
+          [lifecycle]="lifecycle"
+          (changed)="onIIDChanged()"
+        ></device-instance-id>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-flex>
+      <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+      <nz-form-control>
+        <device-instance-namespace formControlName="ns"></device-instance-namespace>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-flex>
+      <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+      <nz-form-control>
+        <device-instance-name
+          formControlName="code"
+          [lifecycle]="lifecycle"
+          [updatable]="updatable"
+          (changed)="onCodeChanged()"
+        ></device-instance-name>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-flex>
+      <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+      <nz-form-control>
+        <device-instance-description
+          formControlName="description"
+          [lifecycle]="lifecycle"
+          (changed)="onDescriptionChanged()"
+        ></device-instance-description>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-flex>
+      <nz-form-label [style.width.px]="120" nzRequired>访问方式</nz-form-label>
+      <nz-form-control>
+        <device-instance-service-property-access
+          formControlName="access"
+          [lifecycle]="lifecycle"
+          (changed)="onAccessChanged()"
+        ></device-instance-service-property-access>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item nz-flex>
+      <nz-form-label [style.width.px]="120" nzRequired>数据格式</nz-form-label>
+      <nz-form-control>
+        <device-instance-service-property-format
+          formControlName="format"
+          [lifecycle]="lifecycle"
+          (changed)="onFormatChanged()"
+        ></device-instance-service-property-format>
+      </nz-form-control>
+    </nz-form-item>
+
+    @if (constrainable) {
+      <nz-form-item nz-flex>
+        <nz-form-label [style.width.px]="120" nzRequired>取值约束</nz-form-label>
+        <nz-form-control>
+          <device-instance-service-property-constraint
+            formControlName="constraint"
+            [lifecycle]="lifecycle"
+            (changed)="onConstraintTypeChanged()"
+          ></device-instance-service-property-constraint>
+        </nz-form-control>
+      </nz-form-item>
+
+      @switch (form.controls.constraint.value) {
+        @case (ConstraintType.RANGE) {
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>取值范围</nz-form-label>
+            <nz-form-control>
+              <device-instance-service-property-range
+                formControlName="range"
+                [lifecycle]="lifecycle"
+                (changed)="onConstraintRangeChanged()"
+              ></device-instance-service-property-range>
+            </nz-form-control>
+          </nz-form-item>
+        }
+        @case (ConstraintType.LIST) {
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>取值列表</nz-form-label>
+            <nz-form-control>
+              <device-instance-service-property-list
+                formControlName="list"
+                [lifecycle]="lifecycle"
+                (changed)="onConstraintListChanged()"
+              ></device-instance-service-property-list>
+            </nz-form-control>
+          </nz-form-item>
+        }
+      }
+    }
+
+    @if (combinationValue) {
+      <nz-form-item nz-flex>
+        <nz-form-label [style.width.px]="120" nzRequired>成员列表</nz-form-label>
+        <nz-form-control>
+          <device-instance-service-property-members
+            formControlName="members"
+            [lifecycle]="lifecycle"
+            [service]="service"
+            [property]="property"
+            [language]="language"
+            (changed)="onMembersChanged()"
+          ></device-instance-service-property-members>
+        </nz-form-control>
+      </nz-form-item>
+    }
+
+    @if (property) {
+      @if (property.formatNumber()) {
+        <nz-form-item nz-flex>
+          <nz-form-label [style.width.px]="120" nzRequired>单位</nz-form-label>
+          <nz-form-control>
+            <device-instance-service-property-unit
+              formControlName="unit"
+              [lifecycle]="lifecycle"
+              (changed)="onUnitChanged()"
+            ></device-instance-service-property-unit>
+          </nz-form-control>
+        </nz-form-item>
+      }
+
+      @if (property.format !== DataFormat.COMBINATION) {
+        <nz-form-item nz-flex>
+          <nz-form-label [style.width.px]="120" nzRequired>缺省值</nz-form-label>
+          <nz-form-control>
+            <device-instance-service-property-default-value
+              formControlName="defaultValue"
+              [property]="property"
+              [lifecycle]="lifecycle"
+              (changed)="onDefaultValueChanged()"
+            ></device-instance-service-property-default-value>
+          </nz-form-control>
+        </nz-form-item>
+      }
+    }
+  </form>
+</nz-card>

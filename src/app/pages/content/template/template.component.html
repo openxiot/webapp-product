@@ -1,0 +1,28 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-page-header nzTitle="产品模板" [nzGhost]="false">
+    <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+
+    <nz-page-header-tags>
+      <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"></nz-segmented>
+    </nz-page-header-tags>
+  </nz-page-header>
+
+  <div style="padding: 20px 20px">
+    <div nz-row [nzGutter]="[8, 8]">
+      <div nz-col [nzSpan]="24">
+        <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
+      </div>
+
+      <div nz-col [nzSpan]="24">
+        @switch (viewMode) {
+          @case (0) {
+            <template-grid [templates]="templates"></template-grid>
+          }
+          @case (1) {
+            <template-list [templates]="templates"></template-list>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</nz-spin>

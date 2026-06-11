@@ -1,0 +1,150 @@
+<form nz-form [formGroup]="form">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>实例ID</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <nz-input-number formControlName="iid" [nzMin]="1" [nzMax]="10" [nzStep]="1" (ngModelChange)="onChanged()"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>代码</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="code" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>简体中文描述</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="descriptionZHCN" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>繁体中文描述</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="descriptionZHTW" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>英文描述</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="descriptionENUS" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>访问方式</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <div formGroupName="access">
+        <label nz-checkbox formControlName="isReadable">读</label>
+        <label nz-checkbox formControlName="isWritable">写</label>
+        <label nz-checkbox formControlName="isNotifiable">通知</label>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>数据格式</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <nz-select formControlName="format" (ngModelChange)="onFormatChanged()">
+        @for (item of formats; track item.value) {
+          <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+        }
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+
+  @if (constrainable) {
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired>取值约束</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <nz-radio-group formControlName="constraint" nzButtonStyle="solid" (ngModelChange)="onConstraintChanged($event)">
+          <label nz-radio-button nzValue="none">无</label>
+          <label nz-radio-button nzValue="range">范围</label>
+          <label nz-radio-button nzValue="list">列表</label>
+        </nz-radio-group>
+      </nz-form-control>
+    </nz-form-item>
+
+    @switch (constraintType) {
+      @case ('range') {
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>取值范围</nz-form-label>
+          <nz-form-control [nzSpan]="16">
+            <div formGroupName="range">
+              <nz-space nzDirection="horizontal">
+                <nz-input-number-group *nzSpaceItem nzAddOnBefore="最小" style="width: 100%">
+                  <nz-input-number formControlName="min" (ngModelChange)="onChanged()"></nz-input-number>
+                </nz-input-number-group>
+
+                <nz-input-number-group *nzSpaceItem nzAddOnBefore="最大" style="width: 100%">
+                  <nz-input-number formControlName="max" (ngModelChange)="onChanged()"></nz-input-number>
+                </nz-input-number-group>
+
+                <nz-input-number-group *nzSpaceItem nzAddOnBefore="步长" style="width: 100%">
+                  <nz-input-number formControlName="step" (ngModelChange)="onChanged()"></nz-input-number>
+                </nz-input-number-group>
+              </nz-space>
+            </div>
+          </nz-form-control>
+        </nz-form-item>
+      }
+      @case ('list') {
+        <nz-form-item>
+          <nz-form-label [nzSpan]="6" nzRequired>取值列表</nz-form-label>
+          <nz-form-control [nzSpan]="16">
+            @if (list.length > 0) {
+              <div formArrayName="list">
+                @for (item of list.controls; track $index; let i = $index) {
+                  <div [formGroupName]="i">
+                    <nz-form-item>
+                      <div nz-row [nzGutter]="[8, 8]">
+                        <div nz-col [nzSpan]="6">
+                          <nz-input-number-group nzAddOnBefore="值">
+                            <nz-input-number id="value{{i}}" formControlName="value" />
+                          </nz-input-number-group>
+                        </div>
+
+                        <div nz-col [nzSpan]="13">
+                          <input nz-input id="description{{i}}" type="text" formControlName="description" placeholder="请输入值的描述">
+<!--                          <nz-input-group nzPrefix="描述">-->
+<!--                            <input nz-input id="description{{i}}" type="text" formControlName="description">-->
+<!--                          </nz-input-group>-->
+                        </div>
+
+                        <div nz-col [nzSpan]="1">
+                          <button nz-button nzType="dashed" nzDanger (click)="addValueItem()" style="width: 100px">
+                            <span nz-icon nzType="delete"></span>
+                          </button>
+
+<!--                          <span nz-icon nzType="delete"></span>-->
+                        </div>
+                      </div>
+                    </nz-form-item>
+                  </div>
+                }
+              </div>
+
+              <button nz-button nzType="dashed" (click)="addValueItem()" style="width: 100px">
+                <span nz-icon nzType="plus"></span>
+              </button>
+            } @else {
+              <button nz-button nzType="dashed" (click)="addValueItem()" style="width: 100px">
+                <span nz-icon nzType="plus"></span>
+              </button>
+            }
+          </nz-form-control>
+        </nz-form-item>
+      }
+    }
+  }
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzRequired>缺省值</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <label nz-checkbox formControlName="hasDefaultValue" (ngModelChange)="onChanged()">有</label>
+    </nz-form-control>
+  </nz-form-item>
+</form>

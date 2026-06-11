@@ -1,0 +1,66 @@
+<nz-spin [nzSpinning]="loading || loadingProperties">
+  <nz-layout class="inner-layout">
+    <nz-sider nzWidth="200px" nzTheme="light" class="sider">
+      <ul nz-menu nzMode="inline" nzTheme="light">
+        <li nz-menu-item (click)="onClickEvent(data)">
+          <span class="action-title">{{ data.description.get('zh-CN') }}</span>
+        </li>
+
+        <li nz-menu-divider></li>
+
+        @for (s of events; track s.type.name) {
+          <li nz-menu-item (click)="onClickEvent(s)">
+            <span class="action-title">{{ s.description.get('zh-CN') }}</span>
+          </li>
+        }
+      </ul>
+    </nz-sider>
+
+    <nz-content class="inner-content">
+      <div style="width: 100%">
+        <form nz-form [formGroup]="form">
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+            <nz-form-control>
+              <device-instance-id
+                formControlName="iid"
+                [lifecycle]="LifeCycle.PREVIEW"
+                (changed)="onIIDChanged()"
+              ></device-instance-id>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+            <nz-form-control>
+              <device-instance-namespace formControlName="ns"></device-instance-namespace>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+            <nz-form-control>
+              <device-instance-name
+                formControlName="code"
+                [lifecycle]="form.controls.ns.value === current.type.organization ? LifeCycle.DEVELOPMENT : LifeCycle.PREVIEW"
+                [updatable]="true"
+                (changed)="onCodeChanged()"
+              ></device-instance-name>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+            <nz-form-control>
+              <device-instance-description
+                formControlName="description"
+                [lifecycle]="LifeCycle.DEVELOPMENT"
+                (changed)="onDescriptionChanged()"
+              ></device-instance-description>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-spin>

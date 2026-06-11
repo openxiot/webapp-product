@@ -1,0 +1,14 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-select [ngModel]="_value" (ngModelChange)="onSelectionChange($event)">
+    @for (item of formats; track item.value) {
+      <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+    }
+  </nz-select>
+} @else {
+  <span class="format-display" [class.disabled]="isDisabled">
+    {{ selectedLabel }}
+    @if (isDisabled) {
+      <span class="disabled-hint">(已禁用)</span>
+    }
+  </span>
+}

@@ -1,0 +1,36 @@
+<form nz-form [formGroup]="form">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>实例ID</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <nz-input-number formControlName="iid" [nzMin]="1" [nzMax]="10" [nzStep]="1" (ngModelChange)="onChanged()"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>代码</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="code" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>简体中文描述</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="descriptionZHCN" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>繁体中文描述</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="descriptionZHTW" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired>英文描述</nz-form-label>
+    <nz-form-control [nzSpan]="16">
+      <input nz-input formControlName="descriptionENUS" (ngModelChange)="onChanged()"/>
+    </nz-form-control>
+  </nz-form-item>
+</form>

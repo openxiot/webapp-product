@@ -1,0 +1,48 @@
+@if (service) {
+  <nz-layout class="inner-layout">
+    <nz-sider nzWidth="360px" nzTheme="light">
+      <template-service-menu
+        [version]="version"
+        [service]="service"
+        [language]="language"
+        (titleSelected)="onTitleSelected($event)"
+        (propertySelected)="onPropertySelected($event)"
+        (actionSelected)="onActionSelected($event)"
+        (eventSelected)="onEventSelected($event)"
+      ></template-service-menu>
+    </nz-sider>
+
+    <nz-content class="inner-content">
+      @if (showServiceDetail) {
+        <template-card-service
+          [service]="service"
+          [language]="language"
+        ></template-card-service>
+      }
+
+      @if (property) {
+        <template-card-property
+          [service]="service"
+          [property]="property"
+          [language]="language"
+        ></template-card-property>
+      }
+
+      @if (action) {
+        <template-card-action
+          [service]="service"
+          [action]="action"
+          [language]="language"
+        ></template-card-action>
+      }
+
+      @if (event) {
+        <template-card-event
+          [service]="service"
+          [event]="event"
+          [language]="language"
+        ></template-card-event>
+      }
+    </nz-content>
+  </nz-layout>
+}

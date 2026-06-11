@@ -1,0 +1,29 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-space nzDirection="horizontal">
+    <nz-input-number-group *nzSpaceItem nzAddOnBefore="最小" style="width: 100%">
+      <nz-input-number [(ngModel)]="_value.min" (ngModelChange)="onMinChange($event)"></nz-input-number>
+    </nz-input-number-group>
+
+    <nz-input-number-group *nzSpaceItem nzAddOnBefore="最大" style="width: 100%">
+      <nz-input-number [(ngModel)]="_value.max" (ngModelChange)="onMaxChange($event)"></nz-input-number>
+    </nz-input-number-group>
+
+    <nz-input-number-group *nzSpaceItem nzAddOnBefore="步长" style="width: 100%">
+      <nz-input-number [(ngModel)]="_value.step" (ngModelChange)="onStepChange($event)"></nz-input-number>
+    </nz-input-number-group>
+  </nz-space>
+} @else {
+  <nz-space nzDirection="horizontal">
+    <nz-input-number-group *nzSpaceItem nzAddOnBefore="最小" style="width: 100%">
+      <nz-input-number [ngModel]="_value.min" nzDisabled></nz-input-number>
+    </nz-input-number-group>
+
+    <nz-input-number-group *nzSpaceItem nzAddOnBefore="最大" style="width: 100%">
+      <nz-input-number [ngModel]="_value.max" nzDisabled></nz-input-number>
+    </nz-input-number-group>
+
+    <nz-input-number-group *nzSpaceItem nzAddOnBefore="步长" style="width: 100%">
+      <nz-input-number [ngModel]="_value.step" nzDisabled></nz-input-number>
+    </nz-input-number-group>
+  </nz-space>
+}

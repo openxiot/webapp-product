@@ -1,0 +1,19 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-radio-group [ngModel]="value" nzButtonStyle="solid" (ngModelChange)="onRadioChange($event)">
+    <label nz-radio-button [nzValue]="ValueConstraintType.NONE">无</label>
+    <label nz-radio-button [nzValue]="ValueConstraintType.RANGE">范围</label>
+    <label nz-radio-button [nzValue]="ValueConstraintType.LIST">列表</label>
+  </nz-radio-group>
+} @else {
+  @switch (value) {
+    @case (ValueConstraintType.NONE) {
+      <nz-tag nzColor="green">无</nz-tag>
+    }
+    @case (ValueConstraintType.RANGE) {
+      <nz-tag nzColor="blue">范围</nz-tag>
+    }
+    @case (ValueConstraintType.LIST) {
+      <nz-tag nzColor="green">列表</nz-tag>
+    }
+  }
+}

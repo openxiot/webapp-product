@@ -1,0 +1,320 @@
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewContainerRef
+} from '@angular/core';
+import {NzCardModule} from 'ng-zorro-antd/card';
+import {NzSpaceModule} from 'ng-zorro-antd/space';
+import {NzModalService} from 'ng-zorro-antd/modal';
+
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
+import {Action, ActionTemplate, Argument, Property, Service, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
+import {NzFormModule} from 'ng-zorro-antd/form';
+import {NzInputModule} from 'ng-zorro-antd/input';
+import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
+import {NzSelectModule} from 'ng-zorro-antd/select';
+import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
+import {NzRadioModule} from 'ng-zorro-antd/radio';
+import {NzButtonModule} from 'ng-zorro-antd/button';
+import {NzIconModule} from 'ng-zorro-antd/icon';
+import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
+import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
+import {Arg} from './argument/Arg';
+import {EditorServiceActionArgumentComponent} from './argument/editor.service.action.argument.component';
+
+@Component({
+  selector: 'template-card-action',
+  templateUrl: './template.card.action.component.html',
+  styleUrls: ['./template.card.action.component.less'],
+  standalone: true,
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    NzFormModule,
+    NzInputModule,
+    NzInputNumberModule,
+    NzSelectModule,
+    NzCheckboxModule,
+    NzRadioModule,
+    NzSpaceModule,
+    NzButtonModule,
+    NzIconModule,
+    NzCardModule,
+    EditorNamespaceComponent,
+    EditorServiceActionArgumentComponent
+  ],
+  providers: [
+    NzModalService
+  ],
+})
+export class TemplateCardActionComponent implements OnInit, OnChanges {
+
+  @Input() service!: ServiceTemplate;
+  @Input() action!: ActionTemplate;
+  @Input() language!: string;
+
+  form: FormGroup<{
+    iid: FormControl<number>,
+    ns: FormControl<string>,
+    code: FormControl<string>,
+    descriptionZHCN: FormControl<string>,
+    descriptionZHTW: FormControl<string>,
+    descriptionENUS: FormControl<string>,
+    argumentIn: FormArray<FormGroup<{
+      argument: FormControl<Arg>,
+    }>>,
+    argumentOut: FormArray<FormGroup<{
+      argument: FormControl<Arg>,
+    }>>,
+  }>;
+
+  changed: boolean = false;
+
+  constructor(
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    private fb: NonNullableFormBuilder
+  ) {
+    this.form = this.fb.group({
+      iid: this.fb.control(0, [Validators.required]),
+      ns: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [Validators.required]),
+      descriptionZHCN: this.fb.control('', [Validators.required]),
+      descriptionZHTW: this.fb.control('', [Validators.required]),
+      descriptionENUS: this.fb.control('', [Validators.required]),
+      argumentIn: this.fb.array<
+        FormGroup<{
+          argument: FormControl<Arg>,
+        }>
+      >([]),
+      argumentOut: this.fb.array<
+        FormGroup<{
+          argument: FormControl<Arg>,
+        }>
+      >([]),
+    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['action']) {
+      this.reload();
+    }
+  }
+
+  ngOnInit(): void {
+    this.reload();
+  }
+
+  private reload() {
+    this.form.controls.iid.setValue(this.action.iid);
+    this.form.controls.ns.setValue(this.action.type.ns);
+    this.form.controls.code.setValue(this.action.type.name);
+    this.form.controls.descriptionZHCN.setValue(this.action.description.get('zh-CN') || '');
+    this.form.controls.descriptionZHTW.setValue(this.action.description.get('zh-TW') || '');
+    this.form.controls.descriptionENUS.setValue(this.action.description.get('en-US') || '');
+
+    this.argumentIn.clear();
+
+    for (const [iid, argument] of this.action.in.entries()) {
+      const property = this.service.properties.get(iid);
+      if (property) {
+        this.addArgumentIn(argument, property);
+      }
+    }
+
+    this.argumentOut.clear();
+
+    for (const [iid, argument] of this.action.out.entries()) {
+      const property = this.service.properties.get(iid);
+      if (property) {
+        this.addArgumentOut(argument, property);
+      }
+    }
+
+    this.changed = false;
+  }
+
+  private addArgumentIn(argument: Argument, property: Property) {
+    console.log('addArgumentIn: ', property.iid);
+    this.argumentIn.push(this.createArgumentItem(argument, property));
+  }
+
+  private addArgumentOut(argument: Argument, property: Property) {
+    console.log('addArgumentOut: ', property.iid);
+    this.argumentOut.push(this.createArgumentItem(argument, property));
+  }
+
+  get argumentIn(): FormArray<FormGroup<{
+    argument: FormControl<Arg>
+  }>> {
+    return this.form.controls.argumentIn;
+  }
+
+  get argumentOut(): FormArray<FormGroup<{
+    argument: FormControl<Arg>
+  }>> {
+    return this.form.controls.argumentOut;
+  }
+
+  createArgumentItem(argument: Argument, property: Property): FormGroup<{
+    argument: FormControl<Arg>,
+  }> {
+    return this.fb.group({
+      argument: new Arg(argument, property, this.language)
+    });
+  }
+
+  removeArgumentIn(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
+    this.argumentIn.removeAt(i);
+    this.onChanged();
+  }
+
+  addArgumentInItem() {
+    // const exclusion = new Set(this.action.getArgumentsIn().map(x => x.piid));
+    //
+    // const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
+    //   nzTitle: '选择属性作为参数',
+    //   nzWidth: 1000,
+    //   nzContent: SelectArgumentComponent,
+    //   nzViewContainerRef: this.viewContainerRef,
+    //   nzData: new SelectArgument(this.service, exclusion, this.language),
+    //   nzFooter: [
+    //     {
+    //       label: '取消',
+    //       onClick: component => component!.cancel()
+    //     },
+    //     {
+    //       label: '确认',
+    //       danger: true,
+    //       type: 'primary',
+    //       onClick: component => component!.ok()
+    //     }
+    //   ],
+    // });
+    //
+    // modal.afterClose.subscribe(result => {
+    //   if (result) {
+    //     const sortedResult = Array.from(result).sort((a, b) => a - b);
+    //     for (let iid of sortedResult) {
+    //         this.action.in.set(iid, new Argument(iid));
+    //     }
+    //
+    //     // 更新参数表
+    //     this.argumentIn.clear();
+    //     for (const [iid, argument] of this.action.in.entries()) {
+    //       const property = this.service.properties.get(iid);
+    //       if (property) {
+    //         this.addArgumentIn(argument, property);
+    //       }
+    //     }
+    //
+    //     this.onChanged();
+    //   }
+    // });
+  }
+
+  removeArgumentOut(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
+    this.argumentOut.removeAt(i);
+    this.onChanged();
+  }
+
+  addArgumentOutItem() {
+    // const exclusion = new Set(this.action.getArgumentsOut().map(x => x.piid));
+    //
+    // const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
+    //   nzTitle: '选择属性作为结果',
+    //   nzWidth: 1000,
+    //   nzContent: SelectArgumentComponent,
+    //   nzViewContainerRef: this.viewContainerRef,
+    //   nzData: new SelectArgument(this.service, exclusion, this.language),
+    //   nzFooter: [
+    //     {
+    //       label: '取消',
+    //       onClick: component => component!.cancel()
+    //     },
+    //     {
+    //       label: '确认',
+    //       danger: true,
+    //       type: 'primary',
+    //       onClick: component => component!.ok()
+    //     }
+    //   ],
+    // });
+    //
+    // modal.afterClose.subscribe(result => {
+    //   if (result) {
+    //     const sortedResult = Array.from(result).sort((a, b) => a - b);
+    //     for (let iid of sortedResult) {
+    //       this.action.out.set(iid, new Argument(iid));
+    //     }
+    //
+    //     // 更新参数表
+    //     this.argumentOut.clear();
+    //     for (const [iid, argument] of this.action.out.entries()) {
+    //       const property = this.service.properties.get(iid);
+    //       if (property) {
+    //         this.addArgumentOut(argument, property);
+    //       }
+    //     }
+    //
+    //     this.onChanged();
+    //   }
+    // });
+  }
+
+  onChanged() {
+    this.changed = true;
+  }
+
+  onRemoved() {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个方法吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: this.action.description.get('zh-CN'),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    // modal.afterClose.subscribe(result => {
+    //   if (result) {
+    //     this.removed.emit(this.action);
+    //   }
+    // });
+  }
+
+  onSubmit() {
+    this.action.iid = this.form.controls.iid.value;
+    this.action.type.name = this.form.controls.code.value;
+    this.action.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
+    this.action.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
+    this.action.description.set('en-US', this.form.controls.descriptionENUS.value);
+
+    // todo: save
+
+    this.changed = false;
+  }
+}

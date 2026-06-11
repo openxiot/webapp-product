@@ -1,0 +1,15 @@
+@if (disabled) {
+  @switch (value) {
+    @case ('simple') {
+      <nz-tag nzColor="geekblue">简单</nz-tag>
+    }
+    @default {
+      <nz-tag nzColor="green">复合</nz-tag>
+    }
+  }
+} @else {
+  <nz-radio-group [(ngModel)]="value" nzButtonStyle="solid">
+    <label nz-radio-button nzValue="simple">简单固件</label>
+<!--    <label nz-radio-button nzValue="complex">复合固件</label>-->
+  </nz-radio-group>
+}

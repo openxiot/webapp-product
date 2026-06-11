@@ -1,0 +1,133 @@
+@if (service) {
+        <nz-card nzSize="small" class="service" [nzBodyStyle]="{ padding: 0}" nzBorderless>
+          <div class="service-title-bar">
+            <nz-space class="service-title">
+              <span *nzSpaceItem>
+                <span nz-icon nzType="database" nzTheme="outline"></span>
+              </span>
+              <span *nzSpaceItem>
+                {{ service.description.get(language)}}
+              </span>
+            </nz-space>
+
+            <span class="service-extra">
+<!--              <span>-->
+<!--                <span>-->
+<!--                  <a>修改</a>-->
+<!--                </span>-->
+
+<!--                <nz-divider nzType="vertical"></nz-divider>-->
+
+<!--                <span>-->
+<!--                  <a>删除</a>-->
+<!--                </span>-->
+<!--              </span>-->
+
+              <span>
+                <span class="editable" (click)="onEdit(service)">
+                  <span nz-icon nzType="edit" nzTheme="outline" style="color: blue"></span>
+                </span>
+
+                <nz-divider nzType="vertical"></nz-divider>
+
+                <span class="removable" (click)="onRemove(service)">
+                  <span nz-icon nzType="delete" nzTheme="outline" style="color: red"></span>
+                </span>
+              </span>
+
+<!--                <div nz-row [nzGutter]="[2, 2]">-->
+<!--                  <div nz-col [nzSpan]="12">-->
+<!--                    <span class="service-remove" (click)="onEdit(service)">-->
+<!--                      <span nz-icon nzType="edit" nzTheme="outline" style="color: blue"></span>-->
+<!--                    </span>-->
+<!--                  </div>-->
+<!--                  <div nz-col [nzSpan]="12">-->
+<!--                    <span class="service-remove" (click)="onRemove(service)">-->
+<!--                      <span nz-icon nzType="delete" nzTheme="outline" style="color: red"></span>-->
+<!--                    </span>-->
+<!--                  </div>-->
+<!--                </div>-->
+            </span>
+          </div>
+
+          <div class="service-content">
+            <nz-descriptions [nzColumn]="4">
+              <nz-descriptions-item nzTitle="ID">
+                <nz-tag [nzColor]="'blue'"> {{ service.iid }} </nz-tag>
+              </nz-descriptions-item>
+
+              <nz-descriptions-item nzTitle="代码">
+                {{ service.type.name }}
+              </nz-descriptions-item>
+
+              <nz-descriptions-item nzTitle="描述">
+                {{ service.description.get(language) }}
+              </nz-descriptions-item>
+
+              @if (version) {
+                <nz-descriptions-item nzTitle="版本">
+                  <nz-tag [nzColor]="'blue'">版本 {{ service.type.version }}</nz-tag>
+                </nz-descriptions-item>
+              }
+            </nz-descriptions>
+          </div>
+        </nz-card>
+
+<!--  <nz-table-->
+<!--    style="width: 100%"-->
+<!--    [nzSize]="'small'"-->
+<!--    [nzPageSize]="30"-->
+<!--    [nzTemplateMode]="true"-->
+<!--    [nzHideOnSinglePage]="true"-->
+<!--    [nzWidthConfig]="getWidthConfig()"-->
+<!--    [nzBordered]="true"-->
+<!--    [nzTitle]="title"-->
+<!--    [nzScroll]="{ x: '1200px'}"-->
+<!--  >-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th>ID</th>-->
+<!--      <th>代码</th>-->
+<!--      <th>描述</th>-->
+<!--      @if (version) {-->
+<!--        <th>版本</th>-->
+<!--      }-->
+<!--      <th>操作</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr>-->
+<!--      <td nzAlign="center">-->
+<!--        <nz-tag [nzColor]="'blue'"> {{ service.iid }}</nz-tag>-->
+<!--      </td>-->
+<!--      <td>{{ service.type.name }}</td>-->
+<!--      <td>{{ service.description.get(language) }}</td>-->
+<!--      @if (version) {-->
+<!--        <td>-->
+<!--          <nz-tag [nzColor]="'blue'">版本 {{ service.type.version }}</nz-tag>-->
+<!--        </td>-->
+<!--      }-->
+<!--      <td nzAlign="center">-->
+<!--        <div (click)="onEdit(service)" class="editable">-->
+<!--          <span nz-icon nzType="edit" nzTheme="outline" style="color: blue"></span>-->
+<!--        </div>-->
+<!--      </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--  </nz-table>-->
+
+<!--  <ng-template #title>-->
+<!--    <div>-->
+<!--      <nz-space style="font-size: 14px; font-weight: bold;">-->
+<!--        <span *nzSpaceItem nz-icon nzType="database" nzTheme="outline"></span>-->
+<!--        <span *nzSpaceItem>{{ service.description.get(language)}}</span>-->
+<!--      </nz-space>-->
+
+<!--      <span style="float: right">-->
+<!--        <span class="service-remove" (click)="onRemove(service)">-->
+<!--          <span nz-icon nzType="delete" nzTheme="outline" style="color: red"></span>-->
+<!--        </span>-->
+<!--      </span>-->
+<!--    </div>-->
+<!--  </ng-template>-->
+}

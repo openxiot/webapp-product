@@ -1,0 +1,35 @@
+.group {
+  height: 100%;
+}
+
+.group-bar {
+  background: white;
+  padding: 12px 8px 12px 8px;
+  height: 48px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.group-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.service-group {
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+  border-right: 0;
+}
+
+.service-group.ant-menu-inline .ant-menu-item-selected::after {
+  //display: none !important;
+}
+
+.service-title {
+  display: inline-block;    /* 或者 block */
+  max-width: 200px;         /* 设置你的最大宽度 */
+  white-space: nowrap;      /* 禁止换行 */
+  overflow: hidden;         /* 隐藏溢出内容 */
+  text-overflow: ellipsis;  /* 显示省略号 */
+  vertical-align: bottom;   /* 可选的，用于对齐优化 */
+}

@@ -1,0 +1,29 @@
+<nz-layout>
+  <nz-sider nzWidth="200px" nzTheme="dark">
+    <ul nz-menu nzMode="inline" class="menu">
+      @for (p of products; track p.id) {
+        <li nz-menu-item class="menu-item" nzMatchRouter [routerLink]="['/main/product/detail', p.id]">
+          <div class="menu-item-content">
+            <span class="menu-icon">
+               <img [src]="p.icon" width="32" height="32">
+            </span>
+            <span class="menu-text">{{ p.name }}</span>
+          </div>
+        </li>
+      }
+    </ul>
+  </nz-sider>
+
+  <nz-layout class="inner-layout">
+    <nz-content>
+      <router-outlet></router-outlet>
+    </nz-content>
+
+    <nz-footer>
+      <span>Copyright</span>
+      <span nz-icon nzType="copyright" nzTheme="outline"></span>
+      <span><a href="https://openxiot.cc/" target="_blank">Openxiot</a></span>
+      <span>2026 ({{ version }})</span>
+    </nz-footer>
+  </nz-layout>
+</nz-layout>

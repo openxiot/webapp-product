@@ -1,0 +1,34 @@
+<nz-page-header nzTitle="所有产品" [nzGhost]="false" class="fixed-header">
+<!--  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>-->
+
+  <nz-page-header-tags>
+    <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode" (ngModelChange)="onViewModeChanged($event)"></nz-segmented>
+  </nz-page-header-tags>
+
+  <nz-page-header-extra>
+    <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">创建</button>
+  </nz-page-header-extra>
+</nz-page-header>
+
+<div style="padding: 20px 20px; margin-top: 72px;">
+  <div nz-row [nzGutter]="[8, 8]">
+    <!--      <div nz-col [nzSpan]="24">-->
+    <!--        <product-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></product-filter-type>-->
+    <!--      </div>-->
+
+    <!--      <div nz-col [nzSpan]="24">-->
+    <!--        <product-filter-vendor [vendors]="vendors" (vendorSelected)="onVendorsSelected($event)"></product-filter-vendor>-->
+    <!--      </div>-->
+
+    <div nz-col [nzSpan]="24">
+      @switch (viewMode) {
+        @case (0) {
+          <product-grid></product-grid>
+        }
+        @case (1) {
+          <product-list></product-list>
+        }
+      }
+    </div>
+  </div>
+</div>

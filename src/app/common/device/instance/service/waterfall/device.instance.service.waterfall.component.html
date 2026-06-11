@@ -1,0 +1,19 @@
+@if (service) {
+  <div nz-row [nzGutter]="[8, 8]">
+    <div nz-col [nzSpan]="24">
+      <device-instance-service-header [version]="version" [service]="service" [language]="language" (removed)="onServiceRemoved($event)"></device-instance-service-header>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <editor-properties [version]="version" [service]="service" [language]="language" (changed)="onPropertyChanged($event)" (removed)="onPropertyRemoved($event)"></editor-properties>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <editor-actions style="padding-top: 8px" [version]="version" [service]="service" [language]="language"></editor-actions>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <editor-events style="padding-top: 8px" [version]="version" [service]="service" [language]="language"></editor-events>
+    </div>
+  </div>
+}

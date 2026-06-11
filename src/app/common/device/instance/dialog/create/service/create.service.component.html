@@ -1,0 +1,126 @@
+<nz-spin [nzSpinning]="loadingServices || loadingProperties || loadingActions || loadingEvents">
+  <nz-layout class="inner-layout">
+    <nz-sider nzWidth="200px" nzTheme="light" class="sider">
+      <ul nz-menu nzMode="inline" nzTheme="light">
+        <li nz-menu-item (click)="onClickService(data)">
+          <span class="service-title">{{ data.description.get('zh-CN') }}</span>
+        </li>
+
+        <li nz-menu-divider></li>
+
+        @for (s of services; track s.type.name) {
+          <li nz-menu-item (click)="onClickService(s)">
+            <span class="service-title">{{ s.description.get('zh-CN') }}</span>
+          </li>
+        }
+      </ul>
+    </nz-sider>
+
+    <nz-content class="inner-content">
+      <div style="width: 100%">
+        <form nz-form [formGroup]="form">
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+            <nz-form-control>
+              <device-instance-id
+                formControlName="iid"
+                [lifecycle]="LifeCycle.PREVIEW"
+                (changed)="onIIDChanged()"
+              ></device-instance-id>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+            <nz-form-control>
+              <device-instance-namespace formControlName="ns"></device-instance-namespace>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+            <nz-form-control>
+              <device-instance-name
+                formControlName="code"
+                [lifecycle]="form.controls.ns.value === current.type.organization ? LifeCycle.DEVELOPMENT : LifeCycle.PREVIEW"
+                [updatable]="true"
+                (changed)="onCodeChanged()"
+              ></device-instance-name>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+            <nz-form-control>
+              <device-instance-description
+                formControlName="description"
+                [lifecycle]="LifeCycle.DEVELOPMENT"
+                (changed)="onDescriptionChanged()"
+              ></device-instance-description>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>必选属性</nz-form-label>
+            <nz-form-control>
+              <create-service-properties
+                formControlName="requiredProperties"
+                (changed)="onRequiredPropertiesChanged()"
+              ></create-service-properties>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>可选属性</nz-form-label>
+            <nz-form-control>
+              <create-service-properties
+                formControlName="optionalProperties"
+                (changed)="onOptionalPropertiesChanged()"
+              ></create-service-properties>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>必选方法</nz-form-label>
+            <nz-form-control>
+              <create-service-actions
+                formControlName="requiredActions"
+                (changed)="onRequiredActionsChanged()"
+              ></create-service-actions>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>可选方法</nz-form-label>
+            <nz-form-control>
+              <create-service-actions
+                formControlName="optionalActions"
+                (changed)="onOptionalActionsChanged()"
+              ></create-service-actions>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>必选事件</nz-form-label>
+            <nz-form-control>
+              <create-service-events
+                formControlName="requiredEvents"
+                (changed)="onRequiredActionsChanged()"
+              ></create-service-events>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item nz-flex>
+            <nz-form-label [style.width.px]="120" nzRequired>可选事件</nz-form-label>
+            <nz-form-control>
+              <create-service-events
+                formControlName="optionalEvents"
+                (changed)="onOptionalActionsChanged()"
+              ></create-service-events>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div>
+    </nz-content>
+  </nz-layout>
+</nz-spin>

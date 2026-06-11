@@ -1,0 +1,83 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-row [nzGutter]="[8, 8]">
+    @if (items.length > 0) {
+      @for (item of items; track $index; let i = $index) {
+        <nz-col [nzSpan]="24">
+          <div class="item-row" [formGroup]="item">
+
+            <!-- 值输入 -->
+            <div class="value-input">
+              <nz-input-number-group nzAddOnBefore="值">
+                <nz-input-number
+                  formControlName="value"
+                  [nzMin]="0"
+                  [nzStep]="1"
+                  [nzPrecision]="0">
+                </nz-input-number>
+              </nz-input-number-group>
+            </div>
+
+            <!-- 描述输入 -->
+            <div class="description-input">
+              <nz-input-group nzAddOnBefore="中">
+                <input
+                  nz-input
+                  formControlName="descriptionZH"
+                  placeholder="中文描述">
+              </nz-input-group>
+            </div>
+
+            <div class="description-input">
+              <nz-input-group nzAddOnBefore="英">
+                <input
+                  nz-input
+                  formControlName="descriptionEN"
+                  placeholder="英文描述">
+              </nz-input-group>
+            </div>
+
+            <!-- 删除按钮 -->
+            <div class="action-buttons">
+              <button
+                nz-button
+                nzType="dashed"
+                nzDanger
+                (click)="removeItem(i)"
+                nz-tooltip="删除此项"
+                type="button">
+                <span nz-icon nzType="delete"></span>
+              </button>
+            </div>
+          </div>
+
+        </nz-col>
+      }
+    }
+
+    <!-- 操作按钮区域 -->
+    <nz-col nzSpan="24">
+      <button
+        nz-button
+        nzType="dashed"
+        [disabled]="isDisabled"
+        (click)="addItem()"
+        type="button">
+        <span nz-icon nzType="plus"></span>
+        添加
+      </button>
+    </nz-col>
+  </nz-row>
+} @else {
+  <div class="readonly-list">
+    <nz-list nzSize="small" class="readonly-items">
+      @for (item of items; track $index; let i = $index) {
+        <nz-list-item>
+          <div class="readonly-item">
+            <span class="item-value">值: <strong>{{ item.value.value }}</strong></span>
+            <span class="item-description">描述: {{ item.value.descriptionZH }} / {{ item.value.descriptionEN }}</span>
+          </div>
+        </nz-list-item>
+      }
+    </nz-list>
+  </div>
+}

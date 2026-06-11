@@ -1,0 +1,66 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-space>
+    <div *nzSpaceItem>
+      <nz-switch [(ngModel)]="value.valid" nzCheckedChildren="有" nzUnCheckedChildren="无" (ngModelChange)="onValueChanged($event)"></nz-switch>
+    </div>
+
+    @if (value.valid) {
+      @switch (property.format) {
+        @case (DataFormat.BOOL) {
+          <div *nzSpaceItem>
+            <nz-switch [(ngModel)]="value.value" (ngModelChange)="onValueChanged($event)"></nz-switch>
+          </div>
+        }
+        @case (DataFormat.STRING) {
+          <div *nzSpaceItem>
+            <input nz-input [(ngModel)]="value.value" (ngModelChange)="onValueChanged($event)"/>
+          </div>
+        }
+        @case (DataFormat.FLOAT) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" (ngModelChange)="onValueChanged($event)"></nz-input-number>`
+          </div>
+        }
+        @case (DataFormat.INT8) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" [nzMin]="-127" [nzMax]="127" [nzStep]="1" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+        @case (DataFormat.INT16) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" [nzMin]="-32767" [nzMax]="32767" [nzStep]="1" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+        @case (DataFormat.INT32) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" [nzMin]="-2147483647" [nzMax]="2147483647" [nzStep]="1" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+        @case (DataFormat.INT64) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+        @case (DataFormat.UINT8) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" [nzMin]="0" [nzMax]="255" [nzStep]="1" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+        @case (DataFormat.UINT16) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" [nzMin]="0" [nzMax]="65535" [nzStep]="1" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+        @case (DataFormat.UINT32) {
+          <div *nzSpaceItem>
+            <nz-input-number [(ngModel)]="value.value" [nzMin]="0" [nzMax]="4294967295" [nzStep]="1" (ngModelChange)="onValueChanged($event)"></nz-input-number>
+          </div>
+        }
+      }
+    }
+  </nz-space>
+} @else {
+  @if (value.valid) {
+    {{ value.value }}
+  }
+}

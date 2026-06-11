@@ -1,0 +1,18 @@
+<div nz-row [nzGutter]="[8, 8]">
+  @for (t of templates; track t.type.toString()) {
+    <div nz-col [nzSpan]="6">
+      <nz-card
+        nzSize="small"
+        [nzTitle]="t.description.get('zh-CN')"
+        [nzExtra]="t.type.ns"
+        [nzActions]="[productExtra]"
+      >
+        {{ t.type.model }}
+      </nz-card>
+
+      <ng-template #productExtra>
+        <a routerLink="/main/template/detail/{{t.type.toString()}}">详情</a>
+      </ng-template>
+    </div>
+  }
+</div>

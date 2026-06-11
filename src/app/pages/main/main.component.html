@@ -1,0 +1,174 @@
+<nz-layout class="main-layout">
+  <nz-header class="fixed-header">
+    <div class="logo">
+      <img src="logo.svg" alt="logo">
+    </div>
+
+    <!-- 大屏幕水平菜单：小屏幕隐藏 -->
+    <ul
+      nz-menu
+      nzTheme="dark"
+      nzMode="horizontal"
+      class="header-menu desktop-menu"
+    >
+      <!--    <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">-->
+      <li nz-menu-item nzMatchRouter routerLink="/main/product">
+        <span nz-icon nzType="bulb" nzTheme="outline"></span>
+        产品
+      </li>
+<!--      <li nz-menu-item nzMatchRouter routerLink="/main/application">-->
+<!--        <span nz-icon nzType="appstore" nzTheme="outline"></span>-->
+<!--        应用-->
+<!--      </li>-->
+<!--      <li nz-menu-item nzMatchRouter routerLink="/main/statistic">-->
+<!--        <span nz-icon nzType="line-chart" nzTheme="outline"></span>-->
+<!--        统计-->
+<!--      </li>-->
+
+      <li nz-menu-item nzMatchRouter routerLink="/main/template">
+        <span nz-icon nzType="fire" nzTheme="outline"></span>
+        产品模板
+      </li>
+
+      <li nz-menu-item nzMatchRouter routerLink="/main/spec">
+        <span nz-icon nzType="gold" nzTheme="outline"></span>
+        产品规范
+      </li>
+
+      <li nz-menu-item nzMatchRouter (click)="logout()" style="float: right" >
+        <span nz-icon nzType="logout" nzTheme="outline"></span>
+        退出
+      </li>
+
+      <li nz-menu-item nzMatchRouter routerLink="/main/profile" style="float: right" >
+        <nz-space>
+          <nz-avatar *nzSpaceItem nzIcon="user"></nz-avatar>
+          <span *nzSpaceItem>{{ nickname }}</span>
+        </nz-space>
+      </li>
+
+      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="notice">
+        <nz-badge
+          nzSize="small"
+          [nzCount]="9"
+        >
+          <span nz-icon nzType="bell" nzTheme="outline"></span>
+        </nz-badge>
+      </li>
+
+      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="organization">
+        <nz-space>
+          @if (name === '个人开发者') {
+            <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>
+          } @else {
+            <span *nzSpaceItem nz-icon nzType="team" nzTheme="outline"></span>
+          }
+          <span *nzSpaceItem>{{ name }}</span>
+        </nz-space>
+      </li>
+
+      <!--      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="user">-->
+      <!--        <nz-space>-->
+      <!--          <nz-avatar *nzSpaceItem nzIcon="user"></nz-avatar>-->
+      <!--          <span *nzSpaceItem>张三</span>-->
+      <!--        </nz-space>-->
+      <!--      </li>-->
+    </ul>
+
+    <!-- 小屏幕汉堡按钮 + 下拉菜单 -->
+    <div class="mobile-menu-trigger">
+      <span>
+        <button
+          nz-button
+          nzType="text"
+          nzSize="large"
+          nz-dropdown
+          [nzDropdownMenu]="mobileMenu"
+          nzPlacement="bottomRight"
+        >
+          <span nz-icon nzType="menu" nzTheme="outline" style="color: white; font-size: 20px;"></span>
+        </button>
+      </span>
+    </div>
+  </nz-header>
+
+  <nz-content class="scrollable-content">
+    <router-outlet></router-outlet>
+  </nz-content>
+</nz-layout>
+
+<!-- 小屏幕下拉菜单 -->
+<nz-dropdown-menu #mobileMenu="nzDropdownMenu">
+  <ul nz-menu nzTheme="dark" nzMode="vertical">
+    <li nz-menu-item nzMatchRouter routerLink="/main/product">
+      <span nz-icon nzType="bulb" nzTheme="outline"></span>
+      产品
+    </li>
+    <li nz-menu-item nzMatchRouter routerLink="/main/application">
+      <span nz-icon nzType="appstore" nzTheme="outline"></span>
+      应用
+    </li>
+    <li nz-menu-item nzMatchRouter routerLink="/main/statistic">
+      <span nz-icon nzType="line-chart" nzTheme="outline"></span>
+      统计
+    </li>
+    <li nz-menu-item nzMatchRouter routerLink="/main/template">
+      <span nz-icon nzType="fire" nzTheme="outline"></span>
+      产品模板
+    </li>
+    <li nz-menu-item nzMatchRouter routerLink="/main/spec">
+      <span nz-icon nzType="gold" nzTheme="outline"></span>
+      产品规范
+    </li>
+
+    <li nz-menu-item nzMatchRouter routerLink="/main/profile">
+      <span nz-icon nzType="user" nzTheme="outline"></span>
+      个人中心
+    </li>
+
+    <li nz-menu-item nzMatchRouter (click)="logout()">
+      <span nz-icon nzType="logout" nzTheme="outline"></span>
+      退出登录
+    </li>
+  </ul>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #notice>
+  <notice-card></notice-card>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #organization>
+  <ul nz-menu nzTheme="light" nzMode="vertical">
+    <li nz-menu-item (click)="onSelect('个人开发者')">
+      <nz-space>
+        <i *nzSpaceItem nz-icon nzTheme="outline" nzType="user"></i>
+        <span *nzSpaceItem>个人开发者</span>
+      </nz-space>
+    </li>
+    <li nz-menu-divider></li>
+    <li nz-menu-item (click)="onSelect('xxx')">
+      <nz-space>
+        <i *nzSpaceItem nz-icon nzTheme="outline" nzType="team"></i>
+        <span *nzSpaceItem>xxx</span>
+      </nz-space>
+    </li>
+  </ul>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #user>
+  <ul nz-menu nzTheme="light" nzMode="vertical">
+    <li nz-menu-item>
+      <nz-space>
+        <i *nzSpaceItem nz-icon nzTheme="outline" nzType="user"></i>
+        <span *nzSpaceItem>个人中心</span>
+      </nz-space>
+    </li>
+    <li nz-menu-divider></li>
+    <li nz-menu-item (click)="logout()">
+      <nz-space>
+        <i *nzSpaceItem nz-icon nzTheme="outline" nzType="logout"></i>
+        <span *nzSpaceItem>退出登录</span>
+      </nz-space>
+    </li>
+  </ul>
+</nz-dropdown-menu>

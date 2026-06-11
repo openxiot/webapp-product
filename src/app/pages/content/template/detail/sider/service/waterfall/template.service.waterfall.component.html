@@ -1,0 +1,19 @@
+@if (service) {
+  <div nz-row [nzGutter]="[8, 8]">
+    <div nz-col [nzSpan]="24">
+      <template-service-header [version]="version" [service]="service" [language]="language"></template-service-header>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <template-table-properties [version]="version" [service]="service" [language]="language"></template-table-properties>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <template-table-actions style="padding-top: 8px" [version]="version" [service]="service" [language]="language"></template-table-actions>
+    </div>
+
+    <div nz-col [nzSpan]="24">
+      <template-table-events style="padding-top: 8px" [version]="version" [service]="service" [language]="language"></template-table-events>
+    </div>
+  </div>
+}

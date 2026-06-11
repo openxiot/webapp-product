@@ -1,0 +1,284 @@
+<nz-row [nzGutter]="[8, 8]">
+
+  <nz-col nzSpan="24">
+    <nz-card nzSize="small">
+      <label nz-checkbox [(ngModel)]="basicChecked">基本信息</label>
+      <label nz-checkbox [(ngModel)]="wizardChecked">配网引导</label>
+      <label nz-checkbox [(ngModel)]="instanceChecked">功能</label>
+      <label nz-checkbox [(ngModel)]="panelChecked">控制页</label>
+      <label nz-checkbox [(ngModel)]="firmwareChecked">固件</label>
+      <label nz-checkbox [(ngModel)]="manualChecked">说明书</label>
+<!--      <label nz-checkbox [(ngModel)]="visibilityChecked">可见性</label>-->
+    </nz-card>
+  </nz-col>
+
+  <nz-col nzSpan="24">
+    <nz-table
+      nzShowSizeChanger
+      nzSize="small"
+      nzBordered
+      [nzData]="products"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzTotal]="total"
+      [(nzPageSize)]="pageSize"
+      [(nzPageIndex)]="pageIndex"
+      [nzPageSizeOptions]="pageSizeOptions"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
+      <thead>
+      <tr>
+        <th rowSpan="2">图标</th>
+
+        <th
+          rowSpan="2"
+          [nzSortFn]="typeSortFn"
+        >型号</th>
+
+        <th
+          rowSpan="2"
+          [nzSortFn]="templateSortFn"
+          [nzFilters]="templateFilters"
+          [nzFilterFn]="templateFilterFn"
+        >产品模板</th>
+
+        <th
+          rowSpan="2"
+          [nzSortFn]="typeSortFn"
+          [nzFilters]="typeFilters"
+          [nzFilterFn]="typeFilterFn"
+        >设备类型</th>
+
+        @if (basicChecked) {
+          <th colspan="4">
+            基本信息
+          </th>
+        }
+
+        @if (wizardChecked) {
+          <th colspan="2">
+            配网引导
+          </th>
+        }
+
+        @if (instanceChecked) {
+          <th colspan="2">
+            功能
+          </th>
+        }
+
+        @if (panelChecked) {
+          <th colspan="2">
+            控制页
+          </th>
+        }
+
+        @if (firmwareChecked) {
+          <th colspan="1" rowSpan="2">
+            固件
+          </th>
+        }
+
+        @if (manualChecked) {
+          <th colspan="1" rowSpan="2">
+            说明书
+          </th>
+        }
+
+        @if (visibilityChecked) {
+          <th colspan="1" rowSpan="2">
+            可见性
+          </th>
+        }
+      </tr>
+
+      <tr>
+        @if (basicChecked) {
+          <th
+            [nzSortFn]="nameSortFn"
+            nzCustomFilter
+          >
+            产品名称
+            <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchNameValue.length > 0" [nzDropdownMenu]="menuSearchName">
+              <span nz-icon nzType="search"></span>
+            </nz-filter-trigger>
+          </th>
+
+          <th
+            [nzSortFn]="protocolSortFn"
+            [nzFilters]="protocolFilters"
+            [nzFilterFn]="protocolFilterFn"
+          >连接方式</th>
+
+          <th
+            [nzSortFn]="upgradeSortFn"
+            [nzFilters]="upgradeFilters"
+            [nzFilterFn]="upgradeFilterFn"
+          >固件升级</th>
+
+          <th
+            [nzSortFn]="basicLifecycleSortFn"
+            [nzFilters]="basicLifecycleFilters"
+            [nzFilterFn]="basicLifecycleFilterFn"
+          >状态</th>
+        }
+
+        <!--      <th>操作</th>-->
+        @if (wizardChecked) {
+          <th>步骤</th>
+          <th>状态</th>
+        }
+
+        @if (instanceChecked) {
+          <th>版本</th>
+          <th>状态</th>
+        }
+
+        @if (panelChecked) {
+          <th>版本</th>
+          <th>状态</th>
+        }
+      </tr>
+      </thead>
+      <tbody>
+        @for (p of products; track p.basic.id) {
+          <tr>
+            <td nzAlign="center"><img nz-image [nzSrc]="p.basic.icon" width="64" height="64"></td>
+            <td><a routerLink="/main/product/detail/{{p.basic.id}}">{{ p.basic.model }}</a>
+            <td><a> {{ p.basic.template.name }}</a></td>
+            <td>{{ p.basic.template.name }}</td>
+
+            @if (basicChecked) {
+              <td><a routerLink="/main/product/detail/{{p.basic.id}}">{{ p.basic.name }}</a></td>
+              <td>{{ p.basic.protocol }}</td>
+              <td>
+                @for (item of p.basic.upgrade; track item) {
+                  @switch (item) {
+                    @case ('Direct') {
+                      直接升级
+                    }
+                    @case ('Gateway') {
+                      网关协助
+                    }
+                    @case ('Ble') {
+                      蓝牙协助
+                    }
+                  }
+                }
+              </td>
+              <td>
+                @switch (p.basic.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <nz-tag nzColor="red">开发中</nz-tag>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <nz-tag nzColor="blue">上线中</nz-tag>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    <nz-tag nzColor="green">已上线</nz-tag>
+                  }
+                }
+              </td>
+            }
+
+            @if (wizardChecked) {
+              <td>
+                {{ p.wizard.steps.length }}
+              </td>
+              <td>
+                @switch (p.wizard.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <nz-tag nzColor="red">开发中</nz-tag>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <nz-tag nzColor="blue">上线中</nz-tag>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    <nz-tag nzColor="green">已上线</nz-tag>
+                  }
+                }
+              </td>
+            }
+
+            @if (instanceChecked) {
+              <td>
+                {{ p.CurrentInstance.type?.version }}
+              </td>
+              <td>
+                @switch (p.CurrentInstance.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <nz-tag nzColor="red">开发中</nz-tag>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <nz-tag nzColor="blue">上线中</nz-tag>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    <nz-tag nzColor="green">已上线</nz-tag>
+                  }
+                }
+              </td>
+            }
+
+            @if (panelChecked) {
+              <td>
+                {{ p.CurrentPanel.version.code }}
+              </td>
+              <td>
+                @switch (p.CurrentPanel.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <nz-tag nzColor="red">开发中</nz-tag>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <nz-tag nzColor="blue">上线中</nz-tag>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    <nz-tag nzColor="green">已上线</nz-tag>
+                  }
+                }
+              </td>
+            }
+
+            @if (firmwareChecked) {
+              <td>
+                {{ p.firmwares.length }}
+              </td>
+            }
+
+            @if (manualChecked) {
+              <td>
+                @switch (p.manual.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <nz-tag nzColor="red">开发中</nz-tag>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <nz-tag nzColor="blue">上线中</nz-tag>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    <nz-tag nzColor="green">已上线</nz-tag>
+                  }
+                }
+              </td>
+            }
+
+            @if (visibilityChecked) {
+              <td>
+                所有应用可见
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+
+      <nz-dropdown-menu #menuSearchName="nzDropdownMenu">
+        <div class="ant-table-filter-dropdown">
+          <div class="search-box">
+            <input type="text" nz-input placeholder="请输入产品名称" [(ngModel)]="searchNameValue" />
+            <button nz-button nzSize="small" nzType="primary" (click)="searchName()" class="search-button">搜索</button>
+            <button nz-button nzSize="small" (click)="resetName()">复位</button>
+          </div>
+        </div>
+      </nz-dropdown-menu>
+    </nz-table>
+  </nz-col>
+
+</nz-row>

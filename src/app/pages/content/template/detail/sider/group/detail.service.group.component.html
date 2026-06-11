@@ -1,0 +1,44 @@
+@if (device) {
+  <nz-card nzSize="small" class="group" [nzBodyStyle]="{ padding: 0}" nzBorderless>
+    <div class="group-bar">
+      <nz-space class="group-title">
+        <span *nzSpaceItem><span nz-icon nzType="appstore" nzTheme="outline"></span></span>
+        <span *nzSpaceItem>功能组({{ device.services.size }})</span>
+      </nz-space>
+
+<!--      <span style="float: right">-->
+<!--        <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu">添加</button>-->
+<!--      </span>-->
+    </div>
+
+    <ul nz-menu nzMode="inline" nzTheme="light" class="service-group">
+      @for (s of device.getServices(); track s.iid) {
+        <li nz-menu-item (click)="onClickService(s)">
+          <nz-tag [nzColor]="'blue'">{{ s.iid }}</nz-tag>
+          <span class="service-title">{{ s.description.get(language) }}</span>
+          @if (version) {
+            <span style="float: right"><nz-tag nzColor="blue">版本 {{ s.type.version }}</nz-tag></span>
+          }
+        </li>
+      }
+    </ul>
+  </nz-card>
+
+<!--  <nz-dropdown-menu #menu="nzDropdownMenu">-->
+<!--    <ul nz-menu nzSelectable>-->
+<!--      <li nz-menu-item (click)="onAddService()">-->
+<!--        <nz-space>-->
+<!--          <span *nzSpaceItem nz-icon nzType="database" nzTheme="outline"></span>-->
+<!--          <span *nzSpaceItem>标准功能组</span>-->
+<!--        </nz-space>-->
+<!--      </li>-->
+<!--      <li nz-menu-divider></li>-->
+<!--      <li nz-menu-item (click)="onAddService()">-->
+<!--        <nz-space>-->
+<!--          <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>-->
+<!--          <span *nzSpaceItem>自定义功能组</span>-->
+<!--        </nz-space>-->
+<!--      </li>-->
+<!--    </ul>-->
+<!--  </nz-dropdown-menu>-->
+}

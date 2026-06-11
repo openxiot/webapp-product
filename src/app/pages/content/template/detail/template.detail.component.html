@@ -1,0 +1,46 @@
+<nz-page-header nzTitle="详情" [nzGhost]="false">
+  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+
+  <nz-page-header-content>
+    <nz-descriptions nzSize="small" [nzColumn]="3">
+      <nz-descriptions-item nzTitle="产品模板名称" [nzSpan]="1">
+        @if (template) {
+          <a (click)="onClickType()" target="_blank">{{ template.value.description.get('zh-CN') }}</a>
+        }
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="设备型号" [nzSpan]="1">
+        @if (template) {
+          {{ template.value.type.model }}
+        }
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="设备版本" [nzSpan]="1">
+        @if (template) {
+          {{ template.value.type.version }}
+        }
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="语言" [nzSpan]="1">
+        <nz-radio-group [(ngModel)]="language" nzButtonStyle="solid" nzSize="small">
+          <label nz-radio-button nzValue="zh-CN">简体中文</label>
+          <label nz-radio-button nzValue="zh-TW">繁体中文</label>
+          <label nz-radio-button nzValue="en-US">英文</label>
+        </nz-radio-group>
+      </nz-descriptions-item>
+
+<!--      <nz-descriptions-item nzTitle="版本" [nzSpan]="1">-->
+<!--        <nz-switch [(ngModel)]="version" nzCheckedChildren="显示" nzUnCheckedChildren="隐藏"></nz-switch>-->
+<!--      </nz-descriptions-item>-->
+
+      <nz-descriptions-item nzTitle="浏览模式" [nzSpan]="1">
+        <nz-switch [(ngModel)]="expert" nzCheckedChildren="专家模式" nzUnCheckedChildren="普通模式"></nz-switch>
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-page-header-content>
+</nz-page-header>
+
+<div style="padding: 20px 20px">
+  <nz-spin [nzSpinning]="loading">
+    @if (template) {
+      <template-detail-slider [version]="version" [expert]="expert" [template]="template" [language]="language"></template-detail-slider>
+    }
+  </nz-spin>
+</div>

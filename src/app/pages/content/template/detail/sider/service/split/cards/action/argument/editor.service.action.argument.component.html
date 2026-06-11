@@ -1,0 +1,23 @@
+<div nz-row [nzGutter]="[8, 8]">
+  <div nz-col [nzSpan]="6" class="argument">
+    <span>
+      <nz-tag nzColor="blue">{{ value.property.iid }}</nz-tag>
+    </span>
+
+    <span>
+      {{ value.property.description.get(value.language) }}
+    </span>
+  </div>
+
+  <div nz-col [nzSpan]="16">
+    <nz-space nzDirection="horizontal">
+      <nz-input-number-group *nzSpaceItem nzAddOnBefore="最少" nzAddOnAfter="次">
+        <nz-input-number [(ngModel)]="value.argument.minRepeat" (ngModelChange)="onChanged()"></nz-input-number>
+      </nz-input-number-group>
+
+      <nz-input-number-group *nzSpaceItem nzAddOnBefore="最多" nzAddOnAfter="次">
+        <nz-input-number [(ngModel)]="value.argument.maxRepeat" (ngModelChange)="onChanged()"></nz-input-number>
+      </nz-input-number-group>
+    </nz-space>
+  </div>
+</div>

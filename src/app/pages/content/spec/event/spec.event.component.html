@@ -1,0 +1,51 @@
+<nz-table
+  nzShowSizeChanger
+  nzSize="small"
+  [nzData]="events"
+  [nzFrontPagination]="false"
+  [nzLoading]="loading"
+  [nzTotal]="total"
+  [(nzPageSize)]="pageSize"
+  [(nzPageIndex)]="pageIndex"
+  [nzPageSizeOptions]="pageSizeOptions"
+  (nzQueryParams)="onQueryParamsChange($event)"
+>
+  <thead>
+  <tr>
+    <th>编码</th>
+    <th>代码</th>
+    <th>描述</th>
+    <th>参数</th>
+    <th>状态</th>
+  </tr>
+  </thead>
+  <tbody>
+    @for (a of events; track a.value.type.value) {
+      <tr>
+        <td><nz-tag>{{ a.value.type.shortUUID() }}</nz-tag></td>
+        <td>{{ a.value.type.name }}</td>
+        <td>{{ a.value.description.get('zh-CN') }}</td>
+        <td>
+          @if (a.value.arguments.length > 0) {
+            @for (arg of a.value.arguments; track arg.type.value) {
+              <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
+            }
+          }
+        </td>
+        <td>
+          @switch (a.lifecycle) {
+            @case (LifeCycle.RELEASED) {
+              <nz-tag nzColor="blue">已发布</nz-tag>
+            }
+            @case (LifeCycle.PREVIEW) {
+              <nz-tag nzColor="yellow">预览</nz-tag>
+            }
+            @case (LifeCycle.DEVELOPMENT) {
+              <nz-tag nzColor="red">开发中</nz-tag>
+            }
+          }
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>

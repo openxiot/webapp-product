@@ -1,0 +1,27 @@
+<nz-row [nzGutter]="[8, 8]">
+  <nz-col [nzSpan]="24">
+    <toolbar>
+      <span nz-icon nzType="bulb" nzTheme="outline"></span>
+
+      <div style="color: gray">产品耗材，如滤芯、电池，在APP里查询时出现。</div>
+
+      <div style="margin-left: auto;">
+        <button nz-button nzType="primary" nzDanger>保存</button>
+      </div>
+    </toolbar>
+  </nz-col>
+
+  <nz-col [nzSpan]="24">
+    <div nz-row [nzGutter]="[8, 8]">
+      @for (m of materials; track m.id) {
+        <div nz-col [nzSpan]="12">
+          <product-supply-material [material]="m"></product-supply-material>
+        </div>
+      }
+
+      <div nz-col [nzSpan]="12">
+        <button nz-button (click)="add()">添加耗材</button>
+      </div>
+    </div>
+  </nz-col>
+</nz-row>

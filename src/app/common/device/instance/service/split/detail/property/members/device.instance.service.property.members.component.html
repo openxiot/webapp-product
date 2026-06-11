@@ -1,0 +1,42 @@
+<nz-row [nzGutter]="[8, 8]">
+  @for (id of value; track id) {
+    <nz-col [nzSpan]="24">
+      <div class="member-row">
+        <div class="member-info">
+          <!-- 显示成员属性信息 -->
+          <nz-tag>
+            {{ getPropertyName(id) }}
+          </nz-tag>
+          <span class="member-iid">(ID: {{ id }})</span>
+        </div>
+
+        <div class="member-actions">
+          <!-- 删除按钮 -->
+          <button
+            nz-button
+            nzType="text"
+            nzDanger
+            nz-tooltip="删除成员"
+            (click)="removeMember(id)"
+            [disabled]="isDisabled"
+          >
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+    </nz-col>
+  }
+
+  <nz-col [nzSpan]="24">
+    <button
+      nz-button
+      nzType="dashed"
+      nzBlock
+      (click)="addMemberItem()"
+      [disabled]="isDisabled"
+    >
+      <span nz-icon nzType="plus"></span>
+      添加成员
+    </button>
+  </nz-col>
+</nz-row>

@@ -1,0 +1,31 @@
+<nz-table
+  #table
+  nzSize="small"
+  nzHideOnSinglePage
+  nzShowSizeChanger
+  [nzPageSize]="100"
+  [nzData]="templates"
+>
+  <thead>
+    <tr>
+      <th>名字空间</th>
+      <th>模板名称</th>
+      <th>型号</th>
+      <th>版本</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of table.data; track p.type.toString()) {
+      <tr>
+        <td>{{ p.type.ns }}</td>
+        <td>{{ p.description.get('zh-CN') }}</td>
+        <td>{{ p.type.model }}</td>
+        <td>{{ p.type.version }}</td>
+        <td>
+          <a routerLink="/main/template/detail/{{p.type.toString()}}">详情</a>
+        </td>
+      </tr>
+    }
+  </tbody>
+</nz-table>

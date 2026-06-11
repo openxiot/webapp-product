@@ -1,0 +1,31 @@
+.inner-layout {
+  padding: 0 0;
+  height: 600px;
+  background: #fff;
+}
+
+.inner-content {
+  overflow-y: auto; /* 超出时显示滚动条 */
+  overflow-x: hidden;
+  min-height: 380px;
+}
+
+.sider {
+  overflow-y: auto; /* 超出时显示滚动条 */
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+  border-right: 0;
+}
+
+.event-title {
+  display: inline-block;    /* 或者 block */
+  max-width: 200px;         /* 设置你的最大宽度 */
+  white-space: nowrap;      /* 禁止换行 */
+  overflow: hidden;         /* 隐藏溢出内容 */
+  text-overflow: ellipsis;  /* 显示省略号 */
+  vertical-align: bottom;   /* 可选的，用于对齐优化 */
+}

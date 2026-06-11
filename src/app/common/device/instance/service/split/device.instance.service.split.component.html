@@ -1,0 +1,62 @@
+@if (service) {
+  <nz-layout class="inner-layout">
+    <nz-sider nzWidth="300px" nzTheme="light">
+      <device-instance-service-menu
+        [version]="version"
+        [lifecycle]="lifecycle"
+        [service]="service"
+        [language]="language"
+        (titleSelected)="onTitleSelected($event)"
+        (propertySelected)="onPropertySelected($event)"
+        (actionSelected)="onActionSelected($event)"
+        (eventSelected)="onEventSelected($event)"
+        (changed)="onServiceChanged($event)"
+      ></device-instance-service-menu>
+    </nz-sider>
+
+    <nz-content class="inner-content">
+      @if (showServiceDetail) {
+        <device-instance-service-detail
+          [lifecycle]="lifecycle"
+          [service]="service"
+          [language]="language"
+          (removed)="onServiceRemoved($event)"
+          (changed)="onServiceChanged($event)"
+        ></device-instance-service-detail>
+      }
+
+      @if (property) {
+        <device-instance-service-property
+          [lifecycle]="lifecycle"
+          [service]="service"
+          [property]="property"
+          [language]="language"
+          (removed)="onPropertyRemoved($event)"
+          (changed)="onPropertyChanged($event)"
+        ></device-instance-service-property>
+      }
+
+      @if (action) {
+        <device-instance-service-action
+          [lifecycle]="lifecycle"
+          [service]="service"
+          [action]="action"
+          [language]="language"
+          (removed)="onActionRemoved($event)"
+          (changed)="onActionChanged($event)"
+        ></device-instance-service-action>
+      }
+
+      @if (event) {
+        <device-instance-service-event
+          [lifecycle]="lifecycle"
+          [service]="service"
+          [event]="event"
+          [language]="language"
+          (removed)="onEventRemoved($event)"
+          (changed)="onEventChanged($event)"
+        ></device-instance-service-event>
+      }
+    </nz-content>
+  </nz-layout>
+}

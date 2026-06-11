@@ -1,0 +1,9 @@
+<nz-card
+  nzSize="small"
+  nzTitle="设备类型"
+>
+  <nz-tag nzMode="checkable" [(nzChecked)]="all.checked" (nzCheckedChange)="onAllChecked(all, $event)">{{ all.name }}</nz-tag>
+  @for (type of types; track type.code) {
+    <nz-tag nzMode="checkable" [(nzChecked)]="type.checked" (nzCheckedChange)="onTypeChecked(type, $event)">{{ type.name }}</nz-tag>
+  }
+</nz-card>

@@ -1,0 +1,63 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="productTitle" [nzSubtitle]="productModel" [nzGhost]="false" class="fixed-header">
+    <nz-page-header-footer>
+      <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
+        <nz-tab nzTitle="基本信息"></nz-tab>
+        <nz-tab nzTitle="配网引导"></nz-tab>
+        <nz-tab nzTitle="功能"></nz-tab>
+        <nz-tab nzTitle="控制页"></nz-tab>
+        @if (product.upgrade.length > 0) {
+          <nz-tab nzTitle="固件"></nz-tab>
+        }
+        <nz-tab nzTitle="说明书"></nz-tab>
+<!--        <nz-tab nzTitle="可见性"></nz-tab>-->
+<!--        <nz-tab nzTitle="耗材"></nz-tab>-->
+<!--        <nz-tab nzTitle="销售"></nz-tab>-->
+      </nz-tabset>
+    </nz-page-header-footer>
+  </nz-page-header>
+
+  <ng-template #productTitle>
+    {{ product.name }}
+  </ng-template>
+
+  <ng-template #productModel>
+    型号: {{ product.model }}
+  </ng-template>
+
+  <div style="padding: 20px 20px; margin-top: 110px;">
+    @switch (tabIndex) {
+      @case (0) {
+        <product-basic [product]="product" (onSaved)="onSaved()"></product-basic>
+      }
+      @case (1) {
+        <product-wizard [product]="product"></product-wizard>
+      }
+      @case (2) {
+        <product-instance [product]="product"></product-instance>
+      }
+      @case (3) {
+        <product-panel [product]="product"></product-panel>
+      }
+      @case (4) {
+        @if (product.upgrade.length > 0) {
+          <product-firmware [product]="product"></product-firmware>
+        } @else {
+          <product-manual [product]="product"></product-manual>
+        }
+      }
+      @case (5) {
+        @if (product.upgrade.length > 0) {
+          <product-manual [product]="product"></product-manual>
+        } @else {
+          <product-visibility [product]="product"></product-visibility>
+        }
+      }
+      @case (6) {
+        @if (product.upgrade.length > 0) {
+          <product-visibility [product]="product"></product-visibility>
+        }
+      }
+    }
+  </div>
+</nz-spin>

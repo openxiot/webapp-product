@@ -1,0 +1,124 @@
+@if (service) {
+  <div style="width: 100%;">
+    <nz-table
+      style="width: 100%"
+      #actionTable
+      [nzData]="service.getActions()"
+      [nzSize]="'small'"
+      [nzPageSize]="100"
+      [nzHideOnSinglePage]="true"
+      [nzWidthConfig]="['32px', '128px', '160px', '260px', '240px', '40px', '40px']"
+      [nzBordered]="true"
+      [nzTitle]="title"
+      [nzScroll]="{ x: '1000px'}"
+    >
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>代码</th>
+        <th>描述</th>
+        <th>参数</th>
+        <th>返回值</th>
+        <th>版本</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+        @for (p of actionTable.data; track p) {
+          <tr>
+            <td nzAlign="center">
+              <a>
+                <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
+              </a>
+            </td>
+            <td>
+              <a>
+                {{ p.type.name }}
+              </a>
+            </td>
+            <td>
+              <a>
+                {{ p.description.get(language) }}
+                <span style="float: right" nz-icon nzType="edit" nzTheme="outline"></span>
+              </a>
+            </td>
+            <td>
+              <div nz-row [nzGutter]="[8, 8]">
+                <div nz-col [nzSpan]="20">
+                  @for (arg of p.getArgumentsIn(); track arg) {
+                    <div (click)="onClickArgumentIn(arg)">
+                      <span nz-tooltip nzTooltipTitle="属性IID: {{arg.piid}} ，最少{{arg.minRepeat}}个，最多{{arg.maxRepeat}}个">
+                        @switch (getProperty(arg.piid)?.format) {
+                          @case (DataFormat.COMBINATION) {
+                            <nz-tag nzColor="red" class="argument">{{ getProperty(arg.piid)?.description!.get(language) }}</nz-tag>
+                          }
+                          @default {
+                            <nz-tag class="argument">{{ getProperty(arg.piid)?.description!.get(language) }}</nz-tag>
+                          }
+                        }
+                      </span>
+                    </div>
+                  }
+                </div>
+
+                <div nz-col [nzSpan]="4" class="center">
+                  <button nz-button nzType="dashed" nzSize="small">
+                    <span nz-icon nzType="plus"></span>
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div nz-row [nzGutter]="[8, 8]">
+                <div nz-col [nzSpan]="20">
+                  @for (arg of p.getArgumentsOut(); track arg) {
+                    <div (click)="onClickArgumentOut(arg)">
+                      <span nz-tooltip nzTooltipTitle="属性IID: {{arg.piid}}，最少{{arg.minRepeat}}个，最多{{arg.maxRepeat}}个">
+                        @switch (getProperty(arg.piid)?.format) {
+                          @case (DataFormat.COMBINATION) {
+                            <nz-tag nzColor="red" class="argument">{{ getProperty(arg.piid)?.description!.get(language) }}</nz-tag>
+                          }
+                          @default {
+                            <nz-tag class="argument">{{ getProperty(arg.piid)?.description!.get(language) }}</nz-tag>
+                          }
+                        }
+                      </span>
+                    </div>
+                  }
+
+                </div>
+
+                <div nz-col [nzSpan]="4" class="center">
+                  <button nz-button nzType="dashed" nzSize="small">
+                    <span nz-icon nzType="plus"></span>
+                  </button>
+                </div>
+              </div>
+            </td>
+            <td>
+              <nz-tag [nzColor]="'blue'">版本 {{ p.type.version }}</nz-tag>
+            </td>
+            <td nzAlign="center">
+              <div (click)="onRemove(p)" class="remove">
+                <span nz-icon nzType="delete" nzTheme="outline" style="color: red"></span>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+
+    <ng-template #title>
+      <div>
+        <nz-space style="font-size: 14px; font-weight: bold;">
+          <span *nzSpaceItem nz-icon nzType="thunderbolt" nzTheme="outline"></span>
+          <span *nzSpaceItem>方法({{ service.actions.size }}个)</span>
+        </nz-space>
+
+        <span style="float: right">
+          <button nz-button nzType="primary" nzSize="small">添加</button>
+        </span>
+      </div>
+    </ng-template>
+  </div>
+}

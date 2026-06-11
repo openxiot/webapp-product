@@ -1,0 +1,63 @@
+.preview {
+  width: 100%;
+  height: 300px;
+}
+
+.icon-uploader {
+  height: 300px;
+
+  .upload-container {
+    width: 148px;  // 固定方框大小
+    height: 148px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.3s;
+
+    &:hover {
+      border-color: #1890ff;  // hover时高亮边框
+    }
+  }
+
+  .preview-wrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+
+    .preview-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;  // 图片自适应方框
+    }
+
+    .delete-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 24px;
+      height: 24px;
+      padding: 0;
+      margin: 0;
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      border-radius: 0 0 0 4px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.7);
+      }
+    }
+
+    // 鼠标悬停图片时显示删除按钮
+    &:hover .delete-btn {
+      opacity: 1;
+    }
+  }
+}

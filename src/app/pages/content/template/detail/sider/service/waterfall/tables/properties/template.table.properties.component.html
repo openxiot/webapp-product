@@ -1,0 +1,157 @@
+@if (service) {
+  <div style="width: 100%">
+    <nz-table
+      style="width: 100%"
+      #propertyTable
+      [nzData]="service.getProperties()"
+      [nzSize]="'small'"
+      [nzPageSize]="30"
+      [nzHideOnSinglePage]="true"
+      [nzWidthConfig]="getWidthConfig()"
+      [nzBordered]="true"
+      [nzTitle]="title"
+      [nzScroll]="{ x: '1200px'}"
+    >
+<!--      [nzWidthConfig]="['32px', '128px', '128px', '40px', '100px', '32px', '32px']"-->
+      @if (expand) {
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>代码</th>
+          <th>描述</th>
+          <th>格式</th>
+          <th>访问方式</th>
+          <th>缺省值</th>
+          <th>成员</th>
+          @if (version) {
+            <th>版本</th>
+          }
+          <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+          @for (p of propertyTable.data; track p) {
+            <tr>
+              <td nzAlign="center">
+                <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
+              </td>
+              <td>
+                {{ p.type.name }}
+
+<!--                <a (click)="onEditName(p)">-->
+<!--                  <div nz-row [nzGutter]="[8, 8]">-->
+<!--                    <div nz-col [nzSpan]="20">-->
+<!--                    </div>-->
+
+<!--                    <div nz-col [nzSpan]="4" class="center">-->
+<!--                      <span style="float: right" nz-icon nzType="edit" nzTheme="outline"></span>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </a>-->
+              </td>
+              <td>
+                {{ p.description.get(language) }}
+              </td>
+<!--              <td class="editable" (click)="onEditDescription(p)">-->
+<!--&lt;!&ndash;                <a>&ndash;&gt;-->
+<!--                  <div nz-row [nzGutter]="[8, 8]">-->
+<!--                    <div nz-col [nzSpan]="20">-->
+<!--                      {{ p.description.get(language) }}-->
+<!--                    </div>-->
+<!--&lt;!&ndash;                    <div nz-col [nzSpan]="4" class="center">&ndash;&gt;-->
+<!--&lt;!&ndash;                      <span style="float: right" nz-icon nzType="edit" nzTheme="outline"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--                  </div>-->
+<!--&lt;!&ndash;                </a>&ndash;&gt;-->
+<!--              </td>-->
+              <td>
+<!--                {{ getFormatLabel(p.format) }}-->
+                {{ p.format.toString() }}
+              </td>
+              <td>
+                @if (p.access.isWritable) {
+                  <nz-tag [nzColor]="'blue'">写</nz-tag>
+                }
+
+                @if (p.access.isReadable) {
+                  <nz-tag [nzColor]="'blue'">读</nz-tag>
+                }
+
+                @if (p.access.isNotifiable) {
+                  <nz-tag [nzColor]="'blue'">通知</nz-tag>
+                }
+              </td>
+              <td>
+                <debugger-property-value [service]="service" [property]="p"></debugger-property-value>
+              </td>
+              <td>
+                @if (p.formatCombination()) {
+                  <property-member [service]="service" [property]="p" [language]="language"></property-member>
+                }
+
+<!--                @if (p.formatCombination()) {-->
+<!--                  <div nz-row [nzGutter]="[8, 8]">-->
+<!--                    <div nz-col [nzSpan]="18">-->
+<!--                      <debugger-property-member [service]="service" [property]="p" [language]="language"></debugger-property-member>-->
+<!--                    </div>-->
+
+<!--                    <div nz-col [nzSpan]="6" class="center">-->
+<!--                      <button nz-button nzType="dashed" nzSize="small">-->
+<!--                        <span nz-icon nzType="plus"></span>-->
+<!--                      </button>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                }-->
+              </td>
+
+              @if (version) {
+                <td>
+                  <nz-tag [nzColor]="'blue'">版本 {{ p.type.version }}</nz-tag>
+                </td>
+              }
+
+              <td nzAlign="center">
+                <span (click)="onEdit(p)" class="editable">
+                  <span nz-icon nzType="edit" nzTheme="outline" style="color: blue"></span>
+                </span>
+
+                <nz-divider nzType="vertical"></nz-divider>
+
+                <span (click)="onRemove(p)" class="removable">
+                  <span nz-icon nzType="delete" nzTheme="outline" style="color: red"></span>
+                </span>
+
+<!--                <div nz-row [nzGutter]="[8, 8]">-->
+<!--                  <div nz-col [nzSpan]="12">-->
+<!--                    <span (click)="onEdit(p)" class="editable">-->
+<!--                      <span nz-icon nzType="edit" nzTheme="outline" style="color: blue"></span>-->
+<!--                    </span>-->
+<!--                  </div>-->
+
+<!--                  <div nz-col [nzSpan]="12">-->
+<!--                    <span (click)="onRemove(p)" class="remove">-->
+<!--                      <span nz-icon nzType="delete" nzTheme="outline" style="color: red"></span>-->
+<!--                    </span>-->
+<!--                  </div>-->
+<!--                </div>-->
+              </td>
+            </tr>
+          }
+        </tbody>
+      }
+    </nz-table>
+
+    <ng-template #title>
+      <div>
+        <nz-space style="font-size: 14px; font-weight: bold;">
+          <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>
+          <span *nzSpaceItem>属性({{ service.properties.size }}个)</span>
+        </nz-space>
+
+        <span style="float: right">
+          <button nz-button nzType="primary" nzSize="small">添加</button>
+        </span>
+      </div>
+    </ng-template>
+  </div>
+}

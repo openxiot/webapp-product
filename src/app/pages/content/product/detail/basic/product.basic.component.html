@@ -1,0 +1,114 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-row [nzGutter]="[8, 8]">
+    <nz-col [nzSpan]="24">
+      <toolbar>
+        @switch (product.lifecycle) {
+          @case (LifeCycle.DEVELOPMENT) {
+            <nz-tag nzColor="red">开发中</nz-tag>
+
+            @if (changed) {
+              <div style="color: red">基本信息已修改，请保存！</div>
+            } @else {
+              <div style="color: gray">开发中的产品，最终用户不可见。如需最终用户可见，需要上线。</div>
+            }
+          }
+          @case (LifeCycle.PREVIEW) {
+            <nz-tag nzColor="green">上线中</nz-tag>
+            <div style="color: gray">管理员正在审批，请等待！</div>
+          }
+          @case (LifeCycle.RELEASED) {
+            <nz-tag nzColor="blue">已上线</nz-tag>
+            <div style="color: gray">产品已上线，基本信息不可修改</div>
+          }
+        }
+
+        <!-- 在 flex 容器中，margin-left: auto 会让元素 “自动填满左侧剩余空间”-->
+        <div style="margin-left: auto;">
+          @if (changed) {
+            <nz-space>
+              <div *nzSpaceItem>
+                <button nz-button nzType="primary" nzDanger (click)="onCancel()">取消</button>
+              </div>
+
+              <div *nzSpaceItem>
+                <button nz-button nzType="primary" (click)="onSave()">保存</button>
+              </div>
+            </nz-space>
+          } @else {
+            @switch (product.lifecycle) {
+              @case (LifeCycle.DEVELOPMENT) {
+                <nz-space>
+                  <div *nzSpaceItem>
+                    <button nz-button nzType="primary" nzDanger (click)="onRemove()">删除</button>
+                  </div>
+
+                  <div *nzSpaceItem>
+                    <button nz-button nzType="primary" (click)="onPreview()">上线</button>
+                  </div>
+                </nz-space>
+              }
+              @case (LifeCycle.PREVIEW) {
+                <button nz-button nzType="primary" nzDanger (click)="cancelPreview()">取消上线</button>
+              }
+            }
+          }
+        </div>
+      </toolbar>
+    </nz-col>
+
+    <nz-col [nzSpan]="24">
+      <nz-card nzBorderless>
+        <form nz-form [formGroup]="form">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="name">产品ID</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <product-basic-id formControlName="id"></product-basic-id>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="name">产品名称</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <product-basic-name formControlName="name" [lifecycle]="product.lifecycle"></product-basic-name>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="model">产品型号</nz-form-label>
+            <nz-form-control [nzSpan]="6" nzErrorTip="产品型号">
+              <product-basic-model formControlName="model"></product-basic-model>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="type">产品类型</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <product-basic-type formControlName="type"></product-basic-type>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="icon">产品图标</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <product-basic-icon formControlName="icon" [lifecycle]="product.lifecycle" [productId]="product.id"></product-basic-icon>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="protocol">设备连接</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <product-basic-protocol formControlName="protocol" [lifecycle]="product.lifecycle"></product-basic-protocol>
+            </nz-form-control>
+          </nz-form-item>
+
+          <nz-form-item>
+            <nz-form-label [nzSpan]="2" nzRequired nzFor="supported">固件升级</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <product-basic-upgrade formControlName="upgrade" [lifecycle]="product.lifecycle"></product-basic-upgrade>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </nz-card>
+    </nz-col>
+  </nz-row>
+</nz-spin>

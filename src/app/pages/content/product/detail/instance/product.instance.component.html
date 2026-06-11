@@ -1,0 +1,105 @@
+<nz-row [nzGutter]="[8, 8]">
+  <nz-col [nzSpan]="24">
+    <nz-spin [nzSpinning]="loadingInstances">
+      <toolbar>
+        @if (instances.length > 0) {
+          <nz-select [(ngModel)]="currentVersion" style="width: 140px" (ngModelChange)="onCurrentVersionChanged($event)">
+            @for (instance of instances; track instance.type) {
+              <nz-option nzValue="{{ instance.type?.version || 0 }}" nzLabel="版本 {{ instance.type?.version || 0 }}"></nz-option>
+            }
+          </nz-select>
+
+          <div>
+            @switch (currentInstance?.lifecycle) {
+              @case (LifeCycle.DEVELOPMENT) {
+                <nz-tag nzColor="red">开发中</nz-tag>
+                <nz-tag nzColor="geekblue">最新版本</nz-tag>
+              }
+              @case (LifeCycle.PREVIEW) {
+                <nz-tag nzColor="green">上线中</nz-tag>
+                <nz-tag nzColor="geekblue">最新版本</nz-tag>
+              }
+              @case (LifeCycle.RELEASED) {
+                <nz-tag nzColor="blue">已上线</nz-tag>
+              }
+            }
+          </div>
+
+          <div style="color: gray">
+            @switch (currentInstance?.lifecycle) {
+              @case (LifeCycle.DEVELOPMENT) {
+                @if (isChanged) {
+                  产品功能已修改，请保存！
+                } @else {
+                  产品功能处于“开发中”，最终用户不可见，如需最终用户可见，需要上线。
+                }
+              }
+              @case (LifeCycle.PREVIEW) {
+                产品功正在上线，等待管理员审批
+              }
+              @case (LifeCycle.RELEASED) {
+                产品功能已“上线”，不能“修改”功能，最终用户可见，最后一个版本可以升级功能。
+              }
+            }
+          </div>
+
+          <div style="margin-left: auto;">
+            @if (isChanged) {
+              <nz-space>
+                <div *nzSpaceItem>
+                  <button nz-button nzType="primary" (click)="onCancel()">取消</button>
+                </div>
+
+                <div *nzSpaceItem>
+                  <button nz-button nzType="primary" nzDanger (click)="onSave()">保存</button>
+                </div>
+              </nz-space>
+            } @else {
+              <nz-space>
+                <div *nzSpaceItem>
+                  <button nz-button (click)="onDownload()">下载</button>
+                </div>
+
+                @switch (currentInstance?.lifecycle) {
+                  @case (LifeCycle.DEVELOPMENT) {
+                    <div *nzSpaceItem>
+                      <button nz-button nzType="primary" (click)="onPreview()">上线</button>
+                    </div>
+                  }
+                  @case (LifeCycle.PREVIEW) {
+                    <div *nzSpaceItem>
+                      <button nz-button nzType="primary" (click)="onCancelPreview()">取消上线</button>
+                    </div>
+                  }
+                  @case (LifeCycle.RELEASED) {
+                    @if (lastVersion) {
+                      <div *nzSpaceItem>
+                        <button nz-button nzType="primary">升级</button>
+                      </div>
+                    }
+                  }
+                }
+              </nz-space>
+            }
+          </div>
+        } @else {
+          <div style="margin-left: auto;">
+            <button nz-button nzType="primary" nzDanger (click)="onFirstInstance()">创建产品功能</button>
+          </div>
+        }
+      </toolbar>
+    </nz-spin>
+  </nz-col>
+
+  <nz-col [nzSpan]="24">
+    <nz-spin [nzSpinning]="loadingInstance">
+      @if (device) {
+        <device-instance
+          [device]="device.value"
+          [lifecycle]="device.lifecycle"
+          (changed)="onChanged($event)"
+        ></device-instance>
+      }
+    </nz-spin>
+  </nz-col>
+</nz-row>

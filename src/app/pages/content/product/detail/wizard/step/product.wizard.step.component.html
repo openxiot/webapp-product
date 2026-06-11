@@ -1,0 +1,83 @@
+<nz-card
+  nzBorderless
+  nzSize="small"
+  nzTitle="步骤 {{ step.index }}"
+  [nzExtra]="stepExtra"
+>
+  <nz-row [nzGutter]="[8, 8]">
+
+    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+      <nz-col [nzSpan]="24">
+        <div style="color: darkgray; font-size: 12px;">请上传jpeg图片，512*512像素，大小不超过512KB。</div>
+      </nz-col>
+
+      <nz-col [nzSpan]="24">
+        <nz-upload
+          class="icon-uploader"
+          nzType="drag"
+          nzListType="picture-card"
+          [nzCustomRequest]="customUpload"
+          [nzBeforeUpload]="beforeUpload"
+          [nzFileType]="supportFileType"
+          [nzMultiple]="false"
+          (nzChange)="handleChange($event)"
+          [nzShowUploadList]="false"
+          [nzDisabled]="loading"
+        >
+          @if (step.image.length === 0) {
+            <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></span>
+            <div class="ant-upload-text">上传</div>
+          } @else {
+            <div class="preview-wrapper">
+              <img [src]="step.image" class="preview-img" alt="上传的图片"/>
+              <button
+                class="delete-btn"
+                nz-icon nzType="delete"
+                (click)="handleDelete($event)"
+              ></button>
+            </div>
+          }
+        </nz-upload>
+      </nz-col>
+    } @else {
+      <nz-col [nzSpan]="24">
+        <div class="preview">
+          <img [src]="step.image" style="width: 100%; height: 100%;"/>
+        </div>
+      </nz-col>
+    }
+
+    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+      <nz-col [nzSpan]="24">
+        <div style="color: darkgray; font-size: 12px;">步骤说明</div>
+      </nz-col>
+    }
+
+      <nz-col [nzSpan]="24">
+      <div style="height: 90px;">
+        @if (lifecycle === LifeCycle.DEVELOPMENT) {
+          <textarea
+            nz-input
+            placeholder="请输入步骤说明"
+            rows="4"
+            [(ngModel)]="step.description"
+            (ngModelChange)="onDescriptionChanged()"
+          ></textarea>
+        } @else {
+          <div>
+            {{ step.description}}
+          </div>
+        }
+      </div>
+    </nz-col>
+
+  </nz-row>
+</nz-card>
+
+<ng-template #stepExtra>
+  @switch (lifecycle) {
+    @case (LifeCycle.DEVELOPMENT) {
+      <button nzSize="small" nz-button nzType="primary" nzDanger (click)="onRemove()">删除</button>
+    }
+  }
+</ng-template>

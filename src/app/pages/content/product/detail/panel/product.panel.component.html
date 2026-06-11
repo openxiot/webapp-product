@@ -1,0 +1,19 @@
+<nz-spin [nzSpinning]="loadingInstances || loading">
+<nz-row [nzGutter]="[8, 8]">
+    <nz-col [nzSpan]="24">
+      <toolbar>
+        <span nz-icon nzType="user" nzTheme="outline"></span>
+
+        <div style="color: gray">产品控制页面</div>
+
+        <div style="margin-left: auto;">
+          <button nz-button nzType="primary" (click)="create()">添加</button>
+        </div>
+      </toolbar>
+    </nz-col>
+
+    <nz-col [nzSpan]="24">
+      <product-panel-list [product]="product" #productPanel></product-panel-list>
+    </nz-col>
+  </nz-row>
+</nz-spin>

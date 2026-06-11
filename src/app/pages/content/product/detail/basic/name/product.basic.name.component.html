@@ -1,0 +1,8 @@
+@switch (lifecycle) {
+  @case (LifeCycle.DEVELOPMENT) {
+    <input type="text" nz-input [(ngModel)]="value" placeholder="产品名称"/>
+  }
+  @default {
+    {{ value }}
+  }
+}

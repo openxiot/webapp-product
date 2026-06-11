@@ -1,0 +1,38 @@
+.menu {
+  height: 100%;
+}
+
+.title-bar {
+  //background: white;
+  //padding: 12px 8px 12px 8px;
+  height: 48px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.menu-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+  border-right: 0;
+}
+
+//::ng-deep {
+//  .ant-menu-inline .ant-menu-item:not(:last-child),
+//  .ant-menu-vertical .ant-menu-item:not(:last-child),
+//  .ant-menu-vertical-left .ant-menu-item:not(:last-child),
+//  .ant-menu-vertical-right .ant-menu-item:not(:last-child) {
+//    margin-top: 0;
+//    margin-bottom: 0;
+//  }
+//}
+
+.menu-item {
+  display: inline-block;    /* 或者 block */
+  max-width: 200px;         /* 设置你的最大宽度 */
+  white-space: nowrap;      /* 禁止换行 */
+  overflow: hidden;         /* 隐藏溢出内容 */
+  text-overflow: ellipsis;  /* 显示省略号 */
+  vertical-align: bottom;   /* 可选的，用于对齐优化 */
+}
