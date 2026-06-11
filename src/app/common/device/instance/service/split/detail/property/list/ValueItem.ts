@@ -1,4 +1,4 @@
-import {ValueDefinition} from '@openxiot/xiot-core-spec-ts/dist/xiot/core/spec/typedef/definition/property/ValueDefinition';
+import {ValueDefinition} from '@openxiot/xiot-core-spec-ts';
 
 export class ValueItem {
 

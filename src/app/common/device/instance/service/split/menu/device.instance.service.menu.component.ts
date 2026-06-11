@@ -12,8 +12,8 @@ import {CreatePropertyComponent} from '../../../dialog/create/property/create.pr
 import {CreateActionComponent} from '../../../dialog/create/action/create.action.component';
 import {CreateEventComponent} from '../../../dialog/create/event/create.event.component';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
-import {DataFormat} from '@openxiot/xiot-core-spec-ts/dist/xiot/core/spec/typedef/definition/property/data/DataFormat';
-import {Access} from '@openxiot/xiot-core-spec-ts/dist/xiot/core/spec/typedef/definition/property/Access';
+import {DataFormat} from '@openxiot/xiot-core-spec-ts';
+import {Access} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'device-instance-service-menu',

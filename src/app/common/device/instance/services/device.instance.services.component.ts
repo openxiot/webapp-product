@@ -10,7 +10,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {CreateServiceComponent} from '../dialog/create/service/create.service.component';
-import {ServiceType} from '@openxiot/xiot-core-spec-ts/dist/xiot/core/spec/typedef/definition/urn/ServiceType';
+import {ServiceType} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'device-instance-services',
