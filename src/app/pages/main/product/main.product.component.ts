@@ -7,7 +7,7 @@ import {RouterLink, RouterOutlet} from '@angular/router';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {Product} from '@openxiot/xiot-core-spec-ts';
+import {ProductBasic} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
@@ -39,7 +39,7 @@ export class MainProductComponent implements OnInit, OnDestroy {
   private subscription: any;
   version: string = pkg.version;
   loading: boolean = true;
-  products: Map<string, Product[]> = new Map<string, Product[]>();
+  products: Map<string, ProductBasic[]> = new Map<string, ProductBasic[]>();
   menuState: { [key: string]: boolean } = {};
 
   constructor(

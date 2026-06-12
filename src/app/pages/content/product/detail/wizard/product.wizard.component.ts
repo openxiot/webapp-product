@@ -11,7 +11,7 @@ import {NzInputModule} from 'ng-zorro-antd/input';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ProductWizardStepComponent} from './step/product.wizard.step.component';
-import {LifeCycle, Product, ProductWizard, ProductWizardStep, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, ProductBasic, ProductWizard, ProductWizardStep, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {MainService} from '../../../../../service/main.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
@@ -42,7 +42,7 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 })
 export class ProductWizardComponent implements OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
 
   protected readonly LifeCycle = LifeCycle;
 

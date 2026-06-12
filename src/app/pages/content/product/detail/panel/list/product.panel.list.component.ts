@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NzUploadModule} from 'ng-zorro-antd/upload';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTableModule} from 'ng-zorro-antd/table';
-import {LifeCycle, Product, ProductFirmwareInstance, ProductPanel, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, ProductBasic, ProductFirmwareInstance, ProductPanel, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../../service/main.service';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
@@ -47,7 +47,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
 
   loading: boolean = false;
   panels: ProductPanel[] = [];

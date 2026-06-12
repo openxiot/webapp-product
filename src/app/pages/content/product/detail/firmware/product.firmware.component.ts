@@ -14,7 +14,7 @@ import {NzSwitchModule} from 'ng-zorro-antd/switch';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {
   LifeCycle,
-  Product,
+  ProductBasic,
   ProductFirmware,
   ProductFirmwareInstance,
   ProductInstance,
@@ -66,7 +66,7 @@ import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.com
 })
 export class ProductFirmwareComponent implements OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
 
   protected readonly LifeCycle = LifeCycle;
 

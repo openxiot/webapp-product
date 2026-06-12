@@ -4,7 +4,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
-import {Product, LifeCycle, ProductVisibility, Urn, UrnType, ProductVisibilityApplication} from '@openxiot/xiot-core-spec-ts';
+import {ProductBasic, LifeCycle, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzOptionComponent, NzSelectModule} from 'ng-zorro-antd/select';
 import {FormsModule} from '@angular/forms';
@@ -35,12 +35,11 @@ import {MainService} from '../../../../../service/main.service';
 })
 export class ProductVisibilityComponent implements OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
 
   protected readonly LifeCycle = LifeCycle;
 
   loading: boolean = false;
-  visibility: ProductVisibility = new ProductVisibility();
   changed: boolean = false;
 
   constructor(
@@ -56,17 +55,17 @@ export class ProductVisibilityComponent implements OnChanges {
   }
 
   private loadVisibility(productId: number) {
-    this.loading = true;
-    this.service.getProductVisibility(productId).subscribe({
-      next: data => {
-        this.visibility = data;
-        this.loading = false;
-        this.changed = false;
-      },
-      error: error => {
-        this.msg.warning('Failed to getProductVisibility', error);
-      }
-    });
+    // this.loading = true;
+    // this.service.getProductVisibility(productId).subscribe({
+    //   next: data => {
+    //     this.visibility = data;
+    //     this.loading = false;
+    //     this.changed = false;
+    //   },
+    //   error: error => {
+    //     this.msg.warning('Failed to getProductVisibility', error);
+    //   }
+    // });
   }
 
   protected onCurrentTypeChanged($event: any) {
@@ -93,7 +92,7 @@ export class ProductVisibilityComponent implements OnChanges {
 
   }
 
-  protected onRemoveApp(app: ProductVisibilityApplication) {
-
-  }
+  // protected onRemoveApp(app: ProductVisibilityApplication) {
+  //
+  // }
 }

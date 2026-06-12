@@ -65,14 +65,27 @@
 }
 
 .logo {
-  position: relative;
+  display: flex;
+  align-items: center;   /* 垂直居中 */
+  gap: 8px;              /* 图标与文字间距 */
+  width: 180px;          /* 足够放下图标+文字 */
   height: 30px;
-  width: 140px;
-  padding-left: 16px;
-  overflow: hidden;
-  line-height: 32px;
-  margin: 16px 30px 16px 30px;
+  padding: 0 16px;
+  margin: 17px 30px;     /* 垂直居中 header */
   float: left;
+}
+
+.logo-img {
+  height: 100%;          /* 占满logo区域高度 */
+  width: auto;
+  object-fit: contain;
+}
+
+.logo-text {
+  color: darkgray;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
 .header-menu {

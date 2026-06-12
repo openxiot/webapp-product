@@ -1,5 +1,5 @@
 import {
-  ProductCodec,
+  ProductBasicCodec,
   ProductFirmwareCodec,
   ProductInstanceCodec,
   ProductManualCodec,
@@ -11,7 +11,7 @@ import {JoyProduct} from '../../define/product/JoyProduct';
 export class JoyProductCodec {
 
   static decode(x: any): JoyProduct {
-    const basic = ProductCodec.decode(x.basic);
+    const basic = ProductBasicCodec.decode(x.basic);
     const wizard = ProductWizardCodec.decode(x.wizard);
     const instances = ProductInstanceCodec.decodeArray(x.instances);
     const panels = ProductPanelCodec.decodeArray(x.panels);

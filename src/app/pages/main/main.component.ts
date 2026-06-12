@@ -45,7 +45,7 @@ export class MainComponent implements OnInit {
 
   private cookie = inject(CookieService);
 
-  passport: string = environment.passport.url;
+  passport: string = "environment.passport.url";
   version: string = pkg.version;
   loading: boolean = true;
 

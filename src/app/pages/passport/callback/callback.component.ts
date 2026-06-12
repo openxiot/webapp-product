@@ -53,7 +53,7 @@ export class CallbackComponent implements OnInit {
           console.log('navigate failed: ', e);
         });
     } else {
-      window.location.href = environment.passport.url;
+      // window.location.href = environment.passport.url;
     }
   }
 }

@@ -1,6 +1,6 @@
 import {
   DeviceType,
-  Product,
+  ProductBasic,
   ProductFirmware,
   ProductInstance,
   ProductManual,
@@ -13,7 +13,7 @@ import {
 export class JoyProduct {
 
   constructor(
-    public basic: Product,
+    public basic: ProductBasic,
     public wizard: ProductWizard,
     public instances: ProductInstance[],
     public panels: ProductPanel[],

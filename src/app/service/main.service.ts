@@ -26,8 +26,8 @@ import {
   DeviceTemplateWithLifecycleCodec,
   LifeCycle,
   ObjectWithLifecycle,
-  Product,
-  ProductCodec,
+  ProductBasic,
+  ProductBasicCodec,
   ProductFirmware,
   ProductFirmwareCodec,
   ProductFirmwareInstance,
@@ -40,7 +40,7 @@ import {
   ProductPanelCodec,
   ProductWizard,
   ProductWizardCodec,
-  DeviceInstance, ProductVisibilityCodec, ProductVisibility
+  DeviceInstance
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -234,22 +234,22 @@ export class MainService {
   /**
    * 读取产品列表
    */
-  getProducts(organizationCode: string): Observable<Product[]> {
+  getProducts(organizationCode: string): Observable<ProductBasic[]> {
     console.log('getProducts: ', organizationCode);
     const params = {
       organization: organizationCode,
     }
     return this.http
       .get<JoyResponse>(`${this.server}/v2/product/basic/all`, {params})
-      .pipe(map(response => ProductCodec.decodeArray(response.data.products)));
+      .pipe(map(response => ProductBasicCodec.decodeArray(response.data.products)));
   }
 
   /**
    * 创建产品基本信息
    */
-  createProduct(product: Product): Observable<Number> {
+  createProduct(product: ProductBasic): Observable<Number> {
     return this.http
-      .post<JoyResponse>(`${this.server}/v2/product/basic/one`, ProductCodec.encode(product))
+      .post<JoyResponse>(`${this.server}/v2/product/basic/one`, ProductBasicCodec.encode(product))
       .pipe(map(response => response.data.id));
   }
 
@@ -268,7 +268,7 @@ export class MainService {
   /**
    * 修改产品基本信息
    */
-  updateProduct(product: Product, fields: Map<string, any>): Observable<void> {
+  updateProduct(product: ProductBasic, fields: Map<string, any>): Observable<void> {
     fields.set('organization', product.organization);
     fields.set('model', product.model);
 
@@ -282,13 +282,13 @@ export class MainService {
   /**
    * 读取产品基本信息
    */
-  getProduct(productId: number): Observable<Product> {
+  getProduct(productId: number): Observable<ProductBasic> {
     const params = {
       productId: productId,
     }
     return this.http
       .get<JoyResponse>(`${this.server}/v2/product/basic/one`, {params})
-      .pipe(map(response => ProductCodec.decode(response.data)));
+      .pipe(map(response => ProductBasicCodec.decode(response.data)));
   }
 
   /**
@@ -663,28 +663,6 @@ export class MainService {
     return this.http
       .put<JoyResponse>(`${this.server}/v2/product/manual/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
-  }
-
-  /**------------------------------------------------------------------------------------------------
-   * 产品可见性
-   *------------------------------------------------------------------------------------------------*/
-  updateProductVisibility(productId: number, visibility: ProductVisibility): Observable<void> {
-    const body = {
-      productId: productId,
-      visibility: ProductVisibilityCodec.encode(visibility)
-    }
-    return this.http
-      .put<JoyResponse>(`${this.server}/v2/product/visibility`, body)
-      .pipe(map(() => undefined));
-  }
-
-  getProductVisibility(productId: number): Observable<ProductVisibility> {
-    const params = {
-      productId: productId,
-    }
-    return this.http
-      .get<JoyResponse>(`${this.server}/v2/product/visibility`, {params})
-      .pipe(map(response => ProductVisibilityCodec.decode(response.data)));
   }
 
   /**

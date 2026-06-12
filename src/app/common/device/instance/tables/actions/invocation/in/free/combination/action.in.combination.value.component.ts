@@ -41,6 +41,6 @@ export class ActionInCombinationValueComponent {
   }
 
   getMemberArgument(iid: number): Argument {
-    return Argument.from(iid, 1, 1);
+    return Argument.of(iid, 1, 1);
   }
 }

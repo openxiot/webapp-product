@@ -36,7 +36,7 @@ export class ActionOutCombinationValueComponent {
   }
 
   getMemberArgument(iid: number): Argument {
-    return Argument.from(iid, 1, 1);
+    return Argument.of(iid, 1, 1);
   }
 
   getMemberValue(iid: number, value: any): any {

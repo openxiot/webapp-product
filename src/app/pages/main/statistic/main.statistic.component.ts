@@ -7,7 +7,7 @@ import {RouterLink, RouterOutlet} from '@angular/router';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {Product} from '@openxiot/xiot-core-spec-ts';
+import {ProductBasic} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
@@ -38,7 +38,7 @@ export class MainStatisticComponent implements OnInit {
 
   version: string = pkg.version;
   loading: boolean = true;
-  products: Product[] = [];
+  products: ProductBasic[] = [];
 
   constructor(
     private service: MainService,

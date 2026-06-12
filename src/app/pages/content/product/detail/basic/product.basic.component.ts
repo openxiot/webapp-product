@@ -23,7 +23,7 @@ import {NzSwitchModule} from 'ng-zorro-antd/switch';
 import {Subject, takeUntil} from 'rxjs';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {DeviceInstance, LifeCycle, Product, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {DeviceInstance, LifeCycle, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {ProductBasicModelComponent} from './model/product.basic.model.component';
 import {ProductBasicIdComponent} from './id/product.basic.id.component';
@@ -70,7 +70,7 @@ import {ProductBasicNameComponent} from './name/product.basic.name.component';
 })
 export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
   @Output() onSaved = new EventEmitter<void>();
 
   loading: boolean = false;

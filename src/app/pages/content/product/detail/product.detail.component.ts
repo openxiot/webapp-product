@@ -15,7 +15,7 @@ import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {ProductWizardComponent} from './wizard/product.wizard.component';
 import {ProductFirmwareComponent} from './firmware/product.firmware.component';
 import {ProductManualComponent} from './manual/product.manual.component';
-import {ObjectWithLifecycle, DeviceInstance, Product, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {ObjectWithLifecycle, DeviceInstance, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../service/main.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
@@ -56,7 +56,7 @@ export class ProductDetailComponent implements OnInit {
 
   loading: boolean = true;
   productId: number = 0;
-  product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
   instances: ObjectWithLifecycle<DeviceInstance>[] = [];
 
   constructor(

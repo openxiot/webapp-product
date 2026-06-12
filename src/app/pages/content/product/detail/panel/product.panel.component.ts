@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {NzSwitchModule} from 'ng-zorro-antd/switch';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
-import {Product, ProductInstance, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {ProductBasic, ProductInstance, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ProductPanelListComponent} from './list/product.panel.list.component';
 import {MainService} from '../../../../../service/main.service';
 
@@ -41,7 +41,7 @@ import {MainService} from '../../../../../service/main.service';
 })
 export class ProductPanelComponent implements OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
 
   @ViewChild('productPanel') productPanel!: ProductPanelListComponent;
 

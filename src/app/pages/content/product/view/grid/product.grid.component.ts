@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {RouterLink} from '@angular/router';
-import {LifeCycle, Product} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, ProductBasic} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -31,7 +31,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
 
   // private subscription: any;
   loading: boolean = true;
-  products: Product[] = [];
+  products: ProductBasic[] = [];
 
   constructor(
     private organization: OrganizationService,

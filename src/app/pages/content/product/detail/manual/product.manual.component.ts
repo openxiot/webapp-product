@@ -13,7 +13,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {LifeCycle, Product, ProductManual, ProductManualPage, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, ProductBasic, ProductManual, ProductManualPage, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {ProductManualPageComponent} from './page/product.manual.page.component';
 
@@ -42,7 +42,7 @@ import {ProductManualPageComponent} from './page/product.manual.page.component';
 })
 export class ProductManualComponent implements OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
 
   protected readonly LifeCycle = LifeCycle;
 

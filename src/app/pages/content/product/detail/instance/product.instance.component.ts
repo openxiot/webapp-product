@@ -5,7 +5,7 @@ import {NzListModule} from 'ng-zorro-antd/list';
 import {
   DeviceInstance, DeviceInstanceCodec, LifeCycle,
   ObjectWithLifecycle,
-  Product,
+  ProductBasic,
   ProductInstance,
   Service,
   Urn,
@@ -50,7 +50,7 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
 })
 export class ProductInstanceComponent implements OnChanges {
 
-  @Input() product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
   @Output() changed = new EventEmitter<DeviceInstance>();
   @Output() removed = new EventEmitter<Service>();
 

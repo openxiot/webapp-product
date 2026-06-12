@@ -1,112 +1,112 @@
-<nz-row [nzGutter]="[8, 8]">
-  <nz-col [nzSpan]="24">
-    <toolbar>
-      <div>本产品</div>
+<!--<nz-row [nzGutter]="[8, 8]">-->
+<!--  <nz-col [nzSpan]="24">-->
+<!--    <toolbar>-->
+<!--      <div>本产品</div>-->
 
-      <nz-select [(ngModel)]="visibility.type" style="width: 240px" (ngModelChange)="onCurrentTypeChanged($event)">
-        <nz-option nzValue="ALL" nzLabel="在所有应用中可见"></nz-option>
-        <nz-option nzValue="INCLUDE" nzLabel="在以下应用中可见"></nz-option>
-        <nz-option nzValue="EXCLUDE" nzLabel="在以下应用中不可见"></nz-option>
-      </nz-select>
+<!--      <nz-select [(ngModel)]="visibility.type" style="width: 240px" (ngModelChange)="onCurrentTypeChanged($event)">-->
+<!--        <nz-option nzValue="ALL" nzLabel="在所有应用中可见"></nz-option>-->
+<!--        <nz-option nzValue="INCLUDE" nzLabel="在以下应用中可见"></nz-option>-->
+<!--        <nz-option nzValue="EXCLUDE" nzLabel="在以下应用中不可见"></nz-option>-->
+<!--      </nz-select>-->
 
-      @switch (visibility.lifecycle) {
-        @case (LifeCycle.DEVELOPMENT) {
-          <nz-tag nzColor="red">未审核</nz-tag>
-          @if (changed) {
-            <div style="color: red">已修改，请保存！</div>
-          }
-        }
-        @case (LifeCycle.PREVIEW) {
-          <nz-tag nzColor="green">正在审核</nz-tag>
-          <div style="color: gray">管理员正在审批，请等待！</div>
-        }
-        @case (LifeCycle.RELEASED) {
-          <nz-tag nzColor="blue">已批准</nz-tag>
-          <div style="color: gray">已批准，不可修改</div>
-        }
-      }
+<!--      @switch (visibility.lifecycle) {-->
+<!--        @case (LifeCycle.DEVELOPMENT) {-->
+<!--          <nz-tag nzColor="red">未审核</nz-tag>-->
+<!--          @if (changed) {-->
+<!--            <div style="color: red">已修改，请保存！</div>-->
+<!--          }-->
+<!--        }-->
+<!--        @case (LifeCycle.PREVIEW) {-->
+<!--          <nz-tag nzColor="green">正在审核</nz-tag>-->
+<!--          <div style="color: gray">管理员正在审批，请等待！</div>-->
+<!--        }-->
+<!--        @case (LifeCycle.RELEASED) {-->
+<!--          <nz-tag nzColor="blue">已批准</nz-tag>-->
+<!--          <div style="color: gray">已批准，不可修改</div>-->
+<!--        }-->
+<!--      }-->
 
-      <div style="margin-left: auto;">
-        <nz-space>
-          @switch (visibility.lifecycle) {
-            @case (LifeCycle.DEVELOPMENT) {
-              @if (visibility.type !== 'ALL') {
-                <div *nzSpaceItem>
-                  <button nz-button nzType="primary" nzDanger (click)="onAddApp()">添加应用</button>
-                </div>
-              }
-              <div *nzSpaceItem>
-                <button nz-button nzType="primary" (click)="onPreview()">提交审核</button>
-              </div>
-            }
-            @case (LifeCycle.PREVIEW) {
-              <div *nzSpaceItem>
-                <button nz-button nzType="primary" (click)="onCancelPreview()">取消提交</button>
-              </div>
-            }
-          }
+<!--      <div style="margin-left: auto;">-->
+<!--        <nz-space>-->
+<!--          @switch (visibility.lifecycle) {-->
+<!--            @case (LifeCycle.DEVELOPMENT) {-->
+<!--              @if (visibility.type !== 'ALL') {-->
+<!--                <div *nzSpaceItem>-->
+<!--                  <button nz-button nzType="primary" nzDanger (click)="onAddApp()">添加应用</button>-->
+<!--                </div>-->
+<!--              }-->
+<!--              <div *nzSpaceItem>-->
+<!--                <button nz-button nzType="primary" (click)="onPreview()">提交审核</button>-->
+<!--              </div>-->
+<!--            }-->
+<!--            @case (LifeCycle.PREVIEW) {-->
+<!--              <div *nzSpaceItem>-->
+<!--                <button nz-button nzType="primary" (click)="onCancelPreview()">取消提交</button>-->
+<!--              </div>-->
+<!--            }-->
+<!--          }-->
 
-          @if (changed) {
-            <div *nzSpaceItem>
-              <button nz-button nzType="primary" (click)="onCancel()">取消</button>
-            </div>
+<!--          @if (changed) {-->
+<!--            <div *nzSpaceItem>-->
+<!--              <button nz-button nzType="primary" (click)="onCancel()">取消</button>-->
+<!--            </div>-->
 
-            <div *nzSpaceItem>
-              <button nz-button nzType="primary" nzDanger (click)="onSave()">保存</button>
-            </div>
-          }
-        </nz-space>
-      </div>
-    </toolbar>
-  </nz-col>
+<!--            <div *nzSpaceItem>-->
+<!--              <button nz-button nzType="primary" nzDanger (click)="onSave()">保存</button>-->
+<!--            </div>-->
+<!--          }-->
+<!--        </nz-space>-->
+<!--      </div>-->
+<!--    </toolbar>-->
+<!--  </nz-col>-->
 
-  <nz-col [nzSpan]="24">
-    @switch (visibility.type) {
-      @case ('ALL') {
-        <nz-card
-          nzBorderless
-        >
-          此产品在所有应用中可见
-        </nz-card>
-      }
-      @default {
-        <nz-table
-          nzShowSizeChanger
-          nzSize="small"
-          nzBordered
-          [nzData]="visibility.applications"
-          [nzFrontPagination]="false"
-        >
-          <thead>
-          <tr>
-            <th>
-              应用ID
-            </th>
-            <th>
-              应用名称
-            </th>
-            <th>
-              操作
-            </th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (item of visibility.applications; track item.id) {
-              <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.name }}</td>
-                <td>
-                  @switch (visibility.lifecycle) {
-                    @case (LifeCycle.DEVELOPMENT) {
-                      <a (click)="onRemoveApp(item)">删除</a>
-                    }
-                  }
-                </td>
-              </tr>
-            }
-          </tbody>
-        </nz-table>
-      }
-    }
-  </nz-col>
-</nz-row>
+<!--  <nz-col [nzSpan]="24">-->
+<!--    @switch (visibility.type) {-->
+<!--      @case ('ALL') {-->
+<!--        <nz-card-->
+<!--          nzBorderless-->
+<!--        >-->
+<!--          此产品在所有应用中可见-->
+<!--        </nz-card>-->
+<!--      }-->
+<!--      @default {-->
+<!--        <nz-table-->
+<!--          nzShowSizeChanger-->
+<!--          nzSize="small"-->
+<!--          nzBordered-->
+<!--          [nzData]="visibility.applications"-->
+<!--          [nzFrontPagination]="false"-->
+<!--        >-->
+<!--          <thead>-->
+<!--          <tr>-->
+<!--            <th>-->
+<!--              应用ID-->
+<!--            </th>-->
+<!--            <th>-->
+<!--              应用名称-->
+<!--            </th>-->
+<!--            <th>-->
+<!--              操作-->
+<!--            </th>-->
+<!--          </tr>-->
+<!--          </thead>-->
+<!--          <tbody>-->
+<!--            @for (item of visibility.applications; track item.id) {-->
+<!--              <tr>-->
+<!--                <td>{{ item.id }}</td>-->
+<!--                <td>{{ item.name }}</td>-->
+<!--                <td>-->
+<!--                  @switch (visibility.lifecycle) {-->
+<!--                    @case (LifeCycle.DEVELOPMENT) {-->
+<!--                      <a (click)="onRemoveApp(item)">删除</a>-->
+<!--                    }-->
+<!--                  }-->
+<!--                </td>-->
+<!--              </tr>-->
+<!--            }-->
+<!--          </tbody>-->
+<!--        </nz-table>-->
+<!--      }-->
+<!--    }-->
+<!--  </nz-col>-->
+<!--</nz-row>-->

@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {ProductBasicIconComponent} from '../detail/basic/icon/product.basic.icon.component';
-import {DeviceType, Product, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {DeviceType, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ProductBasicProtocolComponent} from '../detail/basic/protocol/product.basic.protocol.component';
 import {ProductBasicUpgradeComponent} from '../detail/basic/upgrade/product.basic.upgrade.component';
 import {UpgradeType} from '../detail/basic/upgrade/UpgradeType';
@@ -46,7 +46,7 @@ import {ProtocolFromArray} from '../detail/basic/protocol/ProtocolType';
 })
 export class CreateComponent implements OnInit {
 
-  product: Product = new Product(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
   loading: boolean = false;
 
   form: FormGroup<{

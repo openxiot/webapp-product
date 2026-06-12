@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {NzTableFilterFn, NzTableModule, NzTableQueryParams, NzTableSortFn} from 'ng-zorro-antd/table';
 import {RouterLink} from '@angular/router';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
-import {LifeCycle, Product} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, ProductBasic} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzImageModule} from 'ng-zorro-antd/image';
 import {NzTagModule} from 'ng-zorro-antd/tag';
@@ -59,11 +59,11 @@ export class ProductListComponent implements OnInit, OnDestroy {
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];
 
-  nameSortFn: NzTableSortFn<Product> = (a: Product, b: Product): number => a.name.localeCompare(b.name);
+  nameSortFn: NzTableSortFn<ProductBasic> = (a: ProductBasic, b: ProductBasic): number => a.name.localeCompare(b.name);
   searchNameValue = '';
   visible = false;
 
-  typeSortFn: NzTableSortFn<Product> = (a: Product, b: Product): number => a.name.localeCompare(b.name);
+  typeSortFn: NzTableSortFn<ProductBasic> = (a: ProductBasic, b: ProductBasic): number => a.name.localeCompare(b.name);
   typeFilters = [
     {
       text: 'aaa', value: "a"
@@ -72,9 +72,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       text: 'bbb', value: "b"
     }
   ]
-  typeFilterFn: NzTableFilterFn<Product> = (list: string[], a: Product) => list.some(name => a.name.includes(name));
+  typeFilterFn: NzTableFilterFn<ProductBasic> = (list: string[], a: ProductBasic) => list.some(name => a.name.includes(name));
 
-  protocolSortFn: NzTableSortFn<Product> = (a: Product, b: Product): number => a.name.localeCompare(b.name);
+  protocolSortFn: NzTableSortFn<ProductBasic> = (a: ProductBasic, b: ProductBasic): number => a.name.localeCompare(b.name);
   protocolFilters = [
     {
       text: 'aaa', value: "a"
@@ -83,9 +83,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       text: 'bbb', value: "b"
     }
   ]
-  protocolFilterFn: NzTableFilterFn<Product> = (list: string[], a: Product) => list.some(name => a.name.includes(name));
+  protocolFilterFn: NzTableFilterFn<ProductBasic> = (list: string[], a: ProductBasic) => list.some(name => a.name.includes(name));
 
-  upgradeSortFn: NzTableSortFn<Product> = (a: Product, b: Product): number => a.name.localeCompare(b.name);
+  upgradeSortFn: NzTableSortFn<ProductBasic> = (a: ProductBasic, b: ProductBasic): number => a.name.localeCompare(b.name);
   upgradeFilters = [
     {
       text: 'aaa', value: "a"
@@ -94,9 +94,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       text: 'bbb', value: "b"
     }
   ]
-  upgradeFilterFn: NzTableFilterFn<Product> = (list: string[], a: Product) => list.some(name => a.name.includes(name));
+  upgradeFilterFn: NzTableFilterFn<ProductBasic> = (list: string[], a: ProductBasic) => list.some(name => a.name.includes(name));
 
-  templateSortFn: NzTableSortFn<Product> = (a: Product, b: Product): number => a.name.localeCompare(b.name);
+  templateSortFn: NzTableSortFn<ProductBasic> = (a: ProductBasic, b: ProductBasic): number => a.name.localeCompare(b.name);
   templateFilters = [
     {
       text: 'aaa', value: "a"
@@ -105,9 +105,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
       text: 'bbb', value: "b"
     }
   ]
-  templateFilterFn: NzTableFilterFn<Product> = (list: string[], a: Product) => list.some(name => a.name.includes(name));
+  templateFilterFn: NzTableFilterFn<ProductBasic> = (list: string[], a: ProductBasic) => list.some(name => a.name.includes(name));
 
-  basicLifecycleSortFn: NzTableSortFn<Product> = (a: Product, b: Product): number => a.name.localeCompare(b.name);
+  basicLifecycleSortFn: NzTableSortFn<ProductBasic> = (a: ProductBasic, b: ProductBasic): number => a.name.localeCompare(b.name);
   basicLifecycleFilters = [
     {
       text: 'aaa', value: "a"
@@ -116,7 +116,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
       text: 'bbb', value: "b"
     }
   ]
-  basicLifecycleFilterFn: NzTableFilterFn<Product> = (list: string[], a: Product) => list.some(name => a.name.includes(name));
+  basicLifecycleFilterFn: NzTableFilterFn<ProductBasic> = (list: string[], a: ProductBasic) => list.some(name => a.name.includes(name));
 
   constructor(
     private organization: OrganizationService,
