@@ -3,15 +3,17 @@ import {OnOrganizationChanged} from "../typedef/define/listener/OnOrganizationCh
 import {Developer} from '../typedef/define/developer/Developer';
 import {DeveloperCodec} from '../typedef/codec/developer/DeveloperCodec';
 import {Organization} from '../typedef/define/developer/Organization';
+import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
 
 @Injectable({providedIn: 'root'})
 export class AccountService {
 
   private listeners: Map<string, OnOrganizationChanged> = new Map();
 
+  public login: boolean = false;
   public developer: Developer = new Developer();
   public organization!: Organization;
-  public login: boolean = false;
+  public ns!: NamespaceDefinition;
 
   constructor() {
     // const organization = localStorage.getItem("organizationId") || null;

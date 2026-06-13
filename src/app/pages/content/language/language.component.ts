@@ -5,31 +5,31 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
-import {NzTabsModule} from 'ng-zorro-antd/tabs';
-import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {AccountService} from '../../../service/account.service';
-import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {NzIconModule} from 'ng-zorro-antd/icon';
+import {MainI18nService} from '../../../service/i18n.service';
+import {NzSpaceModule} from 'ng-zorro-antd/space';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: 'main-account',
+  selector: 'main-language',
   standalone: true,
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.less'],
+  templateUrl: './language.component.html',
+  styleUrls: ['./language.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
     NzSpinModule,
     NzCardModule,
-    NzTabsModule,
-    NzDescriptionsModule,
-    NzAvatarModule,
-    NzIconModule
+    NzIconModule,
+    NzSpaceModule
   ],
 })
-export class AccountComponent implements OnInit {
+export class LanguageComponent implements OnInit {
 
   constructor(
+    private router: Router,
+    public i18n: MainI18nService,
     public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
@@ -37,5 +37,10 @@ export class AccountComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  protected changeLanguage(code: string): void {
+    this.i18n.changeLanguage(code)
+    this.router.navigate(['/main']).then(() => {});
   }
 }

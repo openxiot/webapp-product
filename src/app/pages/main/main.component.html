@@ -3,7 +3,7 @@
     <nz-header class="fixed-header">
       <div class="logo">
         <img src="logo_256x256_gray.svg" alt="logo" class="logo-img">
-        <span class="logo-text">Product Center</span>
+        <span class="logo-text">{{ '产品中心' | translate }}</span>
       </div>
 
       <!-- 大屏幕水平菜单：小屏幕隐藏 -->
@@ -15,28 +15,26 @@
       >
         <li nz-menu-item nzMatchRouter routerLink="/main/product">
           <span nz-icon nzType="bulb" nzTheme="outline"></span>
-          产品
+          {{ '产品' | translate }}
         </li>
 
         <li nz-menu-item nzMatchRouter routerLink="/main/template">
           <span nz-icon nzType="fire" nzTheme="outline"></span>
-          模板
+          {{ '模板' | translate }}
         </li>
 
         <li nz-menu-item nzMatchRouter routerLink="/main/spec">
           <span nz-icon nzType="gold" nzTheme="outline"></span>
-          规范
+          {{ '规范' | translate }}
         </li>
 
         <li nz-menu-item nzMatchRouter routerLink="/main/namespace">
           <span nz-icon nzType="appstore" nzTheme="outline"></span>
-          名字空间
+          {{ '名字空间' | translate }}
         </li>
 
-        <li nz-menu-item nzMatchRouter>
-        <span class="main-header-icon" nz-dropdown [nzDropdownMenu]="language">
+        <li nz-menu-item nzMatchRouter routerLink="/main/language">
           <span nz-icon nzType="global" nzTheme="outline"></span>
-        </span>
         </li>
 
         <li nz-menu-item nzMatchRouter (click)="logout()" style="float: right" >

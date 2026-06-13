@@ -12,7 +12,7 @@ import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {AccountService} from '../../../service/account.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {Organization} from '../../../typedef/define/developer/Organization';
 import {DatePipe} from '@angular/common';
 
@@ -46,6 +46,7 @@ export class OrganizationComponent implements OnInit {
 
   constructor(
     public account: AccountService,
+    private router: Router,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -72,5 +73,14 @@ export class OrganizationComponent implements OnInit {
 
   protected setCurrentOrganization(organization: Organization) {
     this.account.setOrganization(organization);
+
+    this.router
+      .navigate(['/main'])
+      .then(() => {
+        console.log('setCurrentOrganization ok!')
+      })
+      .catch(e => {
+        console.log('setCurrentOrganization failed: ', e)
+      });
   }
 }

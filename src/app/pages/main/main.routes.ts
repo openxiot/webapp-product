@@ -41,4 +41,9 @@ export const MAIN_ROUTES: Routes = [
     data: {breadcrumb: '账号'},
     loadChildren: () => import('../content/account/account.routes').then(m => m.ACCOUNT_ROUTES)
   },
+  {
+    path: 'language',
+    data: {breadcrumb: '语言'},
+    loadChildren: () => import('../content/language/language.routes').then(m => m.LANGUAGE_ROUTES)
+  },
 ];

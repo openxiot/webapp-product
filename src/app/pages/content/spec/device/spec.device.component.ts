@@ -11,6 +11,7 @@ import {SpecDevice} from '../../../../typedef/define/spec/SpecDevice';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'spec-device',
@@ -37,13 +38,16 @@ export class SpecDeviceComponent implements OnInit {
   pageIndex = 1;
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize);
+    if (this.account.ns) {
+      this.loadDataFromServer(this.pageIndex, this.pageSize);
+    }
   }
 
   loadDataFromServer(
@@ -51,7 +55,7 @@ export class SpecDeviceComponent implements OnInit {
     pageSize: number,
   ): void {
     this.loading = true;
-    this.service.getSpecDevices('jd')
+    this.service.getSpecDevices(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.devices = data;

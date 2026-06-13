@@ -63,13 +63,12 @@ export class OrganizationCreateComponent implements OnInit {
   }
 
   protected onBack() {
-    this.router.navigate(['/main/product']).then(() => {});
+    this.router.navigate(['/main/organization']).then(() => {});
   }
 
   protected submitForm() {
     const code = this.form.value.code || 'null';
     const name = this.form.value.name || 'null';
-
 
     this.loading = true;
     this.service.createOrganization(code, name)

@@ -18,6 +18,9 @@ import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzButtonModule} from 'ng-zorro-antd/button';
+import {RouterLink} from '@angular/router';
+import {AccountService} from '../../../service/account.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'main-spec',
@@ -43,6 +46,8 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
     NzButtonModule,
     NzRadioComponent,
     NzRadioGroupComponent,
+    RouterLink,
+    TranslatePipe,
   ],
 })
 export class SpecComponent implements OnInit {
@@ -51,6 +56,7 @@ export class SpecComponent implements OnInit {
   language: string = 'zh-CN'
 
   constructor(
+    public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {

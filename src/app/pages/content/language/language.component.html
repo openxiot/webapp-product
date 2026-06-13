@@ -1,0 +1,15 @@
+<nz-page-header nzTitle="语言" [nzGhost]="false">
+  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+</nz-page-header>
+
+<div style="padding: 20px 20px">
+  <nz-card>
+    <nz-space>
+      @for (lang of i18n.languages; track lang.code) {
+        <div *nzSpaceItem>
+          <a (click)="changeLanguage(lang.code)">{{ lang.name }}</a>
+        </div>
+      }
+    </nz-space>
+  </nz-card>
+</div>

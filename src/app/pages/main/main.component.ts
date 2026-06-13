@@ -13,7 +13,6 @@ import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NoticeCardComponent} from './notice/card/notice.card.component';
 import {NzBadgeModule} from 'ng-zorro-antd/badge';
-import {OrganizationService} from '../../service/organization.service';
 import {CookieService} from 'ngx-cookie-service';
 import {AccountService} from '../../service/account.service';
 import {MainService} from '../../service/main.service';
@@ -58,7 +57,6 @@ export class MainComponent implements OnInit {
     public i18n: MainI18nService,
     private main: MainService,
     private router: Router,
-    private organization: OrganizationService,
     private msg: NzMessageService,
   ) {
   }

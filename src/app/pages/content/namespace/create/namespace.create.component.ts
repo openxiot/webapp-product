@@ -66,7 +66,7 @@ export class NamespaceCreateComponent implements OnInit {
   }
 
   protected onBack() {
-    this.router.navigate(['/main/product']).then(() => {});
+    this.router.navigate(['/main/namespace']).then(() => {});
   }
 
   protected submitForm() {

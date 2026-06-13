@@ -1,11 +1,27 @@
 <nz-spin [nzSpinning]="loading">
-  <nz-page-header [nzTitle]="title" [nzGhost]="false">
+  <nz-page-header [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 
     <nz-page-header-tags>
       <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"></nz-segmented>
     </nz-page-header-tags>
   </nz-page-header>
+
+  <ng-template #title>
+    <a routerLink="/main/template/ns">
+      @if (account.ns) {
+        {{ account.ns.namespace }}
+      } @else {
+        {{ '请选择一个名字空间' | translate }}
+      }
+    </a>
+  </ng-template>
+
+  <ng-template #subTitle>
+    @if (account.ns) {
+      {{ account.ns.description.get('zh-CN') }}
+    }
+  </ng-template>
 
   <div style="padding: 20px 20px">
     <div nz-row [nzGutter]="[8, 8]">
@@ -25,8 +41,4 @@
       </div>
     </div>
   </div>
-
-  <ng-template #title>
-    <button nz-button nzType="dashed">请选择一个名字空间</button>
-  </ng-template>
 </nz-spin>
