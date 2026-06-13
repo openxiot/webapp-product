@@ -2,21 +2,22 @@ import {Injectable} from "@angular/core";
 import {OnOrganizationChanged} from "../typedef/define/listener/OnOrganizationChanged";
 import {Developer} from '../typedef/define/developer/Developer';
 import {DeveloperCodec} from '../typedef/codec/developer/DeveloperCodec';
+import {Organization} from '../typedef/define/developer/Organization';
 
 @Injectable({providedIn: 'root'})
 export class AccountService {
 
   private listeners: Map<string, OnOrganizationChanged> = new Map();
-  public organizationId: string = '';
-  public organizationValid: boolean = false;
+
   public developer: Developer = new Developer();
+  public organization!: Organization;
   public login: boolean = false;
 
   constructor() {
-    const organization = localStorage.getItem("organizationId") || null;
-    if (organization !== null) {
-      this.organizationId = organization;
-    }
+    // const organization = localStorage.getItem("organizationId") || null;
+    // if (organization !== null) {
+    //   this.organizationId = organization;
+    // }
 
     const a = localStorage.getItem("developer") || null;
     if (a !== null) {
@@ -28,23 +29,35 @@ export class AccountService {
     console.info('developer.avatar: ' + this.developer.avatar);
   }
 
+  isCurrentOrganization(organization: Organization): boolean {
+    if (this.organization) {
+      return this.organization.id === organization.id;
+    }
+
+    return false;
+  }
+
   addOrganizationListener(id: string, listener: OnOrganizationChanged) {
     this.listeners.set(id, listener);
   }
 
-  setOrganizationId(organizationId: string) {
-    if (this.organizationId !== organizationId) {
-      console.log("setOrganizationId: " + organizationId);
+  setOrganization(organization: Organization) {
+    if (this.isOrganizationChanged(organization)) {
+      localStorage.setItem("organizationId", organization.id);
 
-      localStorage.setItem("organizationId", organizationId);
-      this.organizationId = organizationId;
-
+      this.organization = organization;
       for (let listener of this.listeners.values()) {
-        listener.onOrganizationChanged(organizationId);
+        listener.onOrganizationChanged(this.organization.id);
       }
-    } else {
-      console.log('setOrganizationId: not changed');
     }
+  }
+
+  private isOrganizationChanged(organization: Organization): boolean {
+      if (this.organization) {
+        return this.organization.id !== organization.id;
+      } else {
+        return true;
+      }
   }
 
   setDeveloper(developer: Developer) {

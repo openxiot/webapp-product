@@ -70,6 +70,7 @@ import {
   FacebookOutline,
   GoogleOutline,
   TabletOutline,
+  PlusCircleOutline,
 } from '@ant-design/icons-angular/icons';
 
 export const icons = [
@@ -92,6 +93,7 @@ export const icons = [
   BorderOutline,
   LogoutOutline,
   LoginOutline,
+  PlusCircleOutline,
   HomeOutline,
   SendOutline,
   GlobalOutline,

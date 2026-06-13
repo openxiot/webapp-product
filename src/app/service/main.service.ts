@@ -69,42 +69,38 @@ export class MainService {
   /**------------------------------------------------------------------------------------------------
    * 开发组
    *------------------------------------------------------------------------------------------------*/
-  addOrganization(name: string): Observable<void> {
-    console.log('addOrganization: ', name);
+  createOrganization(organizationId: string, name: string): Observable<void> {
+    console.log(`addOrganization: ${organizationId}/${name}`);
     return this.http
-      .post(`${this.account}/organization/one`, {name})
+      .post(`${this.account}/organization/one/${organizationId}`, {name})
       .pipe(map(() => undefined));
   }
 
   removeOrganization(organizationId: string): Observable<void> {
-    console.log('removeOrganization: ', organizationId);
-    const params = {organizationId: organizationId};
+    console.log(`removeOrganization: ${organizationId}`);
     return this.http
-      .delete(`${this.account}/organization/one`, {params})
+      .delete(`${this.account}/organization/one/${organizationId}`)
       .pipe(map(() => undefined));
   }
 
   updateOrganizationName(organizationId: string, name: string): Observable<void> {
     console.log(`updateOrganizationName: ${organizationId} => ${name}`);
-    const params = {organizationId: organizationId};
     return this.http
-      .put(`${this.account}/organization/name`, {name: name}, {params})
+      .put(`${this.account}/organization/one/${organizationId}`, {name: name})
       .pipe(map(() => undefined));
   }
 
   addOrganizationMember(organizationId: string, member: OrganizationMember) {
     console.log(`addOrganizationMember: ${organizationId} => ${member}`);
-    const params = {organizationId: organizationId};
     return this.http
-      .post(`${this.account}/organization/member`, OrganizationMemberCodec.encode(member), {params})
+      .post(`${this.account}/organization/member/${organizationId}`, OrganizationMemberCodec.encode(member))
       .pipe(map(() => undefined));
   }
 
   getOrganization(organizationId: string): Observable<Organization> {
     console.log(`getOrganization: ${organizationId}`);
-    const params = {organizationId: organizationId};
     return this.http
-      .get<OxResponse>(`${this.account}/organization/one`, {params})
+      .get<OxResponse>(`${this.account}/organization/one/${organizationId}`)
       .pipe(map(response => OrganizationCodec.decode(response.data)));
   }
 

@@ -1,0 +1,30 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon nzTitle="创建组织" [nzGhost]="false">
+  </nz-page-header>
+
+  <div style="padding: 20px 20px">
+    <nz-card nzBorderless nzSize="small">
+      <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">组织代码</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请输入组织代码">
+            <input type="text" nz-input formControlName="code" placeholder="请输入组织代码"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">组织名称</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请输入组织名称">
+            <input type="text" nz-input formControlName="name" placeholder="请输入组织名称"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="4" [nzOffset]="4">
+            <button nz-button nzType="primary">提交</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-card>
+  </div>
+</nz-spin>

@@ -46,6 +46,7 @@ export class OrganizationCodec {
 
   public static encode(organization: Organization): any {
     let o: any = {
+      code: organization.id,
       name: organization.name,
       creator: organization.creator,
       createAt: organization.createAt,
@@ -63,7 +64,7 @@ export class OrganizationCodec {
 
   static decode(o: any): Organization {
     let organization = new Organization();
-    organization.id = o.id;
+    organization.id = o.code;
     organization.name = o.name;
     organization.creator = o.creator;
     organization.creatorName = o.creatorName;

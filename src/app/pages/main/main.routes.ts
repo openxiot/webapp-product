@@ -31,5 +31,14 @@ export const MAIN_ROUTES: Routes = [
     data: {breadcrumb: '名字空间'},
     loadChildren: () => import('../content/namespace/namespace.routes').then(m => m.NAMESPACE_ROUTES)
   },
-
+  {
+    path: 'organization',
+    data: {breadcrumb: '组织'},
+    loadChildren: () => import('../content/organization/organization.routes').then(m => m.ORGANIZATION_ROUTES)
+  },
+  {
+    path: 'account',
+    data: {breadcrumb: '账号'},
+    loadChildren: () => import('../content/account/account.routes').then(m => m.ACCOUNT_ROUTES)
+  },
 ];

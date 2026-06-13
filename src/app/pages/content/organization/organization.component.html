@@ -1,0 +1,43 @@
+<nz-page-header nzTitle="组织" [nzGhost]="false">
+  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+
+  @if (account.login) {
+    <nz-page-header-extra>
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/organization/create']">创建</button>
+    </nz-page-header-extra>
+  }
+</nz-page-header>
+
+<div style="padding: 20px 20px">
+  <nz-table
+    nzShowSizeChanger
+    [nzData]="organizations"
+    [nzHideOnSinglePage]="true"
+  >
+    <thead>
+    <tr>
+      <th>组成代码</th>
+      <th>组成名称</th>
+      <th>创建者</th>
+      <th>创建时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (org of organizations; track org.id) {
+        <tr>
+          <td>{{ org.id }}</td>
+          <td>{{ org.name }}</td>
+          <td>{{ org.creatorName }}</td>
+          <td>{{ org.createAt | date:'yyyy-MM-dd HH:mm:ss':'GMT+00:00' }} </td>
+          <td>
+            @if (! account.isCurrentOrganization(org)) {
+              <a (click)="setCurrentOrganization(org)">设置为当前组织</a>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+
+</div>

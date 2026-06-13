@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
@@ -52,7 +52,6 @@ export class MainComponent implements OnInit {
 
   loading: boolean = true;
   organizations: Organization[] = [];
-  currentOrganization: Organization = new Organization();
 
   constructor(
     public account: AccountService,
@@ -75,6 +74,7 @@ export class MainComponent implements OnInit {
       .subscribe({
         next: data => {
           this.organizations = data;
+          this.selectCurrentOrganization();
           this.loading = false;
         },
         error: error => {
@@ -83,10 +83,19 @@ export class MainComponent implements OnInit {
       })
   }
 
-  protected selectOrganization(organization: Organization) {
-    console.log('selectOrganization: ', organization);
-    this.currentOrganization = organization;
-    this.account.setOrganizationId(organization.id);
+  private selectCurrentOrganization() {
+    const selected = localStorage.getItem("organizationId") || null;
+    if (selected !== null) {
+      const org = this.organizations.find(x => x.id === selected);
+      if (org) {
+        this.account.setOrganization(org);
+      }
+    } else {
+      if (this.organizations.length > 0) {
+        const org = this.organizations[0];
+        this.account.setOrganization(org);
+      }
+    }
   }
 
   protected goOrganizations() {
