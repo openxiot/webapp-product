@@ -46,6 +46,8 @@ import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
 import {OSSUpload} from '../typedef/define/upload/OSSUpload';
 import {OSSUploadCodec} from '../typedef/codec/upload/OSSUploadCodec';
+import {Organization, OrganizationMember} from '../typedef/define/developer/Organization';
+import {OrganizationCodec, OrganizationMemberCodec} from '../typedef/codec/developer/OrganizationCodec';
 
 @Injectable({providedIn: 'root'})
 export class MainService {
@@ -65,8 +67,62 @@ export class MainService {
   }
 
   /**------------------------------------------------------------------------------------------------
+   * 开发组
+   *------------------------------------------------------------------------------------------------*/
+  addOrganization(name: string): Observable<void> {
+    console.log('addOrganization: ', name);
+    return this.http
+      .post(`${this.account}/organization/one`, {name})
+      .pipe(map(() => undefined));
+  }
+
+  removeOrganization(organizationId: string): Observable<void> {
+    console.log('removeOrganization: ', organizationId);
+    const params = {organizationId: organizationId};
+    return this.http
+      .delete(`${this.account}/organization/one`, {params})
+      .pipe(map(() => undefined));
+  }
+
+  updateOrganizationName(organizationId: string, name: string): Observable<void> {
+    console.log(`updateOrganizationName: ${organizationId} => ${name}`);
+    const params = {organizationId: organizationId};
+    return this.http
+      .put(`${this.account}/organization/name`, {name: name}, {params})
+      .pipe(map(() => undefined));
+  }
+
+  addOrganizationMember(organizationId: string, member: OrganizationMember) {
+    console.log(`addOrganizationMember: ${organizationId} => ${member}`);
+    const params = {organizationId: organizationId};
+    return this.http
+      .post(`${this.account}/organization/member`, OrganizationMemberCodec.encode(member), {params})
+      .pipe(map(() => undefined));
+  }
+
+  getOrganization(organizationId: string): Observable<Organization> {
+    console.log(`getOrganization: ${organizationId}`);
+    const params = {organizationId: organizationId};
+    return this.http
+      .get<OxResponse>(`${this.account}/organization/one`, {params})
+      .pipe(map(response => OrganizationCodec.decode(response.data)));
+  }
+
+  getOrganizations(): Observable<Organization[]> {
+    console.log('getOrganizations');
+    return this.http
+      .get<OxResponse>(`${this.account}/organization/many`)
+      .pipe(map(response => OrganizationCodec.decodeArray(response.data)));
+  }
+
+  /**------------------------------------------------------------------------------------------------
    * 产品规范
    *------------------------------------------------------------------------------------------------*/
+  createNamespace(organization: string, namespace: NamespaceDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/namespace/one/${organization}`, NamespaceDefinitionCodec.encode(namespace))
+      .pipe(map(() => undefined));
+  }
 
   getSpecNamespaces(): Observable<NamespaceDefinition[]> {
     return this.http

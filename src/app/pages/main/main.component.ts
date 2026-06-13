@@ -16,6 +16,10 @@ import {NzBadgeModule} from 'ng-zorro-antd/badge';
 import {OrganizationService} from '../../service/organization.service';
 import {CookieService} from 'ngx-cookie-service';
 import {AccountService} from '../../service/account.service';
+import {MainService} from '../../service/main.service';
+import {Organization} from '../../typedef/define/developer/Organization';
+import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../service/i18n.service';
 
 @Component({
   selector: 'app-main',
@@ -36,6 +40,7 @@ import {AccountService} from '../../service/account.service';
     NzSpaceModule,
     NzBadgeModule,
     NoticeCardComponent,
+    TranslatePipe,
   ],
   providers: [
     CookieService
@@ -44,11 +49,15 @@ import {AccountService} from '../../service/account.service';
 export class MainComponent implements OnInit {
 
   version: string = pkg.version;
+
   loading: boolean = true;
-  name: string = '个人开发者';
+  organizations: Organization[] = [];
+  currentOrganization: Organization = new Organization();
 
   constructor(
     public account: AccountService,
+    public i18n: MainI18nService,
+    private main: MainService,
     private router: Router,
     private organization: OrganizationService,
     private msg: NzMessageService,
@@ -57,22 +66,49 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     console.log('init');
+
+    this.loadOrganizations();
   }
 
-  protected goto(path: string) {
+  private loadOrganizations() {
+    this.main.getOrganizations()
+      .subscribe({
+        next: data => {
+          this.organizations = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning('Failed to getOrganizations: ', error);
+        }
+      })
   }
 
-  protected onSelect(name: string) {
-    console.log('onSelect', name);
+  protected selectOrganization(organization: Organization) {
+    console.log('selectOrganization: ', organization);
+    this.currentOrganization = organization;
+    this.account.setOrganizationId(organization.id);
+  }
 
-    this.name = name;
+  protected goOrganizations() {
+    this.router
+      .navigate(['/main/organization'])
+      .then(() => {
+        console.log('goOrganizations ok!')
+      })
+      .catch(e => {
+        console.log('goOrganizations failed: ', e)
+      });
+  }
 
-    // 主模块
-    if (name === '个人开发者') {
-      this.organization.update('personal');
-    } else {
-      this.organization.update('jd');
-    }
+  protected goAddOrganization() {
+    this.router
+      .navigate(['/main/organization/add'])
+      .then(() => {
+        console.log('goAddOrganization ok!')
+      })
+      .catch(e => {
+        console.log('goAddOrganization failed: ', e)
+      });
   }
 
   protected logout() {
