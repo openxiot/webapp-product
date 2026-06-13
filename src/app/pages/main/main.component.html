@@ -76,19 +76,10 @@
           </li>
         }
 
-        <!--      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="notice">-->
-        <!--        <nz-badge-->
-        <!--          nzSize="small"-->
-        <!--          [nzCount]="9"-->
-        <!--        >-->
-        <!--          <span nz-icon nzType="bell" nzTheme="outline"></span>-->
-        <!--        </nz-badge>-->
-        <!--      </li>-->
-
         @if (account.login) {
           @if (account.organization) {
             <li nz-menu-item nzMatchRouter routerLink="/main/organization" style="float: right">
-              {{ account.organization.name }}
+              {{ account.organization.name }} ({{ account.organization.id }})
             </li>
           } @else {
             <li nz-menu-item nzMatchRouter routerLink="/main/organization/create" style="float: right">
@@ -96,34 +87,7 @@
               <span>{{ '创建组织' | translate }}</span>
             </li>
           }
-
-<!--          @if (account.organizationId) {-->
-<!--            -->
-<!--          }-->
-
-<!--          <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="organization">-->
-<!--          <span class="main-header-icon" nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="organization">-->
-<!--            @if (currentOrganization.personal) {-->
-<!--              <nz-space>-->
-<!--                <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>-->
-<!--                <span *nzSpaceItem>{{ '个人开发组' | translate }}</span>-->
-<!--              </nz-space>-->
-<!--            } @else {-->
-<!--              <nz-space>-->
-<!--                <span *nzSpaceItem nz-icon nzType="team" nzTheme="outline"></span>-->
-<!--                <span *nzSpaceItem>{{ currentOrganization.name }}</span>-->
-<!--              </nz-space>-->
-<!--            }-->
-<!--          </span>-->
-<!--          </li>-->
         }
-
-        <!--      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="user">-->
-        <!--        <nz-space>-->
-        <!--          <nz-avatar *nzSpaceItem nzIcon="user"></nz-avatar>-->
-        <!--          <span *nzSpaceItem>张三</span>-->
-        <!--        </nz-space>-->
-        <!--      </li>-->
       </ul>
 
       <!-- 小屏幕汉堡按钮 + 下拉菜单 -->
@@ -186,67 +150,5 @@
 
   <nz-dropdown-menu #notice>
     <notice-card></notice-card>
-  </nz-dropdown-menu>
-
-<!--  <nz-dropdown-menu #organization>-->
-<!--    <ul nz-menu>-->
-<!--      @for (item of organizations; track item.id) {-->
-<!--        <li nz-menu-item (click)="selectOrganization(item)">-->
-<!--          <nz-space>-->
-<!--            @if (item.personal) {-->
-<!--              <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>-->
-<!--              <span *nzSpaceItem>{{ '个人开发组' | translate }}</span>-->
-<!--            } @else {-->
-<!--              <span *nzSpaceItem nz-icon nzType="team" nzTheme="outline"></span>-->
-<!--              <span *nzSpaceItem>{{ item.name }}</span>-->
-<!--            }-->
-<!--          </nz-space>-->
-<!--        </li>-->
-<!--      }-->
-
-<!--      <li nz-menu-divider></li>-->
-
-<!--      <li nz-menu-item (click)="goOrganizations()">-->
-<!--        <nz-space>-->
-<!--          <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>-->
-<!--          <span *nzSpaceItem>{{ '组织管理' | translate }}</span>-->
-<!--        </nz-space>-->
-<!--      </li>-->
-
-<!--      <li nz-menu-divider></li>-->
-
-<!--      <li nz-menu-item (click)="goAddOrganization()">-->
-<!--        <nz-space>-->
-<!--          <span *nzSpaceItem nz-icon nzType="plus" nzTheme="outline"></span>-->
-<!--          <span *nzSpaceItem>{{ '创建组织' | translate }}</span>-->
-<!--        </nz-space>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </nz-dropdown-menu>-->
-
-  <nz-dropdown-menu #user>
-    <ul nz-menu nzTheme="light" nzMode="vertical">
-      <li nz-menu-item>
-        <nz-space>
-          <i *nzSpaceItem nz-icon nzTheme="outline" nzType="user"></i>
-          <span *nzSpaceItem>个人中心</span>
-        </nz-space>
-      </li>
-      <li nz-menu-divider></li>
-      <li nz-menu-item (click)="logout()">
-        <nz-space>
-          <i *nzSpaceItem nz-icon nzTheme="outline" nzType="logout"></i>
-          <span *nzSpaceItem>退出登录</span>
-        </nz-space>
-      </li>
-    </ul>
-  </nz-dropdown-menu>
-
-  <nz-dropdown-menu #language="nzDropdownMenu">
-    <ul nz-menu nzSelectable>
-      @for (lang of i18n.languages; track lang.code) {
-        <li nz-menu-item (click)="i18n.changeLanguage(lang.code)">{{ lang.name }}</li>
-      }
-    </ul>
   </nz-dropdown-menu>
 </nz-spin>

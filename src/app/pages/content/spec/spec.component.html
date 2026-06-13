@@ -20,17 +20,19 @@
 <!--    </nz-space>-->
 <!--  </nz-page-header-extra>-->
 
-  <nz-page-header-footer>
-    <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
-      <nz-tab nzTitle="设备类型"></nz-tab>
-      <nz-tab nzTitle="功能"></nz-tab>
-      <nz-tab nzTitle="属性"></nz-tab>
-      <nz-tab nzTitle="方法"></nz-tab>
-      <nz-tab nzTitle="事件"></nz-tab>
-      <nz-tab nzTitle="格式"></nz-tab>
-      <nz-tab nzTitle="单位"></nz-tab>
-    </nz-tabset>
-  </nz-page-header-footer>
+  @if (account.ns) {
+    <nz-page-header-footer>
+      <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
+        <nz-tab nzTitle="设备类型"></nz-tab>
+        <nz-tab nzTitle="功能"></nz-tab>
+        <nz-tab nzTitle="属性"></nz-tab>
+        <nz-tab nzTitle="方法"></nz-tab>
+        <nz-tab nzTitle="事件"></nz-tab>
+        <nz-tab nzTitle="格式"></nz-tab>
+        <nz-tab nzTitle="单位"></nz-tab>
+      </nz-tabset>
+    </nz-page-header-footer>
+  }
 </nz-page-header>
 
 <ng-template #title>
@@ -50,27 +52,29 @@
 </ng-template>
 
 <div style="padding: 20px 20px">
-  @switch (tabIndex) {
-    @case (0) {
-      <spec-device></spec-device>
-    }
-    @case (1) {
-      <spec-service></spec-service>
-    }
-    @case (2) {
-      <spec-property></spec-property>
-    }
-    @case (3) {
-      <spec-action></spec-action>
-    }
-    @case (4) {
-      <spec-event></spec-event>
-    }
-    @case (5) {
-      <spec-format></spec-format>
-    }
-    @case (6) {
-      <spec-unit></spec-unit>
+  @if (account.ns) {
+    @switch (tabIndex) {
+      @case (0) {
+        <spec-device></spec-device>
+      }
+      @case (1) {
+        <spec-service></spec-service>
+      }
+      @case (2) {
+        <spec-property></spec-property>
+      }
+      @case (3) {
+        <spec-action></spec-action>
+      }
+      @case (4) {
+        <spec-event></spec-event>
+      }
+      @case (5) {
+        <spec-format></spec-format>
+      }
+      @case (6) {
+        <spec-unit></spec-unit>
+      }
     }
   }
 </div>
