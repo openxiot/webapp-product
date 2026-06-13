@@ -1,9 +1,9 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MainService} from '../../../service/main.service';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {CookieService} from 'ngx-cookie-service';
-import {environment} from '../../../../environments/environment';
+import {Component, OnInit} from '@angular/core';
+import {NzMessageService} from "ng-zorro-antd/message";
+import {ActivatedRoute, Router} from "@angular/router";
+import {NzI18nService} from "ng-zorro-antd/i18n";
+import {AccountService} from "../../../service/account.service";
+import {Developer} from '../../../typedef/define/developer/Developer';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 
 @Component({
@@ -13,47 +13,61 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
   imports: [
     NzSpinModule,
   ],
-  providers: [
-    CookieService
-  ]
 })
 export class CallbackComponent implements OnInit {
 
-  private cookie = inject(CookieService);
-
   loading: boolean = true;
-  logged: boolean = false;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private service: MainService,
-    private msg: NzMessageService
+    private account: AccountService,
+    public i18n: NzI18nService,
+    public msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    console.log('init');
-    // 使用Cookie，直接读取用户信息，读完后跳转到首页
+    console.log('CallbackComponent params: ', this.route.snapshot.params);
+    console.log('CallbackComponent query: ', this.route.snapshot.queryParams);
     this.getProfile();
   }
 
   private getProfile() {
-    const pin = this.cookie.get('pin');
+    let token = this.route.snapshot.queryParams['token'];
+    let id = this.route.snapshot.queryParams['uid'];
+    let name = this.route.snapshot.queryParams['name'];
+    let avatar = this.route.snapshot.queryParams['avatar'];
+    let email = this.route.snapshot.queryParams['email'];
+    let platform = this.route.snapshot.queryParams['platform'];
+    this.save(token, name, avatar, email, id, platform);
+  }
 
-    this.logged = !!pin;
-    this.loading = false;
+  private save(token: string, name: string, avatar: string, email: string, id: string, platform: string) {
+    const developer: Developer = new Developer();
+    developer.name = name;
+    developer.uid = id;
+    developer.avatar = avatar;
+    developer.email = email;
+    developer.token = token;
+    developer.platform = platform;
 
-    if (this.logged) {
-      this.router.navigate(['/main/product'])
-        .then(x => {
-          console.log('navigate ok!');
-        })
-        .catch(e => {
-          console.log('navigate failed: ', e);
+    console.info('name: ', developer.name);
+    console.info('uid: ', developer.uid);
+    console.info('avatar: ', developer.avatar);
+    console.info('email: ', developer.email);
+    console.info('token: ', developer.token);
+    console.info('platform: ', developer.platform);
+
+    this.account.setDeveloper(developer);
+
+    if (developer.token !== null) {
+      this.router.navigate(['/main'])
+        .then(() => {
+          this.loading = false;
         });
     } else {
-      // window.location.href = environment.passport.url;
+      this.msg.info('登录失败, token is null');
     }
   }
 }

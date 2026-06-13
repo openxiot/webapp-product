@@ -1,0 +1,91 @@
+<nz-layout class="login-background">
+
+  <nz-header class="login-header">
+    <span>
+      <img class="show" alt="example" src="logo.svg"/>
+    </span>
+
+    <span class="language" nz-dropdown [nzDropdownMenu]="language" nzTrigger="hover">
+      <span nz-icon nzType="global" nzTheme="outline"></span>
+    </span>
+  </nz-header>
+
+  <nz-content>
+    <div class="centered-card">
+      <div nz-row [nzGutter]="[16, 16]">
+        <div nz-col [nzSpan]="12" >
+<!--          <img class="show" alt="openxiot" src="logo.svg" />-->
+        </div>
+
+        <div nz-col [nzSpan]="12">
+          <nz-card [nzBordered]="false">
+
+            <div class="login-title">
+              {{ '开发者登录' | translate }}
+            </div>
+
+            <nz-divider></nz-divider>
+
+            <div class="login-btn-container">
+              @if (config) {
+                <button nz-button nzType="primary" class="login-button" (click)="open(config)">
+                  @switch (config.platformId) {
+                    @case ('dingtalk') {
+                      <i nz-icon nzType="dingding" nzTheme="outline"></i>
+                    }
+                    @case ('wechat') {
+                      <i nz-icon nzType="wechat" nzTheme="outline"></i>
+                    }
+                    @case ('github') {
+                      <i nz-icon nzType="github" nzTheme="outline"></i>
+                    }
+                    @case ('google') {
+                      <i nz-icon nzType="google" nzTheme="outline"></i>
+                    }
+                  }
+                  {{ config.platformName }} {{ '登录' | translate }}
+                </button>
+              }
+            </div>
+
+            <nz-divider style="font-size: 12px; color: gray" nzText="{{ '或使用以下方式登录' | translate}}"></nz-divider>
+
+            <div class="login-btn-others">
+              @for (item of list; track item.clientId) {
+                @if (item.clientId !== config?.clientId) {
+                  <button nzTooltipTitle="{{ item.platformName | translate }}" nz-tooltip nz-button nzSize="large" nzShape="circle" (click)="open(item)">
+                    @switch (item.platformId) {
+                      @case ('wechat') {
+                        <span nz-icon nzType="wechat" nzTheme="outline"></span>
+                      }
+                      @case ('github') {
+                        <span nz-icon nzType="github" nzTheme="outline"></span>
+                      }
+                      @case ('facebook') {
+                        <span nz-icon nzType="facebook" nzTheme="outline"></span>
+                      }
+                      @case ('google') {
+                        <span nz-icon nzType="google" nzTheme="outline"></span>
+                      }
+                      @default {
+                        <span nz-icon nzType="question" nzTheme="outline"></span>
+                      }
+                    }
+                  </button>
+                }
+              }
+            </div>
+          </nz-card>
+        </div>
+      </div>
+    </div>
+  </nz-content>
+</nz-layout>
+
+<nz-dropdown-menu #language="nzDropdownMenu">
+  <ul nz-menu nzSelectable>
+    @for (lang of i18n.languages; track lang.code) {
+      <li nz-menu-item (click)="i18n.changeLanguage(lang.code)">{{ lang.name }}</li>
+    }
+  </ul>
+</nz-dropdown-menu>

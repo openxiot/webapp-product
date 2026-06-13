@@ -22,6 +22,10 @@
     "@openxiot/xiot-core-spec-ts": "^0.0.6",
     "ng-zorro-antd": "^18.2.1",
     "ngx-cookie-service": "^18.0.0",
+    "handsontable": "^17.0.0",
+    "@handsontable/angular-wrapper": "^17.0.0",
+    "@ngx-translate/core": "^17.0.0",
+    "@ngx-translate/http-loader": "^17.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.10"

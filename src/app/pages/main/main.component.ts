@@ -6,7 +6,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import pkg from '../../../../package.json';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {Router, RouterLink, RouterOutlet} from '@angular/router';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
@@ -45,7 +45,6 @@ export class MainComponent implements OnInit {
 
   private cookie = inject(CookieService);
 
-  passport: string = "environment.passport.url";
   version: string = pkg.version;
   loading: boolean = true;
 
@@ -53,6 +52,7 @@ export class MainComponent implements OnInit {
   nickname: string = '?';
 
   constructor(
+    private router: Router,
     private organization: OrganizationService,
     private msg: NzMessageService,
   ) {
@@ -70,8 +70,14 @@ export class MainComponent implements OnInit {
   }
 
   protected logout() {
-    console.log('logout: ', this.passport);
-    window.location.href = this.passport;
+    this.router
+      .navigate(['/passport'])
+      .then(() => {
+        console.log('goLogin ok!')
+      })
+      .catch(e => {
+        console.log('goLogin failed: ', e)
+      });
   }
 
   name: string = '个人开发者';
