@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {NzContentComponent, NzFooterComponent, NzHeaderComponent, NzLayoutComponent} from "ng-zorro-antd/layout";
+import {NzContentComponent, NzHeaderComponent, NzLayoutComponent} from "ng-zorro-antd/layout";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {MainService} from "../../service/main.service";
 import {NzListModule} from "ng-zorro-antd/list";
@@ -84,7 +84,7 @@ export class PassportComponent implements OnInit {
   setTitle() {
     console.log('CurrentLang: ', this.i18n.translate.getCurrentLang());
     console.log('BrowserLang: ', this.i18n.translate.getBrowserLang());
-    this.i18n.translate.get('MG - 开发者登录').subscribe((res: string) => {
+    this.i18n.translate.get('Openxiot').subscribe((res: string) => {
       this.title.setTitle(res);
     });
   }

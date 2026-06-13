@@ -3,20 +3,23 @@ import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {FormsModule} from '@angular/forms';
+import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
-import {MainService} from '../../../../service/main.service';
-import {SpecDevice} from '../../../../typedef/define/spec/SpecDevice';
+import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
+import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
-import {NzTagModule} from 'ng-zorro-antd/tag';
-import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../service/account.service';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
+import {RouterLink} from '@angular/router';
 
 @Component({
-  selector: 'spec-device',
+  selector: 'main-namespace',
   standalone: true,
-  templateUrl: './spec.device.component.html',
-  styleUrls: ['./spec.device.component.less'],
+  templateUrl: './namespace.component.html',
+  styleUrls: ['./namespace.component.less'],
   imports: [
     FormsModule,
     NzPageHeaderModule,
@@ -25,18 +28,22 @@ import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
     NzCardModule,
     NzTabsModule,
     NzTableModule,
-    NzTagModule,
+    NzDescriptionsModule,
+    NzButtonComponent,
+    NzWaveDirective,
+    RouterLink,
   ],
 })
-export class SpecDeviceComponent implements OnInit {
+export class NamespaceComponent implements OnInit {
 
   loading: boolean = true;
   total: number = 0;
-  devices: SpecDevice[] = [];
+  namespaces: NamespaceDefinition[] = [];
   pageSize = 100;
   pageIndex = 1;
 
   constructor(
+    public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -51,15 +58,15 @@ export class SpecDeviceComponent implements OnInit {
     pageSize: number,
   ): void {
     this.loading = true;
-    this.service.getSpecDevices('jd')
+    this.service.getSpecNamespaces()
       .subscribe({
         next: data => {
-          this.devices = data;
+          this.namespaces = data;
           this.loading = false;
-          this.total = this.devices.length;
+          this.total = this.namespaces.length;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecDevices: ', error);
+          this.msg.warning('Failed to getSpecNamespaces: ', error);
         }
       })
   }
@@ -69,6 +76,4 @@ export class SpecDeviceComponent implements OnInit {
     const { pageSize, pageIndex } = params;
     this.loadDataFromServer(pageIndex, pageSize);
   }
-
-  protected readonly LifeCycle = LifeCycle;
 }

@@ -13,6 +13,10 @@ import {TemplateFilterTypeComponent} from './filter/type/template.filter.type.co
 import {Type} from '../../../typedef/define/Type';
 import {Urn} from '@openxiot/xiot-core-spec-ts';
 import {Template} from '../../../typedef/define/template/Template';
+import {Router} from '@angular/router';
+import {AccountService} from '../../../service/account.service';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 
 @Component({
   selector: 'main-template',
@@ -30,6 +34,8 @@ import {Template} from '../../../typedef/define/template/Template';
     TemplateGridComponent,
     TemplateListComponent,
     TemplateFilterTypeComponent,
+    NzButtonComponent,
+    NzWaveDirective,
   ],
 })
 export class TemplateComponent implements OnInit {
@@ -48,6 +54,7 @@ export class TemplateComponent implements OnInit {
   typesSelected: Set<string> = new Set<string>();
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -59,7 +66,7 @@ export class TemplateComponent implements OnInit {
 
   loadTemplates() {
     this.loading = true;
-    this.service.getTemplates('jd', 1, 100).subscribe({
+    this.service.getTemplates('jd').subscribe({
       next: data => {
         this.templatesOriginal = data.templates;
         this.templates = data.templates;

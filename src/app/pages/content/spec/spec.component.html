@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="产品规范" [nzGhost]="false">
+<nz-page-header [nzTitle]="title" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 
 <!--  <nz-page-header-content>-->
@@ -12,6 +12,13 @@
 <!--      </nz-descriptions-item>-->
 <!--    </nz-descriptions>-->
 <!--  </nz-page-header-content>-->
+
+<!--  <nz-page-header-extra>-->
+<!--    <nz-space>-->
+<!--      <button *nzSpaceItem nz-button nzType="dashed">请选择一个名字空间</button>-->
+<!--      <button *nzSpaceItem nz-button nzType="primary">Primary</button>-->
+<!--    </nz-space>-->
+<!--  </nz-page-header-extra>-->
 
   <nz-page-header-footer>
     <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
@@ -51,3 +58,7 @@
     }
   }
 </div>
+
+<ng-template #title>
+  <button nz-button nzType="dashed">请选择一个名字空间</button>
+</ng-template>

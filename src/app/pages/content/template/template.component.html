@@ -1,5 +1,5 @@
 <nz-spin [nzSpinning]="loading">
-  <nz-page-header nzTitle="产品模板" [nzGhost]="false">
+  <nz-page-header [nzTitle]="title" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 
     <nz-page-header-tags>
@@ -25,4 +25,8 @@
       </div>
     </div>
   </div>
+
+  <ng-template #title>
+    <button nz-button nzType="dashed">请选择一个名字空间</button>
+  </ng-template>
 </nz-spin>

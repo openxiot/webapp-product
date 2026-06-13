@@ -15,7 +15,7 @@ import {NoticeCardComponent} from './notice/card/notice.card.component';
 import {NzBadgeModule} from 'ng-zorro-antd/badge';
 import {OrganizationService} from '../../service/organization.service';
 import {CookieService} from 'ngx-cookie-service';
-import {environment} from "../../../environments/environment";
+import {AccountService} from '../../service/account.service';
 
 @Component({
   selector: 'app-main',
@@ -43,15 +43,12 @@ import {environment} from "../../../environments/environment";
 })
 export class MainComponent implements OnInit {
 
-  private cookie = inject(CookieService);
-
   version: string = pkg.version;
   loading: boolean = true;
-
-  pin: string = '?';
-  nickname: string = '?';
+  name: string = '个人开发者';
 
   constructor(
+    public account: AccountService,
     private router: Router,
     private organization: OrganizationService,
     private msg: NzMessageService,
@@ -60,27 +57,10 @@ export class MainComponent implements OnInit {
 
   ngOnInit() {
     console.log('init');
-    this.pin = this.cookie.get('pin');
-    this.nickname = this.cookie.get('unick');
-    console.log('pin: ', this.pin);
-    console.log('nickname: ', this.nickname);
   }
 
   protected goto(path: string) {
   }
-
-  protected logout() {
-    this.router
-      .navigate(['/passport'])
-      .then(() => {
-        console.log('goLogin ok!')
-      })
-      .catch(e => {
-        console.log('goLogin failed: ', e)
-      });
-  }
-
-  name: string = '个人开发者';
 
   protected onSelect(name: string) {
     console.log('onSelect', name);
@@ -93,5 +73,18 @@ export class MainComponent implements OnInit {
     } else {
       this.organization.update('jd');
     }
+  }
+
+  protected logout() {
+    this.account.clear();
+
+    this.router
+      .navigate(['/passport'])
+      .then(() => {
+        console.log('goLogin ok!')
+      })
+      .catch(e => {
+        console.log('goLogin failed: ', e)
+      });
   }
 }

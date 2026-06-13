@@ -40,7 +40,7 @@ import {
   ProductPanelCodec,
   ProductWizard,
   ProductWizardCodec,
-  DeviceInstance, Oauth2Configuration, Oauth2ConfigurationCodec
+  DeviceInstance, Oauth2Configuration, Oauth2ConfigurationCodec, NamespaceDefinition, NamespaceDefinitionCodec
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -68,15 +68,16 @@ export class MainService {
    * 产品规范
    *------------------------------------------------------------------------------------------------*/
 
-  getSpecDevices(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecDevice[]> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecNamespaces(): Observable<NamespaceDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/device/list`, {params})
-      .pipe(map(response => SpecDeviceCodec.decodeArray(response.data.datalist)));
+      .get<OxResponse>(`${this.server}/v1/spec/namespace/all`)
+      .pipe(map(response => NamespaceDefinitionCodec.decodeArray(response.data)));
+  }
+
+  getSpecDevices(ns: string): Observable<SpecDevice[]> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/device/many/${ns}`)
+      .pipe(map(response => SpecDeviceCodec.decodeArray(response.data)));
   }
 
   getSpecServices(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecServices> {
@@ -152,14 +153,9 @@ export class MainService {
   /**
    * 读取产品模板列表
    */
-  getTemplates(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecTemplates> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getTemplates(ns: string): Observable<SpecTemplates> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/template/list`, {params})
+      .get<OxResponse>(`${this.server}/v1/template/many/${ns}`)
       .pipe(map(response => SpecTemplatesCodec.decode(response.data)));
   }
 

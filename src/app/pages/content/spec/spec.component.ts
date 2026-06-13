@@ -16,6 +16,8 @@ import {SpecFormatComponent} from './format/spec.format.component';
 import {SpecUnitComponent} from './unit/spec.unit.component';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
+import {NzSpaceModule} from 'ng-zorro-antd/space';
+import {NzButtonModule} from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'main-spec',
@@ -37,6 +39,8 @@ import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
     SpecEventComponent,
     SpecFormatComponent,
     SpecUnitComponent,
+    NzSpaceModule,
+    NzButtonModule,
     NzRadioComponent,
     NzRadioGroupComponent,
   ],

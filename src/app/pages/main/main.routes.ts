@@ -17,28 +17,19 @@ export const MAIN_ROUTES: Routes = [
     loadChildren: () => import('./product/main.product.routes').then(m => m.MAIN_PRODUCT_ROUTES)
   },
   {
-    path: 'statistic',
-    data: {breadcrumb: '统计'},
-    loadChildren: () => import('./statistic/main.statistic.routes').then(m => m.MAIN_STATISTIC_ROUTES)
-  },
-  {
-    path: 'application',
-    data: {breadcrumb: '应用'},
-    loadChildren: () => import('./application/main.application.routes').then(m => m.MAIN_APPLICATION_ROUTES)
-  },
-  {
-    path: 'spec',
-    data: {breadcrumb: '产品规范'},
-    loadChildren: () => import('../content/spec/spec.routes').then(m => m.SPEC_ROUTES)
-  },
-  {
     path: 'template',
-    data: {breadcrumb: '产品模板'},
+    data: {breadcrumb: '模板'},
     loadChildren: () => import('../content/template/template.routes').then(m => m.TEMPLATE_ROUTES)
   },
   {
-    path: 'upload',
-    data: {breadcrumb: '上传'},
-    loadChildren: () => import('./upload/upload.routes').then(m => m.UPLOAD_ROUTES)
+    path: 'spec',
+    data: {breadcrumb: '规范'},
+    loadChildren: () => import('../content/spec/spec.routes').then(m => m.SPEC_ROUTES)
   },
+  {
+    path: 'namespace',
+    data: {breadcrumb: '名字空间'},
+    loadChildren: () => import('../content/namespace/namespace.routes').then(m => m.NAMESPACE_ROUTES)
+  },
+
 ];

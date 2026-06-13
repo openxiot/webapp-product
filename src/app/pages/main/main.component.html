@@ -12,61 +12,86 @@
       nzMode="horizontal"
       class="header-menu desktop-menu"
     >
-      <!--    <ul nz-menu nzTheme="dark" nzMode="horizontal" class="header-menu">-->
       <li nz-menu-item nzMatchRouter routerLink="/main/product">
         <span nz-icon nzType="bulb" nzTheme="outline"></span>
         产品
       </li>
-<!--      <li nz-menu-item nzMatchRouter routerLink="/main/application">-->
-<!--        <span nz-icon nzType="appstore" nzTheme="outline"></span>-->
-<!--        应用-->
-<!--      </li>-->
-<!--      <li nz-menu-item nzMatchRouter routerLink="/main/statistic">-->
-<!--        <span nz-icon nzType="line-chart" nzTheme="outline"></span>-->
-<!--        统计-->
-<!--      </li>-->
 
       <li nz-menu-item nzMatchRouter routerLink="/main/template">
         <span nz-icon nzType="fire" nzTheme="outline"></span>
-        产品模板
+        模板
       </li>
 
       <li nz-menu-item nzMatchRouter routerLink="/main/spec">
         <span nz-icon nzType="gold" nzTheme="outline"></span>
-        产品规范
+        规范
+      </li>
+
+      <li nz-menu-item nzMatchRouter routerLink="/main/namespace">
+        <span nz-icon nzType="appstore" nzTheme="outline"></span>
+        名字空间
       </li>
 
       <li nz-menu-item nzMatchRouter (click)="logout()" style="float: right" >
-        <span nz-icon nzType="logout" nzTheme="outline"></span>
-        退出
+        @if (account.login) {
+          <span nz-icon nzType="logout" nzTheme="outline"></span>
+          <span>退出</span>
+        } @else {
+          <span nz-icon nzType="login" nzTheme="outline"></span>
+          <span>登录</span>
+        }
       </li>
 
-      <li nz-menu-item nzMatchRouter routerLink="/main/profile" style="float: right" >
-        <nz-space>
-          <nz-avatar *nzSpaceItem nzIcon="user"></nz-avatar>
-          <span *nzSpaceItem>{{ nickname }}</span>
-        </nz-space>
-      </li>
+      @if (account.login) {
+        <li nz-menu-item nzMatchRouter routerLink="/main/profile" style="float: right" >
+          <nz-space>
+            <div *nzSpaceItem>
+              @switch (account.developer.platform) {
+                @case ('wechat') {
+                  <span nz-icon nzType="wechat" nzTheme="outline"></span>
+                }
+                @case ('github') {
+                  <span nz-icon nzType="github" nzTheme="outline"></span>
+                }
+                @case ('facebook') {
+                  <span nz-icon nzType="facebook" nzTheme="outline"></span>
+                }
+                @case ('google') {
+                  <span nz-icon nzType="google" nzTheme="outline"></span>
+                }
+                @default {
+                  <span nz-icon nzType="question" nzTheme="outline"></span>
+                }
+              }
+            </div>
+            <div *nzSpaceItem>
+              {{ account.developer.name}}
+            </div>
+          </nz-space>
+        </li>
+      }
 
-      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="notice">
-        <nz-badge
-          nzSize="small"
-          [nzCount]="9"
-        >
-          <span nz-icon nzType="bell" nzTheme="outline"></span>
-        </nz-badge>
-      </li>
+<!--      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="notice">-->
+<!--        <nz-badge-->
+<!--          nzSize="small"-->
+<!--          [nzCount]="9"-->
+<!--        >-->
+<!--          <span nz-icon nzType="bell" nzTheme="outline"></span>-->
+<!--        </nz-badge>-->
+<!--      </li>-->
 
-      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="organization">
-        <nz-space>
-          @if (name === '个人开发者') {
-            <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>
-          } @else {
-            <span *nzSpaceItem nz-icon nzType="team" nzTheme="outline"></span>
-          }
-          <span *nzSpaceItem>{{ name }}</span>
-        </nz-space>
-      </li>
+      @if (account.login) {
+        <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="organization">
+          <nz-space>
+            @if (name === '个人开发者') {
+              <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>
+            } @else {
+              <span *nzSpaceItem nz-icon nzType="team" nzTheme="outline"></span>
+            }
+            <span *nzSpaceItem>{{ name }}</span>
+          </nz-space>
+        </li>
+      }
 
       <!--      <li nz-menu-item nzMatchRouter style="float: right" nz-dropdown [nzDropdownMenu]="user">-->
       <!--        <nz-space>-->

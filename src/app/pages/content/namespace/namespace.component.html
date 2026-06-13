@@ -1,0 +1,43 @@
+<nz-page-header nzTitle="名字空间" [nzGhost]="false">
+  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+
+  @if (account.login) {
+    <nz-page-header-extra>
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/namespace/create']">创建</button>
+    </nz-page-header-extra>
+  }
+</nz-page-header>
+
+<div style="padding: 20px 20px">
+  <nz-table
+    nzShowSizeChanger
+    nzSize="small"
+    [nzData]="namespaces"
+    [nzFrontPagination]="false"
+    [nzLoading]="loading"
+    [nzTotal]="total"
+    [(nzPageSize)]="pageSize"
+    [(nzPageIndex)]="pageIndex"
+    (nzQueryParams)="onQueryParamsChange($event)"
+  >
+    <thead>
+    <tr>
+      <th>代码</th>
+      <th>中文描述</th>
+      <th>英文描述</th>
+      <th>创建者</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (ns of namespaces; track ns.namespace) {
+        <tr>
+          <td>{{ ns.namespace }}</td>
+          <td>{{ ns.description.get('zh-CN') }}</td>
+          <td>{{ ns.description.get('en-US') }}</td>
+          <td>?</td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+
+</div>
