@@ -39,11 +39,11 @@ import {ValueItem} from '../../../service/split/detail/property/list/ValueItem';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
 import {DefaultValue} from '../../../service/split/detail/property/value/DefaultValue';
 import {
-  DeviceInstanceServicePropertyDefaultValueComponent
-} from '../../../service/split/detail/property/value/device.instance.service.property.default.value.component';
-import {
   DeviceInstanceServicePropertyUnitComponent
 } from '../../../service/split/detail/property/unit/device.instance.service.property.unit.component';
+import {
+  DeviceInstanceServicePropertyDefaultValueComponent
+} from '../../../service/split/detail/property/value/device.instance.service.property.default.value.component';
 
 @Component({
   selector: 'create-property',
@@ -75,7 +75,6 @@ import {
     DeviceInstanceServicePropertyConstraintComponent,
     DeviceInstanceServicePropertyFormatComponent,
     DeviceInstanceServicePropertyListComponent,
-    DeviceInstanceServicePropertyMembersComponent,
     DeviceInstanceServicePropertyRangeComponent,
     DeviceInstanceServicePropertyDefaultValueComponent,
     DeviceInstanceServicePropertyUnitComponent,
@@ -110,7 +109,7 @@ export class CreatePropertyComponent implements OnInit {
 
   properties: Property[] = [];
   loading: boolean = true;
-  definitions: Map<string, ObjectWithLifecycle<PropertyDefinition>> = new Map<string, ObjectWithLifecycle<PropertyDefinition>>();
+  definitions: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   current: Property;
 
@@ -147,19 +146,19 @@ export class CreatePropertyComponent implements OnInit {
     this.main.getSpecProperties('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.definitions = new Map(data.properties.map(item => [item.value.type.name, item]));
+          this.definitions = new Map(data.properties.map(item => [item.type.name, item]));
 
           this.properties = data.properties
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
               return new Property(
                 this.data.iid,
-                x.value.type,
-                x.value.description,
-                x.value.format,
-                x.value.access,
-                x.value.constraintValue,
-                x.value.unit
+                x.type,
+                x.description,
+                x.format,
+                x.access,
+                x.constraintValue,
+                x.unit
               );
             });
 
@@ -221,8 +220,8 @@ export class CreatePropertyComponent implements OnInit {
     }
 
     if (property.value.defaultValue) {
-      this.form.controls.defaultValue.value.value = property.value.defaultValue.rawValue();
-      this.form.controls.defaultValue.value.valid = true;
+      this.form.controls.defaultValue.defaultValue.value = property.value.defaultValue.rawValue();
+      this.form.controls.defaultValue.defaultValue.valid = true;
     }
 
     this.loading = false;
@@ -238,9 +237,9 @@ export class CreatePropertyComponent implements OnInit {
     this.data.type.value = this.current.type.value;
     this.data.type.name = this.form.controls.code.value;
     this.data.description = this.form.controls.description.value;
-    this.data.access.isReadable = this.form.controls.access.value.isReadable;
-    this.data.access.isWritable = this.form.controls.access.value.isWritable;
-    this.data.access.isNotifiable = this.form.controls.access.value.isNotifiable;
+    this.data.access.isReadable = this.form.controls.access.defaultValue.isReadable;
+    this.data.access.isWritable = this.form.controls.access.defaultValue.isWritable;
+    this.data.access.isNotifiable = this.form.controls.access.defaultValue.isNotifiable;
     this.data.format = this.form.controls.format.value;
 
     switch (this.form.controls.constraint.value) {
@@ -249,7 +248,7 @@ export class CreatePropertyComponent implements OnInit {
         break;
 
       case ConstraintType.RANGE:
-        const range = [this.form.controls.range.value.min, this.form.controls.range.value.max, this.form.controls.range.value.step];
+        const range = [this.form.controls.range.defaultValue.min, this.form.controls.range.defaultValue.max, this.form.controls.range.defaultValue.step];
         this.data.constraintValue = new ValueRange(this.data.format, range);
         break;
 
@@ -270,10 +269,10 @@ export class CreatePropertyComponent implements OnInit {
 
     this.data.unit = this.form.controls.unit.value;
 
-    if (this.form.controls.defaultValue.value.valid) {
-      this.data.setDefaultValue(this.form.controls.defaultValue.value.value);
+    if (this.form.controls.defaultValue.valid) {
+      this.data.setDefaultValue(this.form.controls.defaultValue.value);
     } else {
-      this.data.value.defaultValue = null;
+      this.data.setDefaultValue(null);
     }
 
     this.#modal.destroy(this.data);

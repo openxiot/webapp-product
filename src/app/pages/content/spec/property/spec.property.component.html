@@ -24,29 +24,29 @@
   </thead>
 
   <tbody>
-    @for (p of properties; track p.value.type.value) {
+    @for (p of properties; track p.type.value) {
       <tr>
-        <td><nz-tag>{{ p.value.type.shortUUID() }}</nz-tag></td>
-        <td>{{ p.value.type.name }}</td>
-        <td>{{ p.value.description.get('zh-CN') }}</td>
-        <td>{{ getFormatDescription(p.value.format) }}</td>
-        <td>{{ getUnitDescription(p.value.unit) }}</td>
+        <td><nz-tag>{{ p.type.shortUUID() }}</nz-tag></td>
+        <td>{{ p.type.name }}</td>
+        <td>{{ p.description.get('zh-CN') }}</td>
+        <td>{{ getFormatDescription(p.format) }}</td>
+        <td>{{ getUnitDescription(p.unit) }}</td>
         <td>
-          @if (p.value.access.isWritable) {
+          @if (p.access.isWritable) {
             <nz-tag [nzColor]="'red'">写</nz-tag>
           }
 
-          @if (p.value.access.isReadable) {
+          @if (p.access.isReadable) {
             <nz-tag [nzColor]="'blue'">读</nz-tag>
           }
 
-          @if (p.value.access.isNotifiable) {
+          @if (p.access.isNotifiable) {
             <nz-tag [nzColor]="'green'">通知</nz-tag>
           }
         </td>
         <td>
-          @if (p.value.members.length > 0) {
-            @for (member of p.value.members; track member.value) {
+          @if (p.members.length > 0) {
+            @for (member of p.members; track member.value) {
               <nz-tag>{{ getPropertyDescription(member) }}</nz-tag>
             }
           }

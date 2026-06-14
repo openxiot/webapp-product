@@ -14,7 +14,6 @@ import {
   ActionType,
   PropertyType,
   EventType,
-  ObjectWithLifecycle,
   PropertyDefinition,
   ServiceDefinition,
   ActionDefinition,
@@ -41,19 +40,19 @@ export class SpecServiceComponent implements OnInit {
 
   loading: boolean = true;
   total: number = 0;
-  services: ObjectWithLifecycle<ServiceDefinition>[] = [];
+  services: ServiceDefinition[] = [];
   pageSize = 100;
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];
 
   loadingProperties: boolean = true;
-  properties: Map<string, ObjectWithLifecycle<PropertyDefinition>> = new Map<string, ObjectWithLifecycle<PropertyDefinition>>();
+  properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   loadingActions: boolean = true;
-  actions: Map<string, ObjectWithLifecycle<ActionDefinition>> = new Map<string, ObjectWithLifecycle<ActionDefinition>>();
+  actions: Map<string, ActionDefinition> = new Map<string, ActionDefinition>();
 
   loadingEvents: boolean = true;
-  events: Map<string, ObjectWithLifecycle<EventDefinition>> = new Map<string, ObjectWithLifecycle<EventDefinition>>();
+  events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
     private service: MainService,
@@ -86,7 +85,7 @@ export class SpecServiceComponent implements OnInit {
     this.service.getSpecProperties('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.value.type.name, item]));
+          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {
@@ -98,7 +97,7 @@ export class SpecServiceComponent implements OnInit {
     this.service.getSpecActions('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.actions = new Map(data.actions.map(item => [item.value.type.name, item]));
+          this.actions = new Map(data.actions.map(item => [item.type.name, item]));
           this.loadingActions = false;
         },
         error: error => {
@@ -110,7 +109,7 @@ export class SpecServiceComponent implements OnInit {
     this.service.getSpecEvents('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.events = new Map(data.events.map(item => [item.value.type.name, item]));
+          this.events = new Map(data.events.map(item => [item.type.name, item]));
           this.loadingEvents = false;
         },
         error: error => {
@@ -128,7 +127,7 @@ export class SpecServiceComponent implements OnInit {
   getPropertyDescription(type: PropertyType): string {
     const x = this.properties.get(type.name);
     if (x) {
-      return x.value.description.get('zh-CN') || type.name;
+      return x.description.get('zh-CN') || type.name;
     } else {
       return type.name;
     }
@@ -137,7 +136,7 @@ export class SpecServiceComponent implements OnInit {
   getActionDescription(type: ActionType): string {
     const x = this.actions.get(type.name);
     if (x) {
-      return x.value.description.get('zh-CN') || type.name;
+      return x.description.get('zh-CN') || type.name;
     } else {
       return type.name;
     }
@@ -146,7 +145,7 @@ export class SpecServiceComponent implements OnInit {
   getEventDescription(type: EventType): string {
     const x = this.events.get(type.name);
     if (x) {
-      return x.value.description.get('zh-CN') || type.name;
+      return x.description.get('zh-CN') || type.name;
     } else {
       return type.name;
     }

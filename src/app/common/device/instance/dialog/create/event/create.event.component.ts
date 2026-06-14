@@ -76,10 +76,10 @@ export class CreateEventComponent implements OnInit {
   events: Event[] = [];
   current: Event;
 
-  definitions: ObjectWithLifecycle<EventDefinition>[] = [];
+  definitions: EventDefinition[] = [];
 
   loadingProperties: boolean = true;
-  properties: Map<string, ObjectWithLifecycle<PropertyDefinition>> = new Map<string, ObjectWithLifecycle<PropertyDefinition>>();
+  properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
     private main: MainService,
@@ -111,7 +111,7 @@ export class CreateEventComponent implements OnInit {
           this.events = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Event(this.data.iid, x.value.type, x.value.description, []);
+              return new Event(this.data.iid, x.type, x.description, []);
             });
 
           this.loading = false;
@@ -129,7 +129,7 @@ export class CreateEventComponent implements OnInit {
     this.main.getSpecProperties('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.value.type.name, item]));
+          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {

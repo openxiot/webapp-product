@@ -96,16 +96,16 @@ export class CreateServiceComponent implements OnInit {
   services: Service[] = [];
   current: Service;
 
-  definitions: ObjectWithLifecycle<ServiceDefinition>[] = [];
+  definitions: ServiceDefinition[] = [];
 
   loadingProperties: boolean = true;
-  properties: Map<string, ObjectWithLifecycle<PropertyDefinition>> = new Map<string, ObjectWithLifecycle<PropertyDefinition>>();
+  properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   loadingActions: boolean = true;
-  actions: Map<string, ObjectWithLifecycle<ActionDefinition>> = new Map<string, ObjectWithLifecycle<ActionDefinition>>();
+  actions: Map<string, ActionDefinition> = new Map<string, ActionDefinition>();
 
   loadingEvents: boolean = true;
-  events: Map<string, ObjectWithLifecycle<EventDefinition>> = new Map<string, ObjectWithLifecycle<EventDefinition>>();
+  events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
     private service: MainService,
@@ -145,7 +145,7 @@ export class CreateServiceComponent implements OnInit {
           this.services = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Service(this.data.iid, x.value.type, x.value.description, [], [], []);
+              return new Service(this.data.iid, x.type, x.description, [], [], []);
             });
 
           this.loadingServices = false;
@@ -163,7 +163,7 @@ export class CreateServiceComponent implements OnInit {
     this.service.getSpecProperties('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.value.type.name, item]));
+          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {
@@ -177,7 +177,7 @@ export class CreateServiceComponent implements OnInit {
     this.service.getSpecActions('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.actions = new Map(data.actions.map(item => [item.value.type.name, item]));
+          this.actions = new Map(data.actions.map(item => [item.type.name, item]));
           this.loadingActions = false;
         },
         error: error => {
@@ -191,7 +191,7 @@ export class CreateServiceComponent implements OnInit {
     this.service.getSpecEvents('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.events = new Map(data.events.map(item => [item.value.type.name, item]));
+          this.events = new Map(data.events.map(item => [item.type.name, item]));
           this.loadingEvents = false;
           this.initFormData();
         },
@@ -293,11 +293,11 @@ export class CreateServiceComponent implements OnInit {
       return new Property(
         0,
         type,
-        def.value.description,
-        def.value.format,
-        def.value.access,
-        def.value.constraintValue,
-        def.value.unit,
+        def.description,
+        def.format,
+        def.access,
+        def.constraintValue,
+        def.unit,
       );
     } else {
       console.log('not found: ', type.toString());
@@ -323,7 +323,7 @@ export class CreateServiceComponent implements OnInit {
       return new Action(
         0,
         type,
-        def.value.description,
+        def.description,
         [],
         []
       );
@@ -349,7 +349,7 @@ export class CreateServiceComponent implements OnInit {
       return new Event(
         0,
         type,
-        def.value.description,
+        def.description,
         []
       );
     } else {
@@ -376,10 +376,10 @@ export class CreateServiceComponent implements OnInit {
     this.form.controls.code.setValue(s.type.name);
     this.form.controls.description.setValue(s.description);
 
-    const def = this.definitions.find(x => x.value.type.name === s.type.name);
+    const def = this.definitions.find(x => x.type.name === s.type.name);
     if (def) {
       // requiredProperties
-      const requiredProperties: Property[] = def.value.requiredProperties.map(x => this.toProperty(x));
+      const requiredProperties: Property[] = def.requiredProperties.map(x => this.toProperty(x));
       for (let i = 0; i < requiredProperties.length; i++) {
         requiredProperties[i].iid = i + 1;
       }
@@ -388,7 +388,7 @@ export class CreateServiceComponent implements OnInit {
       this.form.controls.requiredProperties.disable();
 
       // optionalProperties
-      const optionalProperties: Property[] = def.value.optionalProperties.map(x => this.toProperty(x));
+      const optionalProperties: Property[] = def.optionalProperties.map(x => this.toProperty(x));
       for (let i = 0; i < optionalProperties.length; i++) {
         optionalProperties[i].iid = i + 1;
       }
@@ -397,7 +397,7 @@ export class CreateServiceComponent implements OnInit {
       this.form.controls.optionalProperties.enable();
 
       // requiredActions
-      const requiredActions: Action[] = def.value.requiredActions.map(x => this.toAction(x));
+      const requiredActions: Action[] = def.requiredActions.map(x => this.toAction(x));
       for (let i = 0; i < requiredActions.length; i++) {
         requiredActions[i].iid = i + 1;
       }
@@ -406,7 +406,7 @@ export class CreateServiceComponent implements OnInit {
       this.form.controls.requiredActions.disable();
 
       // optionalActions
-      const optionalActions: Action[] = def.value.optionalActions.map(x => this.toAction(x));
+      const optionalActions: Action[] = def.optionalActions.map(x => this.toAction(x));
       for (let i = 0; i < optionalActions.length; i++) {
         optionalActions[i].iid = i + 1;
       }
@@ -415,7 +415,7 @@ export class CreateServiceComponent implements OnInit {
       this.form.controls.optionalActions.enable();
 
       // requiredEvents
-      const requiredEvents: Event[] = def.value.requiredEvents.map(x => this.toEvent(x));
+      const requiredEvents: Event[] = def.requiredEvents.map(x => this.toEvent(x));
       for (let i = 0; i < requiredEvents.length; i++) {
         requiredEvents[i].iid = i + 1;
       }
@@ -424,7 +424,7 @@ export class CreateServiceComponent implements OnInit {
       this.form.controls.requiredEvents.disable();
 
       // optionalEvents
-      const optionalEvents: Event[] = def.value.optionalEvents.map(x => this.toEvent(x));
+      const optionalEvents: Event[] = def.optionalEvents.map(x => this.toEvent(x));
       for (let i = 0; i < optionalEvents.length; i++) {
         optionalEvents[i].iid = i + 1;
       }

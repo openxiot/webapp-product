@@ -7,7 +7,7 @@
     <nz-space>
       @for (ns of namespaces; track ns.namespace) {
         <div *nzSpaceItem>
-          <a (click)="select(ns)">{{ ns.namespace }}</a>
+          <div (click)="select(ns)" class="selector">{{ ns.namespace }} ({{ ns.description.get('zh-CN') }})</div>
         </div>
       }
     </nz-space>

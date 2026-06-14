@@ -19,11 +19,11 @@
   </tr>
   </thead>
   <tbody>
-    @for (unit of units; track unit.value.type.value) {
+    @for (unit of units; track unit.type.value) {
       <tr>
-        <td>{{ unit.value.type.name }}</td>
-        <td>{{ unit.value.description.get('zh-CN') }}</td>
-        <td>{{ unit.value.description.get('en-US') }}</td>
+        <td>{{ unit.type.name }}</td>
+        <td>{{ unit.description.get('zh-CN') }}</td>
+        <td>{{ unit.description.get('en-US') }}</td>
         <td>
           @switch (unit.lifecycle) {
             @case (LifeCycle.RELEASED) {

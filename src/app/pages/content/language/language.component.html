@@ -7,7 +7,7 @@
     <nz-space>
       @for (lang of i18n.languages; track lang.code) {
         <div *nzSpaceItem>
-          <a (click)="changeLanguage(lang.code)">{{ lang.name }}</a>
+          <div (click)="changeLanguage(lang.code)" class="selector">{{ lang.name }}</div>
         </div>
       }
     </nz-space>

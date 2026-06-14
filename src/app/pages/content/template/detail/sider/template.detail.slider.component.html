@@ -1,7 +1,7 @@
 @if (template) {
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="360px" nzTheme="light">
-      <template-detail-service-group [version]="version" [device]="template.value" [language]="language" (selected)="onServiceSelected($event)"></template-detail-service-group>
+      <template-detail-service-group [version]="version" [device]="template" [language]="language" (selected)="onServiceSelected($event)"></template-detail-service-group>
     </nz-sider>
 
     <nz-content class="inner-content">

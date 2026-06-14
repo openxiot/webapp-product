@@ -19,11 +19,11 @@
   </tr>
   </thead>
   <tbody>
-    @for (format of formats; track format.value.type.value) {
+    @for (format of formats; track format.type.value) {
       <tr>
-        <td>{{ format.value.type.name }}</td>
-        <td>{{ format.value.description.get('zh-CN') }}</td>
-        <td>{{ format.value.description.get('en-US') }}</td>
+        <td>{{ format.type.name }}</td>
+        <td>{{ format.description.get('zh-CN') }}</td>
+        <td>{{ format.description.get('en-US') }}</td>
         <td>
           @switch (format.lifecycle) {
             @case (LifeCycle.RELEASED) {

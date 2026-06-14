@@ -15,9 +15,8 @@ import {Urn} from '@openxiot/xiot-core-spec-ts';
 import {Template} from '../../../typedef/define/template/Template';
 import {Router, RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'main-template',
@@ -35,10 +34,9 @@ import {TranslatePipe} from '@ngx-translate/core';
     TemplateGridComponent,
     TemplateListComponent,
     TemplateFilterTypeComponent,
-    NzButtonComponent,
-    NzWaveDirective,
     RouterLink,
     TranslatePipe,
+    NzIconDirective,
   ],
 })
 export class TemplateComponent implements OnInit {

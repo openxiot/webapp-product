@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UrnType, ObjectWithLifecycle, DeviceTemplate} from "@openxiot/xiot-core-spec-ts";
+import {UrnType, DeviceTemplate} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute} from "@angular/router";
 import {NzBreadCrumbComponent} from 'ng-zorro-antd/breadcrumb';
@@ -64,7 +64,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy{
 
   loading: boolean = true;
   type: string = '';
-  template: ObjectWithLifecycle<DeviceTemplate> | undefined = undefined;
+  template: DeviceTemplate | undefined = undefined;
 
   constructor(
     private service: MainService,

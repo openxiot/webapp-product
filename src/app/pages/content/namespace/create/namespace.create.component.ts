@@ -13,7 +13,7 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceType, NamespaceDefinition, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../service/main.service';
 import {DescriptionComponent} from '../../../../common/description/description.component';
 import {AccountService} from '../../../../service/account.service';

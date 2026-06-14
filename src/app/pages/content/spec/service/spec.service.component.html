@@ -22,35 +22,35 @@
   </tr>
   </thead>
   <tbody>
-    @for (s of services; track s.value.type.value) {
+    @for (s of services; track s.type.value) {
       <tr>
-        <td><nz-tag>{{ s.value.type.shortUUID() }}</nz-tag></td>
-        <td>{{ s.value.type.name }}</td>
-        <td>{{ s.value.description.get('zh-CN') }}</td>
+        <td><nz-tag>{{ s.type.shortUUID() }}</nz-tag></td>
+        <td>{{ s.type.name }}</td>
+        <td>{{ s.description.get('zh-CN') }}</td>
         <td>
-          @for (p of s.value.requiredProperties; track p.value) {
+          @for (p of s.requiredProperties; track p.value) {
             <nz-tag nzColor="blue">{{ getPropertyDescription(p) }}</nz-tag>
           }
 
-          @for (p of s.value.optionalProperties; track p.value) {
+          @for (p of s.optionalProperties; track p.value) {
             <nz-tag nzColor="green">{{ getPropertyDescription(p) }}</nz-tag>
           }
         </td>
         <td>
-          @for (p of s.value.requiredActions; track p.value) {
+          @for (p of s.requiredActions; track p.value) {
             <nz-tag nzColor="blue">{{ getActionDescription(p) }}</nz-tag>
           }
 
-          @for (p of s.value.optionalActions; track p.value) {
+          @for (p of s.optionalActions; track p.value) {
             <nz-tag nzColor="green">{{ getActionDescription(p) }}</nz-tag>
           }
         </td>
         <td>
-          @for (p of s.value.requiredEvents; track p.value) {
+          @for (p of s.requiredEvents; track p.value) {
             <nz-tag nzColor="blue">{{ getEventDescription(p) }}</nz-tag>
           }
 
-          @for (p of s.value.optionalEvents; track p.value) {
+          @for (p of s.optionalEvents; track p.value) {
             <nz-tag nzColor="green">{{ getEventDescription(p) }}</nz-tag>
           }
         </td>

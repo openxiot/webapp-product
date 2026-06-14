@@ -30,7 +30,7 @@ export class TemplateDetailSliderComponent implements OnChanges {
 
   @Input() version: boolean = false;
   @Input() expert: boolean = false;
-  @Input() template: ObjectWithLifecycle<DeviceTemplate> | undefined = undefined;
+  @Input() template: DeviceTemplate | undefined = undefined;
   @Input() language: string = 'zh-CN';
   // @Output() changed = new EventEmitter<ObjectWithLifecycle<DeviceTemplate>>();
   // @Output() removed = new EventEmitter<Service>();
@@ -48,7 +48,7 @@ export class TemplateDetailSliderComponent implements OnChanges {
     if (changes['device']) {
       if (this.service) {
         if (this.template) {
-          this.service = this.template.value.services.get(this.service.iid);
+          this.service = this.template.services.get(this.service.iid);
         }
       } else {
         this.service = undefined;

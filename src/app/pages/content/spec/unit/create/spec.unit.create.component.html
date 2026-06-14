@@ -1,0 +1,45 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
+  </nz-page-header>
+
+  <ng-template #title>
+    {{ '创建单位' | translate }}
+  </ng-template>
+
+  <ng-template #subTitle>
+    {{ account.ns.namespace }}
+  </ng-template>
+
+  <div style="padding: 20px 20px">
+    <nz-card nzBorderless nzSize="small">
+      <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">分类</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请输入设备分类">
+            <input type="text" nz-input formControlName="code" placeholder="请输入设备分类"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请输入代码">
+            <input type="text" nz-input formControlName="code" placeholder="请输入代码"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">描述</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="描述">
+            <description formControlName="description"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="4" [nzOffset]="4">
+            <button nz-button nzType="primary">提交</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-card>
+  </div>
+</nz-spin>

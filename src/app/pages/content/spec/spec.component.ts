@@ -15,12 +15,12 @@ import {SpecEventComponent} from './event/spec.event.component';
 import {SpecFormatComponent} from './format/spec.format.component';
 import {SpecUnitComponent} from './unit/spec.unit.component';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
-import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'main-spec',
@@ -44,10 +44,9 @@ import {TranslatePipe} from '@ngx-translate/core';
     SpecUnitComponent,
     NzSpaceModule,
     NzButtonModule,
-    NzRadioComponent,
-    NzRadioGroupComponent,
     RouterLink,
     TranslatePipe,
+    NzIconDirective,
   ],
 })
 export class SpecComponent implements OnInit {

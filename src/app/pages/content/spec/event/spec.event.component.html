@@ -20,14 +20,14 @@
   </tr>
   </thead>
   <tbody>
-    @for (a of events; track a.value.type.value) {
+    @for (a of events; track a.type.value) {
       <tr>
-        <td><nz-tag>{{ a.value.type.shortUUID() }}</nz-tag></td>
-        <td>{{ a.value.type.name }}</td>
-        <td>{{ a.value.description.get('zh-CN') }}</td>
+        <td><nz-tag>{{ a.type.shortUUID() }}</nz-tag></td>
+        <td>{{ a.type.name }}</td>
+        <td>{{ a.description.get('zh-CN') }}</td>
         <td>
-          @if (a.value.arguments.length > 0) {
-            @for (arg of a.value.arguments; track arg.type.value) {
+          @if (a.arguments.length > 0) {
+            @for (arg of a.arguments; track arg.type.value) {
               <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
             }
           }

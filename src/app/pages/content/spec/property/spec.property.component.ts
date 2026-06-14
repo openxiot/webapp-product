@@ -9,13 +9,7 @@ import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {
-  FormatDefinition, LifeCycle,
-  ObjectWithLifecycle,
-  PropertyDefinition,
-  PropertyType,
-  UnitDefinition
-} from '@openxiot/xiot-core-spec-ts';
+import {FormatDefinition, LifeCycle, PropertyDefinition, PropertyType, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'spec-property',
@@ -37,17 +31,17 @@ export class SpecPropertyComponent implements OnInit {
 
   loading: boolean = true;
   total: number = 0;
-  properties: ObjectWithLifecycle<PropertyDefinition>[] = [];
-  propertyMap: Map<string, ObjectWithLifecycle<PropertyDefinition>> = new Map<string, ObjectWithLifecycle<PropertyDefinition>>();
+  properties: PropertyDefinition[] = [];
+  propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
   pageSize = 200;
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];
 
   loadingFormats: boolean = true;
-  formats: Map<string, ObjectWithLifecycle<FormatDefinition>> = new Map<string, ObjectWithLifecycle<FormatDefinition>>();
+  formats: Map<string, FormatDefinition> = new Map<string, FormatDefinition>();
 
   loadingUnits: boolean = true;
-  units: Map<string, ObjectWithLifecycle<UnitDefinition>> = new Map<string, ObjectWithLifecycle<UnitDefinition>>();
+  units: Map<string, UnitDefinition> = new Map<string, UnitDefinition>();
 
   constructor(
     private service: MainService,
@@ -69,7 +63,7 @@ export class SpecPropertyComponent implements OnInit {
         next: data => {
           this.total = data.total;
           this.properties = data.properties;
-          this.propertyMap = new Map(data.properties.map(item => [item.value.type.name, item]));
+          this.propertyMap = new Map(data.properties.map(item => [item.type.name, item]));
           this.loading = false;
         },
         error: error => {
@@ -81,7 +75,7 @@ export class SpecPropertyComponent implements OnInit {
     this.service.getSpecFormats('jd', 1, 100)
       .subscribe({
         next: data => {
-          this.formats = new Map(data.formats.map(item => [item.value.type.name, item]));
+          this.formats = new Map(data.formats.map(item => [item.type.name, item]));
           this.loadingFormats = false;
         },
         error: error => {
@@ -93,7 +87,7 @@ export class SpecPropertyComponent implements OnInit {
     this.service.getSpecUnits('jd', 1, 100)
       .subscribe({
         next: data => {
-          this.units = new Map(data.units.map(item => [item.value.type.name, item]));
+          this.units = new Map(data.units.map(item => [item.type.name, item]));
           this.loadingUnits = false;
         },
         error: error => {
@@ -111,7 +105,7 @@ export class SpecPropertyComponent implements OnInit {
   getFormatDescription(format: string) : string {
     const x = this.formats.get(format);
     if (x) {
-      return x.value.description.get('zh-CN') || format;
+      return x.description.get('zh-CN') || format;
     }
 
     return format;
@@ -121,7 +115,7 @@ export class SpecPropertyComponent implements OnInit {
     if (unit) {
       const x = this.units.get(unit);
       if (x) {
-        return x.value.description.get('zh-CN') || unit;
+        return x.description.get('zh-CN') || unit;
       }
 
       return '';
@@ -133,7 +127,7 @@ export class SpecPropertyComponent implements OnInit {
   getPropertyDescription(type: PropertyType): string {
     const x = this.propertyMap.get(type.name);
     if (x) {
-      return x.value.description.get('zh-CN') || type.name;
+      return x.description.get('zh-CN') || type.name;
     } else {
       return type.name;
     }

@@ -40,10 +40,10 @@
         <li nz-menu-item nzMatchRouter (click)="logout()" style="float: right" >
           @if (account.login) {
             <span nz-icon nzType="logout" nzTheme="outline"></span>
-            <span>退出</span>
+            <span>{{ '退出' | translate }}</span>
           } @else {
             <span nz-icon nzType="login" nzTheme="outline"></span>
-            <span>登录</span>
+            <span>{{ '登录' | translate }}</span>
           }
         </li>
 

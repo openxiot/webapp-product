@@ -61,7 +61,7 @@ export class ProductInstanceComponent implements OnChanges {
   language: string = 'zh-CN';
   instances: ProductInstance[] = [];
   loadingInstances: boolean = false;
-  device: ObjectWithLifecycle<DeviceInstance> | undefined = undefined;
+  device: DeviceInstance | undefined = undefined;
   loadingInstance: boolean = false;
   currentVersion: string = '1';
   isChanged: boolean = false;
@@ -147,7 +147,7 @@ export class ProductInstanceComponent implements OnChanges {
     if (this.device) {
       this.loadingInstance = true;
 
-      this.service.updateProductInstance(this.device.value)
+      this.service.updateProductInstance(this.device)
         .subscribe({
           next: () => {
             console.log('updateProductInstance ok');
@@ -234,7 +234,7 @@ export class ProductInstanceComponent implements OnChanges {
 
   protected onDownload() {
     if (this.device) {
-      const data = DeviceInstanceCodec.encode(this.device.value);
+      const data = DeviceInstanceCodec.encode(this.device);
 
       // 1. 将数据转换为 JSON 字符串
       const jsonString = JSON.stringify(data, null, 2); // 第三个参数是缩进空格数

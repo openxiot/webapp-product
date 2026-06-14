@@ -20,12 +20,11 @@ import {SpecServicesCodec} from '../typedef/codec/spec/SpecServicesCodec';
 import {SpecTemplatesCodec} from '../typedef/codec/template/SpecTemplatesCodec';
 import {SpecTemplates} from '../typedef/define/template/SpecTemplates';
 import {
+  DeviceInstance,
   DeviceInstanceCodec,
-  DeviceInstanceWithLifecycleCodec,
   DeviceTemplate,
-  DeviceTemplateWithLifecycleCodec,
+  DeviceTemplateCodec,
   LifeCycle,
-  ObjectWithLifecycle,
   ProductBasic,
   ProductBasicCodec,
   ProductFirmware,
@@ -40,7 +39,10 @@ import {
   ProductPanelCodec,
   ProductWizard,
   ProductWizardCodec,
-  DeviceInstance, Oauth2Configuration, Oauth2ConfigurationCodec, NamespaceDefinition, NamespaceDefinitionCodec
+  Oauth2Configuration,
+  Oauth2ConfigurationCodec,
+  NamespaceDefinition,
+  NamespaceDefinitionCodec
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -214,14 +216,14 @@ export class MainService {
   /**
    * 读取产品模板
    */
-  getTemplate(organizationCode: string, type: string): Observable<ObjectWithLifecycle<DeviceTemplate>> {
+  getTemplate(organizationCode: string, type: string): Observable<DeviceTemplate> {
     const params = {
       organizationCode: organizationCode,
       type: type
     }
     return this.http
       .get<OxResponse>(`${this.server}/v1/template`, {params})
-      .pipe(map(response => DeviceTemplateWithLifecycleCodec.decode(response.data)));
+      .pipe(map(response => DeviceTemplateCodec.decode(response.data)));
   }
 
   // /**
@@ -438,13 +440,13 @@ export class MainService {
   /**
    * 读取产品功能版本
    */
-  getProductInstance(type: string): Observable<ObjectWithLifecycle<DeviceInstance>> {
+  getProductInstance(type: string): Observable<DeviceInstance> {
     const params = {
       type: type,
     }
     return this.http
       .get<OxResponse>(`${this.server}/v2/product/instance/one`, {params})
-      .pipe(map(response => DeviceInstanceWithLifecycleCodec.decode(response.data)));
+      .pipe(map(response => DeviceInstanceCodec.decode(response.data)));
   }
 
   /**

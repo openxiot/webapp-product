@@ -78,10 +78,10 @@ export class CreateActionComponent implements OnInit {
   actions: Action[] = [];
   current: Action;
 
-  definitions: ObjectWithLifecycle<ActionDefinition>[] = [];
+  definitions: ActionDefinition[] = [];
 
   loadingProperties: boolean = true;
-  properties: Map<string, ObjectWithLifecycle<PropertyDefinition>> = new Map<string, ObjectWithLifecycle<PropertyDefinition>>();
+  properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
     private main: MainService,
@@ -113,7 +113,7 @@ export class CreateActionComponent implements OnInit {
           this.actions = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Action(this.data.iid, x.value.type, x.value.description, [], []);
+              return new Action(this.data.iid, x.type, x.description, [], []);
             });
 
           this.loading = false;
@@ -131,7 +131,7 @@ export class CreateActionComponent implements OnInit {
     this.main.getSpecProperties('jd', 1, 200)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.value.type.name, item]));
+          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {

@@ -5,17 +5,17 @@
     <nz-descriptions nzSize="small" [nzColumn]="3">
       <nz-descriptions-item nzTitle="产品模板名称" [nzSpan]="1">
         @if (template) {
-          <a (click)="onClickType()" target="_blank">{{ template.value.description.get('zh-CN') }}</a>
+          <a (click)="onClickType()" target="_blank">{{ template.description.get('zh-CN') }}</a>
         }
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="设备型号" [nzSpan]="1">
         @if (template) {
-          {{ template.value.type.model }}
+          {{ template.type.model }}
         }
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="设备版本" [nzSpan]="1">
         @if (template) {
-          {{ template.value.type.version }}
+          {{ template.type.version }}
         }
       </nz-descriptions-item>
       <nz-descriptions-item nzTitle="语言" [nzSpan]="1">

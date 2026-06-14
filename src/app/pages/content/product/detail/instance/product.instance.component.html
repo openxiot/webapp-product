@@ -95,7 +95,7 @@
     <nz-spin [nzSpinning]="loadingInstance">
       @if (device) {
         <device-instance
-          [device]="device.value"
+          [device]="device"
           [lifecycle]="device.lifecycle"
           (changed)="onChanged($event)"
         ></device-instance>

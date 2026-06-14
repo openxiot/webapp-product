@@ -31,7 +31,7 @@ export class SpecUnitComponent implements OnInit {
 
   loading: boolean = true;
   total: number = 0;
-  units: ObjectWithLifecycle<UnitDefinition>[] = [];
+  units: UnitDefinition[] = [];
   pageSize = 100;
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];

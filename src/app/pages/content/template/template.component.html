@@ -8,13 +8,14 @@
   </nz-page-header>
 
   <ng-template #title>
-    <a routerLink="/main/template/ns">
+    <div routerLink="/main/template/ns" class="selector">
       @if (account.ns) {
         {{ account.ns.namespace }}
       } @else {
         {{ '请选择一个名字空间' | translate }}
       }
-    </a>
+      <span nz-icon nzType="caret-down" nzTheme="outline"></span>
+    </div>
   </ng-template>
 
   <ng-template #subTitle>

@@ -31,7 +31,7 @@ export class SpecFormatComponent implements OnInit {
 
   loading: boolean = true;
   total: number = 0;
-  formats: ObjectWithLifecycle<FormatDefinition>[] = [];
+  formats: FormatDefinition[] = [];
   pageSize = 100;
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];
