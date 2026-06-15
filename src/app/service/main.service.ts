@@ -3,8 +3,6 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {lastValueFrom, map, Observable} from "rxjs";
 import {OxResponse} from "./response/OxResponse";
-import {SpecDevice} from '../typedef/define/spec/SpecDevice';
-import {SpecDeviceCodec} from '../typedef/codec/spec/SpecDeviceCodec';
 import {SpecUnits} from '../typedef/define/spec/SpecUnits';
 import {SpecUnitsCodec} from '../typedef/codec/spec/SpecUnitsCodec';
 import {SpecFormats} from '../typedef/define/spec/SpecFormats';
@@ -42,7 +40,7 @@ import {
   Oauth2Configuration,
   Oauth2ConfigurationCodec,
   NamespaceDefinition,
-  NamespaceDefinitionCodec
+  NamespaceDefinitionCodec, DeviceDefinition, DeviceDefinitionCodec, DeviceType
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -172,10 +170,34 @@ export class MainService {
     }
   }
 
-  getSpecDevices(ns: string): Observable<SpecDevice[]> {
+  createDeviceDefinition(def: DeviceDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/device/one`, DeviceDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deleteDeviceDefinition(type: DeviceType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/device/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updateDeviceDefinition(def: DeviceDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/device/one`, DeviceDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getDeviceDefinition(type: DeviceType): Observable<DeviceDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/device/one/${type.toString()}`)
+      .pipe(map(response => DeviceDefinitionCodec.decode(response.data)));
+  }
+
+  getDeviceDefinitions(ns: string): Observable<DeviceDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/device/many/${ns}`)
-      .pipe(map(response => SpecDeviceCodec.decodeArray(response.data)));
+      .pipe(map(response => DeviceDefinitionCodec.decodeArray(response.data)));
   }
 
   getSpecServices(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecServices> {

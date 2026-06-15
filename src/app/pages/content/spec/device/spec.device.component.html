@@ -4,10 +4,7 @@
   [nzData]="devices"
   [nzFrontPagination]="false"
   [nzLoading]="loading"
-  [nzTotal]="total"
-  [(nzPageSize)]="pageSize"
-  [(nzPageIndex)]="pageIndex"
-  (nzQueryParams)="onQueryParamsChange($event)"
+  [nzHideOnSinglePage]="true"
 >
   <thead>
   <tr>
@@ -18,9 +15,9 @@
   </tr>
   </thead>
   <tbody>
-    @for (device of devices; track device.uuid) {
+    @for (device of devices; track device.type.toString()) {
       <tr>
-        <td>{{ device.name }}</td>
+        <td>{{ device.type.name }}</td>
         <td>{{ device.description.get('zh-CN') }}</td>
         <td>{{ device.description.get('en-US') }}</td>
         <td>
@@ -33,6 +30,9 @@
             }
             @case (LifeCycle.DEVELOPMENT) {
               <nz-tag nzColor="red">开发中</nz-tag>
+            }
+            @default {
+              <nz-tag>{{ device.lifecycle }}</nz-tag>
             }
           }
         </td>

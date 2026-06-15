@@ -28,6 +28,13 @@
         </nz-form-item>
 
         <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">UUID</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="请输入UUID">
+            <uuid formControlName="uuid"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="model">描述</nz-form-label>
           <nz-form-control [nzSpan]="8" nzErrorTip="描述">
             <description formControlName="description"/>

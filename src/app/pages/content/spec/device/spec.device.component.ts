@@ -10,7 +10,7 @@ import {MainService} from '../../../../service/main.service';
 import {SpecDevice} from '../../../../typedef/define/spec/SpecDevice';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
+import {DeviceDefinition, LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
 
 @Component({
@@ -31,9 +31,11 @@ import {AccountService} from '../../../../service/account.service';
 })
 export class SpecDeviceComponent implements OnInit {
 
+  protected readonly LifeCycle = LifeCycle;
+
   loading: boolean = true;
   total: number = 0;
-  devices: SpecDevice[] = [];
+  devices: DeviceDefinition[] = [];
   pageSize = 100;
   pageIndex = 1;
 
@@ -46,16 +48,13 @@ export class SpecDeviceComponent implements OnInit {
 
   ngOnInit() {
     if (this.account.ns) {
-      this.loadDataFromServer(this.pageIndex, this.pageSize);
+      this.loadDataFromServer();
     }
   }
 
-  loadDataFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ): void {
+  loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecDevices(this.account.ns.namespace)
+    this.service.getDeviceDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.devices = data;
@@ -67,12 +66,4 @@ export class SpecDeviceComponent implements OnInit {
         }
       })
   }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
-  }
-
-  protected readonly LifeCycle = LifeCycle;
 }

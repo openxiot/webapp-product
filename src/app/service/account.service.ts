@@ -31,6 +31,10 @@ export class AccountService {
     console.info('developer.avatar: ' + this.developer.avatar);
   }
 
+  isEditable(): boolean {
+    return this.ns.organization === this.organization.id
+  }
+
   isCurrentOrganization(organization: Organization): boolean {
     if (this.organization) {
       return this.organization.id === organization.id;

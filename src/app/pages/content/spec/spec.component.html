@@ -15,7 +15,7 @@
 
   <nz-page-header-extra>
     @if (account.ns) {
-      @if (account.ns.organization === account.organization.id) {
+      @if (account.isEditable()) {
         @switch (tabIndex) {
           @case (0) {
             <button nz-button nzType="primary" routerLink="/main/spec/device/create">创建设备</button>

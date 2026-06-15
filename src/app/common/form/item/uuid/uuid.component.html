@@ -1,0 +1,7 @@
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-input-number [(ngModel)]="value" ></nz-input-number>
+} @else {
+  <div class="iid">
+    {{ value }}
+  </div>
+}

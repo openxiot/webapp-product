@@ -18,6 +18,7 @@ import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {UuidComponent} from '../../../../../common/form/item/uuid/uuid.component';
 
 @Component({
   selector: 'spec-device-create',
@@ -39,6 +40,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
+    UuidComponent,
   ],
 })
 export class SpecDeviceCreateComponent implements OnInit {
@@ -47,6 +49,7 @@ export class SpecDeviceCreateComponent implements OnInit {
 
   form: FormGroup<{
     category: FormControl<string>,
+    uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
   }>;
@@ -62,6 +65,7 @@ export class SpecDeviceCreateComponent implements OnInit {
     this.form = this.fb.group({
       category: this.fb.control('', [Validators.required]),
       code: this.fb.control('', [Validators.required]),
+      uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });
   }
@@ -76,25 +80,27 @@ export class SpecDeviceCreateComponent implements OnInit {
   protected submitForm() {
     const category = this.form.value.category || 'null';
     const code = this.form.value.code || 'null';
+    const value = this.form.value.uuid || 0;
+    const uuid = value.toString(16).padStart(8, '0');
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
+    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);
     const device: DeviceDefinition = new DeviceDefinition(category, type, description);
 
     this.loading = true;
-    // this.service.createSpecDevice(this.account.organization.id, device)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('updateProduct ok');
-    //       this.loading = false;
-    //       this.router.navigate(['/main/namespace']).then(() => {});
-    //     },
-    //     error: error => {
-    //       this.msg.warning('Failed to createProduct', error);
-    //       this.loading = false;
-    //     }
-    //   });
+    this.service.createDeviceDefinition(device)
+      .subscribe({
+        next: () => {
+          console.log('createSpecDevice ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {});
+        },
+        error: error => {
+          this.msg.warning('Failed to createSpecDevice', error);
+          this.loading = false;
+        }
+      });
   }
 }
