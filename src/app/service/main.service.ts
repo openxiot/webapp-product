@@ -122,6 +122,30 @@ export class MainService {
       .pipe(map(() => undefined));
   }
 
+  deleteNamespace(namespace: string): Observable<void> {
+    const params = {
+      namespace: namespace,
+    }
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/namespace/one`, {params})
+      .pipe(map(() => undefined));
+  }
+
+  updateSpecNamespace(namespace: NamespaceDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/namespace/one`, NamespaceDefinitionCodec.encode(namespace))
+      .pipe(map(() => undefined));
+  }
+
+  getSpecNamespace(namespace: string): Observable<NamespaceDefinition> {
+    const params = {
+      namespace: namespace,
+    }
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/namespace/one`, {params})
+      .pipe(map(response => NamespaceDefinitionCodec.decode(response.data)));
+  }
+
   getSpecNamespaces(): Observable<NamespaceDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/namespace/all`)

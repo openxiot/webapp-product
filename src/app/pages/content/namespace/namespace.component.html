@@ -26,6 +26,7 @@
       <th>英文描述</th>
       <th>可见性</th>
       <th>创建者</th>
+      <th>操作</th>
     </tr>
     </thead>
     <tbody>
@@ -47,7 +48,20 @@
               }
             }
           </td>
-          <td>?</td>
+          <td>
+            @if (ns.organization === account.organization.id) {
+              <nz-tag nzColor="geekblue">当前组织</nz-tag>
+            } @else {
+              <nz-tag>其他组织</nz-tag>
+            }
+          </td>
+          <td>
+            @if (ns.organization === account.organization.id) {
+              <a  [routerLink]="['/main/namespace/edit', ns.namespace]">修改</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(ns)">删除</a>
+            }
+          </td>
         </tr>
       }
     </tbody>

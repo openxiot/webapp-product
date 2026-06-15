@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -16,6 +16,9 @@ import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {RouterLink} from '@angular/router';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {ConfirmComponent} from '../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'main-namespace',
@@ -35,10 +38,16 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzButtonComponent,
     NzWaveDirective,
     NzTagModule,
-    TranslatePipe
+    TranslatePipe,
+    NzDividerComponent
+  ],
+  providers: [
+    NzModalService
   ],
 })
 export class NamespaceComponent implements OnInit {
+
+  protected readonly Visibility = Visibility;
 
   loading: boolean = true;
   total: number = 0;
@@ -47,6 +56,8 @@ export class NamespaceComponent implements OnInit {
   pageIndex = 1;
 
   constructor(
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
     public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
@@ -81,5 +92,45 @@ export class NamespaceComponent implements OnInit {
     this.loadDataFromServer(pageIndex, pageSize);
   }
 
-  protected readonly Visibility = Visibility;
+  protected onDelete(ns: NamespaceDefinition) {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个名字空间吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: ns.namespace,
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doDelete(ns);
+      }
+    });
+  }
+
+  protected doDelete(ns: NamespaceDefinition) {
+    this.loading = true;
+    this.service.deleteNamespace(ns.namespace)
+      .subscribe({
+        next: data => {
+          this.namespaces = this.namespaces.filter(x => x.namespace !== ns.namespace);
+          this.loading = false;
+          this.total = this.namespaces.length;
+        },
+        error: error => {
+          this.msg.warning('Failed to deleteNamespace: ', error);
+        }
+      })
+  }
 }
