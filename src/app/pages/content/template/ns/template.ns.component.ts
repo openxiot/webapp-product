@@ -45,7 +45,7 @@ export class TemplateNsComponent implements OnInit {
   }
 
   private loadNamespaces() {
-    this.service.getVisibleNamespaces(this.account.organization.id)
+    this.service.getAllNamespaces(this.account.organization)
       .subscribe({
         next: data => {
           this.namespaces = data;

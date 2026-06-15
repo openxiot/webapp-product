@@ -146,9 +146,15 @@ export class MainService {
       .pipe(map(response => NamespaceDefinitionCodec.decode(response.data)));
   }
 
-  getVisibleNamespaces(organization: string): Observable<NamespaceDefinition[]> {
+  private getVisibleNamespaces(organization: string): Observable<NamespaceDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/namespace/visible/${organization}`)
+      .pipe(map(response => NamespaceDefinitionCodec.decodeArray(response.data)));
+  }
+
+  private getPublicNamespaces(): Observable<NamespaceDefinition[]> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/namespace/public`)
       .pipe(map(response => NamespaceDefinitionCodec.decodeArray(response.data)));
   }
 
@@ -156,6 +162,14 @@ export class MainService {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/namespace/all`)
       .pipe(map(response => NamespaceDefinitionCodec.decodeArray(response.data)));
+  }
+
+  getAllNamespaces(organization: Organization | undefined): Observable<NamespaceDefinition[]> {
+    if (!organization) {
+      return this.getPublicNamespaces();
+    } else {
+      return this.getVisibleNamespaces(organization.id);
+    }
   }
 
   getSpecDevices(ns: string): Observable<SpecDevice[]> {

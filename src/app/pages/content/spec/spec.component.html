@@ -15,27 +15,29 @@
 
   <nz-page-header-extra>
     @if (account.ns) {
-      @switch (tabIndex) {
-        @case (0) {
-          <button nz-button nzType="primary" routerLink="/main/spec/device/create">创建设备</button>
-        }
-        @case (1) {
-          <button nz-button nzType="primary" routerLink="/main/spec/service/create">创建服务</button>
-        }
-        @case (2) {
-          <button nz-button nzType="primary" routerLink="/main/spec/property/create">创建属性</button>
-        }
-        @case (3) {
-          <button nz-button nzType="primary" routerLink="/main/spec/action/create">创建方法</button>
-        }
-        @case (4) {
-          <button nz-button nzType="primary" routerLink="/main/spec/event/create">创建事件</button>
-        }
-        @case (5) {
-          <button nz-button nzType="primary" routerLink="/main/spec/format/create">创建格式</button>
-        }
-        @case (6) {
-          <button nz-button nzType="primary" routerLink="/main/spec/unit/create">创建单位</button>
+      @if (account.ns.organization === account.organization.id) {
+        @switch (tabIndex) {
+          @case (0) {
+            <button nz-button nzType="primary" routerLink="/main/spec/device/create">创建设备</button>
+          }
+          @case (1) {
+            <button nz-button nzType="primary" routerLink="/main/spec/service/create">创建服务</button>
+          }
+          @case (2) {
+            <button nz-button nzType="primary" routerLink="/main/spec/property/create">创建属性</button>
+          }
+          @case (3) {
+            <button nz-button nzType="primary" routerLink="/main/spec/action/create">创建方法</button>
+          }
+          @case (4) {
+            <button nz-button nzType="primary" routerLink="/main/spec/event/create">创建事件</button>
+          }
+          @case (5) {
+            <button nz-button nzType="primary" routerLink="/main/spec/format/create">创建格式</button>
+          }
+          @case (6) {
+            <button nz-button nzType="primary" routerLink="/main/spec/unit/create">创建单位</button>
+          }
         }
       }
     }
