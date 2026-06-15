@@ -50,9 +50,9 @@
           </td>
           <td>
             @if (ns.organization === account.organization.id) {
-              <nz-tag nzColor="geekblue">当前组织</nz-tag>
+              <nz-tag nzColor="geekblue">{{ ns.organization }}</nz-tag>
             } @else {
-              <nz-tag>其他组织</nz-tag>
+              <nz-tag>{{ ns.organization }}</nz-tag>
             }
           </td>
           <td>

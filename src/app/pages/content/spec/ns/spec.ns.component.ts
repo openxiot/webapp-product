@@ -45,7 +45,7 @@ export class SpecNsComponent implements OnInit {
   }
 
   private loadNamespaces() {
-    this.service.getSpecNamespaces()
+    this.service.getVisibleNamespaces(this.account.organization.id)
       .subscribe({
         next: data => {
           this.namespaces = data;

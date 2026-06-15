@@ -73,7 +73,7 @@ export class NamespaceComponent implements OnInit {
     pageSize: number,
   ): void {
     this.loading = true;
-    this.service.getSpecNamespaces()
+    this.service.getVisibleNamespaces(this.account.organization.id)
       .subscribe({
         next: data => {
           this.namespaces = data;

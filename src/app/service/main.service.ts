@@ -146,6 +146,12 @@ export class MainService {
       .pipe(map(response => NamespaceDefinitionCodec.decode(response.data)));
   }
 
+  getVisibleNamespaces(organization: string): Observable<NamespaceDefinition[]> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/namespace/visible/${organization}`)
+      .pipe(map(response => NamespaceDefinitionCodec.decodeArray(response.data)));
+  }
+
   getSpecNamespaces(): Observable<NamespaceDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/namespace/all`)
