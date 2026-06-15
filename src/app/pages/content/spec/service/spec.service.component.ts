@@ -7,7 +7,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {
   LifeCycle,
@@ -19,6 +19,7 @@ import {
   ActionDefinition,
   EventDefinition
 } from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'spec-service',
@@ -55,25 +56,22 @@ export class SpecServiceComponent implements OnInit {
   events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize);
+    this.loadDataFromServer();
   }
 
-  loadDataFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ): void {
+  loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecServices('jd', pageIndex, pageSize)
+    this.service.getSpecServices(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.total = data.total;
-          this.services = data.services;
+          this.services = data;
           this.loading = false;
         },
         error: error => {
@@ -82,10 +80,10 @@ export class SpecServiceComponent implements OnInit {
       })
 
     this.loadingProperties = true;
-    this.service.getSpecProperties('jd', 1, 200)
+    this.service.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
+          this.properties = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {
@@ -94,10 +92,10 @@ export class SpecServiceComponent implements OnInit {
       })
 
     this.loadingActions = true;
-    this.service.getSpecActions('jd', 1, 200)
+    this.service.getSpecActions(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.actions = new Map(data.actions.map(item => [item.type.name, item]));
+          this.actions = new Map(data.map(item => [item.type.name, item]));
           this.loadingActions = false;
         },
         error: error => {
@@ -106,22 +104,16 @@ export class SpecServiceComponent implements OnInit {
       })
 
     this.loadingEvents = true;
-    this.service.getSpecEvents('jd', 1, 200)
+    this.service.getSpecEvents(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.events = new Map(data.events.map(item => [item.type.name, item]));
+          this.events = new Map(data.map(item => [item.type.name, item]));
           this.loadingEvents = false;
         },
         error: error => {
           this.msg.warning('Failed to getSpecEvents: ', error);
         }
       })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
   }
 
   getPropertyDescription(type: PropertyType): string {

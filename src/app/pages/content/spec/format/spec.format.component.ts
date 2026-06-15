@@ -10,6 +10,7 @@ import {MainService} from '../../../../service/main.service';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {FormatDefinition, LifeCycle, ObjectWithLifecycle} from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'spec-format',
@@ -30,45 +31,31 @@ import {FormatDefinition, LifeCycle, ObjectWithLifecycle} from '@openxiot/xiot-c
 export class SpecFormatComponent implements OnInit {
 
   loading: boolean = true;
-  total: number = 0;
   formats: FormatDefinition[] = [];
-  pageSize = 100;
-  pageIndex = 1;
-  pageSizeOptions = [10, 50, 100, 200, 500];
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize);
+    this.loadDataFromServer();
   }
 
-  loadDataFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ): void {
+  loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecFormats('jd', pageIndex, pageSize)
+    this.service.getSpecFormats(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.formats = data.formats;
-          this.total = data.total;
+          this.formats = data;
           this.loading = false;
-          this.total = this.formats.length;
         },
         error: error => {
           this.msg.warning('Failed to getSpecFormats: ', error);
         }
       })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
   }
 
   protected readonly LifeCycle = LifeCycle;

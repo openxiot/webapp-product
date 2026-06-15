@@ -15,6 +15,7 @@ import {
   PropertyDefinition,
   PropertyType
 } from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'spec-action',
@@ -35,37 +36,29 @@ import {
 export class SpecActionComponent implements OnInit {
 
   loading: boolean = true;
-  total: number = 0;
   actions: ActionDefinition[] = [];
-  pageSize = 100;
-  pageIndex = 1;
-  pageSizeOptions = [10, 50, 100, 200, 500];
 
   loadingProperties: boolean = true;
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize);
+    this.loadDataFromServer();
   }
 
-  loadDataFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ): void {
+  loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecActions('jd', pageIndex, pageSize)
+    this.service.getSpecActions(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.total = data.total;
-          this.actions = data.actions;
+          this.actions = data;
           this.loading = false;
-          this.total = this.actions.length;
         },
         error: error => {
           this.msg.warning('Failed to get SpecDevices: ', error);
@@ -73,22 +66,16 @@ export class SpecActionComponent implements OnInit {
       })
 
     this.loadingProperties = true;
-    this.service.getSpecProperties('jd', 1, 200)
+    this.service.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
+          this.properties = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {
           this.msg.warning('Failed to getSpecProperties: ', error);
         }
       })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
   }
 
   getPropertyDescription(type: PropertyType): string {

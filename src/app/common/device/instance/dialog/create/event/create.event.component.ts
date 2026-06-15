@@ -28,6 +28,7 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {MainService} from '../../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
+import {AccountService} from '../../../../../../service/account.service';
 
 @Component({
   selector: 'create-event',
@@ -82,6 +83,7 @@ export class CreateEventComponent implements OnInit {
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
+    private account: AccountService,
     private main: MainService,
     private msg: NzMessageService,
     private fb: NonNullableFormBuilder
@@ -103,10 +105,10 @@ export class CreateEventComponent implements OnInit {
 
   private loadEvents(): void {
     this.loading = true;
-    this.main.getSpecEvents('jd', 1, 100)
+    this.main.getSpecEvents(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.definitions = data.events;
+          this.definitions = data;
 
           this.events = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
@@ -126,10 +128,10 @@ export class CreateEventComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.main.getSpecProperties('jd', 1, 200)
+    this.main.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
+          this.properties = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {

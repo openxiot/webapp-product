@@ -44,6 +44,7 @@ import {
 import {
   DeviceInstanceServicePropertyDefaultValueComponent
 } from '../../../service/split/detail/property/value/device.instance.service.property.default.value.component';
+import {AccountService} from '../../../../../../service/account.service';
 
 @Component({
   selector: 'create-property',
@@ -114,6 +115,7 @@ export class CreatePropertyComponent implements OnInit {
   current: Property;
 
   constructor(
+    private account: AccountService,
     private main: MainService,
     private msg: NzMessageService,
     private fb: NonNullableFormBuilder
@@ -143,12 +145,12 @@ export class CreatePropertyComponent implements OnInit {
 
   private loadProperties(): void {
     this.loading = true;
-    this.main.getSpecProperties('jd', 1, 200)
+    this.main.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.definitions = new Map(data.properties.map(item => [item.type.name, item]));
+          this.definitions = new Map(data.map(item => [item.type.name, item]));
 
-          this.properties = data.properties
+          this.properties = data
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
               return new Property(

@@ -41,6 +41,7 @@ import {CreateServicePropertiesComponent} from './properties/create.service.prop
 import {CreateServiceActionsComponent} from './actions/create.service.actions.component';
 import {CreateServiceEventsComponent} from './events/create.service.events.component';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
+import {AccountService} from '../../../../../../service/account.service';
 
 @Component({
   selector: 'create-service',
@@ -108,6 +109,7 @@ export class CreateServiceComponent implements OnInit {
   events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
     private fb: NonNullableFormBuilder
@@ -137,11 +139,10 @@ export class CreateServiceComponent implements OnInit {
 
   private loadServices(): void {
     this.loadingServices = true;
-    this.service.getSpecServices('jd', 1, 100)
+    this.service.getSpecServices(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.definitions = data.services;
-
+          this.definitions = data;
           this.services = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
@@ -160,10 +161,10 @@ export class CreateServiceComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.service.getSpecProperties('jd', 1, 200)
+    this.service.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
+          this.properties = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {
@@ -174,10 +175,10 @@ export class CreateServiceComponent implements OnInit {
 
   private loadActions(): void {
     this.loadingActions = true;
-    this.service.getSpecActions('jd', 1, 200)
+    this.service.getSpecActions(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.actions = new Map(data.actions.map(item => [item.type.name, item]));
+          this.actions = new Map(data.map(item => [item.type.name, item]));
           this.loadingActions = false;
         },
         error: error => {
@@ -188,10 +189,10 @@ export class CreateServiceComponent implements OnInit {
 
   private loadEvents(): void {
     this.loadingEvents = true;
-    this.service.getSpecEvents('jd', 1, 200)
+    this.service.getSpecEvents(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.events = new Map(data.events.map(item => [item.type.name, item]));
+          this.events = new Map(data.map(item => [item.type.name, item]));
           this.loadingEvents = false;
           this.initFormData();
         },

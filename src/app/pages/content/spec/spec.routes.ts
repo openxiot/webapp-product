@@ -21,30 +21,37 @@ export const SPEC_ROUTES: Routes = [
   },
   {
     path: 'device/create',
+    data: { breadcrumb: '设备' },
     component: SpecDeviceCreateComponent
   },
   {
     path: 'service/create',
+    data: { breadcrumb: '功能' },
     component: SpecServiceCreateComponent
   },
   {
     path: 'property/create',
+    data: { breadcrumb: '属性' },
     component: SpecPropertyCreateComponent
   },
   {
     path: 'action/create',
+    data: { breadcrumb: '方法' },
     component: SpecActionCreateComponent
   },
   {
     path: 'event/create',
+    data: { breadcrumb: '事件' },
     component: SpecEventCreateComponent
   },
   {
     path: 'format/create',
+    data: { breadcrumb: '格式' },
     component: SpecFormatCreateComponent
   },
   {
     path: 'unit/create',
+    data: { breadcrumb: '单位' },
     component: SpecUnitCreateComponent
   },
 ];

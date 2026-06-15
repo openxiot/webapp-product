@@ -17,9 +17,9 @@ import {DeviceInstanceNamespaceComponent} from '../../../service/split/detail/pr
 import {
   LifeCycle,
   Action,
-  ObjectWithLifecycle,
   PropertyDefinition,
-  ActionDefinition, Event
+  ActionDefinition,
+  Event
 } from '@openxiot/xiot-core-spec-ts';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -28,6 +28,7 @@ import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-z
 import {MainService} from '../../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
+import {AccountService} from '../../../../../../service/account.service';
 
 @Component({
   selector: 'create-action',
@@ -84,6 +85,7 @@ export class CreateActionComponent implements OnInit {
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
+    private account: AccountService,
     private main: MainService,
     private msg: NzMessageService,
     private fb: NonNullableFormBuilder
@@ -105,10 +107,10 @@ export class CreateActionComponent implements OnInit {
 
   private loadActions(): void {
     this.loading = true;
-    this.main.getSpecActions('jd', 1, 100)
+    this.main.getSpecActions(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.definitions = data.actions;
+          this.definitions = data;
 
           this.actions = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
@@ -128,10 +130,10 @@ export class CreateActionComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.main.getSpecProperties('jd', 1, 200)
+    this.main.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.properties.map(item => [item.type.name, item]));
+          this.properties = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {

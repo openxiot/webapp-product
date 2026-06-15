@@ -10,6 +10,7 @@ import {MainService} from '../../../../service/main.service';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle, ObjectWithLifecycle, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'spec-unit',
@@ -30,45 +31,31 @@ import {LifeCycle, ObjectWithLifecycle, UnitDefinition} from '@openxiot/xiot-cor
 export class SpecUnitComponent implements OnInit {
 
   loading: boolean = true;
-  total: number = 0;
   units: UnitDefinition[] = [];
-  pageSize = 100;
-  pageIndex = 1;
-  pageSizeOptions = [10, 50, 100, 200, 500];
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize);
+    this.loadDataFromServer();
   }
 
-  loadDataFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ): void {
+  loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecUnits('jd', pageIndex, pageSize)
+    this.service.getSpecUnits(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.units = data.units;
-          this.total = data.total;
+          this.units = data;
           this.loading = false;
-          this.total = this.units.length;
         },
         error: error => {
           this.msg.warning('Failed to getSpecUnits: ', error);
         }
       })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
   }
 
   protected readonly LifeCycle = LifeCycle;

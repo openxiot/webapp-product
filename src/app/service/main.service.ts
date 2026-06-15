@@ -40,7 +40,10 @@ import {
   Oauth2Configuration,
   Oauth2ConfigurationCodec,
   NamespaceDefinition,
-  NamespaceDefinitionCodec, DeviceDefinition, DeviceDefinitionCodec, DeviceType
+  NamespaceDefinitionCodec, DeviceDefinition, DeviceDefinitionCodec, DeviceType, ServiceDefinition,
+  ServiceDefinitionCodec, ActionDefinition, ActionDefinitionCodec, EventDefinition, EventDefinitionCodec,
+  PropertyDefinition, PropertyDefinitionCodec, FormatDefinition, FormatDefinitionCodec, UnitDefinition,
+  UnitDefinitionCodec
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -200,70 +203,40 @@ export class MainService {
       .pipe(map(response => DeviceDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecServices(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecServices> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecServices(ns: string): Observable<ServiceDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/service/list`, {params})
-      .pipe(map(response => SpecServicesCodec.decode(response.data)));
+      .get<OxResponse>(`${this.server}/v1/spec/service/many/${ns}`)
+      .pipe(map(response => ServiceDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecActions(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecActions> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecActions(ns: string): Observable<ActionDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/action/list`, {params})
-      .pipe(map(response => SpecActionsCodec.decode(response.data)));
+      .get<OxResponse>(`${this.server}/v1/spec/action/many/${ns}`)
+      .pipe(map(response => ActionDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecEvents(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecEvents> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecEvents(ns: string): Observable<EventDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/event/list`, {params})
-      .pipe(map(response => SpecEventsCodec.decode(response.data)));
+      .get<OxResponse>(`${this.server}/v1/spec/event/many/${ns}`)
+      .pipe(map(response => EventDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecProperties(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecProperties> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecProperties(ns: string): Observable<PropertyDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/property/list`, {params})
-      .pipe(map(response => SpecPropertiesCodec.decode(response.data)));
+      .get<OxResponse>(`${this.server}/v1/spec/property/many/${ns}`)
+      .pipe(map(response => PropertyDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecFormats(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecFormats> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecFormats(ns: string): Observable<FormatDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/format/list`, {params})
-      .pipe(map(response => SpecFormatsCodec.decode(response.data)));
+      .get<OxResponse>(`${this.server}/v1/spec/format/many/${ns}`)
+      .pipe(map(response => FormatDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecUnits(organizationCode: string, pageNum: number, pageSize: number): Observable<SpecUnits> {
-    const params = {
-      organizationCode: organizationCode,
-      pageNum: pageNum,
-      pageSize: pageSize
-    }
+  getSpecUnits(ns: string): Observable<UnitDefinition[]> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/unit/list`, {params})
-      .pipe(map(response => SpecUnitsCodec.decode(response.data)));
+      .get<OxResponse>(`${this.server}/v1/spec/unit/many/${ns}`)
+      .pipe(map(response => UnitDefinitionCodec.decodeArray(response.data)));
   }
 
   /**------------------------------------------------------------------------------------------------

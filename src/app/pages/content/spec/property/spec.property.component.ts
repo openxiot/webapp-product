@@ -7,9 +7,10 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {FormatDefinition, LifeCycle, PropertyDefinition, PropertyType, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'spec-property',
@@ -30,12 +31,8 @@ import {FormatDefinition, LifeCycle, PropertyDefinition, PropertyType, UnitDefin
 export class SpecPropertyComponent implements OnInit {
 
   loading: boolean = true;
-  total: number = 0;
   properties: PropertyDefinition[] = [];
   propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
-  pageSize = 200;
-  pageIndex = 1;
-  pageSizeOptions = [10, 50, 100, 200, 500];
 
   loadingFormats: boolean = true;
   formats: Map<string, FormatDefinition> = new Map<string, FormatDefinition>();
@@ -44,26 +41,23 @@ export class SpecPropertyComponent implements OnInit {
   units: Map<string, UnitDefinition> = new Map<string, UnitDefinition>();
 
   constructor(
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.loadDataFromServer(this.pageIndex, this.pageSize);
+    this.loadDataFromServer();
   }
 
-  loadDataFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ): void {
+  loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecProperties('jd', pageIndex, pageSize)
+    this.service.getSpecProperties(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.total = data.total;
-          this.properties = data.properties;
-          this.propertyMap = new Map(data.properties.map(item => [item.type.name, item]));
+          this.properties = data;
+          this.propertyMap = new Map(data.map(item => [item.type.name, item]));
           this.loading = false;
         },
         error: error => {
@@ -72,10 +66,10 @@ export class SpecPropertyComponent implements OnInit {
       })
 
     this.loadingFormats = true;
-    this.service.getSpecFormats('jd', 1, 100)
+    this.service.getSpecFormats(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.formats = new Map(data.formats.map(item => [item.type.name, item]));
+          this.formats = new Map(data.map(item => [item.type.name, item]));
           this.loadingFormats = false;
         },
         error: error => {
@@ -84,22 +78,16 @@ export class SpecPropertyComponent implements OnInit {
       })
 
     this.loadingUnits = true;
-    this.service.getSpecUnits('jd', 1, 100)
+    this.service.getSpecUnits(this.account.ns.namespace)
       .subscribe({
         next: data => {
-          this.units = new Map(data.units.map(item => [item.type.name, item]));
+          this.units = new Map(data.map(item => [item.type.name, item]));
           this.loadingUnits = false;
         },
         error: error => {
           this.msg.warning('Failed to getSpecUnits: ', error);
         }
       })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
   }
 
   getFormatDescription(format: string) : string {
