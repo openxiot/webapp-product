@@ -13,10 +13,11 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
+import {NamespaceDefinition, Visibility} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../service/main.service';
-import {DescriptionComponent} from '../../../../common/description/description.component';
+import {DescriptionComponent} from '../../../../common/form/item/description/description.component';
 import {AccountService} from '../../../../service/account.service';
+import {VisibilityComponent} from '../../../../common/form/item/visibility/visibility.component';
 
 @Component({
   selector: 'namespace-create',
@@ -37,6 +38,7 @@ import {AccountService} from '../../../../service/account.service';
     NzDividerModule,
     ReactiveFormsModule,
     DescriptionComponent,
+    VisibilityComponent,
   ],
 })
 export class NamespaceCreateComponent implements OnInit {
@@ -46,6 +48,7 @@ export class NamespaceCreateComponent implements OnInit {
   form: FormGroup<{
     name: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    visibility: FormControl<Visibility>,
   }>;
 
   constructor(
@@ -59,6 +62,7 @@ export class NamespaceCreateComponent implements OnInit {
     this.form = this.fb.group({
       name: this.fb.control('', [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      visibility: this.fb.control(Visibility.PUBLIC, [Validators.required]),
     });
   }
 
@@ -70,23 +74,27 @@ export class NamespaceCreateComponent implements OnInit {
   }
 
   protected submitForm() {
+    const visibility = this.form.value.visibility || Visibility.PRIVATE;
     const name = this.form.value.name || 'null';
     const description = new Map<string, string>();
+
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
-    const namespace: NamespaceDefinition = new NamespaceDefinition(name, description);
+    const def: NamespaceDefinition = new NamespaceDefinition(name, description);
+    def.organization = this.account.organization.id;
+    def.visibility = visibility;
 
     this.loading = true;
-    this.service.createNamespace(this.account.organization.id, namespace)
+    this.service.createNamespace(def)
       .subscribe({
         next: () => {
-          console.log('updateProduct ok');
+          console.log('createNamespace ok');
           this.loading = false;
           this.router.navigate(['/main/namespace']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createProduct', error);
+          this.msg.warning('Failed to createNamespace', error);
           this.loading = false;
         }
       });

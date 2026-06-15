@@ -116,9 +116,9 @@ export class MainService {
   /**------------------------------------------------------------------------------------------------
    * 产品规范
    *------------------------------------------------------------------------------------------------*/
-  createNamespace(organization: string, namespace: NamespaceDefinition): Observable<void> {
+  createNamespace(namespace: NamespaceDefinition): Observable<void> {
     return this.http
-      .post<OxResponse>(`${this.server}/v1/spec/namespace/one/${organization}`, NamespaceDefinitionCodec.encode(namespace))
+      .post<OxResponse>(`${this.server}/v1/spec/namespace/one`, NamespaceDefinitionCodec.encode(namespace))
       .pipe(map(() => undefined));
   }
 

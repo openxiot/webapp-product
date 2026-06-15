@@ -8,12 +8,14 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
-import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
+import {NamespaceDefinition, Visibility} from '@openxiot/xiot-core-spec-ts';
 import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
 import {AccountService} from '../../../service/account.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {RouterLink} from '@angular/router';
+import {NzTagModule} from 'ng-zorro-antd/tag';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'main-namespace',
@@ -22,6 +24,7 @@ import {RouterLink} from '@angular/router';
   styleUrls: ['./namespace.component.less'],
   imports: [
     FormsModule,
+    RouterLink,
     NzPageHeaderModule,
     NzBreadCrumbModule,
     NzSpinModule,
@@ -31,7 +34,8 @@ import {RouterLink} from '@angular/router';
     NzDescriptionsModule,
     NzButtonComponent,
     NzWaveDirective,
-    RouterLink,
+    NzTagModule,
+    TranslatePipe
   ],
 })
 export class NamespaceComponent implements OnInit {
@@ -76,4 +80,6 @@ export class NamespaceComponent implements OnInit {
     const { pageSize, pageIndex } = params;
     this.loadDataFromServer(pageIndex, pageSize);
   }
+
+  protected readonly Visibility = Visibility;
 }

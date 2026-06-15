@@ -24,6 +24,7 @@
       <th>代码</th>
       <th>中文描述</th>
       <th>英文描述</th>
+      <th>可见性</th>
       <th>创建者</th>
     </tr>
     </thead>
@@ -33,6 +34,19 @@
           <td>{{ ns.namespace }}</td>
           <td>{{ ns.description.get('zh-CN') }}</td>
           <td>{{ ns.description.get('en-US') }}</td>
+          <td>
+            @switch (ns.visibility) {
+              @case (Visibility.PUBLIC) {
+                <nz-tag nzColor="green">{{ '公开' | translate }}</nz-tag>
+              }
+              @case (Visibility.PRIVATE) {
+                <nz-tag nzColor="blue">{{ '私有' | translate }}</nz-tag>
+              }
+              @default {
+                <nz-tag>{{ ns.visibility }}</nz-tag>
+              }
+            }
+          </td>
           <td>?</td>
         </tr>
       }

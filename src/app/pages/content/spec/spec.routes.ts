@@ -16,6 +16,7 @@ export const SPEC_ROUTES: Routes = [
   },
   {
     path: 'ns',
+    data: { breadcrumb: '名字空间' },
     component: SpecNsComponent
   },
   {
