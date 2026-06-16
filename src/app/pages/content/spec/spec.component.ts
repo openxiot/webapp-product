@@ -64,11 +64,9 @@ export class SpecComponent implements OnInit {
   ngOnInit() {
     const savedIndex = localStorage.getItem("specTabIndex") || '0';
     this.tabIndex = Number.parseInt(savedIndex);
-    console.log('SpecComponent: ', this.tabIndex);
   }
 
   protected onTabChanged() {
-    console.log('onTabChanged: ', this.tabIndex);
     localStorage.setItem("specTabIndex", this.tabIndex.toString());
   }
 }
