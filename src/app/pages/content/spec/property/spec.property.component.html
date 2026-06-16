@@ -63,7 +63,7 @@
           }
         </td>
           <td>
-            <a [routerLink]="['/main/spec/device/edit', p.type.toString()]">修改</a>
+            <a [routerLink]="['/main/spec/property/edit', p.type.toString()]">修改</a>
             @if (account.isEditable() && p.lifecycle === LifeCycle.DEVELOPMENT) {
               <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onDelete(p)">删除</a>
