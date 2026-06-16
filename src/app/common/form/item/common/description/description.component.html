@@ -13,13 +13,17 @@
             />
           </nz-input-group>
 
-          @if (item.lang !== 'en-US') {
-            <button type="button" nz-button nzType="text" nzDanger (click)="removeLang(i)">
-              <span nz-icon nzType="delete"></span>
-            </button>
-          }
+          <button type="button" nz-button nzType="text" nzDanger (click)="removeLang(i)" [disabled]="item.lang === 'en-US'">
+            <span nz-icon nzType="delete"></span>
+          </button>
         </div>
       </nz-col>
+
+      <ng-template #label>
+        <span class="lang-label-fixed">
+          {{ item.label }}
+        </span>
+      </ng-template>
     }
 
     <nz-col [nzSpan]="24">
