@@ -1,39 +1,34 @@
 <nz-row [nzGutter]="[8, 8]">
   @for (def of value; track def.type.toString()) {
     <nz-col [nzSpan]="24">
-      <div class="member-row">
-        <div class="member-info">
-          {{ def.description.get('en-US') || def.description.get('zh-CN') || def.type.name }}
+      <!-- 外层 flex：卡片 + 删除按钮 同行 -->
+      <div class="member-item-row">
+        <!-- 成员卡片（原来的 member-row） -->
+        <div class="member-row">
+          <div class="member-info">
+            {{ def.description.get('en-US') || def.description.get('zh-CN') || def.type.name }}
+          </div>
         </div>
 
-        <div class="member-actions">
-          <button
-            type="button"
-            nz-button
-            nzType="text"
-            nzDanger
-            nz-tooltip="删除成员"
-            (click)="removeMember(def)"
-            [disabled]="isDisabled"
-          >
-            <span nz-icon nzType="delete" nzTheme="outline"></span>
-          </button>
-        </div>
+        <!-- 删除按钮 独立放在卡片右侧 -->
+        <button
+          type="button"
+          nz-button
+          nzType="text"
+          nzDanger
+          nz-tooltip="删除成员"
+          (click)="removeMember(def)"
+          [disabled]="isDisabled"
+        >
+          <span nz-icon nzType="delete" nzTheme="outline"></span>
+        </button>
       </div>
     </nz-col>
   }
 
   <nz-col [nzSpan]="24">
-    <button
-      type="button"
-      nz-button
-      nzType="dashed"
-      nzBlock
-      (click)="addMemberItem()"
-      [disabled]="isDisabled"
-    >
-      <span nz-icon nzType="plus"></span>
-      添加成员
+    <button type="button" nz-button nzType="dashed" (click)="addMemberItem()" [disabled]="isDisabled">
+      <span nz-icon nzType="plus"></span> 添加成员
     </button>
   </nz-col>
 </nz-row>

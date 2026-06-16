@@ -1,3 +1,11 @@
+/* 新增：一行布局：卡片 + 删除按钮 */
+.member-item-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;       /* 卡片和按钮之间的间距 */
+}
+
+/* 你原来的样式不动 */
 .member-row {
   display: flex;
   align-items: center;
@@ -7,6 +15,7 @@
   border: 1px solid #f0f0f0;
   border-radius: 4px;
   background-color: #fafafa;
+  flex: 1;        /* 让卡片占满剩余宽度 */
 
   &:hover {
     background-color: #f5f5f5;
