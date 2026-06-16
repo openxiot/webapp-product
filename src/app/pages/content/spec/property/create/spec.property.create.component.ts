@@ -22,6 +22,24 @@ import {CodeComponent} from '../../../../../common/form/item/common/code/code.co
 import {PropertyFormatComponent} from '../../../../../common/form/item/property/format/property.format.component';
 import {PropertyAccessComponent} from '../../../../../common/form/item/property/access/property.access.component';
 import {PropertyUnitComponent} from '../../../../../common/form/item/property/unit/property.unit.component';
+import {RangeValue} from '../../../../../common/form/item/property/range/RangeValue';
+import {ValueItem} from '../../../../../common/form/item/property/list/ValueItem';
+import {ConstraintType} from '../../../../../common/form/item/property/constraint/ConstraintType';
+import {
+  DeviceInstanceServicePropertyConstraintComponent
+} from '../../../../../common/device/instance/service/split/detail/property/constraint/device.instance.service.property.constraint.component';
+import {
+  DeviceInstanceServicePropertyListComponent
+} from '../../../../../common/device/instance/service/split/detail/property/list/device.instance.service.property.list.component';
+import {
+  DeviceInstanceServicePropertyRangeComponent
+} from '../../../../../common/device/instance/service/split/detail/property/range/device.instance.service.property.range.component';
+import {NzFlexDirective} from 'ng-zorro-antd/flex';
+import {
+  PropertyConstraintComponent
+} from '../../../../../common/form/item/property/constraint/property.constraint.component';
+import {PropertyRangeComponent} from '../../../../../common/form/item/property/range/property.range.component';
+import {PropertyListComponent} from '../../../../../common/form/item/property/list/property.list.component';
 
 @Component({
   selector: 'spec-property-create',
@@ -47,10 +65,17 @@ import {PropertyUnitComponent} from '../../../../../common/form/item/property/un
     PropertyFormatComponent,
     PropertyAccessComponent,
     PropertyUnitComponent,
+    DeviceInstanceServicePropertyListComponent,
+    DeviceInstanceServicePropertyRangeComponent,
+    NzFlexDirective,
+    PropertyConstraintComponent,
+    PropertyRangeComponent,
+    PropertyListComponent,
   ],
 })
 export class SpecPropertyCreateComponent implements OnInit {
 
+  protected readonly ConstraintType = ConstraintType;
   loading: boolean = false;
 
   form: FormGroup<{
@@ -58,8 +83,14 @@ export class SpecPropertyCreateComponent implements OnInit {
     description: FormControl<Map<string, string>>,
     access: FormControl<Access>,
     format: FormControl<DataFormat>,
+    constraint: FormControl<ConstraintType>,
+    range: FormControl<RangeValue>,
+    list: FormControl<ValueItem[]>;
     unit: FormControl<string>,
   }>;
+
+  combinationValue: boolean = false;
+  constrainable: boolean = false;
 
   constructor(
     private router: Router,
@@ -74,6 +105,9 @@ export class SpecPropertyCreateComponent implements OnInit {
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       access: this.fb.control(new Access(), [Validators.required]),
       format: this.fb.control(DataFormat.STRING, [Validators.required]),
+      constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
+      range: this.fb.control(new RangeValue()),
+      list: this.fb.control<ValueItem[]>([]),
       unit: this.fb.control('', [Validators.required]),
     });
   }
@@ -83,6 +117,37 @@ export class SpecPropertyCreateComponent implements OnInit {
 
   protected onBack() {
     this.router.navigate(['/main/spec']).then(() => {});
+  }
+
+  protected onFormatChanged() {
+    this.constrainable = this.toConstrainable(this.form.controls.format.value);
+
+    switch (this.form.controls.constraint.value) {
+      case ConstraintType.NONE:
+        break;
+
+      case ConstraintType.RANGE:
+        const min = 0;
+        const max = 0;
+        const step = 0;
+        this.form.controls.range.setValue({min: min, max: max, step: step});
+        break;
+
+      case ConstraintType.LIST:
+        this.form.controls.list.setValue([]);
+        break;
+    }
+
+    // this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
+    // if (this.combinationValue) {
+    //   console.log('init combinationValue');
+    //   this.form.controls.members.setValue(this.property.members);
+    //   console.log('init combinationValue ok');
+    // }
+
+    // if (this.form.controls.format.value.formatNumber()) {
+    //   this.form.controls.unit.setValue(this.property.unit || '');
+    // }
   }
 
   protected submitForm() {
@@ -107,5 +172,22 @@ export class SpecPropertyCreateComponent implements OnInit {
     //       this.loading = false;
     //     }
     //   });
+  }
+
+  private toConstrainable(format: string): boolean {
+    switch (format) {
+      case 'uint8':
+      case 'uint16':
+      case 'uint32':
+      case 'int8':
+      case 'int16':
+      case 'int32':
+      case 'int64':
+      case 'float':
+        return true;
+
+      default:
+        return false;
+    }
   }
 }
