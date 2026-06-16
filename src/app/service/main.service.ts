@@ -191,9 +191,9 @@ export class MainService {
       .pipe(map(() => undefined));
   }
 
-  getDeviceDefinition(type: DeviceType): Observable<DeviceDefinition> {
+  getDeviceDefinition(type: string): Observable<DeviceDefinition> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/spec/device/one/${type.toString()}`)
+      .get<OxResponse>(`${this.server}/v1/spec/device/one/${type}`)
       .pipe(map(response => DeviceDefinitionCodec.decode(response.data)));
   }
 

@@ -74,14 +74,13 @@ export class SpecActionCreateComponent implements OnInit {
   }
 
   protected submitForm() {
-    const category = this.form.value.category || 'null';
     const code = this.form.value.code || 'null';
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
     const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
-    const device: DeviceDefinition = new DeviceDefinition(category, type, description);
+    const device: DeviceDefinition = new DeviceDefinition(type, description);
 
     this.loading = true;
     // this.service.createSpecDevice(this.account.organization.id, device)

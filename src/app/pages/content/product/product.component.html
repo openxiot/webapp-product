@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="所有产品" [nzGhost]="false" class="fixed-header">
+<nz-page-header [nzTitle]="pageTitle" [nzGhost]="false" class="fixed-header">
 <!--  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>-->
 
   <nz-page-header-tags>
@@ -9,6 +9,10 @@
     <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">创建</button>
   </nz-page-header-extra>
 </nz-page-header>
+
+<ng-template #pageTitle>
+  {{ '所有产品' | translate }}
+</ng-template>
 
 <div style="padding: 20px 20px; margin-top: 72px;">
   <div nz-row [nzGutter]="[8, 8]">

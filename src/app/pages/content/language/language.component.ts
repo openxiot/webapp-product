@@ -10,6 +10,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {MainI18nService} from '../../../service/i18n.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {Router} from '@angular/router';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'main-language',
@@ -22,7 +23,8 @@ import {Router} from '@angular/router';
     NzSpinModule,
     NzCardModule,
     NzIconModule,
-    NzSpaceModule
+    NzSpaceModule,
+    TranslatePipe
   ],
 })
 export class LanguageComponent implements OnInit {

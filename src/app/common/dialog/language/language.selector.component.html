@@ -1,0 +1,19 @@
+<nz-space [nzSize]="8">
+  @for (lang of availableLanguages; track lang.lang) {
+    <div *nzSpaceItem>
+      <nz-tag
+        [nzChecked]="isSelected(lang.lang)"
+        (click)="toggleLang(lang.lang)"
+        nzMode="checkable"
+      >
+        {{ lang.label }}
+      </nz-tag>
+    </div>
+  }
+</nz-space>
+
+@if (availableLanguages.length === 0) {
+  <div style="color: #999; padding: 10px 0;">
+    暂无更多语言可添加
+  </div>
+}

@@ -1,23 +1,37 @@
-<nz-row [nzGutter]="[8, 8]">
-  <nz-col [nzSpan]="24">
-    <nz-input-group nzAddOnBefore="中">
-      <input
-        type="text"
-        nz-input
-        [(ngModel)]="descriptionZhCN"
-        (ngModelChange)="onDescriptionChanged($event)"
-        [disabled]="lifecycle !== LifeCycle.DEVELOPMENT"/>
-    </nz-input-group>
-  </nz-col>
+@if (lifecycle === LifeCycle.DEVELOPMENT) {
+  <nz-row [nzGutter]="[8, 8]">
+    @for (item of langList; track item.lang; let i = $index) {
+      <nz-col [nzSpan]="24">
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <nz-input-group nzAddOnBefore="{{ item.label }}" style="flex: 1;">
+            <input
+              type="text"
+              nz-input
+              [(ngModel)]="item.value"
+              (ngModelChange)="emitChange()"
+              [disabled]="isDisabled"
+            />
+          </nz-input-group>
 
-  <nz-col [nzSpan]="24">
-    <nz-input-group nzAddOnBefore="英">
-      <input
-        type="text"
-        nz-input
-        [(ngModel)]="descriptionEnUS"
-        (ngModelChange)="onDescriptionChanged($event)"
-        [disabled]="lifecycle !== LifeCycle.DEVELOPMENT"/>
-    </nz-input-group>
-  </nz-col>
-</nz-row>
+          @if (item.lang !== 'en-US') {
+            <button type="button" nz-button nzType="text" nzDanger (click)="removeLang(i)">
+              <span nz-icon nzType="delete"></span>
+            </button>
+          }
+        </div>
+      </nz-col>
+    }
+
+    <nz-col [nzSpan]="24">
+      <button type="button" nz-button nzType="dashed" (click)="addLang()" [disabled]="isDisabled">
+        <span nz-icon nzType="plus"></span> 添加语言描述
+      </button>
+    </nz-col>
+  </nz-row>
+} @else {
+  @for (item of langList; track item.lang) {
+    <div style="margin-bottom: 8px;">
+      <strong>{{ item.label }}：</strong>{{ item.value || '-' }}
+    </div>
+  }
+}

@@ -1,6 +1,10 @@
-<nz-page-header nzTitle="账号" [nzGhost]="false">
+<nz-page-header nzTitle="pageTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 </nz-page-header>
+
+<ng-template #pageTitle>
+  {{ '账号' | translate }}
+</ng-template>
 
 <div style="padding: 20px 20px">
   <nz-card style="width:300px;" [nzCover]="coverTemplate">

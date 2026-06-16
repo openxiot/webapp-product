@@ -9,15 +9,20 @@
   <thead>
   <tr>
     <th>代码</th>
+    <th>UUID</th>
     <th>中文描述</th>
     <th>英文描述</th>
     <th>状态</th>
+    @if (account.isEditable()) {
+      <th>操作</th>
+    }
   </tr>
   </thead>
   <tbody>
     @for (device of devices; track device.type.toString()) {
       <tr>
         <td>{{ device.type.name }}</td>
+        <td>{{ device.type.shortUUID() }}</td>
         <td>{{ device.description.get('zh-CN') }}</td>
         <td>{{ device.description.get('en-US') }}</td>
         <td>
@@ -36,6 +41,13 @@
             }
           }
         </td>
+        @if (account.isEditable()) {
+          <td>
+            <a [routerLink]="['/main/spec/device/edit', device.type.toString()]">修改</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="onDelete(device)">删除</a>
+          </td>
+        }
       </tr>
     }
   </tbody>

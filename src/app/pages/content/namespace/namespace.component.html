@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="名字空间" [nzGhost]="false">
+<nz-page-header [nzTitle]="pageTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 
   @if (account.login) {
@@ -7,6 +7,10 @@
     </nz-page-header-extra>
   }
 </nz-page-header>
+
+<ng-template #pageTitle>
+  {{ '名字空间' | translate }}
+</ng-template>
 
 <div style="padding: 20px 20px">
   <nz-table
@@ -57,7 +61,7 @@
           </td>
           <td>
             @if (ns.organization === account.organization.id) {
-              <a  [routerLink]="['/main/namespace/edit', ns.namespace]">修改</a>
+              <a [routerLink]="['/main/namespace/edit', ns.namespace]">修改</a>
               <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onDelete(ns)">删除</a>
             }

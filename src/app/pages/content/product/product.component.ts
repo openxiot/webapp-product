@@ -12,6 +12,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {RouterLink} from '@angular/router';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'main-product',
@@ -31,6 +32,7 @@ import {RouterLink} from '@angular/router';
     NzButtonComponent,
     NzWaveDirective,
     RouterLink,
+    TranslatePipe,
   ],
 })
 export class ProductComponent {

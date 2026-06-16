@@ -13,17 +13,21 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceDefinition, DeviceType, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {DeviceDefinition, DeviceType, LifeCycle, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {UuidComponent} from '../../../../../common/form/item/uuid/uuid.component';
+import {
+  DeviceInstanceNameComponent
+} from '../../../../../common/device/instance/service/split/detail/property/name/device.instance.name.component';
 
 @Component({
-  selector: 'spec-event-create',
+  selector: 'spec-device-edit',
   standalone: true,
-  templateUrl: './spec.event.create.component.html',
-  styleUrls: ['./spec.event.create.component.less'],
+  templateUrl: './spec.device.edit.component.html',
+  styleUrls: ['./spec.device.edit.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -39,14 +43,16 @@ import {TranslatePipe} from '@ngx-translate/core';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
+    UuidComponent,
+    DeviceInstanceNameComponent,
   ],
 })
-export class SpecEventCreateComponent implements OnInit {
+export class SpecDeviceEditComponent implements OnInit {
 
   loading: boolean = false;
 
   form: FormGroup<{
-    category: FormControl<string>,
+    uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
   }>;
@@ -60,13 +66,45 @@ export class SpecEventCreateComponent implements OnInit {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      category: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
+
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+
+      uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      const type: string = params['type'] || '';
+      this.load(type);
+    });
+  }
+
+  private load(type: string) {
+    console.log('reload');
+
+    this.loading = true;
+
+    this.service.getDeviceDefinition(type)
+      .subscribe({
+        next: (namespace) => {
+          console.log('getSpecNamespace ok');
+
+          this.form.controls.code.setValue(namespace.type.name);
+          this.form.controls.uuid.setValue(namespace.type.value);
+          this.form.controls.description.setValue(namespace.description);
+
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning('Failed to createNamespace', error);
+          this.loading = false;
+        }
+      });
   }
 
   protected onBack() {
@@ -74,26 +112,32 @@ export class SpecEventCreateComponent implements OnInit {
   }
 
   protected submitForm() {
+    console.log('submitForm');
+
     const code = this.form.value.code || 'null';
+    const value = this.form.value.uuid || 0;
+    const uuid = value.toString(16).padStart(8, '0');
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
+    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);
     const device: DeviceDefinition = new DeviceDefinition(type, description);
 
     this.loading = true;
-    // this.service.createSpecDevice(this.account.organization.id, device)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('updateProduct ok');
-    //       this.loading = false;
-    //       this.router.navigate(['/main/namespace']).then(() => {});
-    //     },
-    //     error: error => {
-    //       this.msg.warning('Failed to createProduct', error);
-    //       this.loading = false;
-    //     }
-    //   });
+    this.service.createDeviceDefinition(device)
+      .subscribe({
+        next: () => {
+          console.log('createSpecDevice ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {});
+        },
+        error: error => {
+          this.msg.warning('Failed to createSpecDevice', error);
+          this.loading = false;
+        }
+      });
   }
+
+  protected readonly LifeCycle = LifeCycle;
 }

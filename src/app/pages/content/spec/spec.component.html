@@ -1,4 +1,4 @@
-<nz-page-header [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
+<nz-page-header [nzTitle]="pageTitle" [nzSubtitle]="subTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 
 <!--  <nz-page-header-content>-->
@@ -58,7 +58,7 @@
   }
 </nz-page-header>
 
-<ng-template #title>
+<ng-template #pageTitle>
   <div routerLink="/main/spec/ns" class="selector">
     @if (account.ns) {
       {{ account.ns.namespace }}

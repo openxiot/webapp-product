@@ -48,7 +48,6 @@ export class SpecDeviceCreateComponent implements OnInit {
   loading: boolean = false;
 
   form: FormGroup<{
-    category: FormControl<string>,
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
@@ -63,8 +62,12 @@ export class SpecDeviceCreateComponent implements OnInit {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      category: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
+
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });
@@ -78,7 +81,8 @@ export class SpecDeviceCreateComponent implements OnInit {
   }
 
   protected submitForm() {
-    const category = this.form.value.category || 'null';
+    console.log('submitForm');
+
     const code = this.form.value.code || 'null';
     const value = this.form.value.uuid || 0;
     const uuid = value.toString(16).padStart(8, '0');
@@ -87,7 +91,7 @@ export class SpecDeviceCreateComponent implements OnInit {
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
     const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);
-    const device: DeviceDefinition = new DeviceDefinition(category, type, description);
+    const device: DeviceDefinition = new DeviceDefinition(type, description);
 
     this.loading = true;
     this.service.createDeviceDefinition(device)

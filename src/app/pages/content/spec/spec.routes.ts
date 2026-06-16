@@ -2,6 +2,7 @@ import {Routes} from '@angular/router';
 import {SpecComponent} from './spec.component';
 import {SpecNsComponent} from './ns/spec.ns.component';
 import {SpecDeviceCreateComponent} from './device/create/spec.device.create.component';
+import {SpecDeviceEditComponent} from './device/edit/spec.device.edit.component';
 import {SpecServiceCreateComponent} from './service/create/spec.service.create.component';
 import {SpecPropertyCreateComponent} from './property/create/spec.property.create.component';
 import {SpecActionCreateComponent} from './action/create/spec.action.create.component';
@@ -23,6 +24,11 @@ export const SPEC_ROUTES: Routes = [
     path: 'device/create',
     data: { breadcrumb: '设备' },
     component: SpecDeviceCreateComponent
+  },
+  {
+    path: 'device/edit/:type',
+    data: { breadcrumb: '设备' },
+    component: SpecDeviceEditComponent
   },
   {
     path: 'service/create',

@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
+import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
@@ -7,6 +7,15 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {LanguageSelectorComponent} from '../../../dialog/language/language.selector.component';
+import {LangOption} from '../../../dialog/language/LangOption';
+
+interface LangDesc {
+  lang: string;
+  label: string;
+  value: string;
+}
 
 @Component({
   selector: 'description',
@@ -20,16 +29,16 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzIconModule,
     NzTagModule,
     FormsModule,
-    ReactiveFormsModule,
     NzRowDirective,
-    NzColDirective
+    NzColDirective,
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: DescriptionComponent,
       multi: true
-    }
+    },
+    NzModalService
   ]
 })
 export class DescriptionComponent implements ControlValueAccessor {
@@ -41,51 +50,123 @@ export class DescriptionComponent implements ControlValueAccessor {
 
   isDisabled = false;
 
-  // 定义变化回调和触摸回调
-  onChange: (value: Map<string, string>) => void = () => {};
-  onTouched: () => void = () => {};
+  onChange: (value: Map<string, string>) => void = () => {
+  };
+  onTouched: () => void = () => {
+  };
 
-  descriptionZhCN: string = '';
-  descriptionZhTW: string = '';
-  descriptionEnUS: string = '';
+  // 动态语言列表
+  langList: LangDesc[] = [
+    {lang: 'en-US', label: '英文', value: ''}
+  ];
 
   constructor(
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
   ) {
   }
 
-  // 同样为其他语言定义 getter/setter
-  // --- ControlValueAccessor 接口方法 ---
-
-  // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
-  writeValue(obj: Map<string, string>): void {
-    if (obj !== undefined && obj !== null) {
-      this.descriptionZhCN = obj.get('zh-CN') || '';
-      this.descriptionZhTW = obj.get('zh-TW') || '';
-      this.descriptionEnUS = obj.get('en-US') || '';
+  writeValue(obj: Map<string, string> | null): void {
+    if (!obj) {
+      this.resetToDefault();
+      return;
     }
+
+    const list: LangDesc[] = [];
+    obj.forEach((val, lang) => {
+      const label = this.getLangLabel(lang);
+      list.push({lang, label, value: val});
+    });
+
+    this.langList = list.length ? list : [{lang: 'en-US', label: '英文', value: ''}];
   }
 
-  // 注册变化回调：Angular 提供给你一个函数，当内部值变化时，你需要调用它来通知外部
+  private getLangLabel(lang: string): string {
+    const map: Record<string, string> = {
+      'en-US': '英文',
+      'zh-CN': '简体中文',
+      'zh-TW': '繁体中文',
+      'ja-JP': '日语',
+      'ko-KR': '韩语',
+      'fr-FR': '法语',
+      'de-DE': '德语',
+      'es-ES': '西班牙语',
+      'ru-RU': '俄语',
+    };
+    return map[lang] ?? lang;
+  }
+
+  private resetToDefault() {
+    this.langList = [{lang: 'en-US', label: '英文', value: ''}];
+  }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
 
-  // 注册触摸回调：Angular 提供给你一个函数，当组件被触摸（如blur）时，你需要调用它
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
 
-  // 当表单控件的禁用状态变更时（如调用 control.disable()），Angular 会调用此方法
   setDisabledState?(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
 
-  protected onDescriptionChanged(value: string): void {
-    const description: Map<string, string> = new Map();
-    description.set('zh-CN', this.descriptionZhCN);
-    description.set('zh-TW', this.descriptionZhTW);
-    description.set('en-US', this.descriptionEnUS);
-    this.onChange(description);
+  emitChange() {
+    const map = new Map<string, string>();
+    this.langList.forEach(item => {
+      map.set(item.lang, item.value.trim());
+    });
+    this.onChange(map);
     this.changed.emit();
+    this.onTouched();
+  }
+
+  addLang() {
+    const modal = this.modal.create<any, LangDesc[], any>({
+      nzTitle: '添加描述语言',
+      nzWidth: 600,
+      nzContent: LanguageSelectorComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: this.langList,
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: c => c.cancel()
+        },
+        {
+          label: '确定',
+          type: 'primary',
+          disabled: component => component!.disabled || false,
+          onClick: c => c.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe((selectedLangArray: LangOption[]) => {
+      if (!selectedLangArray || selectedLangArray.length === 0) return;
+
+      selectedLangArray.forEach(langItem => {
+        const exist = this.langList.some(item => item.lang === langItem.lang);
+        if (!exist) {
+          this.langList.push({
+            lang: langItem.lang,
+            label: langItem.label,
+            value: ''
+          });
+        }
+      });
+
+      this.emitChange();
+    });
+  }
+
+  // 删除语言（en-US 不可删）
+  removeLang(index: number) {
+    const item = this.langList[index];
+    if (item.lang === 'en-US') return;
+
+    this.langList.splice(index, 1);
+    this.emitChange();
   }
 }

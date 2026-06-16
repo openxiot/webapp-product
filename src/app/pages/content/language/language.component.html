@@ -1,6 +1,10 @@
-<nz-page-header nzTitle="语言" [nzGhost]="false">
+<nz-page-header [nzTitle]="pageTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 </nz-page-header>
+
+<ng-template #pageTitle>
+  {{ '语言' | translate }}
+</ng-template>
 
 <div style="padding: 20px 20px">
   <nz-card>

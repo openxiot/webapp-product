@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -7,11 +7,14 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {SpecDevice} from '../../../../typedef/define/spec/SpecDevice';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {DeviceDefinition, LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {RouterLink} from '@angular/router';
+import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'spec-device',
@@ -27,6 +30,11 @@ import {AccountService} from '../../../../service/account.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
+    NzDividerComponent,
+    RouterLink,
+  ],
+  providers: [
+    NzModalService
   ],
 })
 export class SpecDeviceComponent implements OnInit {
@@ -34,13 +42,12 @@ export class SpecDeviceComponent implements OnInit {
   protected readonly LifeCycle = LifeCycle;
 
   loading: boolean = true;
-  total: number = 0;
   devices: DeviceDefinition[] = [];
-  pageSize = 100;
-  pageIndex = 1;
 
   constructor(
-    private account: AccountService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -59,10 +66,51 @@ export class SpecDeviceComponent implements OnInit {
         next: data => {
           this.devices = data;
           this.loading = false;
-          this.total = this.devices.length;
         },
         error: error => {
           this.msg.warning('Failed to getSpecDevices: ', error);
+        }
+      })
+  }
+
+  protected onDelete(device: DeviceDefinition) {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个设备类型吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: device.type.toString(),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doDelete(device);
+      }
+    });
+  }
+
+
+  protected doDelete(device: DeviceDefinition) {
+    this.loading = true;
+    this.service.deleteDeviceDefinition(device.type)
+      .subscribe({
+        next: data => {
+          this.devices = this.devices.filter(x => x.type.name !== device.type.name);
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning('Failed to deleteDeviceDefinition: ', error);
         }
       })
   }

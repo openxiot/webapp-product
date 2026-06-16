@@ -4,7 +4,7 @@
   </nz-page-header>
 
   <ng-template #title>
-    {{ '创建设备类型' | translate }}
+    {{ '编辑设备类型' | translate }}
   </ng-template>
 
   <ng-template #subTitle>
@@ -17,14 +17,14 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
           <nz-form-control [nzSpan]="8" [nzErrorTip]="codeErrorTip">
-            <input type="text" nz-input formControlName="code" placeholder="请输入代码"/>
+            <device-instance-name formControlName="code" [updatable]="false"></device-instance-name>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">UUID</nz-form-label>
           <nz-form-control [nzSpan]="8" nzErrorTip="请输入UUID">
-            <uuid formControlName="uuid"/>
+            <uuid formControlName="uuid" [lifecycle]="LifeCycle.PREVIEW"/>
           </nz-form-control>
         </nz-form-item>
 

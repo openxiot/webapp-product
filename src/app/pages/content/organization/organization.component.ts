@@ -15,6 +15,7 @@ import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {Router, RouterLink} from '@angular/router';
 import {Organization} from '../../../typedef/define/developer/Organization';
 import {DatePipe} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'main-organization',
@@ -34,6 +35,7 @@ import {DatePipe} from '@angular/common';
     NzWaveDirective,
     RouterLink,
     DatePipe,
+    TranslatePipe,
   ],
 })
 export class OrganizationComponent implements OnInit {

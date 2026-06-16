@@ -19,7 +19,7 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@ctrl/tinycolor": "^4.1.0",
-    "@openxiot/xiot-core-spec-ts": "^0.0.18",
+    "@openxiot/xiot-core-spec-ts": "^0.0.19",
     "ng-zorro-antd": "^18.2.1",
     "ngx-cookie-service": "^18.0.0",
     "handsontable": "^17.0.0",

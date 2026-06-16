@@ -10,6 +10,7 @@ import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {AccountService} from '../../../service/account.service';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {NzIconModule} from 'ng-zorro-antd/icon';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'main-account',
@@ -24,7 +25,8 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
     NzTabsModule,
     NzDescriptionsModule,
     NzAvatarModule,
-    NzIconModule
+    NzIconModule,
+    TranslatePipe
   ],
 })
 export class AccountComponent implements OnInit {
