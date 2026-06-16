@@ -13,7 +13,14 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {Access, DataFormat} from '@openxiot/xiot-core-spec-ts';
+import {
+  Access,
+  DataFormat,
+  PropertyDefinition,
+  PropertyType,
+  UrnType, ValueDefinition, ValueList,
+  ValueRange
+} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
@@ -25,21 +32,16 @@ import {PropertyUnitComponent} from '../../../../../common/form/item/property/un
 import {RangeValue} from '../../../../../common/form/item/property/range/RangeValue';
 import {ValueItem} from '../../../../../common/form/item/property/list/ValueItem';
 import {ConstraintType} from '../../../../../common/form/item/property/constraint/ConstraintType';
-import {
-  DeviceInstanceServicePropertyConstraintComponent
-} from '../../../../../common/device/instance/service/split/detail/property/constraint/device.instance.service.property.constraint.component';
-import {
-  DeviceInstanceServicePropertyListComponent
-} from '../../../../../common/device/instance/service/split/detail/property/list/device.instance.service.property.list.component';
-import {
-  DeviceInstanceServicePropertyRangeComponent
-} from '../../../../../common/device/instance/service/split/detail/property/range/device.instance.service.property.range.component';
 import {NzFlexDirective} from 'ng-zorro-antd/flex';
 import {
   PropertyConstraintComponent
 } from '../../../../../common/form/item/property/constraint/property.constraint.component';
 import {PropertyRangeComponent} from '../../../../../common/form/item/property/range/property.range.component';
 import {PropertyListComponent} from '../../../../../common/form/item/property/list/property.list.component';
+import {
+  PropertyDefMembersComponent
+} from '../../../../../common/form/item/property/members/property.def.members.component';
+import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 
 @Component({
   selector: 'spec-property-create',
@@ -69,6 +71,8 @@ import {PropertyListComponent} from '../../../../../common/form/item/property/li
     PropertyConstraintComponent,
     PropertyRangeComponent,
     PropertyListComponent,
+    PropertyDefMembersComponent,
+    UuidComponent,
   ],
 })
 export class SpecPropertyCreateComponent implements OnInit {
@@ -77,6 +81,7 @@ export class SpecPropertyCreateComponent implements OnInit {
   loading: boolean = false;
 
   form: FormGroup<{
+    uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
     access: FormControl<Access>,
@@ -85,6 +90,7 @@ export class SpecPropertyCreateComponent implements OnInit {
     range: FormControl<RangeValue>,
     list: FormControl<ValueItem[]>;
     unit: FormControl<string>,
+    members: FormControl<PropertyDefinition[]>,
   }>;
 
   combinationValue: boolean = false;
@@ -99,7 +105,11 @@ export class SpecPropertyCreateComponent implements OnInit {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      code: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       access: this.fb.control(new Access(), [Validators.required]),
       format: this.fb.control(DataFormat.STRING, [Validators.required]),
@@ -107,6 +117,7 @@ export class SpecPropertyCreateComponent implements OnInit {
       range: this.fb.control(new RangeValue()),
       list: this.fb.control<ValueItem[]>([]),
       unit: this.fb.control('', [Validators.required]),
+      members: this.fb.control<PropertyDefinition[]>([]),
     });
   }
 
@@ -114,7 +125,8 @@ export class SpecPropertyCreateComponent implements OnInit {
   }
 
   protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
+    this.router.navigate(['/main/spec']).then(() => {
+    });
   }
 
   protected onFormatChanged() {
@@ -136,7 +148,7 @@ export class SpecPropertyCreateComponent implements OnInit {
         break;
     }
 
-    // this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
+    this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
     // if (this.combinationValue) {
     //   console.log('init combinationValue');
     //   this.form.controls.members.setValue(this.property.members);
@@ -149,27 +161,57 @@ export class SpecPropertyCreateComponent implements OnInit {
   }
 
   protected submitForm() {
+    const value = this.form.value.uuid || 0;
+    const uuid = value.toString(16).padStart(8, '0');
     const code = this.form.value.code || 'null';
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
-    // const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
-    // const device: DeviceDefinition = new DeviceDefinition(type, description);
+    const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
+    const def: PropertyDefinition = new PropertyDefinition(type, description);
+    def.format = this.form.value.format || DataFormat.STRING;
+    def.access = this.form.value.access || new Access();
 
-    // this.loading = true;
-    // this.service.createSpecDevice(this.account.organization.id, device)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('updateProduct ok');
-    //       this.loading = false;
-    //       this.router.navigate(['/main/namespace']).then(() => {});
-    //     },
-    //     error: error => {
-    //       this.msg.warning('Failed to createProduct', error);
-    //       this.loading = false;
-    //     }
-    //   });
+    switch (this.form.controls.constraint.value) {
+      case ConstraintType.NONE:
+        break;
+
+      case ConstraintType.RANGE:
+        const range = [this.form.controls.range.value.min, this.form.controls.range.value.max, this.form.controls.range.value.step];
+        def.constraintValue = new ValueRange(def.format, range);
+        break;
+
+      case ConstraintType.LIST:
+        const list = new ValueList();
+
+        for (let item of this.form.controls.list.value) {
+          const value = new ValueDefinition(def.format, item.value || 0, item.desc);
+          list.values.push(value);
+        }
+
+        def.constraintValue = list;
+        break;
+    }
+
+    if (this.combinationValue) {
+      def.members = this.form.controls.members.value.map(x => x.type);
+    }
+
+    this.loading = true;
+    this.service.createPropertyDefinition(def)
+      .subscribe({
+        next: () => {
+          console.log('createPropertyDefinition ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {
+          });
+        },
+        error: error => {
+          this.msg.warning('Failed to createPropertyDefinition', error);
+          this.loading = false;
+        }
+      });
   }
 
   private toConstrainable(format: string): boolean {

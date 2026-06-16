@@ -10,30 +10,30 @@ import {
 } from '@angular/forms';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
-import {DeviceInstanceDescriptionComponent} from '../../../service/split/detail/property/description/device.instance.description.component';
-import {DeviceInstanceIdComponent} from '../../../service/split/detail/property/iid/device.instance.id.component';
-import {DeviceInstanceNameComponent} from '../../../service/split/detail/property/name/device.instance.name.component';
-import {DeviceInstanceNamespaceComponent} from '../../../service/split/detail/property/namespace/device.instance.namespace.component';
+import {DeviceInstanceDescriptionComponent} from '../../../../service/split/detail/property/description/device.instance.description.component';
+import {DeviceInstanceIdComponent} from '../../../../service/split/detail/property/iid/device.instance.id.component';
+import {DeviceInstanceNameComponent} from '../../../../service/split/detail/property/name/device.instance.name.component';
+import {DeviceInstanceNamespaceComponent} from '../../../../service/split/detail/property/namespace/device.instance.namespace.component';
 import {
   LifeCycle,
-  Action,
+  Event,
+  ObjectWithLifecycle,
   PropertyDefinition,
-  ActionDefinition,
-  Event
+  EventDefinition,
+  Service
 } from '@openxiot/xiot-core-spec-ts';
-import {NzTabsModule} from 'ng-zorro-antd/tabs';
-import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
-import {MainService} from '../../../../../../service/main.service';
+import {NzSpinComponent} from 'ng-zorro-antd/spin';
+import {MainService} from '../../../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
-import {AccountService} from '../../../../../../service/account.service';
+import {AccountService} from '../../../../../../../service/account.service';
 
 @Component({
-  selector: 'create-action',
-  styleUrls: ['./create.action.component.less'],
-  templateUrl: './create.action.component.html',
+  selector: 'create-event',
+  styleUrls: ['./create.event.component.less'],
+  templateUrl: './create.event.component.html',
   standalone: true,
   imports: [
     FormsModule,
@@ -44,29 +44,27 @@ import {AccountService} from '../../../../../../service/account.service';
     NzFormItemComponent,
     NzFormLabelComponent,
     NzRowDirective,
-    NzTabsModule,
-    NzSpinModule,
-    NzContentComponent,
-    NzLayoutComponent,
-    NzSiderComponent,
-    NzMenuDirective,
-    NzMenuItemComponent,
-    NzMenuDividerDirective,
-    NzFlexModule,
     DeviceInstanceDescriptionComponent,
     DeviceInstanceIdComponent,
     DeviceInstanceNameComponent,
     DeviceInstanceNamespaceComponent,
+    NzContentComponent,
+    NzLayoutComponent,
+    NzMenuDirective,
+    NzMenuDividerDirective,
+    NzMenuItemComponent,
+    NzSiderComponent,
+    NzSpinComponent,
+    NzFlexModule,
   ],
-  providers: [
-  ],
+  providers: [],
 })
-export class CreateActionComponent implements OnInit {
+export class CreateEventComponent implements OnInit {
 
   protected readonly LifeCycle = LifeCycle;
 
   readonly #modal = inject(NzModalRef);
-  readonly data: Action = inject(NZ_MODAL_DATA);
+  readonly data: Event = inject(NZ_MODAL_DATA);
 
   form: FormGroup<{
     iid: FormControl<number>,
@@ -76,10 +74,10 @@ export class CreateActionComponent implements OnInit {
   }>;
 
   loading: boolean = false;
-  actions: Action[] = [];
-  current: Action;
+  events: Event[] = [];
+  current: Event;
 
-  definitions: ActionDefinition[] = [];
+  definitions: EventDefinition[] = [];
 
   loadingProperties: boolean = true;
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
@@ -101,21 +99,21 @@ export class CreateActionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadActions();
+    this.loadEvents();
     this.loadProperties();
   }
 
-  private loadActions(): void {
+  private loadEvents(): void {
     this.loading = true;
-    this.main.getActionDefinitions(this.account.ns.namespace)
+    this.main.getEventDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.definitions = data;
 
-          this.actions = this.definitions
+          this.events = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Action(this.data.iid, x.type, x.description, [], []);
+              return new Event(this.data.iid, x.type, x.description, []);
             });
 
           this.loading = false;
@@ -167,7 +165,7 @@ export class CreateActionComponent implements OnInit {
     this.#modal.destroy(this.data);
   }
 
-  protected onClickAction(a: Action) {
+  protected onClickEvent(a: Event) {
     this.loading = true;
     this.current = a;
 

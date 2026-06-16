@@ -1,20 +1,21 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SelectMember} from './SelectMember';
+import {SelectArgument} from './SelectArgument';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
-import {PropertyMemberComponent} from '../../../tables/properties/member/property-member.component';
+import {PropertyMemberComponent} from '../../../../tables/properties/member/property-member.component';
 import {Property} from '@openxiot/xiot-core-spec-ts';
+import {NzRadioModule} from 'ng-zorro-antd/radio';
 
 @Component({
-  selector: 'select-member',
-  styleUrls: ['./select.member.component.less'],
-  templateUrl: './select.member.component.html',
+  selector: 'select-argument',
+  styleUrls: ['./select.argument.component.less'],
+  templateUrl: './select.argument.component.html',
   standalone: true,
   imports: [
     FormsModule,
@@ -26,14 +27,15 @@ import {Property} from '@openxiot/xiot-core-spec-ts';
     NzTagModule,
     NzCellAlignDirective,
     NzTableModule,
+    NzRadioModule,
     PropertyMemberComponent,
   ],
   providers: [],
 })
-export class SelectMemberComponent implements OnInit {
+export class SelectArgumentComponent implements OnInit {
 
   readonly #modal = inject(NzModalRef);
-  readonly data: SelectMember = inject(NZ_MODAL_DATA);
+  readonly data: SelectArgument = inject(NZ_MODAL_DATA);
 
   properties: Property[] = [];
 
@@ -47,10 +49,7 @@ export class SelectMemberComponent implements OnInit {
 
   ngOnInit(): void {
     this.properties = this.data.service.getProperties()
-      .filter(x => x.iid !== this.data.property.iid)
-      .filter(x => ! new Set(x.members).has(this.data.property.iid));
-
-    this.selected = new Set(this.data.property.members);
+      .filter(x => ! this.data.exclusion.has(x.iid));
   }
 
   cancel(): void {

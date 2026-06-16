@@ -1,0 +1,42 @@
+<div style="width: 100%">
+  <nz-table
+    style="width: 100%"
+    #propertyTable
+    [nzData]="properties"
+    [nzSize]="'small'"
+    [nzPageSize]="100"
+    [nzHideOnSinglePage]="true"
+    [nzBordered]="true"
+  >
+    <thead>
+    <tr>
+      <th
+        [(nzChecked)]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th>ID</th>
+      <th>描述</th>
+      <th>成员</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (p of propertyTable.data; track p) {
+        <tr>
+          <td [nzChecked]="selected.has(p.iid)" (nzCheckedChange)="onItemChecked(p.iid, $event)"></td>
+          <td nzAlign="center">
+            <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
+          </td>
+          <td>
+            {{ p.description.get(data.language) }}
+          </td>
+          <td>
+            @if (p.formatCombination()) {
+              <property-member [service]="data.service" [property]="p" [language]="data.language"></property-member>
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>

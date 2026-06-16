@@ -6,15 +6,19 @@ import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {SelectMemberComponent} from '../../../../../dialog/instance/select/member/select.member.component';
-import {SelectMember} from '../../../../../dialog/instance/select/member/SelectMember';
-import {LifeCycle, Property, Service} from '@openxiot/xiot-core-spec-ts';
+import {PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {
+  DefinitionSelectMemberComponent
+} from '../../../../device/instance/dialog/definition/select/member/definition.select.member.component';
+import {
+  DefinitionSelectMember
+} from '../../../../device/instance/dialog/definition/select/member/DefinitionSelectMember';
 
 @Component({
-  selector: 'device-instance-service-property-members',
-  templateUrl: './device.instance.service.property.members.component.html',
-  styleUrls: ['./device.instance.service.property.members.component.less'],
+  selector: 'property-def-members',
+  templateUrl: './property.def.members.component.html',
+  styleUrls: ['./property.def.members.component.less'],
   standalone: true,
   imports: [
     NzButtonModule,
@@ -28,33 +32,27 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DeviceInstanceServicePropertyMembersComponent,
+      useExisting: PropertyDefMembersComponent,
       multi: true
     },
     NzModalService
   ]
 })
-export class DeviceInstanceServicePropertyMembersComponent implements ControlValueAccessor {
+export class PropertyDefMembersComponent implements ControlValueAccessor {
 
-  protected readonly LifeCycle = LifeCycle;
-
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable: boolean = true;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
-
-  @Input() service!: Service;
-
-  @Input() property!: Property;
 
   @Input() language!: string;
 
   // 组件内部维护的值
-  private _value: number[] = [];
+  private _value: PropertyDefinition[] = [];
 
   // 禁用状态
   isDisabled = false;
 
   // 定义变化回调和触摸回调
-  onChange: (value: number[]) => void = () => {};
+  onChange: (value: PropertyDefinition[]) => void = () => {};
   onTouched: () => void = () => {};
 
   constructor(
@@ -64,12 +62,12 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
   }
 
   // 获取当前值
-  get value(): number[] {
+  get value(): PropertyDefinition[] {
     return this._value;
   }
 
   // 设置当前值，并通知外部变化
-  set value(val: number[]) {
+  set value(val: PropertyDefinition[]) {
     if (val !== this._value) {
       this._value = val;
       this.onChange(val); // 重要：通知外部表单值已变化
@@ -103,11 +101,11 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
   }
 
   addMemberItem() {
-    const modal = this.modal.create<SelectMemberComponent, SelectMember, Set<number>>({
+    const modal = this.modal.create<DefinitionSelectMemberComponent, DefinitionSelectMember, Set<PropertyDefinition>>({
       nzTitle: '选择属性作为成员',
-      nzContent: SelectMemberComponent,
+      nzContent: DefinitionSelectMemberComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new SelectMember(this.service, this.property, this.language),
+      nzData: new DefinitionSelectMember(this._value, this.language),
       nzFooter: [
         {
           label: '取消',
@@ -126,36 +124,23 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
       if (result) {
         this._value = [];
 
-        const sortedResult = Array.from(result).sort((a, b) => a - b);
-        for (let iid of sortedResult) {
-          const p = this.service.properties.get(iid);
-          if (p) {
-            this.addMember(p);
-          }
+        const sortedResult = Array.from(result).sort((a, b) => a.type.name.localeCompare(b.type.name));
+        for (let item of sortedResult) {
+          this.addMember(item);
         }
       }
     });
   }
 
-  addMember(property: Property) {
-    console.log('addMember: ', property.iid);
-    this._value.push(property.iid);
+  addMember(def: PropertyDefinition) {
+    console.log('addMember: ', def.type.toString());
+    this._value.push(def);
     this.changed.emit();
   }
 
-  // 根据属性ID获取属性名称
-  getPropertyName(iid: number): string {
-    const property = this.service.properties.get(iid);
-    if (!property) {
-      return `未知属性 (${iid})`;
-    }
-
-    return property.description.get(this.language) || '?';
-  }
-
   // 删除成员
-  removeMember(iid: number): void {
-    const index = this._value.indexOf(iid);
+  removeMember(def: PropertyDefinition): void {
+    const index = this._value.indexOf(def);
     if (index > -1) {
       this._value.splice(index, 1);
       // 通知外部值已变化

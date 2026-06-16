@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzFormModule} from 'ng-zorro-antd/form';
-import {DeviceInstanceIdComponent} from '../../../service/split/detail/property/iid/device.instance.id.component';
+import {DeviceInstanceIdComponent} from '../../../../service/split/detail/property/iid/device.instance.id.component';
 import {
   Access,
   LifeCycle,
@@ -28,20 +28,20 @@ import {
   EventDefinition,
   DataFormat,
 } from '@openxiot/xiot-core-spec-ts';
-import {DeviceInstanceNamespaceComponent} from '../../../service/split/detail/property/namespace/device.instance.namespace.component';
-import {DeviceInstanceDescriptionComponent} from '../../../service/split/detail/property/description/device.instance.description.component';
-import {DeviceInstanceNameComponent} from '../../../service/split/detail/property/name/device.instance.name.component';
+import {DeviceInstanceNamespaceComponent} from '../../../../service/split/detail/property/namespace/device.instance.namespace.component';
+import {DeviceInstanceDescriptionComponent} from '../../../../service/split/detail/property/description/device.instance.description.component';
+import {DeviceInstanceNameComponent} from '../../../../service/split/detail/property/name/device.instance.name.component';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
-import {MainService} from '../../../../../../service/main.service';
+import {MainService} from '../../../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {CreateServicePropertiesComponent} from './properties/create.service.properties.component';
 import {CreateServiceActionsComponent} from './actions/create.service.actions.component';
 import {CreateServiceEventsComponent} from './events/create.service.events.component';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
-import {AccountService} from '../../../../../../service/account.service';
+import {AccountService} from '../../../../../../../service/account.service';
 
 @Component({
   selector: 'create-service',

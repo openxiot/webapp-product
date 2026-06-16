@@ -10,8 +10,8 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {ConfirmComponent} from '../../../../../dialog/confirm/confirm.component';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
-import {EditServiceComponent} from '../../../dialog/edit/service/edit.service.component';
-import {EditableService} from '../../../dialog/edit/service/EditableService';
+import {EditServiceComponent} from '../../../dialog/instance/edit/service/edit.service.component';
+import {EditableService} from '../../../dialog/instance/edit/service/EditableService';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 
 @Component({

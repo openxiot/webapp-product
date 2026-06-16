@@ -1,0 +1,43 @@
+<nz-row [nzGutter]="[8, 8]">
+  @for (def of value; track def.type.toString()) {
+    <nz-col [nzSpan]="24">
+      <div class="member-row">
+        <div class="member-info">
+          <!-- 显示成员属性信息 -->
+          <nz-tag>
+            {{ def.description.get('en-US') || def.description.get('zh-CN') || def.type.name }}
+          </nz-tag>
+        </div>
+
+        <div class="member-actions">
+          <!-- 删除按钮 -->
+          <button
+            type="button"
+            nz-button
+            nzType="text"
+            nzDanger
+            nz-tooltip="删除成员"
+            (click)="removeMember(def)"
+            [disabled]="isDisabled"
+          >
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        </div>
+      </div>
+    </nz-col>
+  }
+
+  <nz-col [nzSpan]="24">
+    <button
+      type="button"
+      nz-button
+      nzType="dashed"
+      nzBlock
+      (click)="addMemberItem()"
+      [disabled]="isDisabled"
+    >
+      <span nz-icon nzType="plus"></span>
+      添加成员
+    </button>
+  </nz-col>
+</nz-row>

@@ -1,21 +1,21 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {SelectArgument} from './SelectArgument';
+import {DefinitionSelectArgument} from './DefinitionSelectArgument';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
-import {PropertyMemberComponent} from '../../../tables/properties/member/property-member.component';
+import {PropertyMemberComponent} from '../../../../tables/properties/member/property-member.component';
 import {Property} from '@openxiot/xiot-core-spec-ts';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 
 @Component({
-  selector: 'select-argument',
-  styleUrls: ['./select.argument.component.less'],
-  templateUrl: './select.argument.component.html',
+  selector: 'definition-select-argument',
+  styleUrls: ['./definition.select.argument.component.less'],
+  templateUrl: './definition.select.argument.component.html',
   standalone: true,
   imports: [
     FormsModule,
@@ -32,10 +32,10 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
   ],
   providers: [],
 })
-export class SelectArgumentComponent implements OnInit {
+export class DefinitionSelectArgumentComponent implements OnInit {
 
   readonly #modal = inject(NzModalRef);
-  readonly data: SelectArgument = inject(NZ_MODAL_DATA);
+  readonly data: DefinitionSelectArgument = inject(NZ_MODAL_DATA);
 
   properties: Property[] = [];
 
