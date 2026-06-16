@@ -68,7 +68,6 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
     PropertyFormatComponent,
     PropertyAccessComponent,
     PropertyUnitComponent,
-    NzFlexDirective,
     PropertyConstraintComponent,
     PropertyRangeComponent,
     PropertyListComponent,

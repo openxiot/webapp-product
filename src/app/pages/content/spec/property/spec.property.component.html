@@ -15,9 +15,7 @@
     <th>访问方式</th>
     <th>成员</th>
     <th>状态</th>
-    @if (account.isEditable()) {
-      <th>操作</th>
-    }
+    <th>操作</th>
   </tr>
   </thead>
 
@@ -62,15 +60,18 @@
             }
           }
         </td>
-        @if (account.isEditable()) {
-          <td>
+        <td>
+          @if (account.isEditable()) {
             <a [routerLink]="['/main/spec/property/edit', p.type.toString()]">修改</a>
+
             @if (p.lifecycle === LifeCycle.DEVELOPMENT) {
               <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onDelete(p)">删除</a>
             }
-          </td>
-        }
+          } @else {
+            <a [routerLink]="['/main/spec/property/view', p.type.toString()]">查看</a>
+          }
+        </td>
       </tr>
     }
   </tbody>

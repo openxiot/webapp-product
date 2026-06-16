@@ -1,4 +1,6 @@
-@if (lifecycle === LifeCycle.DEVELOPMENT) {
+@if (isDisabled) {
+  <span>{{ displayHex }}</span>
+} @else {
   <input
     nz-input
     type="text"
@@ -9,6 +11,4 @@
     placeholder="8位字符十六进制"
     maxlength="8"
   />
-} @else {
-  <span>{{ displayHex }}</span>
 }

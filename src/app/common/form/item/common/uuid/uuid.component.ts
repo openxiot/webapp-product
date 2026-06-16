@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
-import { LifeCycle } from "@openxiot/xiot-core-spec-ts";
 
 @Component({
   selector: 'uuid',
@@ -21,9 +20,6 @@ import { LifeCycle } from "@openxiot/xiot-core-spec-ts";
 })
 export class UuidComponent implements ControlValueAccessor {
 
-  protected readonly LifeCycle = LifeCycle;
-
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Output() changed = new EventEmitter<void>();
 
   // 内部真实值：number

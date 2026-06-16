@@ -13,14 +13,7 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {
-  Access,
-  DataFormat, LifeCycle,
-  PropertyDefinition,
-  PropertyType,
-  UrnType, ValueDefinition, ValueList,
-  ValueRange
-} from '@openxiot/xiot-core-spec-ts';
+import {Access, DataFormat, LifeCycle, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
@@ -32,7 +25,6 @@ import {PropertyUnitComponent} from '../../../../../common/form/item/property/un
 import {RangeValue} from '../../../../../common/form/item/property/range/RangeValue';
 import {ValueItem} from '../../../../../common/form/item/property/list/ValueItem';
 import {ConstraintType} from '../../../../../common/form/item/property/constraint/ConstraintType';
-import {NzFlexDirective} from 'ng-zorro-antd/flex';
 import {
   PropertyConstraintComponent
 } from '../../../../../common/form/item/property/constraint/property.constraint.component';
@@ -45,10 +37,10 @@ import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.co
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 
 @Component({
-  selector: 'spec-property-edit',
+  selector: 'spec-property-view',
   standalone: true,
-  templateUrl: './spec.property.edit.component.html',
-  styleUrls: ['./spec.property.edit.component.less'],
+  templateUrl: './spec.property.view.component.html',
+  styleUrls: ['./spec.property.view.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -76,7 +68,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
     LifecycleComponent,
   ],
 })
-export class SpecPropertyEditComponent implements OnInit {
+export class SpecPropertyViewComponent implements OnInit {
 
   protected readonly ConstraintType = ConstraintType;
 
@@ -126,7 +118,8 @@ export class SpecPropertyEditComponent implements OnInit {
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
 
-    // this.form.controls.members.disable();
+    this.form.controls.uuid.disable();
+    this.form.controls.members.disable();
   }
 
   ngOnInit() {
@@ -271,62 +264,6 @@ export class SpecPropertyEditComponent implements OnInit {
     // if (this.form.controls.format.value.formatNumber()) {
     //   this.form.controls.unit.setValue(this.property.unit || '');
     // }
-  }
-
-  protected submitForm() {
-    const value = this.form.value.uuid || 0;
-    const uuid = value.toString(16).padStart(8, '0');
-    const code = this.form.value.code || 'null';
-    const description = new Map<string, string>();
-    description.set('en-US', this.form.value.description?.get('en-US') || 'null');
-    description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
-    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
-
-    const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
-    const def: PropertyDefinition = new PropertyDefinition(type, description);
-    def.format = this.form.value.format || DataFormat.STRING;
-    def.access = this.form.value.access || new Access();
-    def.lifecycle = lifecycle;
-
-    switch (this.form.controls.constraint.value) {
-      case ConstraintType.NONE:
-        break;
-
-      case ConstraintType.RANGE:
-        const range = [this.form.controls.range.value.min, this.form.controls.range.value.max, this.form.controls.range.value.step];
-        def.constraintValue = new ValueRange(def.format, range);
-        break;
-
-      case ConstraintType.LIST:
-        const list = new ValueList();
-
-        for (let item of this.form.controls.list.value) {
-          const value = new ValueDefinition(def.format, item.value || 0, item.desc);
-          list.values.push(value);
-        }
-
-        def.constraintValue = list;
-        break;
-    }
-
-    if (this.combinationValue) {
-      def.members = this.form.controls.members.value.map(x => x.type);
-    }
-
-    this.loading = true;
-    this.service.updatePropertyDefinition(def)
-      .subscribe({
-        next: () => {
-          console.log('updatePropertyDefinition ok');
-          this.loading = false;
-          this.router.navigate(['/main/spec']).then(() => {
-          });
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loading = false;
-        }
-      });
   }
 
   private toConstrainable(format: string): boolean {
