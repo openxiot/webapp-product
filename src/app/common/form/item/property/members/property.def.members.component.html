@@ -3,14 +3,10 @@
     <nz-col [nzSpan]="24">
       <div class="member-row">
         <div class="member-info">
-          <!-- 显示成员属性信息 -->
-          <nz-tag>
-            {{ def.description.get('en-US') || def.description.get('zh-CN') || def.type.name }}
-          </nz-tag>
+          {{ def.description.get('en-US') || def.description.get('zh-CN') || def.type.name }}
         </div>
 
         <div class="member-actions">
-          <!-- 删除按钮 -->
           <button
             type="button"
             nz-button
