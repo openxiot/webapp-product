@@ -45,7 +45,7 @@
 
   @if (account.ns) {
     <nz-page-header-footer>
-      <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
+      <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small" (nzSelectChange)="onTabChanged()">
         <nz-tab nzTitle="设备类型"></nz-tab>
         <nz-tab nzTitle="功能"></nz-tab>
         <nz-tab nzTitle="属性"></nz-tab>
