@@ -54,6 +54,7 @@ import {
   DeviceInstanceServicePropertyDefaultValueComponent
 } from './value/device.instance.service.property.default.value.component';
 import {DefaultValue} from './value/DefaultValue';
+import {NzFlexDirective} from 'ng-zorro-antd/flex';
 
 @Component({
   selector: 'device-instance-service-property',
@@ -85,6 +86,7 @@ import {DefaultValue} from './value/DefaultValue';
     DeviceInstanceServicePropertyListComponent,
     DeviceInstanceServicePropertyUnitComponent,
     DeviceInstanceServicePropertyDefaultValueComponent,
+    NzFlexDirective,
   ],
   providers: [
     NzModalService

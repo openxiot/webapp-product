@@ -8,9 +8,9 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 
 @Component({
-  selector: 'name',
-  templateUrl: './name.component.html',
-  styleUrls: ['./name.component.less'],
+  selector: 'code',
+  templateUrl: './code.component.html',
+  styleUrls: ['./code.component.less'],
   standalone: true,
   imports: [
     NzButtonModule,
@@ -24,12 +24,12 @@ import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: NameComponent,
+      useExisting: CodeComponent,
       multi: true
     }
   ]
 })
-export class NameComponent implements ControlValueAccessor {
+export class CodeComponent implements ControlValueAccessor {
 
   protected readonly LifeCycle = LifeCycle;
 

@@ -15,7 +15,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {DeviceDefinition, DeviceType, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
-import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
+import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 

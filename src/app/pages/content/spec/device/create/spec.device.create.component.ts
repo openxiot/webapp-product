@@ -15,11 +15,11 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {DeviceDefinition, DeviceType, LifeCycle, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
-import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
+import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
-import {UuidComponent} from '../../../../../common/form/item/uuid/uuid.component';
-import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
+import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 
 @Component({
   selector: 'spec-device-create',

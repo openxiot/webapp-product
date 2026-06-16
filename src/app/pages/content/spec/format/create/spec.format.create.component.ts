@@ -20,10 +20,11 @@ import {
   UrnType
 } from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
-import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
+import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
-import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
 
 @Component({
   selector: 'spec-format-create',
@@ -46,6 +47,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/life
     DescriptionComponent,
     TranslatePipe,
     LifecycleComponent,
+    CodeComponent,
   ],
 })
 export class SpecFormatCreateComponent implements OnInit {

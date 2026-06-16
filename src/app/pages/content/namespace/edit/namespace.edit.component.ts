@@ -15,9 +15,9 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NamespaceDefinition, Visibility} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../service/main.service';
-import {DescriptionComponent} from '../../../../common/form/item/description/description.component';
+import {DescriptionComponent} from '../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../service/account.service';
-import {VisibilityComponent} from '../../../../common/form/item/visibility/visibility.component';
+import {VisibilityComponent} from '../../../../common/form/item/common/visibility/visibility.component';
 import {NamespaceNsComponent} from './ns/namespace.ns.component';
 
 @Component({

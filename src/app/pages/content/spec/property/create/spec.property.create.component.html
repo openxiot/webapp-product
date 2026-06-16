@@ -15,23 +15,37 @@
     <nz-card nzBorderless nzSize="small">
       <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">分类</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入设备分类">
-            <input type="text" nz-input formControlName="code" placeholder="请输入设备分类"/>
-          </nz-form-control>
-        </nz-form-item>
-
-        <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入代码">
-            <input type="text" nz-input formControlName="code" placeholder="请输入代码"/>
+          <nz-form-control [nzSpan]="8" [nzErrorTip]="codeErrorTip">
+            <code formControlName="code" [updatable]="true"></code>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">描述</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="description">描述</nz-form-label>
           <nz-form-control [nzSpan]="8" nzErrorTip="描述">
             <description formControlName="description"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="access">访问方式</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="访问方式">
+            <property-access formControlName="access" [updatable]="true"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="format">格式</nz-form-label>
+          <nz-form-control [nzSpan]="8">
+            <property-format formControlName="format" [updatable]="true"></property-format>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="unit">单位</nz-form-label>
+          <nz-form-control [nzSpan]="8">
+            <property-unit formControlName="unit" [updatable]="true"></property-unit>
           </nz-form-control>
         </nz-form-item>
 
@@ -44,3 +58,13 @@
     </nz-card>
   </div>
 </nz-spin>
+
+
+<ng-template #codeErrorTip>
+  @if (form.get('code')?.errors?.['required']) {
+    <span>请输入代码</span>
+  }
+  @if (form.get('code')?.errors?.['pattern']) {
+    <span>代码必须以字母开头，可包含字母、数字、中划线</span>
+  }
+</ng-template>

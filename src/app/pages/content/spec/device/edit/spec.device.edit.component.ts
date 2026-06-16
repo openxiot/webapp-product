@@ -15,15 +15,15 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {DeviceDefinition, DeviceType, LifeCycle, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
-import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
+import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
-import {UuidComponent} from '../../../../../common/form/item/uuid/uuid.component';
+import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 import {
   DeviceInstanceNameComponent
 } from '../../../../../common/device/instance/service/split/detail/property/name/device.instance.name.component';
-import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
-import {NameComponent} from '../../../../../common/form/item/name/name.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
 
 @Component({
   selector: 'spec-device-edit',
@@ -48,7 +48,7 @@ import {NameComponent} from '../../../../../common/form/item/name/name.component
     UuidComponent,
     DeviceInstanceNameComponent,
     LifecycleComponent,
-    NameComponent,
+    CodeComponent,
   ],
 })
 export class SpecDeviceEditComponent implements OnInit {

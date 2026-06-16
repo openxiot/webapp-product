@@ -8,8 +8,8 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {LanguageSelectorComponent} from '../../../dialog/language/language.selector.component';
-import {LangOption} from '../../../dialog/language/LangOption';
+import {LanguageSelectorComponent} from '../../../../dialog/language/language.selector.component';
+import {LangOption} from '../../../../dialog/language/LangOption';
 
 interface LangDesc {
   lang: string;
