@@ -22,6 +22,7 @@ import {UuidComponent} from '../../../../../common/form/item/uuid/uuid.component
 import {
   DeviceInstanceNameComponent
 } from '../../../../../common/device/instance/service/split/detail/property/name/device.instance.name.component';
+import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
 
 @Component({
   selector: 'spec-device-edit',
@@ -45,6 +46,7 @@ import {
     TranslatePipe,
     UuidComponent,
     DeviceInstanceNameComponent,
+    LifecycleComponent,
   ],
 })
 export class SpecDeviceEditComponent implements OnInit {
@@ -55,6 +57,7 @@ export class SpecDeviceEditComponent implements OnInit {
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    lifecycle: FormControl<LifeCycle>,
   }>;
 
   constructor(
@@ -74,6 +77,7 @@ export class SpecDeviceEditComponent implements OnInit {
 
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
   }
 
@@ -97,6 +101,7 @@ export class SpecDeviceEditComponent implements OnInit {
           this.form.controls.code.setValue(namespace.type.name);
           this.form.controls.uuid.setValue(namespace.type.value);
           this.form.controls.description.setValue(namespace.description);
+          this.form.controls.lifecycle.setValue(namespace.lifecycle);
 
           this.loading = false;
         },
@@ -120,20 +125,22 @@ export class SpecDeviceEditComponent implements OnInit {
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
     const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);
     const device: DeviceDefinition = new DeviceDefinition(type, description);
+    device.lifecycle = lifecycle;
 
     this.loading = true;
-    this.service.createDeviceDefinition(device)
+    this.service.updateDeviceDefinition(device)
       .subscribe({
         next: () => {
-          console.log('createSpecDevice ok');
+          console.log('updateDeviceDefinition ok');
           this.loading = false;
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createSpecDevice', error);
+          this.msg.warning('Failed to updateDeviceDefinition', error);
           this.loading = false;
         }
       });

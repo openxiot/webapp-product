@@ -36,6 +36,13 @@
         </nz-form-item>
 
         <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">状态</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="状态">
+            <lifecycle formControlName="lifecycle" [updatable]="true"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
           <nz-form-control [nzSpan]="4" [nzOffset]="4">
             <button nz-button nzType="primary" [disabled]="form.invalid || !form.dirty">提交</button>
           </nz-form-control>
