@@ -17,7 +17,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (s of services; track s.type.value) {
+    @for (s of services; track s.type.name) {
       <tr>
         <td><nz-tag>{{ s.type.shortUUID() }}</nz-tag></td>
         <td>{{ s.type.name }}</td>

@@ -15,7 +15,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
   Access,
-  DataFormat,
+  DataFormat, LifeCycle,
   PropertyDefinition,
   PropertyType,
   UrnType, ValueDefinition, ValueList,
@@ -42,6 +42,7 @@ import {
   PropertyDefMembersComponent
 } from '../../../../../common/form/item/property/members/property.def.members.component';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 
 @Component({
   selector: 'spec-property-create',
@@ -73,6 +74,7 @@ import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.co
     PropertyListComponent,
     PropertyDefMembersComponent,
     UuidComponent,
+    LifecycleComponent,
   ],
 })
 export class SpecPropertyCreateComponent implements OnInit {
@@ -91,6 +93,7 @@ export class SpecPropertyCreateComponent implements OnInit {
     list: FormControl<ValueItem[]>;
     unit: FormControl<string>,
     members: FormControl<PropertyDefinition[]>,
+    lifecycle: FormControl<LifeCycle>,
   }>;
 
   combinationValue: boolean = false;
@@ -118,7 +121,10 @@ export class SpecPropertyCreateComponent implements OnInit {
       list: this.fb.control<ValueItem[]>([]),
       unit: this.fb.control('', [Validators.required]),
       members: this.fb.control<PropertyDefinition[]>([]),
+      lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
+
+    // this.form.controls.members.disable();
   }
 
   ngOnInit() {
@@ -167,11 +173,13 @@ export class SpecPropertyCreateComponent implements OnInit {
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
     const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
     const def: PropertyDefinition = new PropertyDefinition(type, description);
     def.format = this.form.value.format || DataFormat.STRING;
     def.access = this.form.value.access || new Access();
+    def.lifecycle = lifecycle;
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
@@ -208,7 +216,7 @@ export class SpecPropertyCreateComponent implements OnInit {
           });
         },
         error: error => {
-          this.msg.warning('Failed to createPropertyDefinition', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

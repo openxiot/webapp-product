@@ -17,7 +17,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (format of formats; track format.type.value) {
+    @for (format of formats; track format.type.name) {
       <tr>
         <td>{{ format.type.name }}</td>
         <td>{{ format.description.get('zh-CN') }}</td>

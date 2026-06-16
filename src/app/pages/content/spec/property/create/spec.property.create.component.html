@@ -81,7 +81,7 @@
           <nz-form-item nz-flex>
             <nz-form-label [nzSpan]="4" nzRequired>成员列表</nz-form-label>
             <nz-form-control>
-              <property-def-members formControlName="members" [updatable]="true"></property-def-members>
+              <property-def-members formControlName="members"></property-def-members>
             </nz-form-control>
           </nz-form-item>
         }
@@ -90,6 +90,13 @@
           <nz-form-label [nzSpan]="4" nzRequired nzFor="unit">单位</nz-form-label>
           <nz-form-control [nzSpan]="10">
             <property-unit formControlName="unit" [updatable]="true"></property-unit>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
+          <nz-form-control [nzSpan]="8" nzErrorTip="状态">
+            <lifecycle formControlName="lifecycle" [updatable]="true"/>
           </nz-form-control>
         </nz-form-item>
 

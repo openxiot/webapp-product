@@ -17,7 +17,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (unit of units; track unit.type.value) {
+    @for (unit of units; track unit.type.name) {
       <tr>
         <td>{{ unit.type.name }}</td>
         <td>{{ unit.description.get('zh-CN') }}</td>

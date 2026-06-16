@@ -17,7 +17,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (a of actions; track a.type.value) {
+    @for (a of actions; track a.type.name) {
       <tr>
         <td><nz-tag>{{ a.type.shortUUID() }}</nz-tag></td>
         <td>{{ a.type.name }}</td>

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -9,8 +9,19 @@ import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {FormatDefinition, LifeCycle, PropertyDefinition, PropertyType, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
+import {
+  DeviceDefinition,
+  FormatDefinition,
+  LifeCycle,
+  PropertyDefinition,
+  PropertyType,
+  UnitDefinition
+} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {RouterLink} from '@angular/router';
+import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'spec-property',
@@ -26,9 +37,16 @@ import {AccountService} from '../../../../service/account.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
+    NzDividerComponent,
+    RouterLink,
+  ],
+  providers: [
+    NzModalService
   ],
 })
 export class SpecPropertyComponent implements OnInit {
+
+  protected readonly LifeCycle = LifeCycle;
 
   loading: boolean = true;
   properties: PropertyDefinition[] = [];
@@ -41,7 +59,9 @@ export class SpecPropertyComponent implements OnInit {
   units: Map<string, UnitDefinition> = new Map<string, UnitDefinition>();
 
   constructor(
-    private account: AccountService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -121,5 +141,44 @@ export class SpecPropertyComponent implements OnInit {
     }
   }
 
-  protected readonly LifeCycle = LifeCycle;
+  protected onDelete(def: PropertyDefinition) {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个属性定义吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: def.type.toString(),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doDelete(def);
+      }
+    });
+  }
+
+  protected doDelete(def: PropertyDefinition) {
+    this.loading = true;
+    this.service.deletePropertyDefinition(def.type)
+      .subscribe({
+        next: data => {
+          this.properties = this.properties.filter(x => x.type.name !== def.type.name);
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
 }

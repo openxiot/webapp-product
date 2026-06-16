@@ -19,7 +19,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (device of devices; track device.type.toString()) {
+    @for (device of devices; track device.type.name) {
       <tr>
         <td>{{ device.type.name }}</td>
         <td>{{ device.type.shortUUID() }}</td>
@@ -44,8 +44,10 @@
         @if (account.isEditable()) {
           <td>
             <a [routerLink]="['/main/spec/device/edit', device.type.toString()]">修改</a>
-            <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="onDelete(device)">删除</a>
+            @if (account.isEditable() && device.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(device)">删除</a>
+            }
           </td>
         }
       </tr>

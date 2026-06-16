@@ -15,11 +15,14 @@
     <th>访问方式</th>
     <th>成员</th>
     <th>状态</th>
+    @if (account.isEditable()) {
+      <th>操作</th>
+    }
   </tr>
   </thead>
 
   <tbody>
-    @for (p of properties; track p.type.value) {
+    @for (p of properties; track p.type.name) {
       <tr>
         <td><nz-tag>{{ p.type.shortUUID() }}</nz-tag></td>
         <td>{{ p.type.name }}</td>
@@ -59,6 +62,13 @@
             }
           }
         </td>
+          <td>
+            <a [routerLink]="['/main/spec/device/edit', p.type.toString()]">修改</a>
+            @if (account.isEditable() && p.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(p)">删除</a>
+            }
+          </td>
       </tr>
     }
   </tbody>

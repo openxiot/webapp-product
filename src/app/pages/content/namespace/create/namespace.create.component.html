@@ -8,21 +8,21 @@
       <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="name">名字空间</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入名称">
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
             <input type="text" nz-input formControlName="name" placeholder="请输入名称"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="model">描述</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="描述">
+          <nz-form-control [nzSpan]="10" nzErrorTip="描述">
             <description formControlName="description"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="name">可见度</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="可见度">
+          <nz-form-control [nzSpan]="10" nzErrorTip="可见度">
             <visibility formControlName="visibility"/>
           </nz-form-control>
         </nz-form-item>
@@ -36,3 +36,12 @@
     </nz-card>
   </div>
 </nz-spin>
+
+<ng-template #codeErrorTip>
+  @if (form.get('name')?.errors?.['required']) {
+    <span>请输入代码</span>
+  }
+  @if (form.get('name')?.errors?.['pattern']) {
+    <span>名字空间必须以字母开头，可包含字母、数字、中划线</span>
+  }
+</ng-template>
