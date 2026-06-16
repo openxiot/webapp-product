@@ -11,6 +11,7 @@ import {MainI18nService} from '../../../../service/i18n.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {Router} from '@angular/router';
 import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'spec-ns',
@@ -23,7 +24,9 @@ import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
     NzSpinModule,
     NzCardModule,
     NzIconModule,
-    NzSpaceModule
+    NzSpaceModule,
+    NzRowDirective,
+    NzColDirective
   ],
 })
 export class SpecNsComponent implements OnInit {
