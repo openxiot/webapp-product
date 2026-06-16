@@ -100,7 +100,6 @@ export class SpecDeviceComponent implements OnInit {
     });
   }
 
-
   protected doDelete(device: DeviceDefinition) {
     this.loading = true;
     this.service.deleteDeviceDefinition(device.type)

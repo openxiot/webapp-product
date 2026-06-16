@@ -91,7 +91,7 @@ export class SpecUnitCreateComponent implements OnInit {
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: UnitType = UnitType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
+    const type: UnitType = UnitType.create(this.account.ns.namespace, UrnType.UNIT, code, '0000');
     const def: UnitDefinition = new UnitDefinition(type, description);
     def.lifecycle = lifecycle;
 

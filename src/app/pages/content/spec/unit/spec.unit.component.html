@@ -11,6 +11,9 @@
     <th>中文描述</th>
     <th>英文描述</th>
     <th>状态</th>
+    @if (account.isEditable()) {
+      <th>操作</th>
+    }
   </tr>
   </thead>
   <tbody>
@@ -32,6 +35,13 @@
             }
           }
         </td>
+        @if (account.isEditable()) {
+          <td>
+            <a [routerLink]="['/main/spec/unit/edit', unit.type.toString()]">修改</a>
+            <nz-divider nzType="vertical"></nz-divider>
+            <a (click)="onDelete(unit)">删除</a>
+          </td>
+        }
       </tr>
     }
   </tbody>

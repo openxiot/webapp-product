@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -11,6 +11,10 @@ import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {RouterLink} from '@angular/router';
+import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'spec-unit',
@@ -26,15 +30,24 @@ import {AccountService} from '../../../../service/account.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
+    NzDividerComponent,
+    RouterLink,
+  ],
+  providers: [
+    NzModalService
   ],
 })
 export class SpecUnitComponent implements OnInit {
+
+  protected readonly LifeCycle = LifeCycle;
 
   loading: boolean = true;
   units: UnitDefinition[] = [];
 
   constructor(
-    private account: AccountService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -58,5 +71,44 @@ export class SpecUnitComponent implements OnInit {
       })
   }
 
-  protected readonly LifeCycle = LifeCycle;
+  protected onDelete(unit: UnitDefinition) {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个单位吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: unit.type.toString(),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doDelete(unit);
+      }
+    });
+  }
+
+  protected doDelete(unit: UnitDefinition) {
+    this.loading = true;
+    this.service.deleteUnitDefinition(unit.type)
+      .subscribe({
+        next: data => {
+          this.units = this.units.filter(x => x.type.name !== unit.type.name);
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning('Failed to deleteUnitDefinition: ', error);
+        }
+      })
+  }
 }
