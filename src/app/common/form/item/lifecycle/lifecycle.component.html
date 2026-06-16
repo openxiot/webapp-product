@@ -1,0 +1,19 @@
+@if (updatable) {
+  <nz-radio-group [ngModel]="value" nzButtonStyle="solid" (ngModelChange)="onRadioChange($event)">
+    <label nz-radio-button [nzValue]="LifeCycle.DEVELOPMENT">开发中</label>
+    <label nz-radio-button [nzValue]="LifeCycle.PREVIEW">预览</label>
+    <label nz-radio-button [nzValue]="LifeCycle.RELEASED">上线</label>
+  </nz-radio-group>
+} @else {
+  @switch (value) {
+    @case (LifeCycle.DEVELOPMENT) {
+      <nz-tag nzColor="red">开发中</nz-tag>
+    }
+    @case (LifeCycle.PREVIEW) {
+      <nz-tag nzColor="blue">预览</nz-tag>
+    }
+    @case (LifeCycle.RELEASED) {
+      <nz-tag nzColor="green">上线</nz-tag>
+    }
+  }
+}
