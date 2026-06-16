@@ -5,7 +5,6 @@ import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {LanguageSelectorComponent} from '../../../../dialog/language/language.selector.component';
@@ -43,9 +42,7 @@ interface LangDesc {
 })
 export class DescriptionComponent implements ControlValueAccessor {
 
-  protected readonly LifeCycle = LifeCycle;
-
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable = true;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   isDisabled = false;

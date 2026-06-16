@@ -1,4 +1,4 @@
-@if (lifecycle === LifeCycle.DEVELOPMENT) {
+@if (updatable) {
   <nz-row [nzGutter]="[8, 8]">
     @for (item of langList; track item.lang; let i = $index) {
       <nz-col [nzSpan]="24">

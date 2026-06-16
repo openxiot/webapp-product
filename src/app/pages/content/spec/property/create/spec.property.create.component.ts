@@ -65,8 +65,6 @@ import {PropertyListComponent} from '../../../../../common/form/item/property/li
     PropertyFormatComponent,
     PropertyAccessComponent,
     PropertyUnitComponent,
-    DeviceInstanceServicePropertyListComponent,
-    DeviceInstanceServicePropertyRangeComponent,
     NzFlexDirective,
     PropertyConstraintComponent,
     PropertyRangeComponent,
