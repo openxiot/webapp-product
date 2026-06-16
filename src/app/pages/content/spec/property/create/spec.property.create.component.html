@@ -50,7 +50,7 @@
         </nz-form-item>
 
         @if (constrainable) {
-          <nz-form-item nz-flex>
+          <nz-form-item>
             <nz-form-label [nzSpan]="4" nzRequired>取值约束</nz-form-label>
             <nz-form-control [nzSpan]="10">
               <property-constraint formControlName="constraint" [updatable]="true"></property-constraint>
@@ -59,7 +59,7 @@
 
           @switch (form.controls.constraint.value) {
             @case (ConstraintType.RANGE) {
-              <nz-form-item nz-flex>
+              <nz-form-item>
                 <nz-form-label [nzSpan]="4" nzRequired>取值范围</nz-form-label>
                 <nz-form-control [nzSpan]="10">
                   <property-range formControlName="range" [updatable]="true"></property-range>
@@ -67,7 +67,7 @@
               </nz-form-item>
             }
             @case (ConstraintType.LIST) {
-              <nz-form-item nz-flex>
+              <nz-form-item>
                 <nz-form-label [nzSpan]="4" nzRequired>取值列表</nz-form-label>
                 <nz-form-control [nzSpan]="10">
                   <property-list formControlName="list" [updatable]="true"></property-list>
@@ -78,9 +78,9 @@
         }
 
         @if (combinationValue) {
-          <nz-form-item nz-flex>
+          <nz-form-item>
             <nz-form-label [nzSpan]="4" nzRequired>成员列表</nz-form-label>
-            <nz-form-control>
+            <nz-form-control [nzSpan]="10">
               <property-def-members formControlName="members"></property-def-members>
             </nz-form-control>
           </nz-form-item>
@@ -95,7 +95,7 @@
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="状态">
+          <nz-form-control [nzSpan]="10" nzErrorTip="状态">
             <lifecycle formControlName="lifecycle" [updatable]="true"/>
           </nz-form-control>
         </nz-form-item>
