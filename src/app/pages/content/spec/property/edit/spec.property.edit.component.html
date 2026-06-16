@@ -4,7 +4,7 @@
   </nz-page-header>
 
   <ng-template #title>
-    {{ '创建属性' | translate }}
+    {{ '编辑属性' | translate }}
   </ng-template>
 
   <ng-template #subTitle>
@@ -17,7 +17,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
           <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
-            <code formControlName="code" [updatable]="true"></code>
+            <code formControlName="code" [updatable]="false"></code>
           </nz-form-control>
         </nz-form-item>
 
@@ -87,7 +87,7 @@
         }
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="unit">单位</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzFor="unit">单位</nz-form-label>
           <nz-form-control [nzSpan]="10">
             <property-unit formControlName="unit" [updatable]="true"></property-unit>
           </nz-form-control>

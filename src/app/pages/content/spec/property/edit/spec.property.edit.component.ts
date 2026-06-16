@@ -122,7 +122,7 @@ export class SpecPropertyEditComponent implements OnInit {
       constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
       range: this.fb.control(new RangeValue()),
       list: this.fb.control<ValueItem[]>([]),
-      unit: this.fb.control('', [Validators.required]),
+      unit: this.fb.control(''),
       members: this.fb.control<PropertyDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
