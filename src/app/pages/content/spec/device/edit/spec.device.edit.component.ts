@@ -23,6 +23,7 @@ import {
   DeviceInstanceNameComponent
 } from '../../../../../common/device/instance/service/split/detail/property/name/device.instance.name.component';
 import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
+import {NameComponent} from '../../../../../common/form/item/name/name.component';
 
 @Component({
   selector: 'spec-device-edit',
@@ -47,6 +48,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/life
     UuidComponent,
     DeviceInstanceNameComponent,
     LifecycleComponent,
+    NameComponent,
   ],
 })
 export class SpecDeviceEditComponent implements OnInit {

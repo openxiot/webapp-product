@@ -9,6 +9,8 @@ import {SpecActionCreateComponent} from './action/create/spec.action.create.comp
 import {SpecEventCreateComponent} from './event/create/spec.event.create.component';
 import {SpecFormatCreateComponent} from './format/create/spec.format.create.component';
 import {SpecUnitCreateComponent} from './unit/create/spec.unit.create.component';
+import {SpecFormatEditComponent} from './format/edit/spec.format.edit.component';
+import {SpecUnitEditComponent} from './unit/edit/spec.unit.edit.component';
 
 export const SPEC_ROUTES: Routes = [
   {
@@ -56,8 +58,18 @@ export const SPEC_ROUTES: Routes = [
     component: SpecFormatCreateComponent
   },
   {
+    path: 'format/edit/:type',
+    data: { breadcrumb: '格式' },
+    component: SpecFormatEditComponent
+  },
+  {
     path: 'unit/create',
     data: { breadcrumb: '单位' },
     component: SpecUnitCreateComponent
+  },
+  {
+    path: 'unit/edit/:type',
+    data: { breadcrumb: '单位' },
+    component: SpecUnitEditComponent
   },
 ];

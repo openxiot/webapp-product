@@ -46,7 +46,7 @@ export class SpecFormatComponent implements OnInit {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecFormats(this.account.ns.namespace)
+    this.service.getFormatDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.formats = data;

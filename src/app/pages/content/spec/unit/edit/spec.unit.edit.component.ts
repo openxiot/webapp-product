@@ -13,23 +13,19 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {
-  UnitDefinition,
-  UnitType,
-  LifeCycle,
-  UrnType
-} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, UnitDefinition, UnitType, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
+import {NameComponent} from '../../../../../common/form/item/name/name.component';
 
 @Component({
-  selector: 'spec-unit-create',
+  selector: 'spec-unit-edit',
   standalone: true,
-  templateUrl: './spec.unit.create.component.html',
-  styleUrls: ['./spec.unit.create.component.less'],
+  templateUrl: './spec.unit.edit.component.html',
+  styleUrls: ['./spec.unit.edit.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -46,9 +42,10 @@ import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/life
     DescriptionComponent,
     TranslatePipe,
     LifecycleComponent,
+    NameComponent,
   ],
 })
-export class SpecUnitCreateComponent implements OnInit {
+export class SpecUnitEditComponent implements OnInit {
 
   loading: boolean = false;
 
@@ -96,15 +93,15 @@ export class SpecUnitCreateComponent implements OnInit {
     def.lifecycle = lifecycle;
 
     this.loading = true;
-    this.service.createUnitDefinition(def)
+    this.service.updateUnitDefinition(def)
       .subscribe({
         next: () => {
-          console.log('createUnitDefinition ok');
+          console.log('updateUnitDefinition ok');
           this.loading = false;
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createUnitDefinition', error);
+          this.msg.warning('Failed to updateUnitDefinition', error);
           this.loading = false;
         }
       });

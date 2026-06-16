@@ -145,7 +145,7 @@ export class CreatePropertyComponent implements OnInit {
 
   private loadProperties(): void {
     this.loading = true;
-    this.main.getSpecProperties(this.account.ns.namespace)
+    this.main.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.definitions = new Map(data.map(item => [item.type.name, item]));

@@ -7,7 +7,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {EventDefinition, LifeCycle, PropertyDefinition, PropertyType} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
@@ -49,7 +49,7 @@ export class SpecEventComponent implements OnInit {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecEvents(this.account.ns.namespace)
+    this.service.getEventDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.events = data;
@@ -61,7 +61,7 @@ export class SpecEventComponent implements OnInit {
       })
 
     this.loadingProperties = true;
-    this.service.getSpecProperties(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));

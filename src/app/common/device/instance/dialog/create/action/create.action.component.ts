@@ -107,7 +107,7 @@ export class CreateActionComponent implements OnInit {
 
   private loadActions(): void {
     this.loading = true;
-    this.main.getSpecActions(this.account.ns.namespace)
+    this.main.getActionDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.definitions = data;
@@ -130,7 +130,7 @@ export class CreateActionComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.main.getSpecProperties(this.account.ns.namespace)
+    this.main.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));

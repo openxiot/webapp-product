@@ -13,11 +13,17 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceDefinition, DeviceType, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {
+  FormatDefinition,
+  FormatType,
+  LifeCycle,
+  UrnType
+} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
 
 @Component({
   selector: 'spec-format-create',
@@ -39,6 +45,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
+    LifecycleComponent,
   ],
 })
 export class SpecFormatCreateComponent implements OnInit {
@@ -46,9 +53,9 @@ export class SpecFormatCreateComponent implements OnInit {
   loading: boolean = false;
 
   form: FormGroup<{
-    category: FormControl<string>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    lifecycle: FormControl<LifeCycle>,
   }>;
 
   constructor(
@@ -60,9 +67,13 @@ export class SpecFormatCreateComponent implements OnInit {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      category: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
   }
 
@@ -78,22 +89,24 @@ export class SpecFormatCreateComponent implements OnInit {
     const description = new Map<string, string>();
     description.set('en-US', this.form.value.description?.get('en-US') || 'null');
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
-    const device: DeviceDefinition = new DeviceDefinition(type, description);
+    const type: FormatType = FormatType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
+    const def: FormatDefinition = new FormatDefinition(type, description);
+    def.lifecycle = lifecycle;
 
     this.loading = true;
-    // this.service.createSpecDevice(this.account.organization.id, device)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('updateProduct ok');
-    //       this.loading = false;
-    //       this.router.navigate(['/main/namespace']).then(() => {});
-    //     },
-    //     error: error => {
-    //       this.msg.warning('Failed to createProduct', error);
-    //       this.loading = false;
-    //     }
-    //   });
+    this.service.createFormatDefinition(def)
+      .subscribe({
+        next: () => {
+          console.log('createFormatDefinition ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {});
+        },
+        error: error => {
+          this.msg.warning('Failed to createFormatDefinition', error);
+          this.loading = false;
+        }
+      });
   }
 }

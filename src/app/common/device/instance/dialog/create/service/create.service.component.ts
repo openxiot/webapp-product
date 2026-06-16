@@ -139,7 +139,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadServices(): void {
     this.loadingServices = true;
-    this.service.getSpecServices(this.account.ns.namespace)
+    this.service.getServiceDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.definitions = data;
@@ -161,7 +161,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.service.getSpecProperties(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
@@ -175,7 +175,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadActions(): void {
     this.loadingActions = true;
-    this.service.getSpecActions(this.account.ns.namespace)
+    this.service.getActionDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.actions = new Map(data.map(item => [item.type.name, item]));
@@ -189,7 +189,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadEvents(): void {
     this.loadingEvents = true;
-    this.service.getSpecEvents(this.account.ns.namespace)
+    this.service.getEventDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.events = new Map(data.map(item => [item.type.name, item]));

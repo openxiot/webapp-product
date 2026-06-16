@@ -53,7 +53,7 @@ export class SpecPropertyComponent implements OnInit {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecProperties(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = data;
@@ -66,7 +66,7 @@ export class SpecPropertyComponent implements OnInit {
       })
 
     this.loadingFormats = true;
-    this.service.getSpecFormats(this.account.ns.namespace)
+    this.service.getFormatDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.formats = new Map(data.map(item => [item.type.name, item]));
@@ -78,7 +78,7 @@ export class SpecPropertyComponent implements OnInit {
       })
 
     this.loadingUnits = true;
-    this.service.getSpecUnits(this.account.ns.namespace)
+    this.service.getUnitDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.units = new Map(data.map(item => [item.type.name, item]));

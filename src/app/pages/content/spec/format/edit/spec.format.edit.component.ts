@@ -14,8 +14,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
-  UnitDefinition,
-  UnitType,
+  FormatDefinition,
+  FormatType,
   LifeCycle,
   UrnType
 } from '@openxiot/xiot-core-spec-ts';
@@ -24,12 +24,13 @@ import {DescriptionComponent} from '../../../../../common/form/item/description/
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/lifecycle.component';
+import {NameComponent} from '../../../../../common/form/item/name/name.component';
 
 @Component({
-  selector: 'spec-unit-create',
+  selector: 'spec-format-edit',
   standalone: true,
-  templateUrl: './spec.unit.create.component.html',
-  styleUrls: ['./spec.unit.create.component.less'],
+  templateUrl: './spec.format.edit.component.html',
+  styleUrls: ['./spec.format.edit.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -46,9 +47,10 @@ import {LifecycleComponent} from '../../../../../common/form/item/lifecycle/life
     DescriptionComponent,
     TranslatePipe,
     LifecycleComponent,
+    NameComponent,
   ],
 })
-export class SpecUnitCreateComponent implements OnInit {
+export class SpecFormatEditComponent implements OnInit {
 
   loading: boolean = false;
 
@@ -91,20 +93,20 @@ export class SpecUnitCreateComponent implements OnInit {
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: UnitType = UnitType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
-    const def: UnitDefinition = new UnitDefinition(type, description);
+    const type: FormatType = FormatType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
+    const def: FormatDefinition = new FormatDefinition(type, description);
     def.lifecycle = lifecycle;
 
     this.loading = true;
-    this.service.createUnitDefinition(def)
+    this.service.updateFormatDefinition(def)
       .subscribe({
         next: () => {
-          console.log('createUnitDefinition ok');
+          console.log('updateFormatDefinition ok');
           this.loading = false;
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createUnitDefinition', error);
+          this.msg.warning('Failed to updateFormatDefinition', error);
           this.loading = false;
         }
       });

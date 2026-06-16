@@ -3,18 +3,6 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {lastValueFrom, map, Observable} from "rxjs";
 import {OxResponse} from "./response/OxResponse";
-import {SpecUnits} from '../typedef/define/spec/SpecUnits';
-import {SpecUnitsCodec} from '../typedef/codec/spec/SpecUnitsCodec';
-import {SpecFormats} from '../typedef/define/spec/SpecFormats';
-import {SpecFormatsCodec} from '../typedef/codec/spec/SpecFormatsCodec';
-import {SpecProperties} from '../typedef/define/spec/SpecProperties';
-import {SpecPropertiesCodec} from '../typedef/codec/spec/SpecPropertiesCodec';
-import {SpecActions} from '../typedef/define/spec/SpecActions';
-import {SpecActionsCodec} from '../typedef/codec/spec/SpecActionsCodec';
-import {SpecEvents} from '../typedef/define/spec/SpecEvents';
-import {SpecEventsCodec} from '../typedef/codec/spec/SpecEventsCodec';
-import {SpecServices} from '../typedef/define/spec/SpecServices';
-import {SpecServicesCodec} from '../typedef/codec/spec/SpecServicesCodec';
 import {SpecTemplatesCodec} from '../typedef/codec/template/SpecTemplatesCodec';
 import {SpecTemplates} from '../typedef/define/template/SpecTemplates';
 import {
@@ -43,7 +31,7 @@ import {
   NamespaceDefinitionCodec, DeviceDefinition, DeviceDefinitionCodec, DeviceType, ServiceDefinition,
   ServiceDefinitionCodec, ActionDefinition, ActionDefinitionCodec, EventDefinition, EventDefinitionCodec,
   PropertyDefinition, PropertyDefinitionCodec, FormatDefinition, FormatDefinitionCodec, UnitDefinition,
-  UnitDefinitionCodec
+  UnitDefinitionCodec, ActionType, ServiceType, EventType, FormatType, PropertyType, UnitType
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -173,6 +161,8 @@ export class MainService {
     }
   }
 
+  // device
+
   createDeviceDefinition(def: DeviceDefinition): Observable<void> {
     return this.http
       .post<OxResponse>(`${this.server}/v1/spec/device/one`, DeviceDefinitionCodec.encode(def))
@@ -203,37 +193,190 @@ export class MainService {
       .pipe(map(response => DeviceDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecServices(ns: string): Observable<ServiceDefinition[]> {
+  // service
+
+  createServiceDefinition(def: ServiceDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/service/one`, ServiceDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deleteServiceDefinition(type: ServiceType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/service/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updateServiceDefinition(def: ServiceDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/service/one`, ServiceDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getServiceDefinition(type: string): Observable<ServiceDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/service/one/${type}`)
+      .pipe(map(response => ServiceDefinitionCodec.decode(response.data)));
+  }
+
+  getServiceDefinitions(ns: string): Observable<ServiceDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/service/many/${ns}`)
       .pipe(map(response => ServiceDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecActions(ns: string): Observable<ActionDefinition[]> {
+  // action
+
+  createActionDefinition(def: ActionDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/action/one`, ActionDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deleteActionDefinition(type: ActionType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/action/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updateActionDefinition(def: ActionDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/action/one`, ActionDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getActionDefinition(type: string): Observable<ActionDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/action/one/${type}`)
+      .pipe(map(response => ActionDefinitionCodec.decode(response.data)));
+  }
+
+  getActionDefinitions(ns: string): Observable<ActionDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/action/many/${ns}`)
       .pipe(map(response => ActionDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecEvents(ns: string): Observable<EventDefinition[]> {
+  // event
+
+  createEventDefinition(def: EventDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/event/one`, EventDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deleteEventDefinition(type: EventType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/event/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updateEventDefinition(def: EventDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/event/one`, EventDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getEventDefinition(type: string): Observable<EventDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/event/one/${type}`)
+      .pipe(map(response => EventDefinitionCodec.decode(response.data)));
+  }
+
+  getEventDefinitions(ns: string): Observable<EventDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/event/many/${ns}`)
       .pipe(map(response => EventDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecProperties(ns: string): Observable<PropertyDefinition[]> {
+  // property
+  createPropertyDefinition(def: PropertyDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/property/one`, PropertyDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deletePropertyDefinition(type: PropertyType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/property/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updatePropertyDefinition(def: PropertyDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/property/one`, PropertyDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getPropertyDefinition(type: string): Observable<PropertyDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/property/one/${type}`)
+      .pipe(map(response => PropertyDefinitionCodec.decode(response.data)));
+  }
+
+  getPropertyDefinitions(ns: string): Observable<PropertyDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/property/many/${ns}`)
       .pipe(map(response => PropertyDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecFormats(ns: string): Observable<FormatDefinition[]> {
+  // format
+  createFormatDefinition(def: FormatDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/format/one`, FormatDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deleteFormatDefinition(type: FormatType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/format/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updateFormatDefinition(def: FormatDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/format/one`, FormatDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getFormatDefinition(type: string): Observable<FormatDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/format/one/${type}`)
+      .pipe(map(response => FormatDefinitionCodec.decode(response.data)));
+  }
+
+  getFormatDefinitions(ns: string): Observable<FormatDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/format/many/${ns}`)
       .pipe(map(response => FormatDefinitionCodec.decodeArray(response.data)));
   }
 
-  getSpecUnits(ns: string): Observable<UnitDefinition[]> {
+  // unit
+  createUnitDefinition(def: UnitDefinition): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/unit/one`, UnitDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  deleteUnitDefinition(type: UnitType): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/spec/unit/one/${type.toString()}`)
+      .pipe(map(() => undefined));
+  }
+
+  updateUnitDefinition(def: UnitDefinition): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/spec/unit/one`, UnitDefinitionCodec.encode(def))
+      .pipe(map(() => undefined));
+  }
+
+  getUnitDefinition(type: string): Observable<UnitDefinition> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/spec/format/one/${type}`)
+      .pipe(map(response => UnitDefinitionCodec.decode(response.data)));
+  }
+
+  getUnitDefinitions(ns: string): Observable<UnitDefinition[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/unit/many/${ns}`)
       .pipe(map(response => UnitDefinitionCodec.decodeArray(response.data)));

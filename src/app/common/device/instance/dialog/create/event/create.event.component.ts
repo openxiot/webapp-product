@@ -105,7 +105,7 @@ export class CreateEventComponent implements OnInit {
 
   private loadEvents(): void {
     this.loading = true;
-    this.main.getSpecEvents(this.account.ns.namespace)
+    this.main.getEventDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.definitions = data;
@@ -128,7 +128,7 @@ export class CreateEventComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.main.getSpecProperties(this.account.ns.namespace)
+    this.main.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));

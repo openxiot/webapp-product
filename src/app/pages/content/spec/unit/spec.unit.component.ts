@@ -7,9 +7,9 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {LifeCycle, ObjectWithLifecycle, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
 
 @Component({
@@ -46,7 +46,7 @@ export class SpecUnitComponent implements OnInit {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getSpecUnits(this.account.ns.namespace)
+    this.service.getUnitDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.units = data;
