@@ -10,7 +10,6 @@ import {MainService} from '../../../../service/main.service';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {
-  DeviceDefinition,
   FormatDefinition,
   LifeCycle,
   PropertyDefinition,

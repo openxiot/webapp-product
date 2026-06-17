@@ -17,6 +17,7 @@ import {SpecFormatCreateComponent} from './format/create/spec.format.create.comp
 import {SpecUnitCreateComponent} from './unit/create/spec.unit.create.component';
 import {SpecFormatEditComponent} from './format/edit/spec.format.edit.component';
 import {SpecUnitEditComponent} from './unit/edit/spec.unit.edit.component';
+import {SpecFormatAddComponent} from './format/add/spec.format.add.component';
 
 export const SPEC_ROUTES: Routes = [
   {
@@ -92,6 +93,11 @@ export const SPEC_ROUTES: Routes = [
     path: 'format/create',
     data: { breadcrumb: '格式' },
     component: SpecFormatCreateComponent
+  },
+  {
+    path: 'format/add',
+    data: { breadcrumb: '格式' },
+    component: SpecFormatAddComponent
   },
   {
     path: 'format/edit/:type',

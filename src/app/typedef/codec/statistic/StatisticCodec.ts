@@ -6,6 +6,7 @@ export class StatisticCodec {
     x.products = o.products || 0;
     x.templates = o.templates || 0;
     x.specifications = o.specifications || 0;
+    x.organizations = o.organizations || 0;
     return x;
   }
 }

@@ -38,8 +38,11 @@
         @if (account.isEditable()) {
           <td>
             <a [routerLink]="['/main/spec/format/edit', format.type.toString()]">修改</a>
-            <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="onDelete(format)">删除</a>
+
+            @if (format.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(format)">删除</a>
+            }
           </td>
         }
       </tr>

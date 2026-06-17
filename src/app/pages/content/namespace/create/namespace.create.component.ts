@@ -97,7 +97,7 @@ export class NamespaceCreateComponent implements OnInit {
           this.router.navigate(['/main/namespace']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createNamespace', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

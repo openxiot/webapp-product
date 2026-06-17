@@ -44,7 +44,7 @@
         @if (account.isEditable()) {
           <td>
             <a [routerLink]="['/main/spec/device/edit', device.type.toString()]">修改</a>
-            @if (account.isEditable() && device.lifecycle === LifeCycle.DEVELOPMENT) {
+            @if (device.lifecycle === LifeCycle.DEVELOPMENT) {
               <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onDelete(device)">删除</a>
             }

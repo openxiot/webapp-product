@@ -38,8 +38,11 @@
         @if (account.isEditable()) {
           <td>
             <a [routerLink]="['/main/spec/unit/edit', unit.type.toString()]">修改</a>
-            <nz-divider nzType="vertical"></nz-divider>
-            <a (click)="onDelete(unit)">删除</a>
+
+            @if (unit.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(unit)">删除</a>
+            }
           </td>
         }
       </tr>

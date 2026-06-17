@@ -66,7 +66,7 @@ export class SpecFormatComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecFormats: ', error);
+          this.msg.warning(error);
         }
       })
   }

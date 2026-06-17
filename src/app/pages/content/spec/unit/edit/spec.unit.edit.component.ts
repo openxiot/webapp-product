@@ -75,6 +75,30 @@ export class SpecUnitEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      const type: string = params['type'] || '';
+      this.load(type);
+    });
+  }
+
+  private load(type: string) {
+    console.log('reload');
+
+    this.loading = true;
+
+    this.service.getUnitDefinition(type)
+      .subscribe({
+        next: (namespace) => {
+          this.form.controls.code.setValue(namespace.type.name);
+          this.form.controls.description.setValue(namespace.description);
+          this.form.controls.lifecycle.setValue(namespace.lifecycle);
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 
   protected onBack() {
