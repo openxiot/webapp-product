@@ -9,7 +9,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
-import {CreateServiceComponent} from '../dialog/instance/create/service/create.service.component';
+import {CreateServiceComponent} from '../../../dialog/instance/create/service/create.service.component';
 import {ServiceType} from '@openxiot/xiot-core-spec-ts';
 
 @Component({

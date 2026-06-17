@@ -17,7 +17,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
           <nz-form-control [nzSpan]="8" [nzErrorTip]="codeErrorTip">
-            <input type="text" nz-input formControlName="code" placeholder="请输入代码"/>
+            <code formControlName="code" [updatable]="true"></code>
           </nz-form-control>
         </nz-form-item>
 

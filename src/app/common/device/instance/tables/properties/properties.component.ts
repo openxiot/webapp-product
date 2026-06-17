@@ -12,14 +12,14 @@ import {PropertyReaderComponent} from './read/property.reader.component';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {FormsModule} from '@angular/forms';
-import {EditStringComponent} from '../../dialog/instance/edit/string/edit.string.component';
-import {EditableString} from '../../dialog/instance/edit/string/EditableString';
+import {EditStringComponent} from '../../../../dialog/instance/edit/string/edit.string.component';
+import {EditableString} from '../../../../dialog/instance/edit/string/EditableString';
 import {ConfirmComponent} from '../../../../dialog/confirm/confirm.component';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {PropertyValueComponent} from './property-value/property-value.component';
 import {PropertyMemberComponent} from './member/property-member.component';
-import {EditableProperty} from '../../dialog/instance/edit/property/EditableProperty';
-import {EditPropertyComponent} from '../../dialog/instance/edit/property/edit.property.component';
+import {EditableProperty} from '../../../../dialog/instance/edit/property/EditableProperty';
+import {EditPropertyComponent} from '../../../../dialog/instance/edit/property/edit.property.component';
 
 @Component({
   selector: 'editor-properties',

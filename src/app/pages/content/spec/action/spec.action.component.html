@@ -1,7 +1,6 @@
 <nz-table
   nzShowSizeChanger
   nzSize="small"
-  [nzTitle]="title"
   [nzData]="actions"
   [nzFrontPagination]="false"
   [nzLoading]="loading"
@@ -53,12 +52,3 @@
     }
   </tbody>
 </nz-table>
-
-<ng-template #title>
-  <span>
-    <span>一共 {{ actions.length }} 个方法</span>
-    <span style="float: right">
-      <a>添加</a>
-    </span>
-  </span>
-</ng-template>

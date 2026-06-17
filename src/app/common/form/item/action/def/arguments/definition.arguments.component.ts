@@ -1,4 +1,13 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewContainerRef
+} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -8,15 +17,17 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {Argument, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
+import {ArgumentDefinition, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {SelectArgumentComponent} from '../../../../../../../dialog/instance/select/argument/select.argument.component';
-import {SelectArgument} from '../../../../../../../dialog/instance/select/argument/SelectArgument';
+import {DefinitionSelectArgument} from '../../../../../dialog/definition/select/argument/DefinitionSelectArgument';
+import {
+  DefinitionSelectArgumentComponent
+} from '../../../../../dialog/definition/select/argument/definition.select.argument.component';
 
 @Component({
-  selector: 'device-instance-arguments',
-  templateUrl: './device.instance.arguments.component.html',
-  styleUrls: ['./device.instance.arguments.component.less'],
+  selector: 'definition-arguments',
+  templateUrl: './definition.arguments.component.html',
+  styleUrls: ['./definition.arguments.component.less'],
   standalone: true,
   imports: [
     FormsModule,
@@ -35,37 +46,36 @@ import {SelectArgument} from '../../../../../../../dialog/instance/select/argume
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DeviceInstanceArgumentsComponent,
+      useExisting: DefinitionArgumentsComponent,
       multi: true
     },
     NzModalService
   ]
 })
-export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, OnChanges {
+export class DefinitionArgumentsComponent implements OnInit, ControlValueAccessor, OnChanges {
 
-  protected readonly LifeCycle = LifeCycle;
-
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable: boolean = true;
+  @Input() language!: string;
+  @Input() properties: PropertyDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  @Input() service!: Service;
-
-  @Input() language!: string;
-
   // 组件内部维护的值
-  arguments: Argument[] = [];
+  arguments: ArgumentDefinition[] = [];
 
   // 禁用状态
   isDisabled = false;
 
   // 定义变化回调和触摸回调
-  onChange: (value: Argument[]) => void = () => {};
+  onChange: (value: ArgumentDefinition[]) => void = () => {};
   onTouched: () => void = () => {};
 
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
   ) {
+  }
+
+  ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -101,31 +111,29 @@ export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, O
     this.changed.emit();
   }
 
-  protected getDescription(arg: Argument): string {
-    if (this.service) {
-      const p = this.service.properties.get(arg.piid);
-      if (p) {
+  protected getDescription(arg: ArgumentDefinition): string {
+    const p = this.properties.find(x => x.type.name === arg.type.name);
+    if (p) {
         return p.description.get(this.language) || p.description.get('en-US') || '';
-      }
     }
 
     return '?';
   }
 
-  protected removeArgument(arg: Argument): void {
-    this.arguments = this.arguments.filter(x => x.piid !== arg.piid);
+  protected removeArgument(arg: ArgumentDefinition): void {
+    this.arguments = this.arguments.filter(x => x.type.name !== arg.type.name);
     this.onChanged();
   }
 
   protected addArgument(): void {
-    const exclusion = new Set(this.arguments.map(x => x.piid));
+    const exclusion = new Set(this.arguments.map(x => x.type.name));
 
-    const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
+    const modal = this.modal.create<DefinitionSelectArgumentComponent, DefinitionSelectArgument, Set<PropertyDefinition>>({
       nzTitle: '选择属性作为参数',
       nzWidth: 1000,
-      nzContent: SelectArgumentComponent,
+      nzContent: DefinitionSelectArgumentComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new SelectArgument(this.service, exclusion, this.language),
+      nzData: new DefinitionSelectArgument(this.properties, exclusion, this.language),
       nzFooter: [
         {
           label: '取消',
@@ -147,12 +155,12 @@ export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, O
     });
   }
 
-  private addArguments(result: Set<number>) {
-    for (let iid of result) {
-      this.arguments.push(new Argument(iid));
+  private addArguments(result: Set<PropertyDefinition>) {
+    for (let p of result) {
+      this.arguments.push(new ArgumentDefinition(p.type));
     }
 
-    this.arguments = this.arguments.sort((a, b) => a.piid - b.piid);
+    this.arguments = this.arguments.sort((a, b) => a.type.name.localeCompare(b.type.name));
 
     this.onChanged();
   }

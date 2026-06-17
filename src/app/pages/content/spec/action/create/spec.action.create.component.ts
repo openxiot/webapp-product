@@ -13,11 +13,22 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceDefinition, DeviceType, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {
+  DeviceDefinition,
+  DeviceType, LifeCycle,
+  PropertyDefinition,
+  UrnType
+} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {
+  DefinitionArgumentsComponent
+} from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
 
 @Component({
   selector: 'spec-action-create',
@@ -39,16 +50,24 @@ import {TranslatePipe} from '@ngx-translate/core';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
+    CodeComponent,
+    UuidComponent,
+    LifecycleComponent,
+    DefinitionArgumentsComponent,
   ],
 })
 export class SpecActionCreateComponent implements OnInit {
 
   loading: boolean = false;
+  properties: PropertyDefinition[] = [];
 
   form: FormGroup<{
-    category: FormControl<string>,
+    uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    argumentsIn: FormControl<PropertyDefinition[]>,
+    argumentsOut: FormControl<PropertyDefinition[]>,
+    lifecycle: FormControl<LifeCycle>,
   }>;
 
   constructor(
@@ -56,17 +75,37 @@ export class SpecActionCreateComponent implements OnInit {
     protected account: AccountService,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
-    private msg: NzMessageService,
     private service: MainService,
+    private msg: NzMessageService,
   ) {
     this.form = this.fb.group({
-      category: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      argumentsIn: this.fb.control<PropertyDefinition[]>([]),
+      argumentsOut: this.fb.control<PropertyDefinition[]>([]),
+      lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
   }
 
   ngOnInit() {
+  }
+
+  private loadDataFromServer(): void {
+    this.loading = true;
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.properties = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   protected onBack() {

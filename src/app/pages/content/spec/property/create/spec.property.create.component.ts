@@ -26,21 +26,20 @@ import {DescriptionComponent} from '../../../../../common/form/item/common/descr
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
-import {PropertyFormatComponent} from '../../../../../common/form/item/property/format/property.format.component';
-import {PropertyAccessComponent} from '../../../../../common/form/item/property/access/property.access.component';
-import {PropertyUnitComponent} from '../../../../../common/form/item/property/unit/property.unit.component';
-import {RangeValue} from '../../../../../common/form/item/property/range/RangeValue';
-import {ValueItem} from '../../../../../common/form/item/property/list/ValueItem';
-import {ConstraintType} from '../../../../../common/form/item/property/constraint/ConstraintType';
-import {NzFlexDirective} from 'ng-zorro-antd/flex';
+import {PropertyFormatComponent} from '../../../../../common/form/item/property/common/format/property.format.component';
+import {PropertyAccessComponent} from '../../../../../common/form/item/property/common/access/property.access.component';
+import {PropertyUnitComponent} from '../../../../../common/form/item/property/common/unit/property.unit.component';
+import {RangeValue} from '../../../../../common/form/item/property/common/range/RangeValue';
+import {ValueItem} from '../../../../../common/form/item/property/common/list/ValueItem';
+import {ConstraintType} from '../../../../../common/form/item/property/common/constraint/ConstraintType';
 import {
   PropertyConstraintComponent
-} from '../../../../../common/form/item/property/constraint/property.constraint.component';
-import {PropertyRangeComponent} from '../../../../../common/form/item/property/range/property.range.component';
-import {PropertyListComponent} from '../../../../../common/form/item/property/list/property.list.component';
+} from '../../../../../common/form/item/property/common/constraint/property.constraint.component';
+import {PropertyRangeComponent} from '../../../../../common/form/item/property/common/range/property.range.component';
+import {PropertyListComponent} from '../../../../../common/form/item/property/common/list/property.list.component';
 import {
-  PropertyDefMembersComponent
-} from '../../../../../common/form/item/property/members/property.def.members.component';
+  PropertyDefinitionMembersComponent
+} from '../../../../../common/form/item/property/def/members/property.definition.members.component';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 
@@ -71,7 +70,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
     PropertyConstraintComponent,
     PropertyRangeComponent,
     PropertyListComponent,
-    PropertyDefMembersComponent,
+    PropertyDefinitionMembersComponent,
     UuidComponent,
     LifecycleComponent,
   ],
@@ -80,6 +79,7 @@ export class SpecPropertyCreateComponent implements OnInit {
 
   protected readonly ConstraintType = ConstraintType;
   loading: boolean = false;
+  properties: PropertyDefinition[] = [];
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -122,11 +122,24 @@ export class SpecPropertyCreateComponent implements OnInit {
       members: this.fb.control<PropertyDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
-
-    // this.form.controls.members.disable();
   }
 
   ngOnInit() {
+    this.loadPropertyDefinitions();
+  }
+
+  private loadPropertyDefinitions(): void {
+    this.loading = true;
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.properties = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   protected onBack() {

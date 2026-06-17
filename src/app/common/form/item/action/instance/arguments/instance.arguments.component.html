@@ -1,0 +1,41 @@
+<nz-row [nzGutter]="[8, 8]">
+
+  @for (arg of arguments; track arg.piid) {
+    <nz-col [nzSpan]="24">
+      <nz-row [nzGutter]="[8, 8]">
+        <nz-col [nzSpan]="6" class="argument">
+          <span><nz-tag nzColor="blue">{{ arg.piid }}</nz-tag></span>
+          <span>{{ getDescription(arg) }}</span>
+        </nz-col>
+
+        <nz-col [nzSpan]="15">
+          <nz-space nzDirection="horizontal">
+            <nz-input-number-group *nzSpaceItem nzAddOnBefore="最少" nzAddOnAfter="次">
+              <nz-input-number [(ngModel)]="arg.minRepeat" (ngModelChange)="onChanged()" [nzDisabled]="lifecycle !== LifeCycle.DEVELOPMENT"></nz-input-number>
+            </nz-input-number-group>
+
+            <nz-input-number-group *nzSpaceItem nzAddOnBefore="最多" nzAddOnAfter="次">
+              <nz-input-number [(ngModel)]="arg.maxRepeat" (ngModelChange)="onChanged()" [nzDisabled]="lifecycle !== LifeCycle.DEVELOPMENT"></nz-input-number>
+            </nz-input-number-group>
+          </nz-space>
+        </nz-col>
+
+        @if (lifecycle === LifeCycle.DEVELOPMENT) {
+          <nz-col [nzSpan]="1">
+            <button nz-button nzType="dashed" nzDanger (click)="removeArgument(arg)" style="width: 40px" type="button">
+              <span nz-icon nzType="delete"></span>
+            </button>
+          </nz-col>
+        }
+      </nz-row>
+    </nz-col>
+  }
+
+  @if (lifecycle === LifeCycle.DEVELOPMENT) {
+    <nz-col [nzSpan]="24">
+      <button nz-button nzType="dashed" (click)="addArgument()" style="width: 100px" type="button">
+        <span nz-icon nzType="plus"></span>
+      </button>
+    </nz-col>
+  }
+</nz-row>

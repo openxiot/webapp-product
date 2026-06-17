@@ -20,6 +20,7 @@ import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
 
 @Component({
   selector: 'spec-device-create',
@@ -43,6 +44,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
     TranslatePipe,
     UuidComponent,
     LifecycleComponent,
+    CodeComponent,
   ],
 })
 export class SpecDeviceCreateComponent implements OnInit {

@@ -10,13 +10,13 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {Argument, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {SelectArgumentComponent} from '../../../../../../../dialog/instance/select/argument/select.argument.component';
-import {SelectArgument} from '../../../../../../../dialog/instance/select/argument/SelectArgument';
+import {SelectArgumentComponent} from '../../../../../dialog/instance/select/argument/select.argument.component';
+import {SelectArgument} from '../../../../../dialog/instance/select/argument/SelectArgument';
 
 @Component({
-  selector: 'device-instance-arguments',
-  templateUrl: './device.instance.arguments.component.html',
-  styleUrls: ['./device.instance.arguments.component.less'],
+  selector: 'instance-arguments',
+  templateUrl: './instance.arguments.component.html',
+  styleUrls: ['./instance.arguments.component.less'],
   standalone: true,
   imports: [
     FormsModule,
@@ -35,13 +35,13 @@ import {SelectArgument} from '../../../../../../../dialog/instance/select/argume
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DeviceInstanceArgumentsComponent,
+      useExisting: InstanceArgumentsComponent,
       multi: true
     },
     NzModalService
   ]
 })
-export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, OnChanges {
+export class InstanceArgumentsComponent implements ControlValueAccessor, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
