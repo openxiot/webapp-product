@@ -19,9 +19,6 @@ import {DescriptionComponent} from '../../../../../common/form/item/common/descr
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
-import {
-  DeviceInstanceNameComponent
-} from '../../../../../common/device/instance/service/split/detail/property/name/device.instance.name.component';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
 
@@ -107,7 +104,7 @@ export class SpecDeviceEditComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to createNamespace', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });
@@ -139,7 +136,7 @@ export class SpecDeviceEditComponent implements OnInit {
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to updateDeviceDefinition', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

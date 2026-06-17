@@ -13,11 +13,24 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceDefinition, DeviceType, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {
+  ActionDefinition,
+  ActionType,
+  ArgumentDefinition, EventDefinition,
+  LifeCycle,
+  PropertyDefinition,
+  UrnType
+} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {
+  DefinitionArgumentsComponent
+} from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
 
 @Component({
   selector: 'spec-event-create',
@@ -39,16 +52,23 @@ import {TranslatePipe} from '@ngx-translate/core';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
+    CodeComponent,
+    UuidComponent,
+    LifecycleComponent,
+    DefinitionArgumentsComponent,
   ],
 })
 export class SpecEventCreateComponent implements OnInit {
 
   loading: boolean = false;
+  properties: PropertyDefinition[] = [];
 
   form: FormGroup<{
-    category: FormControl<string>,
+    uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    arguments: FormControl<ArgumentDefinition[]>,
+    lifecycle: FormControl<LifeCycle>,
   }>;
 
   constructor(
@@ -56,17 +76,37 @@ export class SpecEventCreateComponent implements OnInit {
     protected account: AccountService,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
-    private msg: NzMessageService,
     private service: MainService,
+    private msg: NzMessageService,
   ) {
     this.form = this.fb.group({
-      category: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      arguments: this.fb.control<ArgumentDefinition[]>([]),
+      lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
   }
 
   ngOnInit() {
+    this.loadProperties();
+  }
+
+  private loadProperties(): void {
+    this.loading = true;
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.properties = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   protected onBack() {
@@ -74,24 +114,30 @@ export class SpecEventCreateComponent implements OnInit {
   }
 
   protected submitForm() {
+    const value = this.form.value.uuid || 0;
+    const uuid = value.toString(16).padStart(8, '0');
     const code = this.form.value.code || 'null';
     const description = this.form.value.description || new Map<string, string>();
+    const args: ArgumentDefinition[] = this.form.value.arguments || [];
+    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
-    const device: DeviceDefinition = new DeviceDefinition(type, description);
+    const type: ActionType = ActionType.create(this.account.ns.namespace, UrnType.ACTION, code, uuid);
+    const def: EventDefinition = new EventDefinition(type, description, args);
+    def.lifecycle = lifecycle;
 
     this.loading = true;
-    // this.service.createSpecDevice(this.account.organization.id, device)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('updateProduct ok');
-    //       this.loading = false;
-    //       this.router.navigate(['/main/namespace']).then(() => {});
-    //     },
-    //     error: error => {
-    //       this.msg.warning('Failed to createProduct', error);
-    //       this.loading = false;
-    //     }
-    //   });
+    this.service.createEventDefinition(def)
+      .subscribe({
+        next: () => {
+          console.log('createEventDefinition ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {
+          });
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 }

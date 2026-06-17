@@ -104,7 +104,7 @@ export class SpecUnitCreateComponent implements OnInit {
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createUnitDefinition', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

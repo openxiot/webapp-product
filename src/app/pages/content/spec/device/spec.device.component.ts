@@ -68,7 +68,7 @@ export class SpecDeviceComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecDevices: ', error);
+          this.msg.warning(error);
         }
       })
   }

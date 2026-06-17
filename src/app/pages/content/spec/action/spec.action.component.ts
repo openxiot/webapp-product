@@ -73,7 +73,7 @@ export class SpecActionComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to get SpecDevices: ', error);
+          this.msg.warning(error);
         }
       })
 
@@ -85,7 +85,7 @@ export class SpecActionComponent implements OnInit {
           this.loadingProperties = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecProperties: ', error);
+          this.msg.warning(error);
         }
       })
   }

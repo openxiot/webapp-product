@@ -12,6 +12,7 @@
     <th>描述</th>
     <th>参数</th>
     <th>状态</th>
+    <th>操作</th>
   </tr>
   </thead>
   <tbody>
@@ -38,6 +39,18 @@
             @case (LifeCycle.DEVELOPMENT) {
               <nz-tag nzColor="red">开发中</nz-tag>
             }
+          }
+        </td>
+        <td>
+          @if (account.isEditable()) {
+            <a [routerLink]="['/main/spec/event/edit', a.type.toString()]">修改</a>
+
+            @if (a.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(a)">删除</a>
+            }
+          } @else {
+            <a [routerLink]="['/main/spec/event/view', a.type.toString()]">查看</a>
           }
         </td>
       </tr>

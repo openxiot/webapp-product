@@ -26,10 +26,10 @@ import {
 } from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
 
 @Component({
-  selector: 'spec-action-view',
+  selector: 'spec-event-view',
   standalone: true,
-  templateUrl: './spec.action.view.component.html',
-  styleUrls: ['./spec.action.view.component.less'],
+  templateUrl: './spec.event.view.component.html',
+  styleUrls: ['./spec.event.view.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -51,18 +51,17 @@ import {
     DefinitionArgumentsComponent,
   ],
 })
-export class SpecActionViewComponent implements OnInit {
+export class SpecEventViewComponent implements OnInit {
 
   loading: boolean = false;
   properties: PropertyDefinition[] = [];
-  actionType: string = '';
+  eventType: string = '';
 
   form: FormGroup<{
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
-    argumentsIn: FormControl<ArgumentDefinition[]>,
-    argumentsOut: FormControl<ArgumentDefinition[]>,
+    arguments: FormControl<ArgumentDefinition[]>,
     lifecycle: FormControl<LifeCycle>,
   }>;
 
@@ -81,8 +80,7 @@ export class SpecActionViewComponent implements OnInit {
       ]),
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
-      argumentsIn: this.fb.control<ArgumentDefinition[]>([]),
-      argumentsOut: this.fb.control<ArgumentDefinition[]>([]),
+      arguments: this.fb.control<ArgumentDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
 
@@ -91,7 +89,7 @@ export class SpecActionViewComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.actionType = params['type'] || '';
+      this.eventType = params['type'] || '';
       this.load();
     });
   }
@@ -103,7 +101,7 @@ export class SpecActionViewComponent implements OnInit {
         next: data => {
           this.properties = data;
           this.loading = false;
-          this.loadActionDefinition(this.actionType);
+          this.loadEventDefinition(this.eventType);
         },
         error: error => {
           this.msg.warning(error);
@@ -111,21 +109,20 @@ export class SpecActionViewComponent implements OnInit {
       })
   }
 
-  private loadActionDefinition(type: string) {
+  private loadEventDefinition(type: string) {
     this.loading = true;
 
-    this.service.getActionDefinition(type)
+    this.service.getEventDefinition(type)
       .subscribe({
         next: (a) => {
-          console.log('getActionDefinition ok');
+          console.log('getEventDefinition ok');
 
           this.form.controls.code.setValue(a.type.name);
           this.form.controls.uuid.setValue(a.type.value);
           this.form.controls.description.setValue(a.description);
           this.form.controls.lifecycle.setValue(a.lifecycle);
 
-          this.form.controls.argumentsIn.setValue(a.in);
-          this.form.controls.argumentsIn.setValue(a.out);
+          this.form.controls.arguments.setValue(a.arguments);
 
           this.loading = false;
         },

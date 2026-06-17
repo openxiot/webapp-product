@@ -55,7 +55,7 @@ export class SpecNsComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecNamespaces: ', error);
+          this.msg.warning(error);
         }
       })
   }

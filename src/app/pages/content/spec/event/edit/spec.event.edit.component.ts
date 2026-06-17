@@ -13,7 +13,14 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {ArgumentDefinition, LifeCycle, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {
+  EventDefinition,
+  ActionType,
+  ArgumentDefinition,
+  LifeCycle,
+  PropertyDefinition,
+  UrnType
+} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
@@ -26,10 +33,10 @@ import {
 } from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
 
 @Component({
-  selector: 'spec-action-view',
+  selector: 'spec-event-edit',
   standalone: true,
-  templateUrl: './spec.action.view.component.html',
-  styleUrls: ['./spec.action.view.component.less'],
+  templateUrl: './spec.event.edit.component.html',
+  styleUrls: ['./spec.event.edit.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -51,18 +58,17 @@ import {
     DefinitionArgumentsComponent,
   ],
 })
-export class SpecActionViewComponent implements OnInit {
+export class SpecEventEditComponent implements OnInit {
 
   loading: boolean = false;
   properties: PropertyDefinition[] = [];
-  actionType: string = '';
+  eventType: string = '';
 
   form: FormGroup<{
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
-    argumentsIn: FormControl<ArgumentDefinition[]>,
-    argumentsOut: FormControl<ArgumentDefinition[]>,
+    arguments: FormControl<ArgumentDefinition[]>,
     lifecycle: FormControl<LifeCycle>,
   }>;
 
@@ -81,17 +87,14 @@ export class SpecActionViewComponent implements OnInit {
       ]),
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
-      argumentsIn: this.fb.control<ArgumentDefinition[]>([]),
-      argumentsOut: this.fb.control<ArgumentDefinition[]>([]),
+      arguments: this.fb.control<ArgumentDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
-
-    this.form.controls.uuid.disable();
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.actionType = params['type'] || '';
+      this.eventType = params['type'] || '';
       this.load();
     });
   }
@@ -103,7 +106,7 @@ export class SpecActionViewComponent implements OnInit {
         next: data => {
           this.properties = data;
           this.loading = false;
-          this.loadActionDefinition(this.actionType);
+          this.loadEventDefinition(this.eventType);
         },
         error: error => {
           this.msg.warning(error);
@@ -111,21 +114,20 @@ export class SpecActionViewComponent implements OnInit {
       })
   }
 
-  private loadActionDefinition(type: string) {
+  private loadEventDefinition(type: string) {
     this.loading = true;
 
-    this.service.getActionDefinition(type)
+    this.service.getEventDefinition(type)
       .subscribe({
         next: (a) => {
-          console.log('getActionDefinition ok');
+          console.log('getEventDefinition ok');
 
           this.form.controls.code.setValue(a.type.name);
           this.form.controls.uuid.setValue(a.type.value);
           this.form.controls.description.setValue(a.description);
           this.form.controls.lifecycle.setValue(a.lifecycle);
 
-          this.form.controls.argumentsIn.setValue(a.in);
-          this.form.controls.argumentsIn.setValue(a.out);
+          this.form.controls.arguments.setValue(a.arguments);
 
           this.loading = false;
         },
@@ -138,5 +140,33 @@ export class SpecActionViewComponent implements OnInit {
 
   protected onBack() {
     this.router.navigate(['/main/spec']).then(() => {});
+  }
+
+  protected submitForm() {
+    const value = this.form.value.uuid || 0;
+    const uuid = value.toString(16).padStart(8, '0');
+    const code = this.form.value.code || 'null';
+    const description = this.form.value.description || new Map<string, string>();
+    const args: ArgumentDefinition[] = this.form.value.arguments || [];
+    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
+
+    const type: ActionType = ActionType.create(this.account.ns.namespace, UrnType.ACTION, code, uuid);
+    const def: EventDefinition = new EventDefinition(type, description, args);
+    def.lifecycle = lifecycle;
+
+    this.loading = true;
+    this.service.updateEventDefinition(def)
+      .subscribe({
+        next: () => {
+          console.log('updateEventDefinition ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {
+          });
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 }
