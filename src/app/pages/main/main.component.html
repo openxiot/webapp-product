@@ -12,6 +12,11 @@
         nzMode="horizontal"
         class="header-menu"
       >
+        <li nz-menu-item nzMatchRouter routerLink="/main/welcome">
+          <span nz-icon nzType="home" nzTheme="outline"></span>
+          {{ '首页' | translate }}
+        </li>
+
         <li nz-menu-item nzMatchRouter routerLink="/main/product">
           <span nz-icon nzType="bulb" nzTheme="outline"></span>
           {{ '产品' | translate }}
