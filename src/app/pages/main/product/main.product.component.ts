@@ -13,7 +13,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {KeyValuePipe} from '@angular/common';
 import pkg from '../../../../../package.json';
-import {OrganizationService} from '../../../service/organization.service';
+import {AccountService} from '../../../service/account.service';
 
 @Component({
   selector: 'main-product',
@@ -43,18 +43,14 @@ export class MainProductComponent implements OnInit, OnDestroy {
   menuState: { [key: string]: boolean } = {};
 
   constructor(
-    private organization: OrganizationService,
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
   }
 
   ngOnInit() {
-    this.subscription = this.organization.data$.subscribe(data => {
-      if (data) {
-        this.load();
-      }
-    });
+    this.load();
   }
 
   private load() {
@@ -78,7 +74,7 @@ export class MainProductComponent implements OnInit, OnDestroy {
 
   loadProductFromServer() {
     this.loading = true;
-    this.service.getProducts(this.organization.code.value).subscribe({
+    this.service.getProducts(this.account.organization.id).subscribe({
       next: data => {
         this.products.clear();
 

@@ -50,7 +50,6 @@ export class NamespaceComponent implements OnInit {
   protected readonly Visibility = Visibility;
 
   loading: boolean = true;
-  total: number = 0;
   namespaces: NamespaceDefinition[] = [];
   pageSize = 100;
   pageIndex = 1;
@@ -78,7 +77,6 @@ export class NamespaceComponent implements OnInit {
         next: data => {
           this.namespaces = data;
           this.loading = false;
-          this.total = this.namespaces.length;
         },
         error: error => {
           this.msg.warning('Failed to getSpecNamespaces: ', error);
@@ -126,7 +124,6 @@ export class NamespaceComponent implements OnInit {
         next: data => {
           this.namespaces = this.namespaces.filter(x => x.namespace !== ns.namespace);
           this.loading = false;
-          this.total = this.namespaces.length;
         },
         error: error => {
           this.msg.warning('Failed to deleteNamespace: ', error);

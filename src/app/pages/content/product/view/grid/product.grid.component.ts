@@ -9,7 +9,7 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
-import {OrganizationService} from '../../../../../service/organization.service';
+import {AccountService} from '../../../../../service/account.service';
 
 @Component({
   selector: 'product-grid',
@@ -34,7 +34,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   products: ProductBasic[] = [];
 
   constructor(
-    private organization: OrganizationService,
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -56,7 +56,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
 
   loadProductsFromServer() {
     this.loading = true;
-    this.service.getProducts(this.organization.code.value).subscribe({
+    this.service.getProducts(this.account.organization.id).subscribe({
       next: data => {
         this.products = data;
         this.loading = false;

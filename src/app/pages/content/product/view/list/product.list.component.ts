@@ -16,7 +16,7 @@ import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {MainService} from '../../../../../service/main.service';
 import {JoyProduct} from '../../../../../typedef/define/product/JoyProduct';
-import {OrganizationService} from '../../../../../service/organization.service';
+import {AccountService} from '../../../../../service/account.service';
 
 @Component({
   selector: 'product-list',
@@ -119,7 +119,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   basicLifecycleFilterFn: NzTableFilterFn<ProductBasic> = (list: string[], a: ProductBasic) => list.some(name => a.name.includes(name));
 
   constructor(
-    private organization: OrganizationService,
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -145,7 +145,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     pageSize: number,
   ) {
     this.loading = true;
-    this.service.getFullProducts(this.organization.code.value, pageIndex, pageSize).subscribe({
+    this.service.getFullProducts(this.account.organization.id, pageIndex, pageSize).subscribe({
       next: data => {
         this.total = data.page.total;
         this.products = data.list;

@@ -58,6 +58,17 @@ export class MainService {
   }
 
   /**------------------------------------------------------------------------------------------------
+   * 动态判断：如果有开发组，就访问开发组可见数据；如果没有，就只访问公开的信息
+   *------------------------------------------------------------------------------------------------*/
+  getAllNamespaces(organization: Organization | undefined): Observable<NamespaceDefinition[]> {
+    if (!organization) {
+      return this.getPublicNamespaces();
+    } else {
+      return this.getVisibleNamespaces(organization.id);
+    }
+  }
+
+  /**------------------------------------------------------------------------------------------------
    * 开发组
    *------------------------------------------------------------------------------------------------*/
   createOrganization(organizationId: string, name: string): Observable<void> {
@@ -96,7 +107,6 @@ export class MainService {
   }
 
   getOrganizations(): Observable<Organization[]> {
-    console.log('getOrganizations');
     return this.http
       .get<OxResponse>(`${this.account}/organization/many`)
       .pipe(map(response => OrganizationCodec.decodeArray(response.data)));
@@ -151,14 +161,6 @@ export class MainService {
     return this.http
       .get<OxResponse>(`${this.server}/v1/spec/namespace/all`)
       .pipe(map(response => NamespaceDefinitionCodec.decodeArray(response.data)));
-  }
-
-  getAllNamespaces(organization: Organization | undefined): Observable<NamespaceDefinition[]> {
-    if (!organization) {
-      return this.getPublicNamespaces();
-    } else {
-      return this.getVisibleNamespaces(organization.id);
-    }
   }
 
   // device

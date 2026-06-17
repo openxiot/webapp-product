@@ -49,7 +49,7 @@ export class MainComponent implements OnInit {
 
   version: string = pkg.version;
 
-  loading: boolean = true;
+  loading: boolean = false;
   organizations: Organization[] = [];
 
   constructor(
@@ -68,17 +68,20 @@ export class MainComponent implements OnInit {
   }
 
   private loadOrganizations() {
-    this.main.getOrganizations()
-      .subscribe({
-        next: data => {
-          this.organizations = data;
-          this.selectCurrentOrganization();
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning('Failed to getOrganizations: ', error);
-        }
-      })
+    if (this.account.login) {
+      this.loading = true;
+      this.main.getOrganizations()
+        .subscribe({
+          next: data => {
+            this.organizations = data;
+            this.selectCurrentOrganization();
+            this.loading = false;
+          },
+          error: error => {
+            this.msg.warning('Failed to getOrganizations: ', error);
+          }
+        })
+    }
   }
 
   private selectCurrentOrganization() {

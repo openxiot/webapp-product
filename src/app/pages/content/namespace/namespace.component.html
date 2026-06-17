@@ -18,10 +18,6 @@
     [nzData]="namespaces"
     [nzFrontPagination]="false"
     [nzLoading]="loading"
-    [nzTotal]="total"
-    [(nzPageSize)]="pageSize"
-    [(nzPageIndex)]="pageIndex"
-    (nzQueryParams)="onQueryParamsChange($event)"
   >
     <thead>
     <tr>
@@ -53,17 +49,23 @@
             }
           </td>
           <td>
-            @if (ns.organization === account.organization.id) {
-              <nz-tag nzColor="geekblue">{{ ns.organization }}</nz-tag>
+            @if (account.organization) {
+              @if (ns.organization === account.organization.id) {
+                <nz-tag nzColor="geekblue">{{ ns.organization }}</nz-tag>
+              } @else {
+                <nz-tag>{{ ns.organization }}</nz-tag>
+              }
             } @else {
               <nz-tag>{{ ns.organization }}</nz-tag>
             }
           </td>
           <td>
-            @if (ns.organization === account.organization.id) {
-              <a [routerLink]="['/main/namespace/edit', ns.namespace]">修改</a>
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(ns)">删除</a>
+            @if (account.organization) {
+              @if (ns.organization === account.organization.id) {
+                <a [routerLink]="['/main/namespace/edit', ns.namespace]">修改</a>
+                <nz-divider nzType="vertical"></nz-divider>
+                <a (click)="onDelete(ns)">删除</a>
+              }
             }
           </td>
         </tr>
