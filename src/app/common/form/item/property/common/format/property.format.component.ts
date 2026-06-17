@@ -5,7 +5,7 @@ import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {DataFormat} from '@openxiot/xiot-core-spec-ts';
+import {DataFormat, FormatDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 
 @Component({
@@ -33,34 +33,35 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
 })
 export class PropertyFormatComponent implements ControlValueAccessor {
 
+  @Input() formats: FormatDefinition[] = [];
   @Input() updatable: boolean = false;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  // 使用 readonly 确保 formats 不会被修改
-  readonly formats: Array<{ value: DataFormat, label: string }> = [
-    { value: DataFormat.BOOL, label: '布尔值' },
-    { value: DataFormat.UINT8, label: '无符号8位整型' },
-    { value: DataFormat.UINT16, label: '无符号16位整型' },
-    { value: DataFormat.UINT32, label: '无符号32位整型' },
-    { value: DataFormat.INT8, label: '8位整型' },
-    { value: DataFormat.INT16, label: '16位整型' },
-    { value: DataFormat.INT32, label: '32位整型' },
-    { value: DataFormat.INT64, label: '64位整型' },
-    { value: DataFormat.FLOAT, label: '浮点数' },
-    { value: DataFormat.STRING, label: '字符串' },
-    { value: DataFormat.HEX, label: '16进制字符串' },
-    { value: DataFormat.TLV8, label: 'TLV8字符串' },
-    { value: DataFormat.COMBINATION, label: '组合值' },
-  ];
+  // // 使用 readonly 确保 formats 不会被修改
+  // readonly formats: Array<{ value: DataFormat, label: string }> = [
+  //   { value: DataFormat.BOOL, label: '布尔值' },
+  //   { value: DataFormat.UINT8, label: '无符号8位整型' },
+  //   { value: DataFormat.UINT16, label: '无符号16位整型' },
+  //   { value: DataFormat.UINT32, label: '无符号32位整型' },
+  //   { value: DataFormat.INT8, label: '8位整型' },
+  //   { value: DataFormat.INT16, label: '16位整型' },
+  //   { value: DataFormat.INT32, label: '32位整型' },
+  //   { value: DataFormat.INT64, label: '64位整型' },
+  //   { value: DataFormat.FLOAT, label: '浮点数' },
+  //   { value: DataFormat.STRING, label: '字符串' },
+  //   { value: DataFormat.HEX, label: '16进制字符串' },
+  //   { value: DataFormat.TLV8, label: 'TLV8字符串' },
+  //   { value: DataFormat.COMBINATION, label: '组合值' },
+  // ];
 
   // 组件内部维护的值
-  _value: DataFormat = DataFormat.BOOL;
+  _value: string = 'bool';
 
   // 禁用状态
   isDisabled = false;
 
   // 定义变化回调和触摸回调
-  onChange: (value: DataFormat) => void = () => {};
+  onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
 
   constructor(
@@ -68,12 +69,12 @@ export class PropertyFormatComponent implements ControlValueAccessor {
   }
 
   // 获取当前值
-  get value(): DataFormat {
+  get value(): string {
     return this._value;
   }
 
   // 设置当前值，并通知外部变化
-  set value(val: DataFormat) {
+  set value(val: string) {
     if (val !== this._value) {
       this._value = val;
       this.onChange(val); // 重要：通知外部表单值已变化
@@ -83,12 +84,12 @@ export class PropertyFormatComponent implements ControlValueAccessor {
 
   // 获取当前选中项的显示标签
   get selectedLabel(): string {
-    const selected = this.formats.find(item => item.value === this._value);
-    return selected ? selected.label : '未知格式';
+    const selected = this.formats.find(item => item.type.name === this._value);
+    return selected ? (selected.description.get('en-US') || selected.type.name) : '未知格式';
   }
 
   // 选择变化处理
-  onSelectionChange(value: DataFormat): void {
+  onSelectionChange(value: string): void {
     console.log('onSelectionChange: ', value);
 
     if (this.isDisabled) {
@@ -112,7 +113,7 @@ export class PropertyFormatComponent implements ControlValueAccessor {
   // --- ControlValueAccessor 接口方法 ---
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
-  writeValue(value: DataFormat): void {
+  writeValue(value: string): void {
     this._value = value;
   }
 

@@ -1,7 +1,10 @@
 @if (updatable) {
   <nz-select [ngModel]="_value" (ngModelChange)="onSelectionChange($event)">
-    @for (item of formats; track item.value) {
-      <nz-option [nzValue]="item.value" [nzLabel]="item.label"></nz-option>
+    @for (item of formats; track item) {
+      <nz-option
+        [nzValue]="item.type.name"
+        nzLabel="{{ item.type.name }} ({{ item.description.get('zh-CN') || item.description.get('en-US') }})"
+      ></nz-option>
     }
   </nz-select>
 } @else {

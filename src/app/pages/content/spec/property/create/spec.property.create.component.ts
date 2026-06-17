@@ -15,7 +15,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
   Access,
-  DataFormat, LifeCycle,
+  DataFormat, DataFormatFromString, FormatDefinition, LifeCycle,
   PropertyDefinition,
   PropertyType,
   UrnType, ValueDefinition, ValueList,
@@ -78,15 +78,19 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
 export class SpecPropertyCreateComponent implements OnInit {
 
   protected readonly ConstraintType = ConstraintType;
+
   loading: boolean = false;
   properties: PropertyDefinition[] = [];
+
+  loadingFormats: boolean = false;
+  formats: FormatDefinition[] = [];
 
   form: FormGroup<{
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
     access: FormControl<Access>,
-    format: FormControl<DataFormat>,
+    format: FormControl<string>,
     constraint: FormControl<ConstraintType>,
     range: FormControl<RangeValue>,
     list: FormControl<ValueItem[]>;
@@ -114,7 +118,7 @@ export class SpecPropertyCreateComponent implements OnInit {
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       access: this.fb.control(new Access(), [Validators.required]),
-      format: this.fb.control(DataFormat.STRING, [Validators.required]),
+      format: this.fb.control('', [Validators.required]),
       constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
       range: this.fb.control(new RangeValue()),
       list: this.fb.control<ValueItem[]>([]),
@@ -126,6 +130,21 @@ export class SpecPropertyCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadPropertyDefinitions();
+    this.loadFormats();
+  }
+
+  private loadFormats(): void {
+    this.loadingFormats = true;
+    this.service.getFormatDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.formats = data;
+          this.loadingFormats = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   private loadPropertyDefinitions(): void {
@@ -187,7 +206,7 @@ export class SpecPropertyCreateComponent implements OnInit {
 
     const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
     const def: PropertyDefinition = new PropertyDefinition(type, description);
-    def.format = this.form.value.format || DataFormat.STRING;
+    def.format = DataFormatFromString(this.form.value.format || '');
     def.access = this.form.value.access || new Access();
     def.lifecycle = lifecycle;
 
