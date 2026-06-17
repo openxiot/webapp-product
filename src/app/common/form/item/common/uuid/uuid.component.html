@@ -1,14 +1,10 @@
-@if (isDisabled) {
-  <span>{{ displayHex }}</span>
-} @else {
-  <input
-    nz-input
-    type="text"
-    [(ngModel)]="inputHex"
-    (ngModelChange)="onInputChange($event)"
-    (blur)="onBlur()"
-    [disabled]="isDisabled"
-    placeholder="8位字符十六进制"
-    maxlength="8"
-  />
-}
+<input
+  nz-input
+  type="text"
+  [(ngModel)]="inputHex"
+  (ngModelChange)="onInputChange($event)"
+  (blur)="onBlur()"
+  [disabled]="isDisabled"
+  placeholder="8位字符十六进制"
+  maxlength="8"
+/>

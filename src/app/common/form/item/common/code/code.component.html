@@ -1,7 +1,5 @@
-@if (lifecycle === LifeCycle.DEVELOPMENT && updatable) {
-  <input nz-input [(ngModel)]="value"/>
-} @else {
-  <div class="iid">
-    {{ value }}
-  </div>
-}
+<input
+  nz-input
+  [(ngModel)]="value"
+  [disabled]="!updatable"
+/>

@@ -11,24 +11,28 @@
         </div>
 
         <!-- 删除按钮 独立放在卡片右侧 -->
-        <button
-          type="button"
-          nz-button
-          nzType="text"
-          nzDanger
-          nz-tooltip="删除成员"
-          (click)="removeMember(def)"
-          [disabled]="isDisabled"
-        >
-          <span nz-icon nzType="delete" nzTheme="outline"></span>
-        </button>
+        @if (! isDisabled) {
+          <button
+            type="button"
+            nz-button
+            nzType="text"
+            nzDanger
+            nz-tooltip="删除成员"
+            (click)="removeMember(def)"
+            [disabled]="isDisabled"
+          >
+            <span nz-icon nzType="delete" nzTheme="outline"></span>
+          </button>
+        }
       </div>
     </nz-col>
   }
 
-  <nz-col [nzSpan]="24">
-    <button type="button" nz-button nzType="dashed" (click)="addMemberItem()" [disabled]="isDisabled">
-      <span nz-icon nzType="plus"></span> 添加成员
-    </button>
-  </nz-col>
+  @if (! isDisabled) {
+    <nz-col [nzSpan]="24">
+      <button type="button" nz-button nzType="dashed" (click)="addMemberItem()">
+        <span nz-icon nzType="plus"></span> 添加成员
+      </button>
+    </nz-col>
+  }
 </nz-row>
