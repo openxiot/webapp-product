@@ -56,7 +56,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
 
   loadProductsFromServer() {
     this.loading = true;
-    this.service.getProducts(this.account.organization.id).subscribe({
+    this.service.getAllProducts(this.account.organization).subscribe({
       next: data => {
         this.products = data;
         this.loading = false;

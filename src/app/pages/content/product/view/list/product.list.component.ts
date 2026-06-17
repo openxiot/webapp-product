@@ -15,7 +15,6 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {MainService} from '../../../../../service/main.service';
-import {JoyProduct} from '../../../../../typedef/define/product/JoyProduct';
 import {AccountService} from '../../../../../service/account.service';
 
 @Component({
@@ -54,7 +53,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
 
   loading: boolean = true;
   total: number = 0;
-  products: JoyProduct[] = [];
+  products: ProductBasic[] = [];
   pageSize = 100;
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];
@@ -145,10 +144,9 @@ export class ProductListComponent implements OnInit, OnDestroy {
     pageSize: number,
   ) {
     this.loading = true;
-    this.service.getFullProducts(this.account.organization.id, pageIndex, pageSize).subscribe({
+    this.service.getAllProducts(this.account.organization).subscribe({
       next: data => {
-        this.total = data.page.total;
-        this.products = data.list;
+        this.products = data;
         this.loading = false;
       },
       error: error => {

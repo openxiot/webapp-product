@@ -32,7 +32,11 @@ export class AccountService {
   }
 
   isEditable(): boolean {
-    return this.ns.organization === this.organization.id
+    if (this.organization) {
+      return this.ns.organization === this.organization.id
+    }
+
+    return false;
   }
 
   isCurrentOrganization(organization: Organization): boolean {

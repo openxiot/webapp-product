@@ -68,6 +68,14 @@ export class MainService {
     }
   }
 
+  getAllProducts(organization: Organization | undefined): Observable<ProductBasic[]> {
+    if (!organization) {
+      return this.getPublicProducts();
+    } else {
+      return this.getVisibleProducts(organization.id);
+    }
+  }
+
   /**------------------------------------------------------------------------------------------------
    * 开发组
    *------------------------------------------------------------------------------------------------*/
@@ -451,7 +459,7 @@ export class MainService {
       size: pageSize
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/full/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/full/all`, {params})
       .pipe(map(response => JoyProductsCodec.decode(response.data)));
   }
 
@@ -460,15 +468,22 @@ export class MainService {
    *------------------------------------------------------------------------------------------------*/
 
   /**
-   * 读取产品列表
+   * 读取公开产品列表
    */
-  getProducts(organizationCode: string): Observable<ProductBasic[]> {
-    console.log('getProducts: ', organizationCode);
-    const params = {
-      organization: organizationCode,
-    }
+  getPublicProducts(): Observable<ProductBasic[]> {
+    console.log('getPublicProducts');
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/basic/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/basic/public`)
+      .pipe(map(response => ProductBasicCodec.decodeArray(response.data.products)));
+  }
+
+  /**
+   * 读取组织可见的产品列表
+   */
+  getVisibleProducts(organization: string): Observable<ProductBasic[]> {
+    console.log('getVisibleProducts: ', organization);
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/product/basic/visible/${organization}`)
       .pipe(map(response => ProductBasicCodec.decodeArray(response.data.products)));
   }
 
@@ -477,7 +492,7 @@ export class MainService {
    */
   createProduct(product: ProductBasic): Observable<Number> {
     return this.http
-      .post<OxResponse>(`${this.server}/v2/product/basic/one`, ProductBasicCodec.encode(product))
+      .post<OxResponse>(`${this.server}/v1/product/basic/one`, ProductBasicCodec.encode(product))
       .pipe(map(response => response.data.id));
   }
 
@@ -489,7 +504,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .delete<OxResponse>(`${this.server}/v2/product/basic/one`, {params})
+      .delete<OxResponse>(`${this.server}/v1/product/basic/one`, {params})
       .pipe(map(() => undefined));
   }
 
@@ -503,7 +518,7 @@ export class MainService {
     const body = Object.fromEntries(fields);
 
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/basic/one`, body)
+      .put<OxResponse>(`${this.server}/v1/product/basic/one`, body)
       .pipe(map(() => undefined));
   }
 
@@ -515,7 +530,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/basic/one`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/basic/one`, {params})
       .pipe(map(response => ProductBasicCodec.decode(response.data)));
   }
 
@@ -527,7 +542,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -545,7 +560,7 @@ export class MainService {
     }
 
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/wizard`, body)
+      .put<OxResponse>(`${this.server}/v1/product/wizard`, body)
       .pipe(map(() => undefined));
   }
 
@@ -557,7 +572,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/wizard`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/wizard`, {params})
       .pipe(map(response => ProductWizardCodec.decode(response.data)));
   }
 
@@ -569,7 +584,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/wizard/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/wizard/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -585,7 +600,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/instance/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/instance/all`, {params})
       .pipe(map(response => ProductInstanceCodec.decodeArray(response.data.instances)));
   }
 
@@ -599,7 +614,7 @@ export class MainService {
     };
 
     return this.http
-      .post<OxResponse>(`${this.server}/v2/product/instance/one`, body)
+      .post<OxResponse>(`${this.server}/v1/product/instance/one`, body)
       .pipe(map(() => undefined));
   }
 
@@ -608,7 +623,7 @@ export class MainService {
    */
   deleteProductInstance(type: string): Observable<void> {
     return this.http
-      .delete<OxResponse>(`${this.server}/v2/product/instance/one/${type}`)
+      .delete<OxResponse>(`${this.server}/v1/product/instance/one/${type}`)
       .pipe(map(() => undefined));
   }
 
@@ -617,7 +632,7 @@ export class MainService {
    */
   updateProductInstance(instance: DeviceInstance): Observable<void> {
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/instance/one`, DeviceInstanceCodec.encode(instance))
+      .put<OxResponse>(`${this.server}/v1/product/instance/one`, DeviceInstanceCodec.encode(instance))
       .pipe(map(() => undefined));
   }
 
@@ -629,7 +644,7 @@ export class MainService {
       type: type,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/instance/one`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/instance/one`, {params})
       .pipe(map(response => DeviceInstanceCodec.decode(response.data)));
   }
 
@@ -641,7 +656,7 @@ export class MainService {
       instance: type,
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/instance/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/instance/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -659,7 +674,7 @@ export class MainService {
     };
 
     return this.http
-      .post<OxResponse>(`${this.server}/v2/product/panel/one`, body)
+      .post<OxResponse>(`${this.server}/v1/product/panel/one`, body)
       .pipe(map(() => undefined));
   }
 
@@ -673,7 +688,7 @@ export class MainService {
       versionCode: versionCode
     }
     return this.http
-      .delete<OxResponse>(`${this.server}/v2/product/panel/one/`, {params})
+      .delete<OxResponse>(`${this.server}/v1/product/panel/one/`, {params})
       .pipe(map(() => undefined));
   }
 
@@ -685,7 +700,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/panel/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/panel/all`, {params})
       .pipe(map(response => ProductPanelCodec.decodeArray(response.data.panels)));
   }
 
@@ -697,7 +712,7 @@ export class MainService {
       type: type,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/panel/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/panel/all`, {params})
       .pipe(map(response => ProductPanelCodec.decodeArray(response.data.panels)));
   }
 
@@ -713,7 +728,7 @@ export class MainService {
       }
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/panel/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/panel/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -731,7 +746,7 @@ export class MainService {
     };
 
     return this.http
-      .post<OxResponse>(`${this.server}/v2/product/firmware/one`, body)
+      .post<OxResponse>(`${this.server}/v1/product/firmware/one`, body)
       .pipe(map(() => undefined));
   }
 
@@ -744,7 +759,7 @@ export class MainService {
       name: firmwareName
     }
     return this.http
-      .delete<OxResponse>(`${this.server}/v2/product/firmware/one/`, {params})
+      .delete<OxResponse>(`${this.server}/v1/product/firmware/one/`, {params})
       .pipe(map(() => undefined));
   }
 
@@ -758,7 +773,7 @@ export class MainService {
     };
 
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/firmware/one`, body)
+      .put<OxResponse>(`${this.server}/v1/product/firmware/one`, body)
       .pipe(map(() => undefined));
   }
 
@@ -770,7 +785,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/firmware/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/firmware/all`, {params})
       .pipe(map(response => ProductFirmwareCodec.decodeArray(response.data.firmwares)));
   }
 
@@ -789,7 +804,7 @@ export class MainService {
     };
 
     return this.http
-      .post<OxResponse>(`${this.server}/v2/product/firmware/instance/one`, body)
+      .post<OxResponse>(`${this.server}/v1/product/firmware/instance/one`, body)
       .pipe(map(response => ProductFirmwareInstanceCodec.decode(response.data)));
   }
 
@@ -803,7 +818,7 @@ export class MainService {
       versionCode: versionCode
     }
     return this.http
-      .delete<OxResponse>(`${this.server}/v2/product/firmware/instance/one`, {params})
+      .delete<OxResponse>(`${this.server}/v1/product/firmware/instance/one`, {params})
       .pipe(map(() => undefined));
   }
 
@@ -818,7 +833,7 @@ export class MainService {
     };
 
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/firmware/instance/one`, body)
+      .put<OxResponse>(`${this.server}/v1/product/firmware/instance/one`, body)
       .pipe(map(() => undefined));
   }
 
@@ -831,7 +846,7 @@ export class MainService {
       name: firmwareName,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/firmware/instance/all`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/firmware/instance/all`, {params})
       .pipe(map(response => ProductFirmwareInstanceCodec.decodeArray(response.data[firmwareName])));
   }
 
@@ -847,7 +862,7 @@ export class MainService {
       }
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/firmware/instance/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/firmware/instance/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -865,7 +880,7 @@ export class MainService {
     }
 
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/manual`, body)
+      .put<OxResponse>(`${this.server}/v1/product/manual`, body)
       .pipe(map(() => undefined));
   }
 
@@ -877,7 +892,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v2/product/manual`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/manual`, {params})
       .pipe(map(response => ProductManualCodec.decode(response.data)));
   }
 
@@ -889,7 +904,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/manual/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/manual/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -901,7 +916,7 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v2/product/visibility/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/visibility/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -917,7 +932,7 @@ export class MainService {
     };
 
       return this.http
-      .get<OxResponse>(`${this.server}/v2/file/upload/url`, {params})
+      .get<OxResponse>(`${this.server}/v1/file/upload/url`, {params})
       .pipe(map(response => OSSUploadCodec.decode(response.data)));
   }
 
@@ -957,7 +972,7 @@ export class MainService {
 
     return lastValueFrom(
       this.http
-        .get<OxResponse>(`${this.server}/v2/product/instance/one`, { params })
+        .get<OxResponse>(`${this.server}/v1/product/instance/one`, { params })
         .pipe(map(response => response.data.definition))
     );
   }
@@ -1044,7 +1059,7 @@ export class MainService {
 
     return lastValueFrom(
       this.http
-        .post<OxResponse>(`${this.server}/v2/product/panel/one/ai`, body)
+        .post<OxResponse>(`${this.server}/v1/product/panel/one/ai`, body)
         .pipe(map(response => response.data))
     );
   }

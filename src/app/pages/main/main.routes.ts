@@ -14,7 +14,7 @@ export const MAIN_ROUTES: Routes = [
   {
     path: 'product',
     data: {breadcrumb: '产品'},
-    loadChildren: () => import('./product/main.product.routes').then(m => m.MAIN_PRODUCT_ROUTES)
+    loadChildren: () => import('../content/product/product.routes').then(m => m.PRODUCT_ROUTES)
   },
   {
     path: 'template',

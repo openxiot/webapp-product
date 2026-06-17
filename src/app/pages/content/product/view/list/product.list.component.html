@@ -141,18 +141,18 @@
       </tr>
       </thead>
       <tbody>
-        @for (p of products; track p.basic.id) {
+        @for (p of products; track p.id) {
           <tr>
-            <td nzAlign="center"><img nz-image [nzSrc]="p.basic.icon" width="64" height="64"></td>
-            <td><a routerLink="/main/product/detail/{{p.basic.id}}">{{ p.basic.model }}</a>
-            <td><a> {{ p.basic.template.name }}</a></td>
-            <td>{{ p.basic.template.name }}</td>
+            <td nzAlign="center"><img nz-image [nzSrc]="p.icon" width="64" height="64"></td>
+            <td><a routerLink="/main/product/detail/{{p.id}}">{{ p.model }}</a>
+            <td><a> {{ p.template.name }}</a></td>
+            <td>{{ p.template.name }}</td>
 
             @if (basicChecked) {
-              <td><a routerLink="/main/product/detail/{{p.basic.id}}">{{ p.basic.name }}</a></td>
-              <td>{{ p.basic.protocol }}</td>
+              <td><a routerLink="/main/product/detail/{{p.id}}">{{ p.name }}</a></td>
+              <td>{{ p.protocol }}</td>
               <td>
-                @for (item of p.basic.upgrade; track item) {
+                @for (item of p.upgrade; track item) {
                   @switch (item) {
                     @case ('Direct') {
                       直接升级
@@ -167,7 +167,7 @@
                 }
               </td>
               <td>
-                @switch (p.basic.lifecycle) {
+                @switch (p.lifecycle) {
                   @case (LifeCycle.DEVELOPMENT) {
                     <nz-tag nzColor="red">开发中</nz-tag>
                   }
@@ -181,90 +181,90 @@
               </td>
             }
 
-            @if (wizardChecked) {
-              <td>
-                {{ p.wizard.steps.length }}
-              </td>
-              <td>
-                @switch (p.wizard.lifecycle) {
-                  @case (LifeCycle.DEVELOPMENT) {
-                    <nz-tag nzColor="red">开发中</nz-tag>
-                  }
-                  @case (LifeCycle.PREVIEW) {
-                    <nz-tag nzColor="blue">上线中</nz-tag>
-                  }
-                  @case (LifeCycle.RELEASED) {
-                    <nz-tag nzColor="green">已上线</nz-tag>
-                  }
-                }
-              </td>
-            }
+<!--            @if (wizardChecked) {-->
+<!--              <td>-->
+<!--                {{ p.wizard.steps.length }}-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                @switch (p.wizard.lifecycle) {-->
+<!--                  @case (LifeCycle.DEVELOPMENT) {-->
+<!--                    <nz-tag nzColor="red">开发中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.PREVIEW) {-->
+<!--                    <nz-tag nzColor="blue">上线中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.RELEASED) {-->
+<!--                    <nz-tag nzColor="green">已上线</nz-tag>-->
+<!--                  }-->
+<!--                }-->
+<!--              </td>-->
+<!--            }-->
 
-            @if (instanceChecked) {
-              <td>
-                {{ p.CurrentInstance.type?.version }}
-              </td>
-              <td>
-                @switch (p.CurrentInstance.lifecycle) {
-                  @case (LifeCycle.DEVELOPMENT) {
-                    <nz-tag nzColor="red">开发中</nz-tag>
-                  }
-                  @case (LifeCycle.PREVIEW) {
-                    <nz-tag nzColor="blue">上线中</nz-tag>
-                  }
-                  @case (LifeCycle.RELEASED) {
-                    <nz-tag nzColor="green">已上线</nz-tag>
-                  }
-                }
-              </td>
-            }
+<!--            @if (instanceChecked) {-->
+<!--              <td>-->
+<!--                {{ p.CurrentInstance.type?.version }}-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                @switch (p.CurrentInstance.lifecycle) {-->
+<!--                  @case (LifeCycle.DEVELOPMENT) {-->
+<!--                    <nz-tag nzColor="red">开发中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.PREVIEW) {-->
+<!--                    <nz-tag nzColor="blue">上线中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.RELEASED) {-->
+<!--                    <nz-tag nzColor="green">已上线</nz-tag>-->
+<!--                  }-->
+<!--                }-->
+<!--              </td>-->
+<!--            }-->
 
-            @if (panelChecked) {
-              <td>
-                {{ p.CurrentPanel.version.code }}
-              </td>
-              <td>
-                @switch (p.CurrentPanel.lifecycle) {
-                  @case (LifeCycle.DEVELOPMENT) {
-                    <nz-tag nzColor="red">开发中</nz-tag>
-                  }
-                  @case (LifeCycle.PREVIEW) {
-                    <nz-tag nzColor="blue">上线中</nz-tag>
-                  }
-                  @case (LifeCycle.RELEASED) {
-                    <nz-tag nzColor="green">已上线</nz-tag>
-                  }
-                }
-              </td>
-            }
+<!--            @if (panelChecked) {-->
+<!--              <td>-->
+<!--                {{ p.CurrentPanel.version.code }}-->
+<!--              </td>-->
+<!--              <td>-->
+<!--                @switch (p.CurrentPanel.lifecycle) {-->
+<!--                  @case (LifeCycle.DEVELOPMENT) {-->
+<!--                    <nz-tag nzColor="red">开发中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.PREVIEW) {-->
+<!--                    <nz-tag nzColor="blue">上线中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.RELEASED) {-->
+<!--                    <nz-tag nzColor="green">已上线</nz-tag>-->
+<!--                  }-->
+<!--                }-->
+<!--              </td>-->
+<!--            }-->
 
-            @if (firmwareChecked) {
-              <td>
-                {{ p.firmwares.length }}
-              </td>
-            }
+<!--            @if (firmwareChecked) {-->
+<!--              <td>-->
+<!--                {{ p.firmwares.length }}-->
+<!--              </td>-->
+<!--            }-->
 
-            @if (manualChecked) {
-              <td>
-                @switch (p.manual.lifecycle) {
-                  @case (LifeCycle.DEVELOPMENT) {
-                    <nz-tag nzColor="red">开发中</nz-tag>
-                  }
-                  @case (LifeCycle.PREVIEW) {
-                    <nz-tag nzColor="blue">上线中</nz-tag>
-                  }
-                  @case (LifeCycle.RELEASED) {
-                    <nz-tag nzColor="green">已上线</nz-tag>
-                  }
-                }
-              </td>
-            }
+<!--            @if (manualChecked) {-->
+<!--              <td>-->
+<!--                @switch (p.manual.lifecycle) {-->
+<!--                  @case (LifeCycle.DEVELOPMENT) {-->
+<!--                    <nz-tag nzColor="red">开发中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.PREVIEW) {-->
+<!--                    <nz-tag nzColor="blue">上线中</nz-tag>-->
+<!--                  }-->
+<!--                  @case (LifeCycle.RELEASED) {-->
+<!--                    <nz-tag nzColor="green">已上线</nz-tag>-->
+<!--                  }-->
+<!--                }-->
+<!--              </td>-->
+<!--            }-->
 
-            @if (visibilityChecked) {
-              <td>
-                所有应用可见
-              </td>
-            }
+<!--            @if (visibilityChecked) {-->
+<!--              <td>-->
+<!--                所有应用可见-->
+<!--              </td>-->
+<!--            }-->
           </tr>
         }
       </tbody>
