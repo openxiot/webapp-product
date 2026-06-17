@@ -83,9 +83,7 @@ export class SpecUnitEditComponent implements OnInit {
 
   protected submitForm() {
     const code = this.form.value.code || 'null';
-    const description = new Map<string, string>();
-    description.set('en-US', this.form.value.description?.get('en-US') || 'null');
-    description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
     const type: UnitType = UnitType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');

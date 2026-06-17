@@ -4,7 +4,7 @@
   </nz-page-header>
 
   <ng-template #title>
-    {{ '编辑设备类型' | translate }}
+    {{ '修改方法' | translate }}
   </ng-template>
 
   <ng-template #subTitle>
@@ -17,12 +17,12 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
           <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
-            <spec-code formControlName="code" [updatable]="false"></spec-code>
+            <spec-code formControlName="code" [updatable]="true"></spec-code>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">UUID</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="uuid">UUID</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="请输入UUID">
             <uuid formControlName="uuid"/>
           </nz-form-control>
@@ -36,7 +36,21 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">状态</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired>输入参数</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+          <definition-arguments formControlName="argumentsIn" [properties]="properties"></definition-arguments>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired>输出结果</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+            <definition-arguments formControlName="argumentsOut" [properties]="properties"></definition-arguments>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="状态">
             <lifecycle formControlName="lifecycle" [updatable]="true"/>
           </nz-form-control>

@@ -5,14 +5,16 @@ import {SpecDeviceCreateComponent} from './device/create/spec.device.create.comp
 import {SpecDeviceEditComponent} from './device/edit/spec.device.edit.component';
 import {SpecServiceCreateComponent} from './service/create/spec.service.create.component';
 import {SpecPropertyCreateComponent} from './property/create/spec.property.create.component';
+import {SpecPropertyEditComponent} from './property/edit/spec.property.edit.component';
+import {SpecPropertyViewComponent} from './property/view/spec.property.view.component';
 import {SpecActionCreateComponent} from './action/create/spec.action.create.component';
+import {SpecActionEditComponent} from './action/edit/spec.action.edit.component';
+import {SpecActionViewComponent} from './action/view/spec.action.view.component';
 import {SpecEventCreateComponent} from './event/create/spec.event.create.component';
 import {SpecFormatCreateComponent} from './format/create/spec.format.create.component';
 import {SpecUnitCreateComponent} from './unit/create/spec.unit.create.component';
 import {SpecFormatEditComponent} from './format/edit/spec.format.edit.component';
 import {SpecUnitEditComponent} from './unit/edit/spec.unit.edit.component';
-import {SpecPropertyEditComponent} from './property/edit/spec.property.edit.component';
-import {SpecPropertyViewComponent} from './property/view/spec.property.view.component';
 
 export const SPEC_ROUTES: Routes = [
   {
@@ -58,6 +60,16 @@ export const SPEC_ROUTES: Routes = [
     path: 'action/create',
     data: { breadcrumb: '方法' },
     component: SpecActionCreateComponent
+  },
+  {
+    path: 'action/edit/:type',
+    data: { breadcrumb: '方法' },
+    component: SpecActionEditComponent
+  },
+  {
+    path: 'action/view/:type',
+    data: { breadcrumb: '方法' },
+    component: SpecActionViewComponent
   },
   {
     path: 'event/create',

@@ -75,9 +75,7 @@ export class SpecServiceCreateComponent implements OnInit {
 
   protected submitForm() {
     const code = this.form.value.code || 'null';
-    const description = new Map<string, string>();
-    description.set('en-US', this.form.value.description?.get('en-US') || 'null');
-    description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const description = this.form.value.description || new Map<string, string>();
 
     const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
     const device: DeviceDefinition = new DeviceDefinition(type, description);

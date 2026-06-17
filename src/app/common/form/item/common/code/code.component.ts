@@ -8,7 +8,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 
 @Component({
-  selector: 'code',
+  selector: 'spec-code',
   templateUrl: './code.component.html',
   styleUrls: ['./code.component.less'],
   standalone: true,

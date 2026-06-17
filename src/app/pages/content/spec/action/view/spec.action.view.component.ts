@@ -13,23 +13,23 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceDefinition, DeviceType, LifeCycle, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {ArgumentDefinition, LifeCycle, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
-import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
-import {
-  DeviceInstanceNameComponent
-} from '../../../../../common/device/instance/service/split/detail/property/name/device.instance.name.component';
-import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
+import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {
+  DefinitionArgumentsComponent
+} from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
 
 @Component({
-  selector: 'spec-device-edit',
+  selector: 'spec-action-view',
   standalone: true,
-  templateUrl: './spec.device.edit.component.html',
-  styleUrls: ['./spec.device.edit.component.less'],
+  templateUrl: './spec.action.view.component.html',
+  styleUrls: ['./spec.action.view.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -45,19 +45,24 @@ import {CodeComponent} from '../../../../../common/form/item/common/code/code.co
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
+    CodeComponent,
     UuidComponent,
     LifecycleComponent,
-    CodeComponent,
+    DefinitionArgumentsComponent,
   ],
 })
-export class SpecDeviceEditComponent implements OnInit {
+export class SpecActionViewComponent implements OnInit {
 
   loading: boolean = false;
+  properties: PropertyDefinition[] = [];
+  actionType: string = '';
 
   form: FormGroup<{
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    argumentsIn: FormControl<ArgumentDefinition[]>,
+    argumentsOut: FormControl<ArgumentDefinition[]>,
     lifecycle: FormControl<LifeCycle>,
   }>;
 
@@ -66,43 +71,61 @@ export class SpecDeviceEditComponent implements OnInit {
     protected account: AccountService,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
-    private msg: NzMessageService,
     private service: MainService,
+    private msg: NzMessageService,
   ) {
     this.form = this.fb.group({
-
       code: this.fb.control('', [
         Validators.required,
         Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
       ]),
-
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      argumentsIn: this.fb.control<ArgumentDefinition[]>([]),
+      argumentsOut: this.fb.control<ArgumentDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
+
+    this.form.controls.uuid.disable();
   }
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      const type: string = params['type'] || '';
-      this.load(type);
+      this.actionType = params['type'] || '';
+      this.load();
     });
   }
 
-  private load(type: string) {
-    console.log('reload');
+  private load(): void {
+    this.loading = true;
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.properties = data;
+          this.loading = false;
+          this.loadActionDefinition(this.actionType);
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
 
+  private loadActionDefinition(type: string) {
     this.loading = true;
 
-    this.service.getDeviceDefinition(type)
+    this.service.getActionDefinition(type)
       .subscribe({
-        next: (namespace) => {
-          console.log('getSpecNamespace ok');
+        next: (a) => {
+          console.log('getActionDefinition ok');
 
-          this.form.controls.code.setValue(namespace.type.name);
-          this.form.controls.uuid.setValue(namespace.type.value);
-          this.form.controls.description.setValue(namespace.description);
-          this.form.controls.lifecycle.setValue(namespace.lifecycle);
+          this.form.controls.code.setValue(a.type.name);
+          this.form.controls.uuid.setValue(a.type.value);
+          this.form.controls.description.setValue(a.description);
+          this.form.controls.lifecycle.setValue(a.lifecycle);
+
+          this.form.controls.argumentsIn.setValue(a.in);
+          this.form.controls.argumentsIn.setValue(a.out);
 
           this.loading = false;
         },
@@ -116,34 +139,4 @@ export class SpecDeviceEditComponent implements OnInit {
   protected onBack() {
     this.router.navigate(['/main/spec']).then(() => {});
   }
-
-  protected submitForm() {
-    console.log('submitForm');
-
-    const code = this.form.value.code || 'null';
-    const value = this.form.value.uuid || 0;
-    const uuid = value.toString(16).padStart(8, '0');
-    const description = this.form.value.description || new Map<string, string>();
-    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
-
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);
-    const device: DeviceDefinition = new DeviceDefinition(type, description);
-    device.lifecycle = lifecycle;
-
-    this.loading = true;
-    this.service.updateDeviceDefinition(device)
-      .subscribe({
-        next: () => {
-          console.log('updateDeviceDefinition ok');
-          this.loading = false;
-          this.router.navigate(['/main/spec']).then(() => {});
-        },
-        error: error => {
-          this.msg.warning('Failed to updateDeviceDefinition', error);
-          this.loading = false;
-        }
-      });
-  }
-
-  protected readonly LifeCycle = LifeCycle;
 }

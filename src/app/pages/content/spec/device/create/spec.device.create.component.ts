@@ -92,9 +92,7 @@ export class SpecDeviceCreateComponent implements OnInit {
     const code = this.form.value.code || 'null';
     const value = this.form.value.uuid || 0;
     const uuid = value.toString(16).padStart(8, '0');
-    const description = new Map<string, string>();
-    description.set('en-US', this.form.value.description?.get('en-US') || 'null');
-    description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
     const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);

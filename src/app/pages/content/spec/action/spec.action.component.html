@@ -13,6 +13,7 @@
     <th>参数</th>
     <th>返回值</th>
     <th>状态</th>
+    <th>操作</th>
   </tr>
   </thead>
   <tbody>
@@ -23,14 +24,14 @@
         <td>{{ a.description.get('zh-CN') }}</td>
         <td>
           @if (a.in.length > 0) {
-            @for (arg of a.in; track arg.type.value) {
+            @for (arg of a.in; track arg; let i = $index)  {
               <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
             }
           }
         </td>
         <td>
           @if (a.out.length > 0) {
-            @for (arg of a.out; track arg.type.value) {
+            @for (arg of a.out; track arg; let i = $index) {
               <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
             }
           }
@@ -46,6 +47,18 @@
             @case (LifeCycle.DEVELOPMENT) {
               <nz-tag nzColor="red">开发中</nz-tag>
             }
+          }
+        </td>
+        <td>
+          @if (account.isEditable()) {
+            <a [routerLink]="['/main/spec/action/edit', a.type.toString()]">修改</a>
+
+            @if (a.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(a)">删除</a>
+            }
+          } @else {
+            <a [routerLink]="['/main/spec/action/view', a.type.toString()]">查看</a>
           }
         </td>
       </tr>

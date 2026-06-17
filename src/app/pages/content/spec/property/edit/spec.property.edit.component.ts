@@ -132,11 +132,11 @@ export class SpecPropertyEditComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.propertyType = params['type'] || '';
-      this.loadPropertyDefinitions();
+      this.load();
     });
   }
 
-  private loadPropertyDefinitions(): void {
+  private load(): void {
     this.loading = true;
     this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
@@ -144,7 +144,7 @@ export class SpecPropertyEditComponent implements OnInit {
           this.properties = data;
           this.propertyMap = new Map(data.map(item => [item.type.name, item]));
           this.loading = false;
-          this.load(this.propertyType);
+          this.loadPropertyDefinition(this.propertyType);
         },
         error: error => {
           this.msg.warning(error);
@@ -152,7 +152,7 @@ export class SpecPropertyEditComponent implements OnInit {
       })
   }
 
-  private load(type: string) {
+  private loadPropertyDefinition(type: string) {
     this.loading = true;
 
     this.service.getPropertyDefinition(type)
@@ -278,9 +278,7 @@ export class SpecPropertyEditComponent implements OnInit {
     const value = this.form.value.uuid || 0;
     const uuid = value.toString(16).padStart(8, '0');
     const code = this.form.value.code || 'null';
-    const description = new Map<string, string>();
-    description.set('en-US', this.form.value.description?.get('en-US') || 'null');
-    description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
     const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);

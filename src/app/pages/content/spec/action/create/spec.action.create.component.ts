@@ -14,8 +14,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
-  DeviceDefinition,
-  DeviceType, LifeCycle,
+  ActionDefinition,
+  ActionType,
+  ArgumentDefinition,
+  LifeCycle,
   PropertyDefinition,
   UrnType
 } from '@openxiot/xiot-core-spec-ts';
@@ -65,8 +67,8 @@ export class SpecActionCreateComponent implements OnInit {
     uuid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
-    argumentsIn: FormControl<PropertyDefinition[]>,
-    argumentsOut: FormControl<PropertyDefinition[]>,
+    argumentsIn: FormControl<ArgumentDefinition[]>,
+    argumentsOut: FormControl<ArgumentDefinition[]>,
     lifecycle: FormControl<LifeCycle>,
   }>;
 
@@ -85,16 +87,17 @@ export class SpecActionCreateComponent implements OnInit {
       ]),
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
-      argumentsIn: this.fb.control<PropertyDefinition[]>([]),
-      argumentsOut: this.fb.control<PropertyDefinition[]>([]),
+      argumentsIn: this.fb.control<ArgumentDefinition[]>([]),
+      argumentsOut: this.fb.control<ArgumentDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
   }
 
   ngOnInit() {
+    this.loadProperties();
   }
 
-  private loadDataFromServer(): void {
+  private loadProperties(): void {
     this.loading = true;
     this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
@@ -113,26 +116,31 @@ export class SpecActionCreateComponent implements OnInit {
   }
 
   protected submitForm() {
+    const value = this.form.value.uuid || 0;
+    const uuid = value.toString(16).padStart(8, '0');
     const code = this.form.value.code || 'null';
-    const description = new Map<string, string>();
-    description.set('en-US', this.form.value.description?.get('en-US') || 'null');
-    description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
+    const description = this.form.value.description || new Map<string, string>();
+    const argumentsIn: ArgumentDefinition[] = this.form.value.argumentsIn || [];
+    const argumentsOut: ArgumentDefinition[] = this.form.value.argumentsOut || [];
+    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, '0000');
-    const device: DeviceDefinition = new DeviceDefinition(type, description);
+    const type: ActionType = ActionType.create(this.account.ns.namespace, UrnType.ACTION, code, uuid);
+    const def: ActionDefinition = new ActionDefinition(type, description, argumentsIn, argumentsOut);
+    def.lifecycle = lifecycle;
 
     this.loading = true;
-    // this.service.createSpecDevice(this.account.organization.id, device)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('updateProduct ok');
-    //       this.loading = false;
-    //       this.router.navigate(['/main/namespace']).then(() => {});
-    //     },
-    //     error: error => {
-    //       this.msg.warning('Failed to createProduct', error);
-    //       this.loading = false;
-    //     }
-    //   });
+    this.service.createActionDefinition(def)
+      .subscribe({
+        next: () => {
+          console.log('createActionDefinition ok');
+          this.loading = false;
+          this.router.navigate(['/main/spec']).then(() => {
+          });
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 }

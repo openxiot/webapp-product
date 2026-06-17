@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -16,6 +16,10 @@ import {
   PropertyType
 } from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {RouterLink} from '@angular/router';
+import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'spec-action',
@@ -31,10 +35,16 @@ import {AccountService} from '../../../../service/account.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
+    NzDividerComponent,
+    RouterLink,
+  ],
+  providers: [
+    NzModalService
   ],
 })
 export class SpecActionComponent implements OnInit {
 
+  protected readonly LifeCycle = LifeCycle;
   loading: boolean = true;
   actions: ActionDefinition[] = [];
 
@@ -42,7 +52,9 @@ export class SpecActionComponent implements OnInit {
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
-    private account: AccountService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    protected account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -87,5 +99,44 @@ export class SpecActionComponent implements OnInit {
     }
   }
 
-  protected readonly LifeCycle = LifeCycle;
+  protected onDelete(def: ActionDefinition) {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个方法定义吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: def.type.toString(),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doDelete(def);
+      }
+    });
+  }
+
+  protected doDelete(def: ActionDefinition) {
+    this.loading = true;
+    this.service.deleteActionDefinition(def.type)
+      .subscribe({
+        next: data => {
+          this.actions = this.actions.filter(x => x.type.name !== def.type.name);
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
 }
