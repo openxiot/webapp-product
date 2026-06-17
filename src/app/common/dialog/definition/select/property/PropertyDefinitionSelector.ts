@@ -1,6 +1,6 @@
 import {PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 
-export class DefinitionSelectArgument {
+export class PropertyDefinitionSelector {
 
   constructor(
     public properties: PropertyDefinition[],

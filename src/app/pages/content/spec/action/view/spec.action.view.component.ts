@@ -85,8 +85,6 @@ export class SpecActionViewComponent implements OnInit {
       argumentsOut: this.fb.control<ArgumentDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
-
-    this.form.controls.uuid.disable();
   }
 
   ngOnInit() {

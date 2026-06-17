@@ -4,7 +4,7 @@
   [(ngModel)]="inputHex"
   (ngModelChange)="onInputChange($event)"
   (blur)="onBlur()"
-  [disabled]="isDisabled"
+  [disabled]="! updatable"
   placeholder="8位字符十六进制"
   maxlength="8"
 />

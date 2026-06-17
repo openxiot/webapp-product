@@ -17,8 +17,7 @@
             nz-button
             nzType="text"
             nzDanger
-            nz-tooltip="删除成员"
-            (click)="removeMember(def)"
+            (click)="removeItem(def)"
             [disabled]="isDisabled"
           >
             <span nz-icon nzType="delete" nzTheme="outline"></span>
@@ -30,7 +29,7 @@
 
   @if (updatable) {
     <nz-col [nzSpan]="24">
-      <button type="button" nz-button nzType="dashed" (click)="addMemberItem()">
+      <button type="button" nz-button nzType="dashed" (click)="addItem()">
         <span nz-icon nzType="plus"></span> 添加
       </button>
     </nz-col>

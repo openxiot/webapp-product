@@ -1,8 +1,8 @@
 <div style="width: 100%">
   <nz-table
     style="width: 100%"
-    #propertyTable
-    [nzData]="data.properties"
+    #table
+    [nzData]="actions"
     [nzSize]="'small'"
     [nzPageSize]="100"
     [nzHideOnSinglePage]="true"
@@ -15,13 +15,14 @@
         [nzIndeterminate]="indeterminate"
         (nzCheckedChange)="onAllChecked($event)"
       ></th>
-      <th>ID</th>
+      <th>代码</th>
       <th>描述</th>
-      <th>成员</th>
+      <th>参数</th>
+      <th>返回值</th>
     </tr>
     </thead>
     <tbody>
-      @for (p of propertyTable.data; track p) {
+      @for (p of table.data; track p) {
         <tr>
           <td [nzChecked]="selected.has(p)" (nzCheckedChange)="onItemChecked(p, $event)"></td>
           <td nzAlign="center">
@@ -31,8 +32,13 @@
             {{ p.description.get(data.language) }}
           </td>
           <td>
-            @if (p.format === DataFormat.COMBINATION) {
-<!--              <property-member [property]="p" [language]="data.language"></property-member>-->
+            @for (arg of p.in; track arg) {
+              {{ arg.type.name}}
+            }
+          </td>
+          <td>
+            @for (arg of p.out; track arg) {
+              {{ arg.type.name}}
             }
           </td>
         </tr>

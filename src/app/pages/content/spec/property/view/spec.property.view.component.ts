@@ -118,9 +118,6 @@ export class SpecPropertyViewComponent implements OnInit {
       members: this.fb.control<PropertyDefinition[]>([]),
       lifecycle: this.fb.control(LifeCycle.DEVELOPMENT, [Validators.required]),
     });
-
-    this.form.controls.uuid.disable();
-    this.form.controls.members.disable();
   }
 
   ngOnInit() {

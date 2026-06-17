@@ -1,70 +1,52 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewContainerRef
-} from '@angular/core';
-import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
+import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
-import {NzSpaceModule} from 'ng-zorro-antd/space';
-import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {ArgumentDefinition, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {PropertyDefinitionSelector} from '../../../../../dialog/definition/select/property/PropertyDefinitionSelector';
 import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definition/select/property/property.definition.select.component';
 
 @Component({
-  selector: 'definition-arguments',
-  templateUrl: './definition.arguments.component.html',
-  styleUrls: ['./definition.arguments.component.less'],
+  selector: 'service-definition-properties',
+  templateUrl: './service.definition.properties.component.html',
+  styleUrls: ['./service.definition.properties.component.less'],
   standalone: true,
   imports: [
-    FormsModule,
-    ReactiveFormsModule,
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
     NzIconModule,
     NzTagModule,
-    NzInputNumberComponent,
-    NzInputNumberGroupComponent,
-    NzSpaceModule,
-    NzRowDirective,
     NzColDirective,
+    NzRowDirective
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: DefinitionArgumentsComponent,
+      useExisting: ServiceDefinitionPropertiesComponent,
       multi: true
     },
     NzModalService
   ]
 })
-export class DefinitionArgumentsComponent implements OnInit, ControlValueAccessor, OnChanges {
+export class ServiceDefinitionPropertiesComponent implements ControlValueAccessor {
 
   @Input() updatable: boolean = true;
-  @Input() language!: string;
+  @Input() language: string = 'en-US';
   @Input() properties: PropertyDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值
-  arguments: ArgumentDefinition[] = [];
+  private _value: PropertyDefinition[] = [];
 
   // 禁用状态
   isDisabled = false;
 
   // 定义变化回调和触摸回调
-  onChange: (value: ArgumentDefinition[]) => void = () => {};
+  onChange: (value: PropertyDefinition[]) => void = () => {};
   onTouched: () => void = () => {};
 
   constructor(
@@ -73,19 +55,27 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   ) {
   }
 
-  ngOnInit() {
+  // 获取当前值
+  get value(): PropertyDefinition[] {
+    return this._value;
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges: ', changes);
+  // 设置当前值，并通知外部变化
+  set value(val: PropertyDefinition[]) {
+    if (val !== this._value) {
+      this._value = val;
+      this.onChange(val); // 重要：通知外部表单值已变化
+      this.changed.emit();
+    }
+    this.onTouched(); // 标记为已触摸
   }
 
   // --- ControlValueAccessor 接口方法 ---
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this.arguments) {
-      this.arguments = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value) {
+      this._value = obj;
     }
   }
 
@@ -104,31 +94,11 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
     this.isDisabled = isDisabled;
   }
 
-  onChanged() {
-    this.onChange(this.arguments);
-    this.changed.emit();
-  }
-
-  protected getDescription(arg: ArgumentDefinition): string {
-    const p = this.properties.find(x => x.type.name === arg.type.name);
-    if (p) {
-        return p.description.get(this.language) || p.description.get('en-US') || '';
-    }
-
-    return '?';
-  }
-
-  protected removeArgument(arg: ArgumentDefinition): void {
-    this.arguments = this.arguments.filter(x => x.type.name !== arg.type.name);
-    this.onChanged();
-  }
-
-  protected addArgument(): void {
-    const exclusion = new Set(this.arguments.map(x => x.type.name));
+  addMemberItem() {
+    const exclusion = new Set(this._value.map(x => x.type.name));
 
     const modal = this.modal.create<PropertyDefinitionSelectComponent, PropertyDefinitionSelector, Set<PropertyDefinition>>({
-      nzTitle: '选择属性作为参数',
-      nzWidth: 1000,
+      nzTitle: '选择属性',
       nzContent: PropertyDefinitionSelectComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: new PropertyDefinitionSelector(this.properties, exclusion, this.language),
@@ -148,18 +118,29 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.addArguments(result);
+        this._value = [];
+
+        const sortedResult = Array.from(result).sort((a, b) => a.type.name.localeCompare(b.type.name));
+        for (let item of sortedResult) {
+          this.addMember(item);
+        }
       }
     });
   }
 
-  private addArguments(result: Set<PropertyDefinition>) {
-    for (let p of result) {
-      this.arguments.push(new ArgumentDefinition(p.type));
+  addMember(def: PropertyDefinition) {
+    this._value.push(def);
+    this.changed.emit();
+  }
+
+  removeMember(def: PropertyDefinition): void {
+    const index = this._value.indexOf(def);
+    if (index > -1) {
+      this._value.splice(index, 1);
+      // 通知外部值已变化
+      this.onChange(this._value);
+      this.onTouched();
+      this.changed.emit();
     }
-
-    this.arguments = this.arguments.sort((a, b) => a.type.name.localeCompare(b.type.name));
-
-    this.onChanged();
   }
 }

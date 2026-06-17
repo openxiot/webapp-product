@@ -41,7 +41,7 @@ export class LifecycleComponent implements ControlValueAccessor {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() updatable: boolean = false;
+  @Input() updatable: boolean = true;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值

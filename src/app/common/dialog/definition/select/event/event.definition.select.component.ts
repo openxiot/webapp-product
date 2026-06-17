@@ -1,19 +1,19 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DefinitionSelectMember} from './DefinitionSelectMember';
+import {EventDefinitionSelector} from './EventDefinitionSelector';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
-import {DataFormat, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {DataFormat, EventDefinition} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
-  selector: 'definition-select-member',
-  styleUrls: ['./definition.select.member.component.less'],
-  templateUrl: './definition.select.member.component.html',
+  selector: 'event-definition-select',
+  styleUrls: ['./event.definition.select.component.less'],
+  templateUrl: './event.definition.select.component.html',
   standalone: true,
   imports: [
     FormsModule,
@@ -28,14 +28,13 @@ import {DataFormat, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
   ],
   providers: [],
 })
-export class DefinitionSelectMemberComponent implements OnInit {
+export class EventDefinitionSelectComponent implements OnInit {
 
   readonly #modal = inject(NzModalRef);
-  readonly data: DefinitionSelectMember = inject(NZ_MODAL_DATA);
+  readonly data: EventDefinitionSelector = inject(NZ_MODAL_DATA);
 
-  loading: boolean = false;
-
-  selected: Set<PropertyDefinition> = new Set<PropertyDefinition>();
+  events: EventDefinition[] = [];
+  selected: Set<EventDefinition> = new Set<EventDefinition>();
   checked: boolean = false;
   indeterminate: boolean = false;
 
@@ -44,7 +43,8 @@ export class DefinitionSelectMemberComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.selected = new Set(this.data.members);
+    this.events = this.data.events
+      .filter(x => ! this.data.exclusion.has(x.type.name));
   }
 
   cancel(): void {
@@ -56,16 +56,16 @@ export class DefinitionSelectMemberComponent implements OnInit {
   }
 
   onAllChecked(value: boolean): void {
-    this.data.properties.forEach(p => this.updateCheckedSet(p, value));
+    this.events.forEach(p => this.updateCheckedSet(p, value));
     this.refreshCheckedStatus();
   }
 
-  onItemChecked(def: PropertyDefinition, checked: boolean): void {
+  onItemChecked(def: EventDefinition, checked: boolean): void {
     this.updateCheckedSet(def, checked);
     this.refreshCheckedStatus();
   }
 
-  updateCheckedSet(def: PropertyDefinition, checked: boolean): void {
+  updateCheckedSet(def: EventDefinition, checked: boolean): void {
     if (checked) {
       this.selected.add(def);
     } else {
@@ -74,8 +74,8 @@ export class DefinitionSelectMemberComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.checked = this.data.properties.every(p => this.selected.has(p));
-    this.indeterminate = this.data.properties.some(p => this.selected.has(p)) && !this.checked;
+    this.checked = this.events.every(p => this.selected.has(p));
+    this.indeterminate = this.events.some(p => this.selected.has(p)) && !this.checked;
   }
 
   protected readonly DataFormat = DataFormat;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -20,6 +20,10 @@ import {
   EventDefinition
 } from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
+import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {RouterLink} from '@angular/router';
+import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'spec-service',
@@ -35,9 +39,16 @@ import {AccountService} from '../../../../service/account.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
+    NzDividerComponent,
+    RouterLink,
+  ],
+  providers: [
+    NzModalService
   ],
 })
 export class SpecServiceComponent implements OnInit {
+
+  protected readonly LifeCycle = LifeCycle;
 
   loading: boolean = true;
   services: ServiceDefinition[] = [];
@@ -52,7 +63,9 @@ export class SpecServiceComponent implements OnInit {
   events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
-    private account: AccountService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    protected account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -71,9 +84,9 @@ export class SpecServiceComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecServices: ', error);
+          this.msg.warning(error);
         }
-      })
+      });
 
     this.loadingProperties = true;
     this.service.getPropertyDefinitions(this.account.ns.namespace)
@@ -83,9 +96,9 @@ export class SpecServiceComponent implements OnInit {
           this.loadingProperties = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecProperties: ', error);
+          this.msg.warning(error);
         }
-      })
+      });
 
     this.loadingActions = true;
     this.service.getActionDefinitions(this.account.ns.namespace)
@@ -95,9 +108,9 @@ export class SpecServiceComponent implements OnInit {
           this.loadingActions = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecActions: ', error);
+          this.msg.warning(error);
         }
-      })
+      });
 
     this.loadingEvents = true;
     this.service.getEventDefinitions(this.account.ns.namespace)
@@ -107,9 +120,9 @@ export class SpecServiceComponent implements OnInit {
           this.loadingEvents = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecEvents: ', error);
+          this.msg.warning(error);
         }
-      })
+      });
   }
 
   getPropertyDescription(type: PropertyType): string {
@@ -139,5 +152,44 @@ export class SpecServiceComponent implements OnInit {
     }
   }
 
-  protected readonly LifeCycle = LifeCycle;
+  protected onDelete(def: ServiceDefinition) {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: '您真的要删除这个方法定义吗？',
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: def.type.toString(),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doDelete(def);
+      }
+    });
+  }
+
+  protected doDelete(def: ServiceDefinition) {
+    this.loading = true;
+    this.service.deleteServiceDefinition(def.type)
+      .subscribe({
+        next: data => {
+          this.services = this.services.filter(x => x.type.name !== def.type.name);
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
 }

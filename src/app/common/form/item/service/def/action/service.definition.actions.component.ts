@@ -2,24 +2,22 @@ import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {ActionDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {PropertyDefinitionSelector} from '../../../../../dialog/definition/select/property/PropertyDefinitionSelector';
-import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definition/select/property/property.definition.select.component';
+import {ActionDefinitionSelector} from "../../../../../dialog/definition/select/action/ActionDefinitionSelector";
+import {ActionDefinitionSelectComponent} from "../../../../../dialog/definition/select/action/action.definition.select.component";
 
 @Component({
-  selector: 'property-definition-members',
-  templateUrl: './property.definition.members.component.html',
-  styleUrls: ['./property.definition.members.component.less'],
+  selector: 'service-definition-actions',
+  templateUrl: './service.definition.actions.component.html',
+  styleUrls: ['./service.definition.actions.component.less'],
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
     NzIconModule,
     NzTagModule,
     NzColDirective,
@@ -28,28 +26,30 @@ import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definitio
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: PropertyDefinitionMembersComponent,
+      useExisting: ServiceDefinitionActionsComponent,
       multi: true
     },
     NzModalService
   ]
 })
-export class PropertyDefinitionMembersComponent implements ControlValueAccessor {
+export class ServiceDefinitionActionsComponent implements ControlValueAccessor {
 
   @Input() updatable: boolean = true;
   @Input() language: string = 'en-US';
-  @Input() properties: PropertyDefinition[] = [];
+  @Input() actions: ActionDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值
-  private _value: PropertyDefinition[] = [];
+  private _value: ActionDefinition[] = [];
 
   // 禁用状态
   isDisabled = false;
 
   // 定义变化回调和触摸回调
-  onChange: (value: PropertyDefinition[]) => void = () => {};
-  onTouched: () => void = () => {};
+  onChange: (value: ActionDefinition[]) => void = () => {
+  };
+  onTouched: () => void = () => {
+  };
 
   constructor(
     private modal: NzModalService,
@@ -58,12 +58,12 @@ export class PropertyDefinitionMembersComponent implements ControlValueAccessor 
   }
 
   // 获取当前值
-  get value(): PropertyDefinition[] {
+  get value(): ActionDefinition[] {
     return this._value;
   }
 
   // 设置当前值，并通知外部变化
-  set value(val: PropertyDefinition[]) {
+  set value(val: ActionDefinition[]) {
     if (val !== this._value) {
       this._value = val;
       this.onChange(val); // 重要：通知外部表单值已变化
@@ -96,14 +96,14 @@ export class PropertyDefinitionMembersComponent implements ControlValueAccessor 
     this.isDisabled = isDisabled;
   }
 
-  addMemberItem() {
+  addItem() {
     const exclusion = new Set(this._value.map(x => x.type.name));
 
-    const modal = this.modal.create<PropertyDefinitionSelectComponent, PropertyDefinitionSelector, Set<PropertyDefinition>>({
-      nzTitle: '选择属性作为成员',
-      nzContent: PropertyDefinitionSelectComponent,
+    const modal = this.modal.create<ActionDefinitionSelectComponent, ActionDefinitionSelector, Set<ActionDefinition>>({
+      nzTitle: '选择属性',
+      nzContent: ActionDefinitionSelectComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new PropertyDefinitionSelector(this.properties, exclusion, this.language),
+      nzData: new ActionDefinitionSelector(this.actions, exclusion, this.language),
       nzFooter: [
         {
           label: '取消',
@@ -130,14 +130,12 @@ export class PropertyDefinitionMembersComponent implements ControlValueAccessor 
     });
   }
 
-  addMember(def: PropertyDefinition) {
-    console.log('addMember: ', def.type.toString());
+  addMember(def: ActionDefinition) {
     this._value.push(def);
     this.changed.emit();
   }
 
-  // 删除成员
-  removeMember(def: PropertyDefinition): void {
+  removeItem(def: ActionDefinition): void {
     const index = this._value.indexOf(def);
     if (index > -1) {
       this._value.splice(index, 1);

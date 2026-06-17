@@ -37,10 +37,10 @@ import {
 } from '../../../../../common/form/item/service/def/action/service.definition.actions.component';
 
 @Component({
-  selector: 'spec-service-create',
+  selector: 'spec-service-edit',
   standalone: true,
-  templateUrl: './spec.service.create.component.html',
-  styleUrls: ['./spec.service.create.component.less'],
+  templateUrl: './spec.service.edit.component.html',
+  styleUrls: ['./spec.service.edit.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -64,16 +64,22 @@ import {
     ServiceDefinitionActionsComponent,
   ],
 })
-export class SpecServiceCreateComponent implements OnInit {
+export class SpecServiceEditComponent implements OnInit {
+
+  loading: boolean = false;
+  serviceType: string = '';
 
   loadingProperties: boolean = false;
   properties: PropertyDefinition[] = [];
+  propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   loadingActions: boolean = false;
   actions: ActionDefinition[] = [];
+  actionMap: Map<string, ActionDefinition> = new Map<string, ActionDefinition>();
 
   loadingEvents: boolean = false;
   events: EventDefinition[] = [];
+  eventMap: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -114,9 +120,95 @@ export class SpecServiceCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadProperties();
-    this.loadActions();
-    this.loadEvents();
+    this.route.params.subscribe(params => {
+      this.serviceType = params['type'] || '';
+      this.loadProperties();
+    });
+  }
+
+  private loadService() {
+    this.loading = true;
+    this.service.getServiceDefinition(this.serviceType)
+      .subscribe({
+        next: a => {
+
+          this.form.controls.code.setValue(a.type.name);
+          this.form.controls.uuid.setValue(a.type.value);
+          this.form.controls.description.setValue(a.description);
+          this.form.controls.lifecycle.setValue(a.lifecycle);
+
+          const requiredProperties = a.requiredProperties
+            .map(x => {
+              let def = this.propertyMap.get(x.name);
+              if (def == null) {
+                def = new PropertyDefinition(x, new Map<string, string>())
+              }
+              return def;
+            });
+
+          this.form.controls.requiredProperties.setValue(requiredProperties);
+
+          const optionalProperties = a.requiredProperties
+            .map(x => {
+              let def = this.propertyMap.get(x.name);
+              if (def == null) {
+                def = new PropertyDefinition(x, new Map<string, string>())
+              }
+              return def;
+            });
+
+          this.form.controls.optionalProperties.setValue(optionalProperties);
+
+          const requiredActions = a.requiredActions
+            .map(x => {
+              let def = this.actionMap.get(x.name);
+              if (def == null) {
+                def = new ActionDefinition(x, new Map<string, string>(), [], [])
+              }
+              return def;
+            });
+
+          this.form.controls.requiredActions.setValue(requiredActions);
+
+          const optionalActions = a.optionalActions
+            .map(x => {
+              let def = this.actionMap.get(x.name);
+              if (def == null) {
+                def = new ActionDefinition(x, new Map<string, string>(), [], [])
+              }
+              return def;
+            });
+
+          this.form.controls.optionalActions.setValue(optionalActions);
+
+          const requiredEvent = a.requiredEvents
+            .map(x => {
+              let def = this.eventMap.get(x.name);
+              if (def == null) {
+                def = new EventDefinition(x, new Map<string, string>(), [])
+              }
+              return def;
+            });
+
+          this.form.controls.requiredProperties.setValue(requiredProperties);
+
+          const optionalEvents = a.optionalEvents
+            .map(x => {
+              let def = this.eventMap.get(x.name);
+              if (def == null) {
+                def = new EventDefinition(x, new Map<string, string>(), [])
+              }
+              return def;
+            });
+
+          this.form.controls.optionalEvents.setValue(optionalEvents);
+
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      });
   }
 
   private loadProperties(): void {
@@ -125,7 +217,9 @@ export class SpecServiceCreateComponent implements OnInit {
       .subscribe({
         next: data => {
           this.properties = data;
+          this.propertyMap = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
+          this.loadActions();
         },
         error: error => {
           this.msg.warning(error);
@@ -139,7 +233,9 @@ export class SpecServiceCreateComponent implements OnInit {
       .subscribe({
         next: data => {
           this.actions = data;
+          this.actionMap = new Map(data.map(item => [item.type.name, item]));
           this.loadingActions = false;
+          this.loadEvents();
         },
         error: error => {
           this.msg.warning(error);
@@ -153,7 +249,9 @@ export class SpecServiceCreateComponent implements OnInit {
       .subscribe({
         next: data => {
           this.events = data;
+          this.eventMap = new Map(data.map(item => [item.type.name, item]));
           this.loadingEvents = false;
+          this.loadService();
         },
         error: error => {
           this.msg.warning(error);

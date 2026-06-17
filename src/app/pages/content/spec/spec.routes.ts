@@ -4,6 +4,8 @@ import {SpecNsComponent} from './ns/spec.ns.component';
 import {SpecDeviceCreateComponent} from './device/create/spec.device.create.component';
 import {SpecDeviceEditComponent} from './device/edit/spec.device.edit.component';
 import {SpecServiceCreateComponent} from './service/create/spec.service.create.component';
+import {SpecServiceEditComponent} from './service/edit/spec.service.edit.component';
+import {SpecServiceViewComponent} from './service/view/spec.service.view.component';
 import {SpecPropertyCreateComponent} from './property/create/spec.property.create.component';
 import {SpecPropertyEditComponent} from './property/edit/spec.property.edit.component';
 import {SpecPropertyViewComponent} from './property/view/spec.property.view.component';
@@ -40,6 +42,16 @@ export const SPEC_ROUTES: Routes = [
     path: 'service/create',
     data: { breadcrumb: '功能' },
     component: SpecServiceCreateComponent
+  },
+  {
+    path: 'service/edit/:type',
+    data: { breadcrumb: '功能' },
+    component: SpecServiceEditComponent
+  },
+  {
+    path: 'service/view/:type',
+    data: { breadcrumb: '功能' },
+    component: SpecServiceViewComponent
   },
   {
     path: 'property/create',

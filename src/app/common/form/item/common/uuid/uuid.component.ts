@@ -20,6 +20,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 })
 export class UuidComponent implements ControlValueAccessor {
 
+  @Input() updatable: boolean = false;
   @Output() changed = new EventEmitter<void>();
 
   // 内部真实值：number

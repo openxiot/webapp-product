@@ -1,0 +1,42 @@
+<div style="width: 100%">
+  <nz-table
+    style="width: 100%"
+    #table
+    [nzData]="events"
+    [nzSize]="'small'"
+    [nzPageSize]="100"
+    [nzHideOnSinglePage]="true"
+    [nzBordered]="true"
+  >
+    <thead>
+    <tr>
+      <th
+        [(nzChecked)]="checked"
+        [nzIndeterminate]="indeterminate"
+        (nzCheckedChange)="onAllChecked($event)"
+      ></th>
+      <th>代码</th>
+      <th>描述</th>
+      <th>参数</th>
+    </tr>
+    </thead>
+    <tbody>
+      @for (p of table.data; track p) {
+        <tr>
+          <td [nzChecked]="selected.has(p)" (nzCheckedChange)="onItemChecked(p, $event)"></td>
+          <td nzAlign="center">
+            <nz-tag [nzColor]="'blue'">{{ p.type.name }}</nz-tag>
+          </td>
+          <td>
+            {{ p.description.get(data.language) }}
+          </td>
+          <td>
+            @for (arg of p.arguments; track arg) {
+              {{ arg.type.name}}
+            }
+          </td>
+        </tr>
+      }
+    </tbody>
+  </nz-table>
+</div>

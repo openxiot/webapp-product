@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DefinitionSelectArgument} from './DefinitionSelectArgument';
+import {PropertyDefinitionSelector} from './PropertyDefinitionSelector';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
@@ -9,13 +9,11 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
 import {DataFormat, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
-import {NzRadioModule} from 'ng-zorro-antd/radio';
-import {PropertyDefinitionMembersComponent} from '../../../../form/item/property/def/members/property.definition.members.component';
 
 @Component({
-  selector: 'definition-select-argument',
-  styleUrls: ['./definition.select.argument.component.less'],
-  templateUrl: './definition.select.argument.component.html',
+  selector: 'property-definition-select',
+  styleUrls: ['./property.definition.select.component.less'],
+  templateUrl: './property.definition.select.component.html',
   standalone: true,
   imports: [
     FormsModule,
@@ -27,18 +25,15 @@ import {PropertyDefinitionMembersComponent} from '../../../../form/item/property
     NzTagModule,
     NzCellAlignDirective,
     NzTableModule,
-    NzRadioModule,
-    PropertyDefinitionMembersComponent,
   ],
   providers: [],
 })
-export class DefinitionSelectArgumentComponent implements OnInit {
+export class PropertyDefinitionSelectComponent implements OnInit {
 
   readonly #modal = inject(NzModalRef);
-  readonly data: DefinitionSelectArgument = inject(NZ_MODAL_DATA);
+  readonly data: PropertyDefinitionSelector = inject(NZ_MODAL_DATA);
 
   properties: PropertyDefinition[] = [];
-
   selected: Set<PropertyDefinition> = new Set<PropertyDefinition>();
   checked: boolean = false;
   indeterminate: boolean = false;
@@ -50,6 +45,7 @@ export class DefinitionSelectArgumentComponent implements OnInit {
   ngOnInit(): void {
     this.properties = this.data.properties
       .filter(x => ! this.data.exclusion.has(x.type.name));
+    // this.selected = new Set(this.data.members);
   }
 
   cancel(): void {
@@ -79,8 +75,8 @@ export class DefinitionSelectArgumentComponent implements OnInit {
   }
 
   refreshCheckedStatus(): void {
-    this.checked = this.data.properties.every(p => this.selected.has(p));
-    this.indeterminate = this.data.properties.some(p => this.selected.has(p)) && !this.checked;
+    this.checked = this.properties.every(p => this.selected.has(p));
+    this.indeterminate = this.properties.some(p => this.selected.has(p)) && !this.checked;
   }
 
   protected readonly DataFormat = DataFormat;

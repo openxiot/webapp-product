@@ -24,7 +24,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="uuid">UUID</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="请输入UUID">
-            <uuid formControlName="uuid"/>
+            <uuid formControlName="uuid" [updatable]="false"/>
           </nz-form-control>
         </nz-form-item>
 

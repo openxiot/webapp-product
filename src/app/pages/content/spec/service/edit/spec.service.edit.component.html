@@ -4,7 +4,7 @@
   </nz-page-header>
 
   <ng-template #title>
-    {{ '创建服务' | translate }}
+    {{ '编辑服务' | translate }}
   </ng-template>
 
   <ng-template #subTitle>
@@ -17,7 +17,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
           <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
-            <spec-code formControlName="code" [updatable]="true"></spec-code>
+            <spec-code formControlName="code" [updatable]="false"></spec-code>
           </nz-form-control>
         </nz-form-item>
 
@@ -80,7 +80,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="状态">
-            <lifecycle formControlName="lifecycle" [updatable]="true"/>
+            <lifecycle formControlName="lifecycle"/>
           </nz-form-control>
         </nz-form-item>
 

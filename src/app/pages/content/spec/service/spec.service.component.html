@@ -14,6 +14,7 @@
     <th>方法</th>
     <th>事件</th>
     <th>状态</th>
+    <th>操作</th>
   </tr>
   </thead>
   <tbody>
@@ -60,6 +61,18 @@
             @case (LifeCycle.DEVELOPMENT) {
               <nz-tag nzColor="red">开发中</nz-tag>
             }
+          }
+        </td>
+        <td>
+          @if (account.isEditable()) {
+            <a [routerLink]="['/main/spec/service/edit', s.type.toString()]">修改</a>
+
+            @if (s.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(s)">删除</a>
+            }
+          } @else {
+            <a [routerLink]="['/main/spec/service/view', s.type.toString()]">查看</a>
           }
         </td>
       </tr>
