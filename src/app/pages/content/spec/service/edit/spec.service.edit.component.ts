@@ -285,7 +285,7 @@ export class SpecServiceEditComponent implements OnInit {
     def.lifecycle = lifecycle;
 
     this.loadingActions = true;
-    this.service.createServiceDefinition(def)
+    this.service.updateServiceDefinition(def)
       .subscribe({
         next: () => {
           console.log('createServiceDefinition ok');

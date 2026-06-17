@@ -18,6 +18,8 @@ import {SpecUnitCreateComponent} from './unit/create/spec.unit.create.component'
 import {SpecFormatEditComponent} from './format/edit/spec.format.edit.component';
 import {SpecUnitEditComponent} from './unit/edit/spec.unit.edit.component';
 import {SpecFormatAddComponent} from './format/add/spec.format.add.component';
+import {SpecEventEditComponent} from './event/edit/spec.event.edit.component';
+import {SpecEventViewComponent} from './event/view/spec.event.view.component';
 
 export const SPEC_ROUTES: Routes = [
   {
@@ -88,6 +90,16 @@ export const SPEC_ROUTES: Routes = [
     path: 'event/create',
     data: { breadcrumb: '事件' },
     component: SpecEventCreateComponent
+  },
+  {
+    path: 'event/edit/:type',
+    data: { breadcrumb: '事件' },
+    component: SpecEventEditComponent
+  },
+  {
+    path: 'event/view/:type',
+    data: { breadcrumb: '事件' },
+    component: SpecEventViewComponent
   },
   {
     path: 'format/create',

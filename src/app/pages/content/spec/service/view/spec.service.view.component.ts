@@ -262,41 +262,4 @@ export class SpecServiceViewComponent implements OnInit {
   protected onBack() {
     this.router.navigate(['/main/spec']).then(() => {});
   }
-
-  protected submitForm() {
-    const value = this.form.value.uuid || 0;
-    const uuid = value.toString(16).padStart(8, '0');
-    const code = this.form.value.code || 'null';
-    const description = this.form.value.description || new Map<string, string>();
-    const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
-
-    const requiredProperties = this.form.controls.requiredProperties.value.map(x => x.type);
-    const optionalProperties = this.form.controls.optionalProperties.value.map(x => x.type);
-    const requiredActions = this.form.controls.requiredActions.value.map(x => x.type);
-    const optionalActions = this.form.controls.optionalActions.value.map(x => x.type);
-    const requiredEvents = this.form.controls.requiredEvents.value.map(x => x.type);
-    const optionalEvents = this.form.controls.optionalEvents.value.map(x => x.type);
-
-    const type: ServiceType = ServiceType.create(this.account.ns.namespace, UrnType.SERVICE, code, uuid);
-    const def: ServiceDefinition = new ServiceDefinition(type, description,
-      requiredProperties, optionalProperties,
-      requiredActions, optionalActions,
-      requiredEvents, optionalEvents);
-    def.lifecycle = lifecycle;
-
-    this.loadingActions = true;
-    this.service.createServiceDefinition(def)
-      .subscribe({
-        next: () => {
-          console.log('createServiceDefinition ok');
-          this.loadingActions = false;
-          this.router.navigate(['/main/spec']).then(() => {
-          });
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loadingActions = false;
-        }
-      });
-  }
 }
