@@ -10,6 +10,8 @@ import {DecimalPipe} from '@angular/common';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconModule} from 'ng-zorro-antd/icon';
+import {NzSpinModule} from 'ng-zorro-antd/spin';
+import {Statistic} from '../../../typedef/define/statistic/Statistic';
 
 @Component({
   selector: 'main-welcome',
@@ -17,6 +19,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.less'],
   imports: [
+    RouterLink,
     TranslatePipe,
     DecimalPipe,
     NzStatisticModule,
@@ -25,10 +28,13 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
     NzButtonModule,
     NzCardModule,
     NzIconModule,
-    RouterLink,
+    NzSpinModule,
   ]
 })
 export class WelcomeComponent implements OnInit {
+
+  loading: boolean = false;
+  statistic: Statistic = new Statistic();
 
   constructor(
     public account: AccountService,
@@ -40,5 +46,20 @@ export class WelcomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.load();
+  }
+
+  private load() {
+    this.loading = true;
+    this.service.getStatistic().subscribe({
+      next: data => {
+        this.statistic = data;
+        this.loading = false;
+      },
+      error: error => {
+        this.msg.warning(error);
+        this.loading = false;
+      }
+    });
   }
 }

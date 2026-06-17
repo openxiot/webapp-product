@@ -39,6 +39,8 @@ import {OSSUpload} from '../typedef/define/upload/OSSUpload';
 import {OSSUploadCodec} from '../typedef/codec/upload/OSSUploadCodec';
 import {Organization, OrganizationMember} from '../typedef/define/developer/Organization';
 import {OrganizationCodec, OrganizationMemberCodec} from '../typedef/codec/developer/OrganizationCodec';
+import {Statistic} from '../typedef/define/statistic/Statistic';
+import {StatisticCodec} from '../typedef/codec/statistic/StatisticCodec';
 
 @Injectable({providedIn: 'root'})
 export class MainService {
@@ -55,6 +57,15 @@ export class MainService {
     return this.http
       .get<OxResponse>(`${this.account}/developer/platform/all`)
       .pipe(map(response => Oauth2ConfigurationCodec.decodeArray(response.data)));
+  }
+
+  /**------------------------------------------------------------------------------------------------
+   * 统计数据
+   *------------------------------------------------------------------------------------------------*/
+  getStatistic(): Observable<Statistic> {
+    return this.http
+      .get<OxResponse>(`${this.server}/v1/statistic`)
+      .pipe(map(response => StatisticCodec.decode(response.data)));
   }
 
   /**------------------------------------------------------------------------------------------------

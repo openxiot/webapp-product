@@ -1,101 +1,104 @@
-<div style="padding: 20px 20px">
-  <nz-row [nzGutter]="[8, 8]">
+<nz-spin [nzSpinning]="loading">
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/product']"
-      >
-        <nz-statistic
-          [nzTitle]="'产品' | translate"
-          [nzValue]="(893 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+  <div style="padding: 20px 20px">
+    <nz-row [nzGutter]="[8, 8]">
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/template']"
-      >
-        <nz-statistic
-          [nzTitle]="'产品模板' | translate"
-          [nzValue]="(193 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/product']"
+        >
+          <nz-statistic
+            [nzTitle]="'产品' | translate"
+            [nzValue]="(statistic.products  | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/namespace']"
-      >
-        <nz-statistic
-          [nzTitle]="'名字空间' | translate"
-          [nzValue]="(10 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/template']"
+        >
+          <nz-statistic
+            [nzTitle]="'产品模板' | translate"
+            [nzValue]="(statistic.templates | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/spec']"
-      >
-        <nz-statistic
-          [nzTitle]="'设备类型' | translate"
-          [nzValue]="(78 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/namespace']"
+        >
+          <nz-statistic
+            [nzTitle]="'名字空间' | translate"
+            [nzValue]="(statistic.specifications | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/spec']"
-      >
-        <nz-statistic
-          [nzTitle]="'功能定义' | translate"
-          [nzValue]="(178 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/spec']"
+        >
+          <nz-statistic
+            [nzTitle]="'设备类型' | translate"
+            [nzValue]="(78 | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/spec']"
-      >
-        <nz-statistic
-          [nzTitle]="'属性定义' | translate"
-          [nzValue]="(1983 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/spec']"
+        >
+          <nz-statistic
+            [nzTitle]="'功能定义' | translate"
+            [nzValue]="(178 | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/spec']"
-      >
-        <nz-statistic
-          [nzTitle]="'方法定义' | translate"
-          [nzValue]="(983 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/spec']"
+        >
+          <nz-statistic
+            [nzTitle]="'属性定义' | translate"
+            [nzValue]="(1983 | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-    <nz-col [nzSpan]="6">
-      <nz-card
-        [nzHoverable]="true"
-        [routerLink]="['/main/spec']"
-      >
-        <nz-statistic
-          [nzTitle]="'事件定义' | translate"
-          [nzValue]="(983 | number)!"
-        ></nz-statistic>
-      </nz-card>
-    </nz-col>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/spec']"
+        >
+          <nz-statistic
+            [nzTitle]="'方法定义' | translate"
+            [nzValue]="(983 | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
 
-  </nz-row>
-</div>
+      <nz-col [nzSpan]="6">
+        <nz-card
+          [nzHoverable]="true"
+          [routerLink]="['/main/spec']"
+        >
+          <nz-statistic
+            [nzTitle]="'事件定义' | translate"
+            [nzValue]="(983 | number)!"
+          ></nz-statistic>
+        </nz-card>
+      </nz-col>
+
+    </nz-row>
+  </div>
+</nz-spin>
