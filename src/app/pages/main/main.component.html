@@ -6,12 +6,11 @@
         <span class="logo-text">{{ '产品中心' | translate }}</span>
       </div>
 
-      <!-- 大屏幕水平菜单：小屏幕隐藏 -->
       <ul
         nz-menu
         nzTheme="dark"
         nzMode="horizontal"
-        class="header-menu desktop-menu"
+        class="header-menu"
       >
         <li nz-menu-item nzMatchRouter routerLink="/main/product">
           <span nz-icon nzType="bulb" nzTheme="outline"></span>
@@ -37,7 +36,7 @@
           <span nz-icon nzType="global" nzTheme="outline"></span>
         </li>
 
-        <li nz-menu-item nzMatchRouter (click)="logout()" style="float: right" >
+        <li nz-menu-item nzMatchRouter routerLink="/passport" style="float: right" >
           @if (account.login) {
             <span nz-icon nzType="logout" nzTheme="outline"></span>
             <span>{{ '退出' | translate }}</span>
@@ -89,66 +88,10 @@
           }
         }
       </ul>
-
-      <!-- 小屏幕汉堡按钮 + 下拉菜单 -->
-      <div class="mobile-menu-trigger">
-      <span>
-        <button
-          nz-button
-          nzType="text"
-          nzSize="large"
-          nz-dropdown
-          [nzDropdownMenu]="mobileMenu"
-          nzPlacement="bottomRight"
-        >
-          <span nz-icon nzType="menu" nzTheme="outline" style="color: white; font-size: 20px;"></span>
-        </button>
-      </span>
-      </div>
     </nz-header>
 
     <nz-content class="scrollable-content">
       <router-outlet></router-outlet>
     </nz-content>
   </nz-layout>
-
-  <!-- 小屏幕下拉菜单 -->
-  <nz-dropdown-menu #mobileMenu="nzDropdownMenu">
-    <ul nz-menu nzTheme="dark" nzMode="vertical">
-      <li nz-menu-item nzMatchRouter routerLink="/main/product">
-        <span nz-icon nzType="bulb" nzTheme="outline"></span>
-        产品
-      </li>
-      <li nz-menu-item nzMatchRouter routerLink="/main/application">
-        <span nz-icon nzType="appstore" nzTheme="outline"></span>
-        应用
-      </li>
-      <li nz-menu-item nzMatchRouter routerLink="/main/statistic">
-        <span nz-icon nzType="line-chart" nzTheme="outline"></span>
-        统计
-      </li>
-      <li nz-menu-item nzMatchRouter routerLink="/main/template">
-        <span nz-icon nzType="fire" nzTheme="outline"></span>
-        产品模板
-      </li>
-      <li nz-menu-item nzMatchRouter routerLink="/main/spec">
-        <span nz-icon nzType="gold" nzTheme="outline"></span>
-        产品规范
-      </li>
-
-      <li nz-menu-item nzMatchRouter routerLink="/main/profile">
-        <span nz-icon nzType="user" nzTheme="outline"></span>
-        个人中心
-      </li>
-
-      <li nz-menu-item nzMatchRouter (click)="logout()">
-        <span nz-icon nzType="logout" nzTheme="outline"></span>
-        退出登录
-      </li>
-    </ul>
-  </nz-dropdown-menu>
-
-  <nz-dropdown-menu #notice>
-    <notice-card></notice-card>
-  </nz-dropdown-menu>
 </nz-spin>

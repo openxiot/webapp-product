@@ -5,43 +5,8 @@
   padding-top: 64px; /* 留出 header 高度，防止内容被遮挡 */
 }
 
-// 大屏幕水平菜单：默认显示
-.desktop-menu {
-  margin-bottom: 0; // 清除 nz-menu 默认 margin
-}
-
-// 小屏幕汉堡按钮：默认隐藏
-.mobile-menu-trigger {
-  display: none;
-}
-
-// 响应式断点：小屏幕（<1024px）
-@media (max-width: 1023px) {
-  // 隐藏大屏幕水平菜单
-  .desktop-menu {
-    display: none;
-  }
-
-  // 显示汉堡按钮
-  .mobile-menu-trigger {
-    display: block;
-  }
-
-  // 优化小屏幕下拉菜单样式（可选）
-  .ant-dropdown-menu {
-    min-width: 160px; // 限制下拉菜单宽度
-  }
-
-  // 可选：缩小 logo 字体，避免挤压
-  .logo {
-    span {
-      font-size: 16px;
-    }
-  }
-}
-
 .ant-layout-header {
-  padding: 0 0px;
+  padding: 0 0;
 }
 
 /* 固定顶部 header */

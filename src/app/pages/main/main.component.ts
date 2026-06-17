@@ -11,7 +11,6 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
-import {NoticeCardComponent} from './notice/card/notice.card.component';
 import {NzBadgeModule} from 'ng-zorro-antd/badge';
 import {CookieService} from 'ngx-cookie-service';
 import {AccountService} from '../../service/account.service';
@@ -38,7 +37,6 @@ import {MainI18nService} from '../../service/i18n.service';
     NzAvatarModule,
     NzSpaceModule,
     NzBadgeModule,
-    NoticeCardComponent,
     TranslatePipe,
   ],
   providers: [
@@ -97,40 +95,5 @@ export class MainComponent implements OnInit {
         this.account.setOrganization(org);
       }
     }
-  }
-
-  protected goOrganizations() {
-    this.router
-      .navigate(['/main/organization'])
-      .then(() => {
-        console.log('goOrganizations ok!')
-      })
-      .catch(e => {
-        console.log('goOrganizations failed: ', e)
-      });
-  }
-
-  protected goAddOrganization() {
-    this.router
-      .navigate(['/main/organization/add'])
-      .then(() => {
-        console.log('goAddOrganization ok!')
-      })
-      .catch(e => {
-        console.log('goAddOrganization failed: ', e)
-      });
-  }
-
-  protected logout() {
-    this.account.clear();
-
-    this.router
-      .navigate(['/passport'])
-      .then(() => {
-        console.log('goLogin ok!')
-      })
-      .catch(e => {
-        console.log('goLogin failed: ', e)
-      });
   }
 }

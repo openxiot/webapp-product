@@ -1,12 +1,16 @@
 <nz-page-header [nzTitle]="pageTitle" [nzGhost]="false" class="fixed-header">
-<!--  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>-->
+  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 
   <nz-page-header-tags>
     <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode" (ngModelChange)="onViewModeChanged($event)"></nz-segmented>
   </nz-page-header-tags>
 
   <nz-page-header-extra>
-    <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">创建</button>
+    @if (account.login) {
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">创建</button>
+    } @else {
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/passport']">创建</button>
+    }
   </nz-page-header-extra>
 </nz-page-header>
 

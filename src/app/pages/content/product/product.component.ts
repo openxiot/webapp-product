@@ -13,6 +13,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {RouterLink} from '@angular/router';
 import {TranslatePipe} from '@ngx-translate/core';
+import {AccountService} from '../../../service/account.service';
 
 @Component({
   selector: 'main-product',
@@ -44,6 +45,7 @@ export class ProductComponent {
   viewMode: number = 0;
 
   constructor(
+    protected account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {

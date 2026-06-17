@@ -1,4 +1,4 @@
-<nz-page-header nzTitle="pageTitle" [nzGhost]="false">
+<nz-page-header [nzTitle]="pageTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
 </nz-page-header>
 
@@ -15,9 +15,9 @@
     ></nz-card-meta>
   </nz-card>
   <ng-template #avatarTemplate>
-    <nz-avatar [nzSrc]="account.developer.avatar"></nz-avatar>
+    <nz-avatar nzSrc="github.svg"></nz-avatar>
   </ng-template>
   <ng-template #coverTemplate>
-<!--    <img alt="example" src="{{account.developer.avatar}}"/>-->
+    <img alt="example" src="{{ account.developer.avatar}}"/>
   </ng-template>
 </div>
