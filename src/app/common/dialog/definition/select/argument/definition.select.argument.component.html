@@ -32,7 +32,11 @@
           </td>
           <td>
             @if (p.format === DataFormat.COMBINATION) {
-              <property-definition-members [properties]="properties" [language]="data.language"></property-definition-members>
+              <property-definition-members
+                [properties]="properties"
+                [language]="data.language"
+                [updatable]="false"
+              ></property-definition-members>
             }
           </td>
         </tr>

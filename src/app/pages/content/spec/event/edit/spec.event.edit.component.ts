@@ -15,7 +15,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
   EventDefinition,
-  ActionType,
+  EventType,
   ArgumentDefinition,
   LifeCycle,
   PropertyDefinition,
@@ -150,7 +150,7 @@ export class SpecEventEditComponent implements OnInit {
     const args: ArgumentDefinition[] = this.form.value.arguments || [];
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: ActionType = ActionType.create(this.account.ns.namespace, UrnType.ACTION, code, uuid);
+    const type: EventType = EventType.create(this.account.ns.namespace, UrnType.EVENT, code, uuid);
     const def: EventDefinition = new EventDefinition(type, description, args);
     def.lifecycle = lifecycle;
 

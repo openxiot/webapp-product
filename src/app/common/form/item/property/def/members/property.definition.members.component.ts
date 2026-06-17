@@ -40,7 +40,8 @@ import {
 })
 export class PropertyDefinitionMembersComponent implements ControlValueAccessor {
 
-  @Input() language!: string;
+  @Input() updatable: boolean = true;
+  @Input() language: string = 'en-US';
   @Input() properties: PropertyDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 

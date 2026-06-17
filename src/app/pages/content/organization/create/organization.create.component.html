@@ -6,9 +6,9 @@
     <nz-card nzBorderless nzSize="small">
       <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">组织代码</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入组织代码">
-            <input type="text" nz-input formControlName="code" placeholder="请输入组织代码"/>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">组织代码</nz-form-label>
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
+            <spec-code formControlName="code" [updatable]="true"></spec-code>
           </nz-form-control>
         </nz-form-item>
 
@@ -28,3 +28,12 @@
     </nz-card>
   </div>
 </nz-spin>
+
+<ng-template #codeErrorTip>
+  @if (form.get('code')?.errors?.['required']) {
+    <span>请输入代码</span>
+  }
+  @if (form.get('code')?.errors?.['pattern']) {
+    <span>代码必须以字母开头，可包含字母、数字、中划线</span>
+  }
+</ng-template>

@@ -23,7 +23,7 @@
         <td>{{ a.description.get('zh-CN') }}</td>
         <td>
           @if (a.arguments.length > 0) {
-            @for (arg of a.arguments; track arg.type.name) {
+            @for (arg of a.arguments; track arg) {
               <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
             }
           }

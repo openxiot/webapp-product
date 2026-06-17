@@ -14,9 +14,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
-  ActionDefinition,
-  ActionType,
-  ArgumentDefinition, EventDefinition,
+  EventType,
+  ArgumentDefinition,
+  EventDefinition,
   LifeCycle,
   PropertyDefinition,
   UrnType
@@ -121,7 +121,7 @@ export class SpecEventCreateComponent implements OnInit {
     const args: ArgumentDefinition[] = this.form.value.arguments || [];
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: ActionType = ActionType.create(this.account.ns.namespace, UrnType.ACTION, code, uuid);
+    const type: EventType = EventType.create(this.account.ns.namespace, UrnType.EVENT, code, uuid);
     const def: EventDefinition = new EventDefinition(type, description, args);
     def.lifecycle = lifecycle;
 

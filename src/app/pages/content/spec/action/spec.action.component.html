@@ -24,14 +24,14 @@
         <td>{{ a.description.get('zh-CN') }}</td>
         <td>
           @if (a.in.length > 0) {
-            @for (arg of a.in; track arg; let i = $index)  {
+            @for (arg of a.in; track arg)  {
               <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
             }
           }
         </td>
         <td>
           @if (a.out.length > 0) {
-            @for (arg of a.out; track arg; let i = $index) {
+            @for (arg of a.out; track arg) {
               <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
             }
           }

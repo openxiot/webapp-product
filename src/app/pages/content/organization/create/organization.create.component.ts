@@ -15,6 +15,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {MainService} from '../../../../service/main.service';
 import {AccountService} from '../../../../service/account.service';
+import {CodeComponent} from '../../../../common/form/item/common/code/code.component';
 
 @Component({
   selector: 'organization-create',
@@ -34,6 +35,7 @@ import {AccountService} from '../../../../service/account.service';
     NzSpaceModule,
     NzDividerModule,
     ReactiveFormsModule,
+    CodeComponent,
   ],
 })
 export class OrganizationCreateComponent implements OnInit {
@@ -54,7 +56,10 @@ export class OrganizationCreateComponent implements OnInit {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      code: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
       name: this.fb.control('', [Validators.required]),
     });
   }
