@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "xiot-product-developer": {
+    "product-developer": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/xiot-product-developer",
+            "outputPath": "dist/product-developer",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -97,10 +97,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "xiot-product-developer:build:production"
+              "buildTarget": "product-developer:build:production"
             },
             "development": {
-              "buildTarget": "xiot-product-developer:build:development"
+              "buildTarget": "product-developer:build:development"
             }
           },
           "defaultConfiguration": "development"
