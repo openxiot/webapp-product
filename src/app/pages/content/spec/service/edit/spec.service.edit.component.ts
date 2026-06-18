@@ -66,6 +66,7 @@ import {
 })
 export class SpecServiceEditComponent implements OnInit {
 
+  changed: boolean = false;
   loading: boolean = false;
   serviceType: string = '';
 
@@ -270,6 +271,9 @@ export class SpecServiceEditComponent implements OnInit {
     const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
+    console.log('111 requiredProperties.length: ', this.form.value.requiredProperties?.length);
+    console.log('222 requiredProperties.length: ', this.form.controls.requiredProperties.value?.length);
+
     const requiredProperties = this.form.controls.requiredProperties.value.map(x => x.type);
     const optionalProperties = this.form.controls.optionalProperties.value.map(x => x.type);
     const requiredActions = this.form.controls.requiredActions.value.map(x => x.type);
@@ -298,5 +302,9 @@ export class SpecServiceEditComponent implements OnInit {
           this.loadingActions = false;
         }
       });
+  }
+
+  protected onChanged() {
+    this.changed = true;
   }
 }

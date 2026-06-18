@@ -24,69 +24,93 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="uuid">UUID</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="请输入UUID">
-            <uuid formControlName="uuid"/>
+            <uuid formControlName="uuid" (changed)="onChanged()"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="model">描述</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="描述">
-            <description formControlName="description"/>
+            <description formControlName="description" (changed)="onChanged()"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>必选属性</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-properties formControlName="requiredProperties" [properties]="properties"></service-definition-properties>
+            <service-definition-properties
+              formControlName="requiredProperties"
+              [properties]="properties"
+              (changed)="onChanged()"
+            ></service-definition-properties>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>可选属性</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-properties formControlName="optionalProperties" [properties]="properties"></service-definition-properties>
+            <service-definition-properties
+              formControlName="optionalProperties"
+              [properties]="properties"
+              (changed)="onChanged()"
+            ></service-definition-properties>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>必选方法</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-actions formControlName="requiredActions" [actions]="actions"></service-definition-actions>
+            <service-definition-actions
+              formControlName="requiredActions"
+              [actions]="actions"
+              (changed)="onChanged()"
+            ></service-definition-actions>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>可选方法</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-actions formControlName="optionalActions" [actions]="actions"></service-definition-actions>
+            <service-definition-actions
+              formControlName="optionalActions"
+              [actions]="actions"
+              (changed)="onChanged()"
+            ></service-definition-actions>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>必选事件</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-events formControlName="requiredEvents" [events]="events"></service-definition-events>
+            <service-definition-events
+              formControlName="requiredEvents"
+              [events]="events"
+              (changed)="onChanged()"
+            ></service-definition-events>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>可选事件</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-events formControlName="optionalEvents" [events]="events"></service-definition-events>
+            <service-definition-events
+              formControlName="optionalEvents"
+              [events]="events"
+              (changed)="onChanged()"
+            ></service-definition-events>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
           <nz-form-control [nzSpan]="10" nzErrorTip="状态">
-            <lifecycle formControlName="lifecycle"/>
+            <lifecycle formControlName="lifecycle" (changed)="onChanged()"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-control [nzSpan]="4" [nzOffset]="4">
-            <button nz-button nzType="primary" [disabled]="form.invalid || !form.dirty">提交</button>
+            <button nz-button nzType="primary" [disabled]="! changed">提交</button>
           </nz-form-control>
         </nz-form-item>
       </form>

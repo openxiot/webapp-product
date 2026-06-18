@@ -132,6 +132,8 @@ export class ServiceDefinitionEventsComponent implements ControlValueAccessor {
 
   addMember(def: EventDefinition) {
     this._value.push(def);
+    this.onChange(this._value);
+    this.onTouched();
     this.changed.emit();
   }
 

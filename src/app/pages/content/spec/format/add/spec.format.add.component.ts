@@ -76,7 +76,7 @@ export class SpecFormatAddComponent implements OnInit {
     this.formats.push(this.createFormat('int64', 'singed 64 bits integer', '有符号64位整型'));
     this.formats.push(this.createFormat('float', 'float', '浮点数'));
     this.formats.push(this.createFormat('hex', 'hex', '16进制字符串'));
-    this.formats.push(this.createFormat('combination', 'combination', '组合数'));
+    this.formats.push(this.createFormat('combination', 'combination', '组合'));
   }
 
   private createFormat(code: string, descriptionENUS: string, descriptionZHCN: string): FormatDefinition {

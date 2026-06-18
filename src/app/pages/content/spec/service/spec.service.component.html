@@ -24,29 +24,29 @@
         <td>{{ s.type.name }}</td>
         <td>{{ s.description.get('zh-CN') }}</td>
         <td>
-          @for (p of s.requiredProperties; track p.value) {
+          @for (p of s.requiredProperties; track p) {
             <nz-tag nzColor="blue">{{ getPropertyDescription(p) }}</nz-tag>
           }
 
-          @for (p of s.optionalProperties; track p.value) {
+          @for (p of s.optionalProperties; track p) {
             <nz-tag nzColor="green">{{ getPropertyDescription(p) }}</nz-tag>
           }
         </td>
         <td>
-          @for (p of s.requiredActions; track p.value) {
+          @for (p of s.requiredActions; track p) {
             <nz-tag nzColor="blue">{{ getActionDescription(p) }}</nz-tag>
           }
 
-          @for (p of s.optionalActions; track p.value) {
+          @for (p of s.optionalActions; track p) {
             <nz-tag nzColor="green">{{ getActionDescription(p) }}</nz-tag>
           }
         </td>
         <td>
-          @for (p of s.requiredEvents; track p.value) {
+          @for (p of s.requiredEvents; track p) {
             <nz-tag nzColor="blue">{{ getEventDescription(p) }}</nz-tag>
           }
 
-          @for (p of s.optionalEvents; track p.value) {
+          @for (p of s.optionalEvents; track p) {
             <nz-tag nzColor="green">{{ getEventDescription(p) }}</nz-tag>
           }
         </td>

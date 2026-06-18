@@ -66,7 +66,7 @@ export class SpecUnitComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecUnits: ', error);
+          this.msg.warning(error);
         }
       })
   }
@@ -107,7 +107,7 @@ export class SpecUnitComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to deleteUnitDefinition: ', error);
+          this.msg.warning(error);
         }
       })
   }

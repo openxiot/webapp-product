@@ -130,6 +130,8 @@ export class ServiceDefinitionPropertiesComponent implements ControlValueAccesso
 
   addMember(def: PropertyDefinition) {
     this._value.push(def);
+    this.onChange(this._value);
+    this.onTouched();
     this.changed.emit();
   }
 
@@ -137,7 +139,6 @@ export class ServiceDefinitionPropertiesComponent implements ControlValueAccesso
     const index = this._value.indexOf(def);
     if (index > -1) {
       this._value.splice(index, 1);
-      // 通知外部值已变化
       this.onChange(this._value);
       this.onTouched();
       this.changed.emit();

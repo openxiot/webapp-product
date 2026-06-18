@@ -80,7 +80,7 @@ export class SpecPropertyComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecProperties: ', error);
+          this.msg.warning(error);
         }
       })
 
@@ -92,7 +92,7 @@ export class SpecPropertyComponent implements OnInit {
           this.loadingFormats = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecFormats: ', error);
+          this.msg.warning(error);
         }
       })
 
@@ -104,7 +104,7 @@ export class SpecPropertyComponent implements OnInit {
           this.loadingUnits = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecUnits: ', error);
+          this.msg.warning(error);
         }
       })
   }
