@@ -7,7 +7,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule} from 'ng-zorro-antd/table';
+import {NzTableModule, NzTableSortFn} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {FormatDefinition, LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
@@ -43,6 +43,8 @@ export class SpecFormatComponent implements OnInit {
 
   loading: boolean = true;
   formats: FormatDefinition[] = [];
+
+  codeSortFn: NzTableSortFn<FormatDefinition> = (a: FormatDefinition, b: FormatDefinition): number => a.type.name.localeCompare(b.type.name);
 
   constructor(
     private modal: NzModalService,

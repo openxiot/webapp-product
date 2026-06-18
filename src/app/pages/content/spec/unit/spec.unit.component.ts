@@ -7,7 +7,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule} from 'ng-zorro-antd/table';
+import {NzTableModule, NzTableSortFn} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle, UnitDefinition} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
@@ -43,6 +43,8 @@ export class SpecUnitComponent implements OnInit {
 
   loading: boolean = true;
   units: UnitDefinition[] = [];
+
+  codeSortFn: NzTableSortFn<UnitDefinition> = (a: UnitDefinition, b: UnitDefinition): number => a.type.name.localeCompare(b.type.name);
 
   constructor(
     private modal: NzModalService,

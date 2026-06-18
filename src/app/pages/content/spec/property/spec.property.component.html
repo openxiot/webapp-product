@@ -1,4 +1,5 @@
 <nz-table
+  #table
   nzShowSizeChanger
   nzSize="small"
   [nzData]="properties"
@@ -7,8 +8,8 @@
 >
   <thead>
   <tr>
-    <th>编码</th>
-    <th>代码</th>
+    <th [nzSortFn]="uuidSortFn">UUID</th>
+    <th [nzSortFn]="codeSortFn">代码</th>
     <th>描述</th>
     <th>格式</th>
     <th>单位</th>
@@ -20,7 +21,7 @@
   </thead>
 
   <tbody>
-    @for (p of properties; track p.type.name) {
+    @for (p of table.data; track p.type.name) {
       <tr>
         <td><nz-tag>{{ p.type.shortUUID() }}</nz-tag></td>
         <td>{{ p.type.name }}</td>

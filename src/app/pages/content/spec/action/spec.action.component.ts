@@ -7,12 +7,11 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {MainService} from '../../../../service/main.service';
-import {NzTableModule} from 'ng-zorro-antd/table';
+import {NzTableModule, NzTableSortFn} from 'ng-zorro-antd/table';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {
   ActionDefinition,
-  LifeCycle,
-  PropertyDefinition,
+  LifeCycle, PropertyDefinition,
   PropertyType
 } from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
@@ -50,6 +49,9 @@ export class SpecActionComponent implements OnInit {
 
   loadingProperties: boolean = true;
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
+
+  uuidSortFn: NzTableSortFn<ActionDefinition> = (a: ActionDefinition, b: ActionDefinition): number => a.type.value - b.type.value;
+  codeSortFn: NzTableSortFn<ActionDefinition> = (a: ActionDefinition, b: ActionDefinition): number => a.type.name.localeCompare(b.type.name);
 
   constructor(
     private modal: NzModalService,

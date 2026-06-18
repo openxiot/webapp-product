@@ -1,4 +1,5 @@
 <nz-table
+  #table
   nzShowSizeChanger
   nzSize="small"
   [nzData]="units"
@@ -7,7 +8,7 @@
 >
   <thead>
   <tr>
-    <th>代码</th>
+    <th [nzSortFn]="codeSortFn">代码</th>
     <th>中文描述</th>
     <th>英文描述</th>
     <th>状态</th>
@@ -17,7 +18,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (unit of units; track unit.type.name) {
+    @for (unit of table.data; track unit.type.name) {
       <tr>
         <td>{{ unit.type.name }}</td>
         <td>{{ unit.description.get('zh-CN') }}</td>

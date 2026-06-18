@@ -1,4 +1,5 @@
 <nz-table
+  #table
   nzShowSizeChanger
   nzSize="small"
   [nzData]="formats"
@@ -7,7 +8,7 @@
 >
   <thead>
   <tr>
-    <th>代码</th>
+    <th [nzSortFn]="codeSortFn">代码</th>
     <th>中文描述</th>
     <th>英文描述</th>
     <th>状态</th>
@@ -17,7 +18,7 @@
   </tr>
   </thead>
   <tbody>
-    @for (format of formats; track format.type.name) {
+    @for (format of table.data; track format.type.name) {
       <tr>
         <td>{{ format.type.name }}</td>
         <td>{{ format.description.get('zh-CN') }}</td>
