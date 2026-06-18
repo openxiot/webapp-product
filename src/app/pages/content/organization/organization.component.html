@@ -45,7 +45,7 @@
 <!--  </nz-table>-->
 
   <nz-row [nzGutter]="[8, 8]">
-    @for (org of organizations; track org.id) {
+    @for (org of organizations; track org) {
       <nz-col [nzSpan]="4" (click)="setCurrentOrganization(org)">
         <nz-card nzHoverable>
           <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
