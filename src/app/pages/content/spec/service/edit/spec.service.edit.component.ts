@@ -14,8 +14,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
-  ActionDefinition,
-  EventDefinition, LifeCycle,
+  ActionDefinition, ActionType,
+  EventDefinition, EventType, LifeCycle,
   PropertyDefinition, ServiceDefinition, ServiceType,
   UrnType
 } from '@openxiot/xiot-core-spec-ts';
@@ -138,77 +138,51 @@ export class SpecServiceEditComponent implements OnInit {
           this.form.controls.description.setValue(a.description);
           this.form.controls.lifecycle.setValue(a.lifecycle);
 
-          const requiredProperties = a.requiredProperties
-            .map(x => {
-              let def = this.propertyMap.get(x.name);
-              if (def == null) {
-                def = new PropertyDefinition(x, new Map<string, string>())
-              }
-              return def;
-            });
-
-          this.form.controls.requiredProperties.setValue(requiredProperties);
-
-          const optionalProperties = a.requiredProperties
-            .map(x => {
-              let def = this.propertyMap.get(x.name);
-              if (def == null) {
-                def = new PropertyDefinition(x, new Map<string, string>())
-              }
-              return def;
-            });
-
-          this.form.controls.optionalProperties.setValue(optionalProperties);
-
-          const requiredActions = a.requiredActions
-            .map(x => {
-              let def = this.actionMap.get(x.name);
-              if (def == null) {
-                def = new ActionDefinition(x, new Map<string, string>(), [], [])
-              }
-              return def;
-            });
-
-          this.form.controls.requiredActions.setValue(requiredActions);
-
-          const optionalActions = a.optionalActions
-            .map(x => {
-              let def = this.actionMap.get(x.name);
-              if (def == null) {
-                def = new ActionDefinition(x, new Map<string, string>(), [], [])
-              }
-              return def;
-            });
-
-          this.form.controls.optionalActions.setValue(optionalActions);
-
-          const requiredEvent = a.requiredEvents
-            .map(x => {
-              let def = this.eventMap.get(x.name);
-              if (def == null) {
-                def = new EventDefinition(x, new Map<string, string>(), [])
-              }
-              return def;
-            });
-
-          this.form.controls.requiredProperties.setValue(requiredProperties);
-
-          const optionalEvents = a.optionalEvents
-            .map(x => {
-              let def = this.eventMap.get(x.name);
-              if (def == null) {
-                def = new EventDefinition(x, new Map<string, string>(), [])
-              }
-              return def;
-            });
-
-          this.form.controls.optionalEvents.setValue(optionalEvents);
+          this.form.controls.requiredProperties.setValue(this.getProperties(a.requiredProperties));
+          this.form.controls.requiredActions.setValue(this.getActions(a.requiredActions));
+          this.form.controls.requiredEvents.setValue(this.getEvents(a.requiredActions));
+          this.form.controls.optionalProperties.setValue(this.getProperties(a.optionalProperties));
+          this.form.controls.optionalActions.setValue(this.getActions(a.optionalActions));
+          this.form.controls.optionalEvents.setValue(this.getEvents(a.optionalEvents));
 
           this.loading = false;
         },
         error: error => {
           this.msg.warning(error);
         }
+      });
+  }
+
+  private getProperties(properties: ActionType[]): PropertyDefinition[] {
+    return properties
+      .map(x => {
+        let def = this.propertyMap.get(x.name);
+        if (def == null) {
+          def = new PropertyDefinition(x, new Map<string, string>())
+        }
+        return def;
+      });
+  }
+
+  private getActions(actions: ActionType[]): ActionDefinition[] {
+    return actions
+      .map(x => {
+        let def = this.actionMap.get(x.name);
+        if (def == null) {
+          def = new ActionDefinition(x, new Map<string, string>(), [], [])
+        }
+        return def;
+      });
+  }
+
+  private getEvents(events: EventType[]): EventDefinition[] {
+    return events
+      .map(x => {
+        let def = this.eventMap.get(x.name);
+        if (def == null) {
+          def = new EventDefinition(x, new Map<string, string>(), [])
+        }
+        return def;
       });
   }
 
@@ -270,9 +244,6 @@ export class SpecServiceEditComponent implements OnInit {
     const code = this.form.value.code || 'null';
     const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
-
-    console.log('111 requiredProperties.length: ', this.form.value.requiredProperties?.length);
-    console.log('222 requiredProperties.length: ', this.form.controls.requiredProperties.value?.length);
 
     const requiredProperties = this.form.controls.requiredProperties.value.map(x => x.type);
     const optionalProperties = this.form.controls.optionalProperties.value.map(x => x.type);
