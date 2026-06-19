@@ -2,15 +2,15 @@ import {Component, inject} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {MainI18nService} from '../../../service/i18n.service';
+import {MainI18nService} from '../../../../service/i18n.service';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 
 @Component({
-  selector: 'app-change-language',
-  templateUrl: './change.language.component.html',
-  styleUrls: ['./change.language.component.less'],
+  selector: 'app-language-change',
+  templateUrl: './language.change.component.html',
+  styleUrls: ['./language.change.component.less'],
   imports: [
     FormsModule,
     NzInputModule,
@@ -22,7 +22,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
   providers: [],
   standalone: true
 })
-export class ChangeLanguageComponent {
+export class LanguageChangeComponent {
 
   readonly #modal = inject(NzModalRef);
   readonly message: string = inject(NZ_MODAL_DATA);

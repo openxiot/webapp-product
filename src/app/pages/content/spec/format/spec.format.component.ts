@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -37,9 +37,11 @@ import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.compon
     NzModalService
   ],
 })
-export class SpecFormatComponent implements OnInit {
+export class SpecFormatComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
+
+  @Input() namespace!: string;
 
   loading: boolean = true;
   formats: FormatDefinition[] = [];
@@ -59,9 +61,15 @@ export class SpecFormatComponent implements OnInit {
     this.loadDataFromServer();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['namespace']) {
+      this.loadDataFromServer();
+    }
+  }
+
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.service.getFormatDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.formats = data;

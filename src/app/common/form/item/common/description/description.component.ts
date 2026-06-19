@@ -7,8 +7,8 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {LanguageSelectorComponent} from '../../../../dialog/language/language.selector.component';
-import {LangOption} from '../../../../dialog/language/LangOption';
+import {LanguageAddComponent} from '../../../../dialog/language/add/language.add.component';
+import {LangOption} from '../../../../dialog/language/add/LangOption';
 
 interface LangDesc {
   lang: string;
@@ -123,7 +123,7 @@ export class DescriptionComponent implements ControlValueAccessor {
     const modal = this.modal.create<any, LangDesc[], any>({
       nzTitle: '添加描述语言',
       nzWidth: 600,
-      nzContent: LanguageSelectorComponent,
+      nzContent: LanguageAddComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: this.langList,
       nzFooter: [

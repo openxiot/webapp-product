@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -37,9 +37,11 @@ import {NzModalService} from 'ng-zorro-antd/modal';
     NzModalService
   ],
 })
-export class SpecDeviceComponent implements OnInit {
+export class SpecDeviceComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
+
+  @Input() namespace!: string;
 
   loading: boolean = true;
   devices: DeviceDefinition[] = [];
@@ -57,23 +59,29 @@ export class SpecDeviceComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.account.ns) {
+    this.loadDataFromServer();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['namespace']) {
       this.loadDataFromServer();
     }
   }
 
   loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getDeviceDefinitions(this.account.ns.namespace)
-      .subscribe({
-        next: data => {
-          this.devices = data;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-        }
-      })
+    if (this.namespace) {
+      this.loading = true;
+      this.service.getDeviceDefinitions(this.namespace)
+        .subscribe({
+          next: data => {
+            this.devices = data;
+            this.loading = false;
+          },
+          error: error => {
+            this.msg.warning(error);
+          }
+        })
+    }
   }
 
   protected onDelete(device: DeviceDefinition) {

@@ -15,7 +15,7 @@ import {AccountService} from '../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../service/i18n.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {ChangeLanguageComponent} from '../../common/dialog/lang/change.language.component';
+import {LanguageChangeComponent} from '../../common/dialog/language/change/language.change.component';
 
 @Component({
   selector: 'app-main',
@@ -60,15 +60,15 @@ export class MainComponent implements OnInit {
   }
 
   protected changeLanguage() {
-    this.modal.create<ChangeLanguageComponent, string, string>({
+    this.modal.create<LanguageChangeComponent, string, string>({
       nzTitle: '',
       nzWidth: 800,
-      nzContent: ChangeLanguageComponent,
+      nzContent: LanguageChangeComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: '',
       nzFooter: null,
       nzClosable: false,
-      nzMaskClosable: false,
+      nzMaskClosable: true,
       nzKeyboard: true
     });
   }

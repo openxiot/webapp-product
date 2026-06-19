@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -16,6 +16,8 @@ import {RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NamespaceChangeComponent} from '../../../common/dialog/namespace/namespace.change.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
 
 @Component({
   selector: 'main-template',
@@ -37,6 +39,9 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     TranslatePipe,
     NzIconDirective,
   ],
+  providers: [
+    NzModalService
+  ]
 })
 export class TemplateComponent implements OnInit {
 
@@ -54,6 +59,8 @@ export class TemplateComponent implements OnInit {
   typesSelected: Set<string> = new Set<string>();
 
   constructor(
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
     public account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
@@ -100,5 +107,25 @@ export class TemplateComponent implements OnInit {
   updateProducts() {
     this.templates = this.templatesOriginal
       .filter(x => this.typesSelected.has(x.type.name))
+  }
+
+  protected changeNamespace(): void {
+    const modal = this.modal.create<NamespaceChangeComponent, string, string>({
+      nzTitle: '',
+      nzWidth: 800,
+      nzContent: NamespaceChangeComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: '',
+      nzFooter: null,
+      nzClosable: false,
+      nzMaskClosable: true,
+      nzKeyboard: true
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.loadTemplates();
+      }
+    });
   }
 }

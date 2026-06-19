@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -46,9 +46,11 @@ import {NzModalService} from 'ng-zorro-antd/modal';
     NzModalService
   ],
 })
-export class SpecServiceComponent implements OnInit {
+export class SpecServiceComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
+
+  @Input() namespace!: string;
 
   loading: boolean = true;
   services: ServiceDefinition[] = [];
@@ -78,9 +80,15 @@ export class SpecServiceComponent implements OnInit {
     this.loadDataFromServer();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['namespace']) {
+      this.loadDataFromServer();
+    }
+  }
+
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getServiceDefinitions(this.account.ns.namespace)
+    this.service.getServiceDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.services = data;
@@ -92,7 +100,7 @@ export class SpecServiceComponent implements OnInit {
       });
 
     this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
@@ -104,7 +112,7 @@ export class SpecServiceComponent implements OnInit {
       });
 
     this.loadingActions = true;
-    this.service.getActionDefinitions(this.account.ns.namespace)
+    this.service.getActionDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.actions = new Map(data.map(item => [item.type.name, item]));
@@ -116,7 +124,7 @@ export class SpecServiceComponent implements OnInit {
       });
 
     this.loadingEvents = true;
-    this.service.getEventDefinitions(this.account.ns.namespace)
+    this.service.getEventDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.events = new Map(data.map(item => [item.type.name, item]));

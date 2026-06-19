@@ -59,7 +59,7 @@
 </nz-page-header>
 
 <ng-template #pageTitle>
-  <div routerLink="/main/spec/ns" class="selector">
+  <div class="selector" (click)="changeNamespace()">
     @if (account.ns) {
       {{ account.ns.namespace }}
     } @else {
@@ -79,25 +79,25 @@
   @if (account.ns) {
     @switch (tabIndex) {
       @case (0) {
-        <spec-device></spec-device>
+        <spec-device [namespace]="account.ns.namespace"></spec-device>
       }
       @case (1) {
-        <spec-service></spec-service>
+        <spec-service [namespace]="account.ns.namespace"></spec-service>
       }
       @case (2) {
-        <spec-property></spec-property>
+        <spec-property [namespace]="account.ns.namespace"></spec-property>
       }
       @case (3) {
-        <spec-action></spec-action>
+        <spec-action [namespace]="account.ns.namespace"></spec-action>
       }
       @case (4) {
-        <spec-event></spec-event>
+        <spec-event [namespace]="account.ns.namespace"></spec-event>
       }
       @case (5) {
-        <spec-format></spec-format>
+        <spec-format [namespace]="account.ns.namespace"></spec-format>
       }
       @case (6) {
-        <spec-unit></spec-unit>
+        <spec-unit [namespace]="account.ns.namespace"></spec-unit>
       }
     }
   }

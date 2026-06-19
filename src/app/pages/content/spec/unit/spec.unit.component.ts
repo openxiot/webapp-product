@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -37,9 +37,11 @@ import {NzModalService} from 'ng-zorro-antd/modal';
     NzModalService
   ],
 })
-export class SpecUnitComponent implements OnInit {
+export class SpecUnitComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
+
+  @Input() namespace!: string;
 
   loading: boolean = true;
   units: UnitDefinition[] = [];
@@ -59,9 +61,15 @@ export class SpecUnitComponent implements OnInit {
     this.loadDataFromServer();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['namespace']) {
+      this.loadDataFromServer();
+    }
+  }
+
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getUnitDefinitions(this.account.ns.namespace)
+    this.service.getUnitDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.units = data;

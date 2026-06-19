@@ -8,7 +8,7 @@
   </nz-page-header>
 
   <ng-template #pageTitle>
-    <div routerLink="/main/template/ns" class="selector">
+    <div class="selector" (click)="changeNamespace()">
       @if (account.ns) {
         {{ account.ns.namespace }}
       } @else {

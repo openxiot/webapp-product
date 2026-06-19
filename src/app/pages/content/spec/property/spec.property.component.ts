@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -43,9 +43,11 @@ import {NzModalService} from 'ng-zorro-antd/modal';
     NzModalService
   ],
 })
-export class SpecPropertyComponent implements OnInit {
+export class SpecPropertyComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
+
+  @Input() namespace!: string;
 
   loading: boolean = true;
   properties: PropertyDefinition[] = [];
@@ -73,9 +75,15 @@ export class SpecPropertyComponent implements OnInit {
     this.loadDataFromServer();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['namespace']) {
+      this.loadDataFromServer();
+    }
+  }
+
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.properties = data;
@@ -88,7 +96,7 @@ export class SpecPropertyComponent implements OnInit {
       })
 
     this.loadingFormats = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.service.getFormatDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.formats = new Map(data.map(item => [item.type.name, item]));
@@ -100,7 +108,7 @@ export class SpecPropertyComponent implements OnInit {
       })
 
     this.loadingUnits = true;
-    this.service.getUnitDefinitions(this.account.ns.namespace)
+    this.service.getUnitDefinitions(this.namespace)
       .subscribe({
         next: data => {
           this.units = new Map(data.map(item => [item.type.name, item]));

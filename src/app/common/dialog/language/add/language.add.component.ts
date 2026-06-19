@@ -4,17 +4,16 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LangOption} from './LangOption';
 
-
 @Component({
-  selector: 'language-selector',
-  templateUrl: './language.selector.component.html',
+  selector: 'language-add',
+  templateUrl: './language.add.component.html',
   standalone: true,
   imports: [
     NzSpaceModule,
     NzTagModule
   ]
 })
-export class LanguageSelectorComponent {
+export class LanguageAddComponent {
 
   readonly modalRef = inject(NzModalRef);
   readonly usedLangs = inject<{ lang: string }[]>(NZ_MODAL_DATA);
