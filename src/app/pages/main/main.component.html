@@ -37,11 +37,15 @@
           {{ '名字空间' | translate }}
         </li>
 
-        <li nz-menu-item nzMatchRouter routerLink="/main/language">
+<!--        <li nz-menu-item nzMatchRouter routerLink="/main/language">-->
+<!--          <span nz-icon nzType="global" nzTheme="outline"></span>-->
+<!--        </li>-->
+
+        <li nz-menu-item nzMatchRouter (click)="changeLanguage()" style="float: right" >
           <span nz-icon nzType="global" nzTheme="outline"></span>
         </li>
 
-        <li nz-menu-item nzMatchRouter routerLink="/passport" style="float: right" >
+        <li nz-menu-item nzMatchRouter routerLink="/passport" style="float: right">
           @if (account.login) {
             <span nz-icon nzType="logout" nzTheme="outline"></span>
             <span>{{ '退出' | translate }}</span>

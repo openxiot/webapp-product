@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
@@ -11,10 +11,11 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzBadgeModule} from 'ng-zorro-antd/badge';
-import {CookieService} from 'ngx-cookie-service';
 import {AccountService} from '../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../service/i18n.service';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {ChangeLanguageComponent} from '../../common/dialog/lang/change.language.component';
 
 @Component({
   selector: 'app-main',
@@ -22,6 +23,7 @@ import {MainI18nService} from '../../service/i18n.service';
   styleUrls: ['./main.component.less'],
   standalone: true,
   imports: [
+    TranslatePipe,
     RouterLink,
     RouterOutlet,
     NzIconModule,
@@ -34,10 +36,9 @@ import {MainI18nService} from '../../service/i18n.service';
     NzAvatarModule,
     NzSpaceModule,
     NzBadgeModule,
-    TranslatePipe,
   ],
   providers: [
-    CookieService
+    NzModalService
   ]
 })
 export class MainComponent implements OnInit {
@@ -47,6 +48,8 @@ export class MainComponent implements OnInit {
   constructor(
     public account: AccountService,
     public i18n: MainI18nService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
   ) {
   }
 
@@ -54,5 +57,19 @@ export class MainComponent implements OnInit {
     console.log('init');
 
     this.account.loadOrganizations();
+  }
+
+  protected changeLanguage() {
+    this.modal.create<ChangeLanguageComponent, string, string>({
+      nzTitle: '',
+      nzWidth: 800,
+      nzContent: ChangeLanguageComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: '',
+      nzFooter: null,
+      nzClosable: false,
+      nzMaskClosable: false,
+      nzKeyboard: true
+    });
   }
 }
