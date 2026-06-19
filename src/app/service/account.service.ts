@@ -4,18 +4,25 @@ import {Developer} from '../typedef/define/developer/Developer';
 import {DeveloperCodec} from '../typedef/codec/developer/DeveloperCodec';
 import {Organization} from '../typedef/define/developer/Organization';
 import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
+import {MainService} from './main.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Injectable({providedIn: 'root'})
 export class AccountService {
 
   private listeners: Map<string, OnOrganizationChanged> = new Map();
 
+  public loading: boolean = false;
+  public organizations: Organization[] = [];
   public login: boolean = false;
   public developer: Developer = new Developer();
   public organization!: Organization;
   public ns!: NamespaceDefinition;
 
-  constructor() {
+  constructor(
+    private main: MainService,
+    private msg: NzMessageService,
+  ) {
     // const organization = localStorage.getItem("organizationId") || null;
     // if (organization !== null) {
     //   this.organizationId = organization;
@@ -81,5 +88,36 @@ export class AccountService {
     console.log("clear");
     localStorage.clear();
     this.login = false;
+  }
+
+  public loadOrganizations() {
+    if (this.login) {
+      this.main.getOrganizations()
+        .subscribe({
+          next: data => {
+            this.organizations = data;
+            this.selectCurrentOrganization();
+            this.loading = false;
+          },
+          error: error => {
+            this.msg.warning(error);
+          }
+        })
+    }
+  }
+
+  private selectCurrentOrganization() {
+    const selected = localStorage.getItem("organizationId") || null;
+    if (selected !== null) {
+      const org = this.organizations.find(x => x.id === selected);
+      if (org) {
+        this.setOrganization(org);
+      }
+    } else {
+      if (this.organizations.length > 0) {
+        const org = this.organizations[0];
+        this.setOrganization(org);
+      }
+    }
   }
 }

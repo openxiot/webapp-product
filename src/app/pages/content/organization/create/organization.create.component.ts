@@ -81,6 +81,7 @@ export class OrganizationCreateComponent implements OnInit {
         next: () => {
           console.log('createOrganization ok');
           this.loading = false;
+          this.account.loadOrganizations();
           this.router.navigate(['/main']).then(() => {});
         },
         error: error => {

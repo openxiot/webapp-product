@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {RouterLink} from '@angular/router';
-import {Template} from '../../../../../typedef/define/template/Template';
+import {TemplateSummary} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'template-list',
@@ -15,5 +15,5 @@ import {Template} from '../../../../../typedef/define/template/Template';
 })
 export class TemplateListComponent {
 
-  @Input() templates: Template[] = [];
+  @Input() templates: TemplateSummary[] = [];
 }

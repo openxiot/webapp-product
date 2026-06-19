@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {RouterLink} from '@angular/router';
-import {Template} from '../../../../../typedef/define/template/Template';
+import {TemplateSummary} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'template-grid',
@@ -18,5 +18,5 @@ import {Template} from '../../../../../typedef/define/template/Template';
 })
 export class TemplateGridComponent {
 
-  @Input() templates: Template[] = [];
+  @Input() templates: TemplateSummary[] = [];
 }

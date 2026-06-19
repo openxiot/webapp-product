@@ -3,8 +3,6 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {lastValueFrom, map, Observable} from "rxjs";
 import {OxResponse} from "./response/OxResponse";
-import {SpecTemplatesCodec} from '../typedef/codec/template/SpecTemplatesCodec';
-import {SpecTemplates} from '../typedef/define/template/SpecTemplates';
 import {
   DeviceInstance,
   DeviceInstanceCodec,
@@ -31,7 +29,8 @@ import {
   NamespaceDefinitionCodec, DeviceDefinition, DeviceDefinitionCodec, DeviceType, ServiceDefinition,
   ServiceDefinitionCodec, ActionDefinition, ActionDefinitionCodec, EventDefinition, EventDefinitionCodec,
   PropertyDefinition, PropertyDefinitionCodec, FormatDefinition, FormatDefinitionCodec, UnitDefinition,
-  UnitDefinitionCodec, ActionType, ServiceType, EventType, FormatType, PropertyType, UnitType
+  UnitDefinitionCodec, ActionType, ServiceType, EventType, FormatType, PropertyType, UnitType, TemplateSummary,
+  TemplateSummaryCodec
 } from '@openxiot/xiot-core-spec-ts';
 import {JoyProducts} from '../typedef/define/product/JoyProducts';
 import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
@@ -410,10 +409,10 @@ export class MainService {
   /**
    * 读取产品模板列表
    */
-  getTemplates(ns: string): Observable<SpecTemplates> {
+  getTemplates(ns: string): Observable<TemplateSummary[]> {
     return this.http
       .get<OxResponse>(`${this.server}/v1/template/many/${ns}`)
-      .pipe(map(response => SpecTemplatesCodec.decode(response.data)));
+      .pipe(map(response => TemplateSummaryCodec.decodeArray(response.data)));
   }
 
   /**

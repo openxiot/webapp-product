@@ -5,7 +5,7 @@ import {EditableString} from './EditableString';
 import {NzInputModule} from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'edit-string',
+  selector: 'app-edit-string',
   templateUrl: './edit.string.component.html',
   styleUrls: ['./edit.string.component.less'],
   imports: [

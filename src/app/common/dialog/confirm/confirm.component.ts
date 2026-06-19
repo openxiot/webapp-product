@@ -4,7 +4,7 @@ import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
 
 @Component({
-  selector: 'confirm',
+  selector: 'app-confirm',
   templateUrl: './confirm.component.html',
   styleUrls: ['./confirm.component.less'],
   imports: [

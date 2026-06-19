@@ -11,9 +11,8 @@ import {TemplateListComponent} from './view/list/template.list.component';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {TemplateFilterTypeComponent} from './filter/type/template.filter.type.component';
 import {Type} from '../../../typedef/define/Type';
-import {Urn} from '@openxiot/xiot-core-spec-ts';
-import {Template} from '../../../typedef/define/template/Template';
-import {Router, RouterLink} from '@angular/router';
+import {TemplateSummary, Urn} from '@openxiot/xiot-core-spec-ts';
+import {RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
@@ -48,8 +47,8 @@ export class TemplateComponent implements OnInit {
   viewMode: number = 0;
 
   loading: boolean = false;
-  templates: Template[] = [];
-  templatesOriginal: Template[] = [];
+  templates: TemplateSummary[] = [];
+  templatesOriginal: TemplateSummary[] = [];
 
   types: Type[] = [];
   typesSelected: Set<string> = new Set<string>();
@@ -62,15 +61,17 @@ export class TemplateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadTemplates();
+    if (this.account.ns) {
+      this.loadTemplates();
+    }
   }
 
   loadTemplates() {
     this.loading = true;
-    this.service.getTemplates('jd').subscribe({
+    this.service.getTemplates(this.account.ns.namespace).subscribe({
       next: data => {
-        this.templatesOriginal = data.templates;
-        this.templates = data.templates;
+        this.templatesOriginal = data;
+        this.templates = data;
         this.types = this.getTypes();
         this.typesSelected = new Set(this.types.map(x => x.code));
         this.loading = false;

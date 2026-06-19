@@ -25,21 +25,23 @@
   </ng-template>
 
   <div style="padding: 20px 20px">
-    <div nz-row [nzGutter]="[8, 8]">
-      <div nz-col [nzSpan]="24">
-        <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
-      </div>
+    @if (account.ns) {
+      <div nz-row [nzGutter]="[8, 8]">
+        <div nz-col [nzSpan]="24">
+          <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
+        </div>
 
-      <div nz-col [nzSpan]="24">
-        @switch (viewMode) {
-          @case (0) {
-            <template-grid [templates]="templates"></template-grid>
+        <div nz-col [nzSpan]="24">
+          @switch (viewMode) {
+            @case (0) {
+              <template-grid [templates]="templates"></template-grid>
+            }
+            @case (1) {
+              <template-list [templates]="templates"></template-list>
+            }
           }
-          @case (1) {
-            <template-list [templates]="templates"></template-list>
-          }
-        }
+        </div>
       </div>
-    </div>
+    }
   </div>
 </nz-spin>
