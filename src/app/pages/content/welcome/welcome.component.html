@@ -39,16 +39,31 @@
         </nz-card>
       </nz-col>
 
-      <nz-col [nzSpan]="6">
-        <nz-card
-          [nzHoverable]="true"
-        >
-          <nz-statistic
-            [nzTitle]="'组织' | translate"
-            [nzValue]="(statistic.organizations | number)!"
-          ></nz-statistic>
-        </nz-card>
-      </nz-col>
+      @if (account.login) {
+        <nz-col [nzSpan]="6">
+          <nz-card
+            [nzHoverable]="true"
+            [routerLink]="['/main/organization']"
+          >
+            <nz-statistic
+              [nzTitle]="'组织' | translate"
+              [nzValue]="(statistic.organizations | number)!"
+            ></nz-statistic>
+          </nz-card>
+        </nz-col>
+      } @else {
+        <nz-col [nzSpan]="6">
+          <nz-card
+            [nzHoverable]="true"
+          >
+            <nz-statistic
+              [nzTitle]="'组织' | translate"
+              [nzValue]="(statistic.organizations | number)!"
+            ></nz-statistic>
+          </nz-card>
+        </nz-col>
+      }
+
 
 <!--      <nz-col [nzSpan]="6">-->
 <!--        <nz-card-->

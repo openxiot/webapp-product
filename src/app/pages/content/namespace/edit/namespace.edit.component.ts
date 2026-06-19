@@ -19,6 +19,7 @@ import {DescriptionComponent} from '../../../../common/form/item/common/descript
 import {AccountService} from '../../../../service/account.service';
 import {VisibilityComponent} from '../../../../common/form/item/common/visibility/visibility.component';
 import {NamespaceNsComponent} from './ns/namespace.ns.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'namespace-edit',
@@ -54,6 +55,7 @@ export class NamespaceEditComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     private account: AccountService,
     private route: ActivatedRoute,
@@ -96,10 +98,6 @@ export class NamespaceEditComponent implements OnInit {
           this.loading = false;
         }
       });
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/namespace']).then(() => {});
   }
 
   protected submitForm() {

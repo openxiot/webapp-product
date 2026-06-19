@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UrnType, DeviceTemplate} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {NzBreadCrumbComponent} from 'ng-zorro-antd/breadcrumb';
 import {
   NzPageHeaderBreadcrumbDirective,
@@ -21,6 +21,10 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzSwitchModule} from 'ng-zorro-antd/switch';
+import {NzIconModule} from 'ng-zorro-antd/icon';
+import {AccountService} from '../../../../service/account.service';
+import {Location} from '@angular/common';
+import {MainI18nService} from '../../../../service/i18n.service';
 
 @Component({
   selector: 'template-detail',
@@ -45,11 +49,11 @@ import {NzSwitchModule} from 'ng-zorro-antd/switch';
     NzButtonModule,
     NzSpaceModule,
     NzSwitchModule,
+    NzIconModule,
   ],
-  providers: [
-  ],
+  providers: [],
 })
-export class TemplateDetailComponent implements OnInit, OnDestroy{
+export class TemplateDetailComponent implements OnInit, OnDestroy {
 
   changed: boolean = false;
 
@@ -67,6 +71,10 @@ export class TemplateDetailComponent implements OnInit, OnDestroy{
   template: DeviceTemplate | undefined = undefined;
 
   constructor(
+    protected location : Location,
+    protected account: AccountService,
+    protected i18n: MainI18nService,
+    private router: Router,
     private service: MainService,
     private route: ActivatedRoute,
     private msg: NzMessageService,
@@ -95,13 +103,13 @@ export class TemplateDetailComponent implements OnInit, OnDestroy{
   }
 
   private load(type: string): void {
-    this.service.getTemplate('jd', type).subscribe({
+    this.service.getTemplate(type).subscribe({
       next: data => {
         this.template = data;
         this.loading = false;
       },
       error: error => {
-        this.msg.warning('Failed to load products');
+        this.msg.warning(error);
       }
     })
   }

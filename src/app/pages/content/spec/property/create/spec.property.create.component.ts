@@ -42,6 +42,7 @@ import {
 } from '../../../../../common/form/item/property/def/members/property.definition.members.component';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'spec-property-create',
@@ -103,6 +104,7 @@ export class SpecPropertyCreateComponent implements OnInit {
   constrainable: boolean = false;
 
   constructor(
+    protected location: Location,
     private router: Router,
     protected account: AccountService,
     private route: ActivatedRoute,

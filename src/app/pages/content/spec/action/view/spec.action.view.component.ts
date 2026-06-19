@@ -24,6 +24,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
 import {
   DefinitionArgumentsComponent
 } from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'spec-action-view',
@@ -67,7 +68,7 @@ export class SpecActionViewComponent implements OnInit {
   }>;
 
   constructor(
-    private router: Router,
+    protected location: Location,
     protected account: AccountService,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
@@ -132,9 +133,5 @@ export class SpecActionViewComponent implements OnInit {
           this.loading = false;
         }
       });
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
   }
 }

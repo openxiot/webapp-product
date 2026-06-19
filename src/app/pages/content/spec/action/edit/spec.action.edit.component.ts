@@ -31,6 +31,7 @@ import {LifecycleComponent} from '../../../../../common/form/item/common/lifecyc
 import {
   DefinitionArgumentsComponent
 } from '../../../../../common/form/item/action/def/arguments/definition.arguments.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'spec-action-edit',
@@ -74,6 +75,7 @@ export class SpecActionEditComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     protected account: AccountService,
     private route: ActivatedRoute,
@@ -139,10 +141,6 @@ export class SpecActionEditComponent implements OnInit {
           this.loading = false;
         }
       });
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
   }
 
   protected submitForm() {

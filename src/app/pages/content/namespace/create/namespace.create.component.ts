@@ -18,6 +18,7 @@ import {MainService} from '../../../../service/main.service';
 import {DescriptionComponent} from '../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../service/account.service';
 import {VisibilityComponent} from '../../../../common/form/item/common/visibility/visibility.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'namespace-create',
@@ -52,6 +53,7 @@ export class NamespaceCreateComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     private account: AccountService,
     private route: ActivatedRoute,
@@ -70,10 +72,6 @@ export class NamespaceCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/namespace']).then(() => {});
   }
 
   protected submitForm() {

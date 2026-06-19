@@ -1,4 +1,4 @@
-import {inject, Injectable, signal} from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
 import {
   NzI18nInterface,
   NzI18nService,
@@ -14,84 +14,85 @@ import {
   nl_NL,
   pt_PT
 } from "ng-zorro-antd/i18n";
-import {TranslateService} from "@ngx-translate/core";
+import { TranslateService } from "@ngx-translate/core";
 
-// 支持的语言映射
-export const SUPPORTED_LANGUAGES: Record<string, { name: string; nzLocale: NzI18nInterface }> = {
+// 支持的语言映射 → 这里加上标准 BCP 47 码
+export const SUPPORTED_LANGUAGES: Record<string, { name: string; nzLocale: NzI18nInterface; bcp47: string }> = {
   en: {
     name: 'English',
-    nzLocale: en_US
+    nzLocale: en_US,
+    bcp47: 'en-US'
   },
   zh: {
     name: '中文',
-    nzLocale: zh_CN
+    nzLocale: zh_CN,
+    bcp47: 'zh-CN'
   },
   de: {
     name: 'Deutsch',
-    nzLocale: de_DE
+    nzLocale: de_DE,
+    bcp47: 'de-DE'
   },
   fr: {
     name: 'Français',
-    nzLocale: fr_FR
+    nzLocale: fr_FR,
+    bcp47: 'fr-FR'
   },
   it: {
     name: 'Italiano',
-    nzLocale: it_IT
+    nzLocale: it_IT,
+    bcp47: 'it-IT'
   },
   ru: {
     name: "Русский",
-    nzLocale: ru_RU
+    nzLocale: ru_RU,
+    bcp47: 'ru-RU'
   },
   ko: {
     name: "한국어",
-    nzLocale: ko_KR
+    nzLocale: ko_KR,
+    bcp47: 'ko-KR'
   },
   es: {
     name: 'Español',
-    nzLocale: es_ES
+    nzLocale: es_ES,
+    bcp47: 'es-ES'
   },
   ja: {
     name: '日本語',
-    nzLocale: ja_JP
+    nzLocale: ja_JP,
+    bcp47: 'ja-JP'
   },
   nl: {
     name: "Nederlands",
-    nzLocale: nl_NL
+    nzLocale: nl_NL,
+    bcp47: 'nl-NL'
   },
   pt: {
     name: 'Português',
     nzLocale: pt_PT,
+    bcp47: 'pt-PT'
   }
 };
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class MainI18nService {
 
   public translate = inject(TranslateService);
   public i18n = inject(NzI18nService);
 
   languages = Object.entries(SUPPORTED_LANGUAGES)
-    .map(
-      ([code, config]) => (
-        {
-          code: code,
-          name: config.name
-        }
-      )
-    );
+    .map(([code, config]) => ({
+      code: code,
+      name: config.name,
+      bcp47: config.bcp47,
+    }));
 
   currentLang = signal<string>('en');
 
   constructor() {
-    // 读保存的语言设置
     const savedLang = localStorage.getItem('lang');
-    console.log('savedLang: ', savedLang);
-
-    // 读浏览器使用的语言（如果浏览器语言取不到，则用英文）
     const browserLang = this.translate.getBrowserLang() || 'en';
-    console.log('browserLang: ', browserLang);
-
-    // 如果有保存的语言，使用保存的语言，否则用浏览器的语言
     const langToUse = savedLang && SUPPORTED_LANGUAGES[savedLang] ? savedLang : browserLang;
 
     this.currentLang.set(langToUse);
@@ -100,8 +101,6 @@ export class MainI18nService {
   }
 
   changeLanguage(lang: string) {
-    console.log(`Language changed to: ${lang}`);
-
     if (!SUPPORTED_LANGUAGES[lang]) {
       console.warn(`Unsupported language: ${lang}`);
       return;
@@ -120,8 +119,9 @@ export class MainI18nService {
     }
   }
 
-  getCurrentLang() {
-    // return this.currentLang.asReadonly();
-    return this.i18n.getLocale().locale;
+  // ✅ 直接返回 BCP 47 格式
+  getCurrentLang(): string {
+    const langCode = this.currentLang();
+    return SUPPORTED_LANGUAGES[langCode]?.bcp47 ?? 'en-US';
   }
 }

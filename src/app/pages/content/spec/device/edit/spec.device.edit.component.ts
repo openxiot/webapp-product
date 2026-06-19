@@ -21,6 +21,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'spec-device-edit',
@@ -59,6 +60,7 @@ export class SpecDeviceEditComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     protected account: AccountService,
     private route: ActivatedRoute,
@@ -108,10 +110,6 @@ export class SpecDeviceEditComponent implements OnInit {
           this.loading = false;
         }
       });
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
   }
 
   protected submitForm() {

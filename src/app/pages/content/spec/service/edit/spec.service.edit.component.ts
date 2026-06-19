@@ -35,6 +35,7 @@ import {
 import {
   ServiceDefinitionActionsComponent
 } from '../../../../../common/form/item/service/def/action/service.definition.actions.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'spec-service-edit',
@@ -96,6 +97,7 @@ export class SpecServiceEditComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     protected account: AccountService,
     private route: ActivatedRoute,

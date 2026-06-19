@@ -418,13 +418,9 @@ export class MainService {
   /**
    * 读取产品模板
    */
-  getTemplate(organizationCode: string, type: string): Observable<DeviceTemplate> {
-    const params = {
-      organizationCode: organizationCode,
-      type: type
-    }
+  getTemplate(type: string): Observable<DeviceTemplate> {
     return this.http
-      .get<OxResponse>(`${this.server}/v1/template`, {params})
+      .get<OxResponse>(`${this.server}/v1/template/one/${type}`)
       .pipe(map(response => DeviceTemplateCodec.decode(response.data)));
   }
 

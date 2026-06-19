@@ -22,6 +22,7 @@ import {
 import {MainService} from '../../../../../service/main.service';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'spec-format-add',
@@ -51,6 +52,7 @@ export class SpecFormatAddComponent implements OnInit {
   formatExist: Set<string> = new Set();
 
   constructor(
+    protected location: Location,
     private router: Router,
     protected account: AccountService,
     private route: ActivatedRoute,
@@ -103,9 +105,7 @@ export class SpecFormatAddComponent implements OnInit {
       })
   }
 
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
-  }
+
 
   protected select(def: FormatDefinition) {
     this.loading = true;

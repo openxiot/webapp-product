@@ -16,6 +16,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {MainService} from '../../../../service/main.service';
 import {AccountService} from '../../../../service/account.service';
 import {CodeComponent} from '../../../../common/form/item/common/code/code.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'organization-create',
@@ -48,6 +49,7 @@ export class OrganizationCreateComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     private account: AccountService,
     private route: ActivatedRoute,
@@ -67,9 +69,7 @@ export class OrganizationCreateComponent implements OnInit {
   ngOnInit() {
   }
 
-  protected onBack() {
-    this.router.navigate(['/main/organization']).then(() => {});
-  }
+
 
   protected submitForm() {
     const code = this.form.value.code || 'null';

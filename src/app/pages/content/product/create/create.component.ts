@@ -20,6 +20,7 @@ import {ProductBasicUpgradeComponent} from '../detail/basic/upgrade/product.basi
 import {UpgradeType} from '../detail/basic/upgrade/UpgradeType';
 import {MainService} from '../../../../service/main.service';
 import {ProtocolFromArray} from '../detail/basic/protocol/ProtocolType';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'product-create',
@@ -59,6 +60,7 @@ export class CreateComponent implements OnInit {
   }>;
 
   constructor(
+    protected location: Location,
     private router: Router,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
@@ -76,10 +78,6 @@ export class CreateComponent implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/product']).then(() => {});
   }
 
   protected submitForm() {

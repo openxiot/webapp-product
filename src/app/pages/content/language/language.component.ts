@@ -11,6 +11,8 @@ import {MainI18nService} from '../../../service/i18n.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {Router} from '@angular/router';
 import {TranslatePipe} from '@ngx-translate/core';
+import {Location} from '@angular/common';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'main-language',
@@ -24,13 +26,16 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzCardModule,
     NzIconModule,
     NzSpaceModule,
-    TranslatePipe
+    TranslatePipe,
+    NzColDirective,
+    NzRowDirective
   ],
 })
 export class LanguageComponent implements OnInit {
 
   constructor(
     private router: Router,
+    private location: Location,
     public i18n: MainI18nService,
     public account: AccountService,
     private service: MainService,
@@ -43,6 +48,6 @@ export class LanguageComponent implements OnInit {
 
   protected changeLanguage(code: string): void {
     this.i18n.changeLanguage(code)
-    this.router.navigate(['/main']).then(() => {});
+    this.location.back();
   }
 }

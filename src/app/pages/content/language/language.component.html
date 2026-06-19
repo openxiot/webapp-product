@@ -6,14 +6,42 @@
   {{ '语言' | translate }}
 </ng-template>
 
+<!--<div style="padding: 20px 20px">-->
+<!--  <nz-card>-->
+<!--    <nz-space>-->
+<!--      @for (lang of i18n.languages; track lang.code) {-->
+<!--        <div *nzSpaceItem>-->
+<!--          <div (click)="changeLanguage(lang.code)" class="selector">{{ lang.name }}</div>-->
+<!--        </div>-->
+<!--      }-->
+<!--    </nz-space>-->
+<!--  </nz-card>-->
+<!--</div>-->
+
 <div style="padding: 20px 20px">
-  <nz-card>
-    <nz-space>
-      @for (lang of i18n.languages; track lang.code) {
-        <div *nzSpaceItem>
-          <div (click)="changeLanguage(lang.code)" class="selector">{{ lang.name }}</div>
-        </div>
-      }
-    </nz-space>
-  </nz-card>
+  <nz-row [nzGutter]="[8, 8]">
+    @for (lang of i18n.languages; track lang.code) {
+      <nz-col [nzSpan]="4" (click)="changeLanguage(lang.code)">
+        <nz-card nzHoverable>
+          <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+        </nz-card>
+      </nz-col>
+
+      <ng-template #title>
+        <span>
+          <span>{{ lang.name }}</span>
+
+          @if (i18n.getCurrentLang() === lang.bcp47) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+      </ng-template>
+
+      <ng-template #desc>
+        {{ lang.bcp47 }}
+      </ng-template>
+    }
+  </nz-row>
 </div>

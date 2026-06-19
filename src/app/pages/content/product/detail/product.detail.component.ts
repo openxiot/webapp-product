@@ -22,6 +22,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {ProductPanelComponent} from './panel/product.panel.component';
 import {ProductInstanceComponent} from './instance/product.instance.component';
 import {ProductVisibilityComponent} from './visibility/product.visibility.component';
+import {Location} from '@angular/common';
 
 @Component({
   selector: 'product-detail',
@@ -60,6 +61,7 @@ export class ProductDetailComponent implements OnInit {
   instances: ObjectWithLifecycle<DeviceInstance>[] = [];
 
   constructor(
+    protected location: Location,
     private route: ActivatedRoute,
     private msg: NzMessageService,
     private router: Router,
@@ -85,10 +87,6 @@ export class ProductDetailComponent implements OnInit {
         this.msg.warning('Failed to getProduct', error);
       }
     });
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/product']).then(() => {});
   }
 
   protected onSaved() {

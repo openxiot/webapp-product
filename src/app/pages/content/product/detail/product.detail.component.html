@@ -1,5 +1,5 @@
 <nz-spin [nzSpinning]="loading">
-  <nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="productTitle" [nzSubtitle]="productModel" [nzGhost]="false" class="fixed-header">
+  <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="productTitle" [nzSubtitle]="productModel" [nzGhost]="false" class="fixed-header">
     <nz-page-header-footer>
       <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
         <nz-tab nzTitle="基本信息"></nz-tab>
