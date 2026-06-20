@@ -7,7 +7,7 @@
 
             <!-- 值输入 -->
             <div class="value-input">
-              <nz-input-number-group nzAddOnBefore="值">
+              <nz-input-number-group [nzAddOnBefore]="'值' | translate">
                 <nz-input-number
                   formControlName="value"
                   [nzMin]="0"
@@ -19,20 +19,20 @@
 
             <!-- 描述输入 -->
             <div class="description-input">
-              <nz-input-group nzAddOnBefore="中">
+              <nz-input-group [nzAddOnBefore]="'中' | translate">
                 <input
                   nz-input
                   formControlName="descriptionZH"
-                  placeholder="中文描述">
+                  [placeholder]="'中文描述' | translate">
               </nz-input-group>
             </div>
 
             <div class="description-input">
-              <nz-input-group nzAddOnBefore="英">
+              <nz-input-group [nzAddOnBefore]="'英' | translate">
                 <input
                   nz-input
                   formControlName="descriptionEN"
-                  placeholder="英文描述">
+                  [placeholder]="'英文描述' | translate">
               </nz-input-group>
             </div>
 
@@ -63,7 +63,7 @@
         (click)="addItem()"
         type="button">
         <span nz-icon nzType="plus"></span>
-        添加
+        {{ '添加' | translate }}
       </button>
     </nz-col>
   </nz-row>
@@ -73,8 +73,8 @@
       @for (item of items; track $index; let i = $index) {
         <nz-list-item>
           <div class="readonly-item">
-            <span class="item-value">值: <strong>{{ item.value.value }}</strong></span>
-            <span class="item-description">描述: {{ item.value.descriptionZH }} / {{ item.value.descriptionEN }}</span>
+            <span class="item-value">{{ '值:' | translate }} <strong>{{ item.value.value }}</strong></span>
+            <span class="item-description">{{ '描述:' | translate }} {{ item.value.descriptionZH }} / {{ item.value.descriptionEN }}</span>
           </div>
         </nz-list-item>
       }

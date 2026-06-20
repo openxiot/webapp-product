@@ -16,6 +16,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {MainService} from '../../../../../service/main.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-wizard',
@@ -37,7 +38,8 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
     NzIconModule,
     ProductWizardStepComponent,
     NzSpaceModule,
-    NzTagComponent
+    NzTagComponent,
+    TranslatePipe
   ],
 })
 export class ProductWizardComponent implements OnChanges {

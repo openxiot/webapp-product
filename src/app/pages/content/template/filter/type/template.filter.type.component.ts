@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {Type} from '../../../../../typedef/define/Type';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-filter-type',
@@ -11,6 +12,7 @@ import {Type} from '../../../../../typedef/define/Type';
   imports: [
     NzCardModule,
     NzTagComponent,
+    TranslatePipe,
   ],
 })
 export class TemplateFilterTypeComponent {

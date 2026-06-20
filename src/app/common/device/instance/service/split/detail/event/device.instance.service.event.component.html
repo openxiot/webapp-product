@@ -4,19 +4,19 @@
   <div class="title-bar">
     <nz-space class="title">
       <span *nzSpaceItem><span nz-icon nzType="fire" nzTheme="outline"></span></span>
-      <span *nzSpaceItem>事件详情</span>
+      <span *nzSpaceItem>{{ '事件详情' | translate }}</span>
     </nz-space>
 
     @if (lifecycle === LifeCycle.DEVELOPMENT) {
       <span style="float: right">
-        <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()" type="button">删除</button>
+        <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()" type="button">{{ '删除' | translate }}</button>
       </span>
     }
   </div>
 
   <form class="content" nz-form [formGroup]="form">
     <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+      <nz-form-label [style.width.px]="120" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control>
         <device-instance-id
           formControlName="iid"
@@ -27,14 +27,14 @@
     </nz-form-item>
 
     <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+      <nz-form-label [style.width.px]="120" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
       <nz-form-control>
         <device-instance-namespace formControlName="ns"></device-instance-namespace>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+      <nz-form-label [style.width.px]="120" nzRequired>{{ '代码' | translate }}</nz-form-label>
       <nz-form-control>
         <device-instance-name
           formControlName="code"
@@ -46,7 +46,7 @@
     </nz-form-item>
 
     <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+      <nz-form-label [style.width.px]="120" nzRequired>{{ '描述' | translate }}</nz-form-label>
       <nz-form-control>
         <device-instance-description
           formControlName="description"
@@ -57,7 +57,7 @@
     </nz-form-item>
 
     <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>参数</nz-form-label>
+      <nz-form-label [style.width.px]="120" nzRequired>{{ '参数' | translate }}</nz-form-label>
       <nz-form-control>
         <device-instance-arguments
           formControlName="arguments"

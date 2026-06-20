@@ -11,6 +11,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {CreateServiceComponent} from '../../../dialog/instance/create/service/create.service.component';
 import {ServiceType} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-services',
@@ -24,7 +25,8 @@ import {ServiceType} from '@openxiot/xiot-core-spec-ts';
     NzCardModule,
     NzSpaceModule,
     NzIconModule,
-    NzDropDownModule
+    NzDropDownModule,
+    TranslatePipe
   ],
   providers: [
     NzModalService

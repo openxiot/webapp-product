@@ -9,6 +9,7 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
 import {DataFormat, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-definition-select',
@@ -25,6 +26,7 @@ import {DataFormat, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
     NzTagModule,
     NzCellAlignDirective,
     NzTableModule,
+    TranslatePipe,
   ],
   providers: [],
 })

@@ -10,6 +10,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
 import {PropertyMemberComponent} from '../../../../device/instance/tables/properties/member/property-member.component';
 import {Property} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'select-member',
@@ -27,6 +28,7 @@ import {Property} from '@openxiot/xiot-core-spec-ts';
     NzCellAlignDirective,
     NzTableModule,
     PropertyMemberComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

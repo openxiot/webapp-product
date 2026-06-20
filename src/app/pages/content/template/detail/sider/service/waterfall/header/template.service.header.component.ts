@@ -10,6 +10,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-service-header',
@@ -26,6 +27,7 @@ import {NzDividerComponent} from 'ng-zorro-antd/divider';
     NzTagModule,
     NzTableModule,
     NzDividerComponent,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

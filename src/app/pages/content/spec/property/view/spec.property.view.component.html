@@ -15,7 +15,7 @@
     <nz-card nzBorderless nzSize="small">
       <form nz-form [formGroup]="form">
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">{{ '代码' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
             <spec-code formControlName="code" [updatable]="false"></spec-code>
           </nz-form-control>
@@ -23,27 +23,27 @@
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="uuid">UUID</nz-form-label>
-          <nz-form-control [nzSpan]="10" nzErrorTip="请输入UUID">
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="'请输入UUID' | translate">
             <uuid formControlName="uuid" [updatable]="false"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="description">描述</nz-form-label>
-          <nz-form-control [nzSpan]="10" nzErrorTip="描述">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="description">{{ '描述' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="'描述' | translate">
             <description formControlName="description" [updatable]="false"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="access">访问方式</nz-form-label>
-          <nz-form-control [nzSpan]="10" nzErrorTip="访问方式">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="access">{{ '访问方式' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="'访问方式' | translate">
             <property-access formControlName="access" [updatable]="false"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="format">格式</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="format">{{ '格式' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
             <property-format formControlName="format" [updatable]="false" (changed)="onFormatChanged()"></property-format>
           </nz-form-control>
@@ -51,7 +51,7 @@
 
         @if (constrainable) {
           <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzRequired>取值约束</nz-form-label>
+            <nz-form-label [nzSpan]="4" nzRequired>{{ '取值约束' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="10">
               <property-constraint formControlName="constraint" [updatable]="false"></property-constraint>
             </nz-form-control>
@@ -60,7 +60,7 @@
           @switch (form.controls.constraint.value) {
             @case (ConstraintType.RANGE) {
               <nz-form-item>
-                <nz-form-label [nzSpan]="4" nzRequired>取值范围</nz-form-label>
+                <nz-form-label [nzSpan]="4" nzRequired>{{ '取值范围' | translate }}</nz-form-label>
                 <nz-form-control [nzSpan]="10">
                   <property-range formControlName="range" [updatable]="false"></property-range>
                 </nz-form-control>
@@ -68,7 +68,7 @@
             }
             @case (ConstraintType.LIST) {
               <nz-form-item>
-                <nz-form-label [nzSpan]="4" nzRequired>取值列表</nz-form-label>
+                <nz-form-label [nzSpan]="4" nzRequired>{{ '取值列表' | translate }}</nz-form-label>
                 <nz-form-control [nzSpan]="10">
                   <property-list formControlName="list" [updatable]="false"></property-list>
                 </nz-form-control>
@@ -79,7 +79,7 @@
 
         @if (combinationValue) {
           <nz-form-item>
-            <nz-form-label [nzSpan]="4" nzRequired>成员列表</nz-form-label>
+            <nz-form-label [nzSpan]="4" nzRequired>{{ '成员列表' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="10">
               <property-definition-members
                 formControlName="members"
@@ -91,15 +91,15 @@
         }
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzFor="unit">单位</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzFor="unit">{{ '单位' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
             <property-unit formControlName="unit" [updatable]="false"></property-unit>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
-          <nz-form-control [nzSpan]="10" nzErrorTip="状态">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">{{ '状态' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="'状态' | translate">
             <lifecycle formControlName="lifecycle" [updatable]="false"/>
           </nz-form-control>
         </nz-form-item>
@@ -110,9 +110,9 @@
 
 <ng-template #codeErrorTip>
   @if (form.get('code')?.errors?.['required']) {
-    <span>请输入代码</span>
+    <span>{{ '请输入代码' | translate }}</span>
   }
   @if (form.get('code')?.errors?.['pattern']) {
-    <span>代码必须以字母开头，可包含字母、数字、中划线</span>
+    <span>{{ '代码必须以字母开头，可包含字母、数字、中划线' | translate }}</span>
   }
 </ng-template>

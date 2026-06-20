@@ -34,6 +34,7 @@ import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.com
 import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
 import {Arg} from './argument/Arg';
 import {EditorServiceActionArgumentComponent} from './argument/editor.service.action.argument.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-card-action',
@@ -54,7 +55,8 @@ import {EditorServiceActionArgumentComponent} from './argument/editor.service.ac
     NzIconModule,
     NzCardModule,
     EditorNamespaceComponent,
-    EditorServiceActionArgumentComponent
+    EditorServiceActionArgumentComponent,
+    TranslatePipe
   ],
   providers: [
     NzModalService

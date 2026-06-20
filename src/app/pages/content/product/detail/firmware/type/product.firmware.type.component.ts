@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzTagModule} from 'ng-zorro-antd/tag';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-firmware-type',
@@ -13,6 +14,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
     ReactiveFormsModule,
     NzRadioModule,
     NzTagModule,
+    TranslatePipe,
   ],
   providers: [
     {

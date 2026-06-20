@@ -8,6 +8,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {Access} from "@openxiot/xiot-core-spec-ts";
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-access',
@@ -25,6 +26,7 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
     NzCheckboxModule,
     NzSpaceModule,
     NzTagModule,
+    TranslatePipe,
   ],
   providers: [
     {

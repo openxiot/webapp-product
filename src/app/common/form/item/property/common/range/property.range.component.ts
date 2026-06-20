@@ -9,6 +9,7 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {RangeValue} from './RangeValue';
 import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-range',
@@ -28,6 +29,7 @@ import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd
     NzTagModule,
     NzInputNumberComponent,
     NzInputNumberGroupComponent,
+    TranslatePipe,
   ],
   providers: [
     {

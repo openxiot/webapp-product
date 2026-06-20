@@ -18,6 +18,7 @@ import {CreatePropertyComponent} from '../../../../common/dialog/create/property
 import {CreateActionComponent} from '../../../../common/dialog/create/action/create.action.component';
 import {CreateEventComponent} from '../../../../common/dialog/create/event/create.event.component';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-service-menu',
@@ -32,6 +33,7 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
     NzSpaceModule,
     NzIconModule,
     NzDropDownModule,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

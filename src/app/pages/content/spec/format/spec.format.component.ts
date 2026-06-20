@@ -15,6 +15,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'spec-format',
@@ -32,6 +33,7 @@ import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.compon
     NzTagModule,
     NzDividerComponent,
     RouterLink,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

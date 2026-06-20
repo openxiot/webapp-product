@@ -21,6 +21,7 @@ import {ArgumentDefinition, PropertyDefinition} from '@openxiot/xiot-core-spec-t
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {PropertyDefinitionSelector} from '../../../../../dialog/definition/select/property/PropertyDefinitionSelector';
 import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definition/select/property/property.definition.select.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'definition-arguments',
@@ -40,6 +41,7 @@ import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definitio
     NzSpaceModule,
     NzRowDirective,
     NzColDirective,
+    TranslatePipe,
   ],
   providers: [
     {

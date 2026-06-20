@@ -19,6 +19,7 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'edit-property',
@@ -36,6 +37,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
     NzSpaceModule,
     NzButtonModule,
     NzIconModule,
+    TranslatePipe,
   ],
   providers: [],
   standalone: true

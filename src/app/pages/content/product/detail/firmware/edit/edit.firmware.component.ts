@@ -14,6 +14,7 @@ import {ProductFirmwareTypeComponent} from '../type/product.firmware.type.compon
 import {ProductFirmware} from '@openxiot/xiot-core-spec-ts';
 import {ProductFirmwareNameComponent} from '../name/product.firmware.name.component';
 import {EditFirmwareResult} from './EditFirmwareResult';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'edit-firmware',
@@ -27,6 +28,7 @@ import {EditFirmwareResult} from './EditFirmwareResult';
     NzInputDirective,
     ProductFirmwareTypeComponent,
     ProductFirmwareNameComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

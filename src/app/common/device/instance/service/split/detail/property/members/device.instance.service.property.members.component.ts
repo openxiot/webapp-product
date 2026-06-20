@@ -10,6 +10,7 @@ import {SelectMemberComponent} from '../../../../../../../dialog/instance/select
 import {SelectMember} from '../../../../../../../dialog/instance/select/member/SelectMember';
 import {LifeCycle, Property, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-property-members',
@@ -23,7 +24,8 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzIconModule,
     NzTagModule,
     NzColDirective,
-    NzRowDirective
+    NzRowDirective,
+    TranslatePipe
   ],
   providers: [
     {

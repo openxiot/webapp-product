@@ -9,6 +9,7 @@ import {EventDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {EventDefinitionSelector} from "../../../../../dialog/definition/select/event/EventDefinitionSelector";
 import {EventDefinitionSelectComponent} from "../../../../../dialog/definition/select/event/event.definition.select.component";
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'service-definition-events',
@@ -21,7 +22,8 @@ import {EventDefinitionSelectComponent} from "../../../../../dialog/definition/s
     NzIconModule,
     NzTagModule,
     NzColDirective,
-    NzRowDirective
+    NzRowDirective,
+    TranslatePipe
   ],
   providers: [
     {

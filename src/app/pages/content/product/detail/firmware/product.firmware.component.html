@@ -9,18 +9,18 @@
             }
           </nz-select>
 
-          <a (click)="onEdit()">编辑</a>
+          <a (click)="onEdit()">{{ '编辑' | translate }}</a>
         }
 
         @if (firmwares.length > 0) {
-          <a (click)="onCreate()">创建</a>
+          <a (click)="onCreate()">{{ '创建' | translate }}</a>
 
           <div style="margin-left: auto;">
-            <button nz-button nzType="primary" (click)="onUpload()">上传固件</button>
+            <button nz-button nzType="primary" (click)="onUpload()">{{ '上传固件' | translate }}</button>
           </div>
         } @else {
           <div style="margin-left: auto;">
-            <button nz-button nzType="primary" nzDanger (click)="onCreate()">创建固件</button>
+            <button nz-button nzType="primary" nzDanger (click)="onCreate()">{{ '创建固件' | translate }}</button>
           </div>
         }
       </toolbar>
@@ -40,37 +40,37 @@
         <thead>
         <tr>
           <th>
-            版本名称
+            {{ '版本名称' | translate }}
           </th>
           <th>
-            版本编码
+            {{ '版本编码' | translate }}
           </th>
           <th>
-            备注
+            {{ '备注' | translate }}
           </th>
           <th>
-            固件大小
+            {{ '固件大小' | translate }}
           </th>
           <th>
-            固件地址
+            {{ '固件地址' | translate }}
           </th>
           <th>
-            固件MD5值
+            {{ '固件MD5值' | translate }}
           </th>
           <th>
-            最小可升级版本
+            {{ '最小可升级版本' | translate }}
           </th>
           <th>
-            固件状态
+            {{ '固件状态' | translate }}
           </th>
           <th>
-            提交人
+            {{ '提交人' | translate }}
           </th>
           <th>
-            时间
+            {{ '时间' | translate }}
           </th>
           <th>
-            操作
+            {{ '操作' | translate }}
           </th>
         </tr>
         </thead>
@@ -81,19 +81,19 @@
               <td>{{ item.version.code }}</td>
               <td>{{ item.simple?.memo }}</td>
               <td>{{ item.simple?.size }}</td>
-              <td><a [href]="item.simple?.url" target="_blank">下载</a></td>
+              <td><a [href]="item.simple?.url" target="_blank">{{ '下载' | translate }}</a></td>
               <td>{{ item.simple?.md5 }}</td>
               <td>{{ item.minUpgradeVersionCode }}</td>
               <td>
                 @switch (item.lifecycle) {
                   @case (LifeCycle.DEVELOPMENT) {
-                    <nz-tag nzColor="red">开发中</nz-tag>
+                    <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
                   }
                   @case (LifeCycle.PREVIEW) {
-                    <nz-tag nzColor="blue">上线中</nz-tag>
+                    <nz-tag nzColor="blue">{{ '上线中' | translate }}</nz-tag>
                   }
                   @case (LifeCycle.RELEASED) {
-                    <nz-tag nzColor="green">已上线</nz-tag>
+                    <nz-tag nzColor="green">{{ '已上线' | translate }}</nz-tag>
                   }
                 }
               </td>
@@ -102,16 +102,16 @@
               <td>
                 @switch (item.lifecycle) {
                   @case (LifeCycle.DEVELOPMENT) {
-                    <a (click)="onView(item)">查看</a>
+                    <a (click)="onView(item)">{{ '查看' | translate }}</a>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a (click)="onPreview(item)">上线</a>
+                    <a (click)="onPreview(item)">{{ '上线' | translate }}</a>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a (click)="onDelete(item)">删除</a>
+                    <a (click)="onDelete(item)">{{ '删除' | translate }}</a>
                   }
                   @case (LifeCycle.PREVIEW) {
-                    <a (click)="onView(item)">查看</a>
+                    <a (click)="onView(item)">{{ '查看' | translate }}</a>
                     <nz-divider nzType="vertical"></nz-divider>
-                    <a (click)="cancelPreview(item)">取消上线</a>
+                    <a (click)="cancelPreview(item)">{{ '取消上线' | translate }}</a>
                   }
                 }
               </td>

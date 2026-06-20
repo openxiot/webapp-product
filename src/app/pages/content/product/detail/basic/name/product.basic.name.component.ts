@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-basic-name',
@@ -11,7 +12,8 @@ import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
   imports: [
     FormsModule,
     NzInputDirective,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslatePipe
   ],
   providers: [
     {

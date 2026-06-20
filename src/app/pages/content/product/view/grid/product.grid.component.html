@@ -54,7 +54,7 @@
                 }
               }
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="状态" nzSpan="3">
+            <nz-descriptions-item [nzTitle]="'状态' | translate" nzSpan="3">
               @switch (p.lifecycle) {
                 @case (LifeCycle.DEVELOPMENT) {
                   <span style="color: red">{{ '开发中' | translate }}</span>

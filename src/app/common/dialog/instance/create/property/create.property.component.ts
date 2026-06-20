@@ -45,6 +45,7 @@ import {
   DeviceInstanceServicePropertyDefaultValueComponent
 } from '../../../../device/instance/service/split/detail/property/value/device.instance.service.property.default.value.component';
 import {AccountService} from '../../../../../service/account.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'create-property',
@@ -79,6 +80,7 @@ import {AccountService} from '../../../../../service/account.service';
     DeviceInstanceServicePropertyRangeComponent,
     DeviceInstanceServicePropertyDefaultValueComponent,
     DeviceInstanceServicePropertyUnitComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

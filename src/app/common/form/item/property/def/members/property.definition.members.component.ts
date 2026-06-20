@@ -10,6 +10,7 @@ import {PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {PropertyDefinitionSelector} from '../../../../../dialog/definition/select/property/PropertyDefinitionSelector';
 import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definition/select/property/property.definition.select.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-definition-members',
@@ -23,7 +24,8 @@ import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definitio
     NzIconModule,
     NzTagModule,
     NzColDirective,
-    NzRowDirective
+    NzRowDirective,
+    TranslatePipe
   ],
   providers: [
     {

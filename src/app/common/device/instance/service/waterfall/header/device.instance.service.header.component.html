@@ -56,17 +56,17 @@
                 <nz-tag [nzColor]="'blue'"> {{ service.iid }} </nz-tag>
               </nz-descriptions-item>
 
-              <nz-descriptions-item nzTitle="代码">
+              <nz-descriptions-item [nzTitle]="'代码' | translate">
                 {{ service.type.name }}
               </nz-descriptions-item>
 
-              <nz-descriptions-item nzTitle="描述">
+              <nz-descriptions-item [nzTitle]="'描述' | translate">
                 {{ service.description.get(language) }}
               </nz-descriptions-item>
 
               @if (version) {
-                <nz-descriptions-item nzTitle="版本">
-                  <nz-tag [nzColor]="'blue'">版本 {{ service.type.version }}</nz-tag>
+                <nz-descriptions-item [nzTitle]="'版本' | translate">
+                  <nz-tag [nzColor]="'blue'">{{ '版本' | translate }} {{ service.type.version }}</nz-tag>
                 </nz-descriptions-item>
               }
             </nz-descriptions>

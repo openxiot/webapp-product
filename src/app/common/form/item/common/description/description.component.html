@@ -24,7 +24,7 @@
   @if (updatable) {
     <nz-col [nzSpan]="24">
       <button type="button" nz-button nzType="dashed" (click)="addLang()" [disabled]="isDisabled">
-        <span nz-icon nzType="plus"></span> 添加语言描述
+        <span nz-icon nzType="plus"></span> {{ '添加语言描述' | translate }}
       </button>
     </nz-col>
   }

@@ -18,6 +18,7 @@ import {MainService} from '../../../../../../service/main.service';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {DatePipe} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-panel-list',
@@ -40,7 +41,8 @@ import {DatePipe} from '@angular/common';
     NzTableModule,
     NzTagModule,
     NzDividerComponent,
-    DatePipe
+    DatePipe,
+    TranslatePipe
   ],
 })
 export class ProductPanelListComponent implements OnInit, OnChanges {

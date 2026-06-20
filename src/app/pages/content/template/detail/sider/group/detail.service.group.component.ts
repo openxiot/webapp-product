@@ -8,6 +8,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-detail-service-group',
@@ -20,7 +21,8 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
     NzCardModule,
     NzSpaceModule,
     NzIconModule,
-    NzDropDownModule
+    NzDropDownModule,
+    TranslatePipe
   ],
   providers: [
     NzModalService

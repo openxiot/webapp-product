@@ -13,6 +13,7 @@ import {NzTableModule} from 'ng-zorro-antd/table';
 import {EditServiceComponent} from '../../../../../dialog/instance/edit/service/edit.service.component';
 import {EditableService} from '../../../../../dialog/instance/edit/service/EditableService';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-header',
@@ -29,6 +30,7 @@ import {NzDividerComponent} from 'ng-zorro-antd/divider';
     NzTagModule,
     NzTableModule,
     NzDividerComponent,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

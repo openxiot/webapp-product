@@ -20,6 +20,7 @@ import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd
 import {Subject, takeUntil} from 'rxjs';
 import {NzListModule} from 'ng-zorro-antd/list';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-property-list',
@@ -42,6 +43,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzInputNumberGroupComponent,
     NzRowDirective,
     NzColDirective,
+    TranslatePipe,
   ],
   providers: [
     {

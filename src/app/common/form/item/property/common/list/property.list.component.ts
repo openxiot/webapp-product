@@ -30,6 +30,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {ValueItem} from './ValueItem';
 import {DescriptionComponent} from '../../../common/description/description.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 // 严格定义每一行的 FormGroup 类型
 export type PropertyItemFormGroup = FormGroup<{
@@ -55,6 +56,7 @@ export type PropertyItemFormGroup = FormGroup<{
     NzRowDirective,
     NzColDirective,
     DescriptionComponent,
+    TranslatePipe,
   ],
   providers: [
     {

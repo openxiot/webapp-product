@@ -5,6 +5,6 @@
   (ngModelChange)="onInputChange($event)"
   (blur)="onBlur()"
   [disabled]="! updatable"
-  placeholder="8位字符十六进制"
+  [placeholder]="'8位字符十六进制' | translate"
   maxlength="8"
 />

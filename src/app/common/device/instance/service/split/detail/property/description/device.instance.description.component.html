@@ -1,7 +1,7 @@
 <nz-row [nzGutter]="[8, 8]">
 
   <nz-col [nzSpan]="8">
-    <nz-input-group nzAddOnBefore="中">
+    <nz-input-group [nzAddOnBefore]="'中' | translate">
       <input
         type="text"
         nz-input
@@ -23,7 +23,7 @@
 <!--  </nz-col>-->
 
   <nz-col [nzSpan]="8">
-    <nz-input-group nzAddOnBefore="英">
+    <nz-input-group [nzAddOnBefore]="'英' | translate">
       <input
         type="text"
         nz-input

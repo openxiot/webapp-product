@@ -23,6 +23,7 @@ import {ProductPanelComponent} from './panel/product.panel.component';
 import {ProductInstanceComponent} from './instance/product.instance.component';
 import {ProductVisibilityComponent} from './visibility/product.visibility.component';
 import {Location} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-detail',
@@ -49,6 +50,7 @@ import {Location} from '@angular/common';
     ProductInstanceComponent,
     ProductPanelComponent,
     ProductVisibilityComponent,
+    TranslatePipe,
   ],
 })
 export class ProductDetailComponent implements OnInit {

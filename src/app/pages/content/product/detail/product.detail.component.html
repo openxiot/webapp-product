@@ -2,14 +2,14 @@
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="productTitle" [nzSubtitle]="productModel" [nzGhost]="false" class="fixed-header">
     <nz-page-header-footer>
       <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
-        <nz-tab nzTitle="基本信息"></nz-tab>
-        <nz-tab nzTitle="配网引导"></nz-tab>
-        <nz-tab nzTitle="功能"></nz-tab>
-        <nz-tab nzTitle="控制页"></nz-tab>
+        <nz-tab [nzTitle]="'基本信息' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'配网引导' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'功能' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'控制页' | translate"></nz-tab>
         @if (product.upgrade.length > 0) {
-          <nz-tab nzTitle="固件"></nz-tab>
+          <nz-tab [nzTitle]="'固件' | translate"></nz-tab>
         }
-        <nz-tab nzTitle="说明书"></nz-tab>
+        <nz-tab [nzTitle]="'说明书' | translate"></nz-tab>
 <!--        <nz-tab nzTitle="可见性"></nz-tab>-->
 <!--        <nz-tab nzTitle="耗材"></nz-tab>-->
 <!--        <nz-tab nzTitle="销售"></nz-tab>-->
@@ -22,7 +22,7 @@
   </ng-template>
 
   <ng-template #productModel>
-    型号: {{ product.model }}
+    {{ '型号:' | translate }} {{ product.model }}
   </ng-template>
 
   <div style="padding: 20px 20px; margin-top: 110px;">

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Property} from '@openxiot/xiot-core-spec-ts';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-write-list-value',
@@ -11,7 +12,8 @@ import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
     ReactiveFormsModule,
     FormsModule,
     NzOptionComponent,
-    NzSelectComponent
+    NzSelectComponent,
+    TranslatePipe
   ],
   standalone: true,
   providers: []

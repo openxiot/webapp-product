@@ -35,6 +35,7 @@ import {ProductBasicProtocolComponent} from './protocol/product.basic.protocol.c
 import {MainService} from '../../../../../service/main.service';
 import {ProtocolFromArray, ProtocolToArray} from './protocol/ProtocolType';
 import {ProductBasicNameComponent} from './name/product.basic.name.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-basic',
@@ -66,6 +67,7 @@ import {ProductBasicNameComponent} from './name/product.basic.name.component';
     ProductBasicUpgradeComponent,
     ProductBasicProtocolComponent,
     ProductBasicNameComponent,
+    TranslatePipe,
   ],
 })
 export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {

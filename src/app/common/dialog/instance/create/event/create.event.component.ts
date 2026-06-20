@@ -29,6 +29,7 @@ import {MainService} from '../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
 import {AccountService} from '../../../../../service/account.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'create-event',
@@ -56,6 +57,7 @@ import {AccountService} from '../../../../../service/account.service';
     NzSiderComponent,
     NzSpinComponent,
     NzFlexModule,
+    TranslatePipe,
   ],
   providers: [],
 })

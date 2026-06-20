@@ -3,20 +3,20 @@
     <toolbar>
       @switch (wizard.lifecycle) {
         @case (LifeCycle.DEVELOPMENT) {
-          <nz-tag nzColor="red">开发中</nz-tag>
+          <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
           @if (changed) {
-            <div style="color: red">已修改，请保存！</div>
+            <div style="color: red">{{ '已修改，请保存！' | translate }}</div>
           } @else {
-            <span style="color: gray">配网引导，在APP添加设备时出现。</span>
+            <span style="color: gray">{{ '配网引导，在APP添加设备时出现。' | translate }}</span>
           }
         }
         @case (LifeCycle.PREVIEW) {
-          <nz-tag nzColor="green">上线中</nz-tag>
-          <div style="color: gray">管理员正在审批，请等待！</div>
+          <nz-tag nzColor="green">{{ '上线中' | translate }}</nz-tag>
+          <div style="color: gray">{{ '管理员正在审批，请等待！' | translate }}</div>
         }
         @case (LifeCycle.RELEASED) {
-          <nz-tag nzColor="blue">已上线</nz-tag>
-          <div style="color: gray">已上线，不可修改</div>
+          <nz-tag nzColor="blue">{{ '已上线' | translate }}</nz-tag>
+          <div style="color: gray">{{ '已上线，不可修改' | translate }}</div>
         }
       }
 
@@ -25,22 +25,22 @@
         @if (changed) {
           <nz-space>
             <div *nzSpaceItem>
-              <button nz-button nzType="primary" nzDanger (click)="onCancel()">取消</button>
+              <button nz-button nzType="primary" nzDanger (click)="onCancel()">{{ '取消' | translate }}</button>
             </div>
 
             <div *nzSpaceItem>
-              <button nz-button nzType="primary" (click)="onSave()">保存</button>
+              <button nz-button nzType="primary" (click)="onSave()">{{ '保存' | translate }}</button>
             </div>
           </nz-space>
         } @else {
           @switch (wizard.lifecycle) {
             @case (LifeCycle.DEVELOPMENT) {
               @if (wizard.steps.length > 0) {
-                <button nz-button nzType="primary" (click)="onPreview()">上线</button>
+                <button nz-button nzType="primary" (click)="onPreview()">{{ '上线' | translate }}</button>
               }
             }
             @case (LifeCycle.PREVIEW) {
-              <button nz-button nzType="primary" nzDanger (click)="cancelPreview()">取消上线</button>
+              <button nz-button nzType="primary" nzDanger (click)="cancelPreview()">{{ '取消上线' | translate }}</button>
             }
           }
         }
@@ -83,7 +83,7 @@
             [nzXXl]="6"
           >
             <div class="button-container">
-              <button nz-button (click)="add()" nzType="dashed" class="fill-button">添加步骤</button>
+              <button nz-button (click)="add()" nzType="dashed" class="fill-button">{{ '添加步骤' | translate }}</button>
             </div>
           </div>
         }

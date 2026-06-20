@@ -14,6 +14,7 @@ import {CreateEventComponent} from '../../../../../dialog/instance/create/event/
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {DataFormat} from '@openxiot/xiot-core-spec-ts';
 import {Access} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-menu',
@@ -27,7 +28,8 @@ import {Access} from '@openxiot/xiot-core-spec-ts';
     NzCardModule,
     NzSpaceModule,
     NzIconModule,
-    NzDropDownModule
+    NzDropDownModule,
+    TranslatePipe
   ],
   providers: [
     NzModalService

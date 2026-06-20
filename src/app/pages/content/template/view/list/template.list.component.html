@@ -8,11 +8,11 @@
 >
   <thead>
     <tr>
-      <th>名字空间</th>
-      <th>模板名称</th>
-      <th>型号</th>
-      <th>版本</th>
-      <th>操作</th>
+      <th>{{ '名字空间' | translate }}</th>
+      <th>{{ '模板名称' | translate }}</th>
+      <th>{{ '型号' | translate }}</th>
+      <th>{{ '版本' | translate }}</th>
+      <th>{{ '操作' | translate }}</th>
     </tr>
   </thead>
   <tbody>
@@ -23,7 +23,7 @@
         <td>{{ p.type.model }}</td>
         <td>{{ p.type.version }}</td>
         <td>
-          <a routerLink="/main/template/detail/{{p.type.toString()}}">详情</a>
+          <a routerLink="/main/template/detail/{{p.type.toString()}}">{{ '详情' | translate }}</a>
         </td>
       </tr>
     }

@@ -3,6 +3,7 @@ import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LangOption} from './LangOption';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'language-add',
@@ -10,7 +11,8 @@ import {LangOption} from './LangOption';
   standalone: true,
   imports: [
     NzSpaceModule,
-    NzTagModule
+    NzTagModule,
+    TranslatePipe
   ]
 })
 export class LanguageAddComponent {

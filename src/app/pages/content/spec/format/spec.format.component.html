@@ -8,12 +8,12 @@
 >
   <thead>
   <tr>
-    <th [nzSortFn]="codeSortFn">代码</th>
-    <th>中文描述</th>
-    <th>英文描述</th>
-    <th>状态</th>
+    <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
+    <th>{{ '中文描述' | translate }}</th>
+    <th>{{ '英文描述' | translate }}</th>
+    <th>{{ '状态' | translate }}</th>
     @if (account.isEditable()) {
-      <th>操作</th>
+      <th>{{ '操作' | translate }}</th>
     }
   </tr>
   </thead>
@@ -26,23 +26,23 @@
         <td>
           @switch (format.lifecycle) {
             @case (LifeCycle.RELEASED) {
-              <nz-tag nzColor="blue">已发布</nz-tag>
+              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
             }
             @case (LifeCycle.PREVIEW) {
-              <nz-tag nzColor="yellow">预览</nz-tag>
+              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
             }
             @case (LifeCycle.DEVELOPMENT) {
-              <nz-tag nzColor="red">开发中</nz-tag>
+              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
             }
           }
         </td>
         @if (account.isEditable()) {
           <td>
-            <a [routerLink]="['/main/spec/format/edit', format.type.toString()]">修改</a>
+            <a [routerLink]="['/main/spec/format/edit', format.type.toString()]">{{ '修改' | translate }}</a>
 
             @if (format.lifecycle === LifeCycle.DEVELOPMENT) {
               <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(format)">删除</a>
+              <a (click)="onDelete(format)">{{ '删除' | translate }}</a>
             }
           </td>
         }

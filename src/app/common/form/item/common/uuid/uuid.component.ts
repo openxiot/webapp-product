@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'uuid',
@@ -8,7 +9,8 @@ import { NzInputModule } from 'ng-zorro-antd/input';
   standalone: true,
   imports: [
     NzInputModule,
-    FormsModule
+    FormsModule,
+    TranslatePipe
   ],
   providers: [
     {

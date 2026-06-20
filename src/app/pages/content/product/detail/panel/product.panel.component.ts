@@ -16,6 +16,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {ProductBasic, ProductInstance, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ProductPanelListComponent} from './list/product.panel.list.component';
 import {MainService} from '../../../../../service/main.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-panel',
@@ -37,6 +38,7 @@ import {MainService} from '../../../../../service/main.service';
     NzIconDirective,
     ToolbarComponent,
     ProductPanelListComponent,
+    TranslatePipe,
   ],
 })
 export class ProductPanelComponent implements OnChanges {

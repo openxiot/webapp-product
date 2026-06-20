@@ -20,6 +20,7 @@ import {PropertyValueComponent} from './property-value/property-value.component'
 import {PropertyMemberComponent} from './member/property-member.component';
 import {EditableProperty} from '../../../../dialog/instance/edit/property/EditableProperty';
 import {EditPropertyComponent} from '../../../../dialog/instance/edit/property/edit.property.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'editor-properties',
@@ -38,6 +39,7 @@ import {EditPropertyComponent} from '../../../../dialog/instance/edit/property/e
     NzDividerComponent,
     PropertyValueComponent,
     PropertyMemberComponent,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

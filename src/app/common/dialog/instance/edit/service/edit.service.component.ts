@@ -12,6 +12,7 @@ import {EditableService} from './EditableService';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'edit-service',
@@ -23,6 +24,7 @@ import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
     NzFormModule,
     NzInputModule,
     NzInputNumberModule,
+    TranslatePipe,
   ],
   providers: [],
   standalone: true

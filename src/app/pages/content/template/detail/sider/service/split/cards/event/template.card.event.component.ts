@@ -36,6 +36,7 @@ import {Arg} from '../action/argument/Arg';
 import {EditorServiceActionArgumentComponent} from '../action/argument/editor.service.action.argument.component';
 import {SelectArgumentComponent} from '../../../../../common/dialog/select/argument/select.argument.component';
 import {SelectArgument} from '../../../../../common/dialog/select/argument/SelectArgument';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-card-event',
@@ -56,7 +57,8 @@ import {SelectArgument} from '../../../../../common/dialog/select/argument/Selec
     NzIconModule,
     NzCardModule,
     EditorNamespaceComponent,
-    EditorServiceActionArgumentComponent
+    EditorServiceActionArgumentComponent,
+    TranslatePipe
   ],
   providers: [
     NzModalService

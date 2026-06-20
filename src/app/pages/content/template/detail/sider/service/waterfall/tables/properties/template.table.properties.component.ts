@@ -20,6 +20,7 @@ import {PropertyValueComponent} from './property-value/property-value.component'
 import {PropertyMemberComponent} from './member/property-member.component';
 import {EditableProperty} from '../../../../../common/dialog/edit/property/EditableProperty';
 import {EditPropertyComponent} from '../../../../../common/dialog/edit/property/edit.property.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-table-properties',
@@ -38,6 +39,7 @@ import {EditPropertyComponent} from '../../../../../common/dialog/edit/property/
     NzDividerComponent,
     PropertyValueComponent,
     PropertyMemberComponent,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

@@ -25,6 +25,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {AccountService} from '../../../../service/account.service';
 import {Location} from '@angular/common';
 import {MainI18nService} from '../../../../service/i18n.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-detail',
@@ -50,6 +51,7 @@ import {MainI18nService} from '../../../../service/i18n.service';
     NzSpaceModule,
     NzSwitchModule,
     NzIconModule,
+    TranslatePipe,
   ],
   providers: [],
 })

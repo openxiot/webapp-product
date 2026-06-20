@@ -9,6 +9,7 @@ import {Arg} from './Arg';
 import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'editor-service-action-argument',
@@ -28,6 +29,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzSpaceModule,
     NzRowDirective,
     NzColDirective,
+    TranslatePipe,
   ],
   providers: [
     {

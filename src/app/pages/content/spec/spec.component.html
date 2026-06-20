@@ -18,25 +18,25 @@
       @if (account.isEditable()) {
         @switch (tabIndex) {
           @case (0) {
-            <button nz-button nzType="primary" routerLink="/main/spec/device/create">创建设备</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/device/create">{{ '创建设备' | translate }}</button>
           }
           @case (1) {
-            <button nz-button nzType="primary" routerLink="/main/spec/service/create">创建服务</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/service/create">{{ '创建服务' | translate }}</button>
           }
           @case (2) {
-            <button nz-button nzType="primary" routerLink="/main/spec/property/create">创建属性</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/property/create">{{ '创建属性' | translate }}</button>
           }
           @case (3) {
-            <button nz-button nzType="primary" routerLink="/main/spec/action/create">创建方法</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/action/create">{{ '创建方法' | translate }}</button>
           }
           @case (4) {
-            <button nz-button nzType="primary" routerLink="/main/spec/event/create">创建事件</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/event/create">{{ '创建事件' | translate }}</button>
           }
           @case (5) {
-            <button nz-button nzType="primary" routerLink="/main/spec/format/add">添加格式</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/format/add">{{ '添加格式' | translate }}</button>
           }
           @case (6) {
-            <button nz-button nzType="primary" routerLink="/main/spec/unit/create">创建单位</button>
+            <button nz-button nzType="primary" routerLink="/main/spec/unit/create">{{ '创建单位' | translate }}</button>
           }
         }
       }
@@ -46,13 +46,13 @@
   @if (account.ns) {
     <nz-page-header-footer>
       <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small" (nzSelectChange)="onTabChanged()">
-        <nz-tab nzTitle="设备类型"></nz-tab>
-        <nz-tab nzTitle="功能"></nz-tab>
-        <nz-tab nzTitle="属性"></nz-tab>
-        <nz-tab nzTitle="方法"></nz-tab>
-        <nz-tab nzTitle="事件"></nz-tab>
-        <nz-tab nzTitle="格式"></nz-tab>
-        <nz-tab nzTitle="单位"></nz-tab>
+        <nz-tab [nzTitle]="'设备类型' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'功能' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'属性' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'方法' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'事件' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'格式' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'单位' | translate"></nz-tab>
       </nz-tabset>
     </nz-page-header-footer>
   }

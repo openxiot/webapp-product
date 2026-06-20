@@ -1,29 +1,29 @@
 <div style="width: 100%">
   <form nz-form [formGroup]="form">
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>固件名称</nz-form-label>
+      <nz-form-label [nzSpan]="6" nzRequired>{{ '固件名称' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <product-firmware-name formControlName="name"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>版本名称</nz-form-label>
+      <nz-form-label [nzSpan]="6" nzRequired>{{ '版本名称' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <input nz-input formControlName="versionName"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>文件</nz-form-label>
+      <nz-form-label [nzSpan]="6" nzRequired>{{ '文件' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16" [nzErrorTip]="errorTip">
         <product-firmware-url formControlName="url" [productId]="0"/>
         <ng-template #errorTip let-control>
           @if (control.hasError('firmwareUrlRequired')) {
-            <span>固件大小不能超过1024M</span>
+            <span>{{ '固件大小不能超过1024M' | translate }}</span>
           }
           @if (control.hasError('invalidFirmwareType')) {
-            <span>请上传.bin格式的固件文件</span>
+            <span>{{ '请上传.bin格式的固件文件' | translate }}</span>
           }
         </ng-template>
       </nz-form-control>
@@ -37,18 +37,18 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6">备注</nz-form-label>
+      <nz-form-label [nzSpan]="6">{{ '备注' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <textarea nz-input placeholder="备注" rows="4" formControlName="memo"></textarea>
+        <textarea nz-input [placeholder]="'备注' | translate" rows="4" formControlName="memo"></textarea>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6">最小可升级版本</nz-form-label>
+      <nz-form-label [nzSpan]="6">{{ '最小可升级版本' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <nz-select formControlName="minUpgradeVersionCode" [nzAllowClear]="true">
           @for (item of data.firmwareInstances; track item) {
-            <nz-option [nzValue]="item.version.code" nzLabel="固件版本 {{ item.version.code }}"></nz-option>
+            <nz-option [nzValue]="item.version.code" nzLabel="{{ '固件版本' | translate }}{{ item.version.code }}"></nz-option>
           }
         </nz-select>
       </nz-form-control>

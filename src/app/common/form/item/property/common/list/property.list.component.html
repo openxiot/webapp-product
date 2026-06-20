@@ -6,7 +6,7 @@
 
           <!-- 第一行：值 + 删除按钮 占满一行 -->
           <div class="value-row">
-            <nz-input-number-group nzAddOnBefore="值" class="full-width">
+            <nz-input-number-group [nzAddOnBefore]="'值' | translate" class="full-width">
               <nz-input-number
                 formControlName="value"
                 [nzMin]="0"
@@ -47,7 +47,7 @@
         type="button"
         [disabled]="isDisabled"
       >
-        <span nz-icon nzType="plus"></span>添加
+        <span nz-icon nzType="plus"></span>{{ '添加' | translate }}
       </button>
     </nz-col>
   </nz-row>
@@ -57,7 +57,7 @@
       <nz-list-item>
         <div class="readonly-item">
           <!-- 第一行：值占满 -->
-          <div class="value-line">值：{{ fg.value.value }}</div>
+          <div class="value-line">{{ '值：' | translate }}{{ fg.value.value }}</div>
           <!-- 第二行：缩进 -->
           <div class="desc-line indented">
             @for (item of Array.from(fg.value.desc ?? []); track item[0]) {

@@ -6,6 +6,7 @@ import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzTagComponent, NzTagModule} from 'ng-zorro-antd/tag';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-basic-upgrade',
@@ -16,7 +17,8 @@ import {NzTagComponent, NzTagModule} from 'ng-zorro-antd/tag';
     FormsModule,
     NzSpaceModule,
     NzCheckboxModule,
-    NzTagModule
+    NzTagModule,
+    TranslatePipe
   ],
   providers: [
     {

@@ -10,6 +10,7 @@ import {DefaultValue} from './DefaultValue';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzSwitchModule} from 'ng-zorro-antd/switch';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-property-default-value',
@@ -27,6 +28,7 @@ import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
     NzSpaceModule,
     NzSwitchModule,
     NzInputNumberModule,
+    TranslatePipe,
   ],
   providers: [
     {

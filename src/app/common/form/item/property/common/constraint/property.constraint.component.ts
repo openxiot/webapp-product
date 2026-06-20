@@ -9,6 +9,7 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {ConstraintType} from './ConstraintType';
 import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-constraint',
@@ -28,6 +29,7 @@ import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
     NzTagModule,
     NzRadioComponent,
     NzRadioGroupComponent,
+    TranslatePipe,
   ],
   providers: [
     {

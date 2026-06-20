@@ -12,6 +12,7 @@ import {ActionInvocationComponent} from './invocation/action.invocation.componen
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'editor-actions',
@@ -29,6 +30,7 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
     NzRowDirective,
     NzColDirective,
     NzDropDownModule,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

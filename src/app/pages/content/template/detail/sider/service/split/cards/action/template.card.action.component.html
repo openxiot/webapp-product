@@ -4,59 +4,59 @@
   <div class="title-bar">
     <nz-space class="title">
       <span *nzSpaceItem><span nz-icon nzType="thunderbolt" nzTheme="outline"></span></span>
-      <span *nzSpaceItem>方法详情</span>
+      <span *nzSpaceItem>{{ '方法详情' | translate }}</span>
     </nz-space>
 
     <span style="float: right">
-      <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()" type="button">删除</button>
+      <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()" type="button">{{ '删除' | translate }}</button>
     </span>
   </div>
 
   <form class="content" nz-form [formGroup]="form" (ngSubmit)="onSubmit()">
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>实例ID</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <nz-input-number formControlName="iid" [nzMin]="1" [nzMax]="10" [nzStep]="1" (ngModelChange)="onChanged()"></nz-input-number>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>名字空间</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <editor-namespace formControlName="ns"></editor-namespace>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>代码</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '代码' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <input nz-input formControlName="code" (ngModelChange)="onChanged()"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>简体中文描述</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '简体中文描述' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <input nz-input formControlName="descriptionZHCN" (ngModelChange)="onChanged()"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>繁体中文描述</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '繁体中文描述' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <input nz-input formControlName="descriptionZHTW" (ngModelChange)="onChanged()"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>英文描述</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '英文描述' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <input nz-input formControlName="descriptionENUS" (ngModelChange)="onChanged()"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>输入参数</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '输入参数' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         @if (argumentIn.length > 0) {
           <div formArrayName="argumentIn">
@@ -102,7 +102,7 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>输出结果</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '输出结果' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         @if (argumentOut.length > 0) {
           <div formArrayName="argumentOut">
@@ -149,7 +149,7 @@
 
     <nz-form-item>
       <nz-form-control [nzSpan]="19" [nzOffset]="5">
-        <button nz-button nzType="primary" [disabled]="!changed" type="submit">保存</button>
+        <button nz-button nzType="primary" [disabled]="!changed" type="submit">{{ '保存' | translate }}</button>
       </nz-form-control>
     </nz-form-item>
   </form>

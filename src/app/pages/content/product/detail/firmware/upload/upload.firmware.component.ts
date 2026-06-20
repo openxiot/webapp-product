@@ -16,6 +16,7 @@ import {UploadFirmware} from './UploadFirmware';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {FirmwareSample, GenericVersion, LifeCycle, ProductFirmwareInstance} from '@openxiot/xiot-core-spec-ts';
 import {FirmwareUrl} from './url/FirmwareUrl';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'upload-firmware',
@@ -30,6 +31,7 @@ import {FirmwareUrl} from './url/FirmwareUrl';
     NzInputDirective,
     ProductFirmwareNameComponent,
     ProductFirmwareUrlComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

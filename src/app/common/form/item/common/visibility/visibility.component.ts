@@ -9,6 +9,7 @@ import {LifeCycle, Visibility} from "@openxiot/xiot-core-spec-ts";
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'visibility',
@@ -28,6 +29,7 @@ import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
     NzTagModule,
     NzRadioComponent,
     NzRadioGroupComponent,
+    TranslatePipe,
   ],
   providers: [
     {

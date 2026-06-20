@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-basic-type',
@@ -7,6 +8,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   templateUrl: './product.basic.type.component.html',
   styleUrls: ['./product.basic.type.component.less'],
   imports: [
+    TranslatePipe
   ],
   providers: [
     {

@@ -2,6 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {Property} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'action-in-list-value',
@@ -11,6 +12,7 @@ import {Property} from '@openxiot/xiot-core-spec-ts';
     NzSelectModule,
     ReactiveFormsModule,
     FormsModule,
+    TranslatePipe,
   ],
   standalone: true,
   providers: []

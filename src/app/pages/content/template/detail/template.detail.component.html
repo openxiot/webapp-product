@@ -10,12 +10,12 @@
 <!--            <a (click)="onClickType()" target="_blank">{{ template.description.get('zh-CN') }}</a>-->
 <!--          }-->
 <!--        </nz-descriptions-item>-->
-        <nz-descriptions-item nzTitle="型号" [nzSpan]="1">
+        <nz-descriptions-item [nzTitle]="'型号' | translate" [nzSpan]="1">
           @if (template) {
             {{ template.type.model }}
           }
         </nz-descriptions-item>
-        <nz-descriptions-item nzTitle="版本" [nzSpan]="1">
+        <nz-descriptions-item [nzTitle]="'版本' | translate" [nzSpan]="1">
           @if (template) {
             {{ template.type.version }}
           }
@@ -33,7 +33,7 @@
         <!--        <nz-switch [(ngModel)]="version" nzCheckedChildren="显示" nzUnCheckedChildren="隐藏"></nz-switch>-->
         <!--      </nz-descriptions-item>-->
 
-        <nz-descriptions-item nzTitle="浏览模式" [nzSpan]="1">
+        <nz-descriptions-item [nzTitle]="'浏览模式' | translate" [nzSpan]="1">
           <nz-switch [(ngModel)]="expert" nzCheckedChildren="专家模式" nzUnCheckedChildren="普通模式"></nz-switch>
         </nz-descriptions-item>
       </nz-descriptions>

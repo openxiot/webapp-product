@@ -12,6 +12,7 @@ import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {ProductFirmwareTypeComponent} from '../type/product.firmware.type.component';
 import {ProductFirmware} from '@openxiot/xiot-core-spec-ts';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'create-firmware',
@@ -24,6 +25,7 @@ import {ProductFirmware} from '@openxiot/xiot-core-spec-ts';
     NzFormModule,
     NzInputDirective,
     ProductFirmwareTypeComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

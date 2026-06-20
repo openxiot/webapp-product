@@ -1,7 +1,7 @@
 <nz-card
   nzBorderless
   nzSize="small"
-  nzTitle="第 {{ page.index }} 页"
+  nzTitle="{{ '第' | translate }}{{ page.index }}{{ '页' | translate }}"
   [nzExtra]="pageExtra"
 >
   <nz-row [nzGutter]="[8, 8]">
@@ -9,7 +9,7 @@
     @if (lifecycle === LifeCycle.DEVELOPMENT) {
       <nz-col [nzSpan]="24">
         <div style="color: darkgray; font-size: 12px;">
-          请上传jpeg图片，512*512像素，大小不超过512KB。
+          {{ '请上传jpeg图片，512*512像素，大小不超过512KB。' | translate }}
         </div>
       </nz-col>
 
@@ -28,7 +28,7 @@
         >
           @if (page.url.length === 0) {
             <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></span>
-            <div class="ant-upload-text">上传</div>
+            <div class="ant-upload-text">{{ '上传' | translate }}</div>
           } @else {
             <div class="preview-wrapper">
               <img [src]="page.url" class="preview-img" alt="上传的图片"/>
@@ -54,7 +54,7 @@
 <ng-template #pageExtra>
   @switch (lifecycle) {
     @case (LifeCycle.DEVELOPMENT) {
-      <button nzSize="small" nz-button nzType="primary" nzDanger (click)="onRemove()">删除</button>
+      <button nzSize="small" nz-button nzType="primary" nzDanger (click)="onRemove()">{{ '删除' | translate }}</button>
     }
   }
 </ng-template>

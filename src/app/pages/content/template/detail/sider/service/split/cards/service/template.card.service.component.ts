@@ -25,6 +25,7 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
 import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-card-service',
@@ -44,7 +45,8 @@ import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.c
     NzButtonModule,
     NzIconModule,
     NzCardModule,
-    EditorNamespaceComponent
+    EditorNamespaceComponent,
+    TranslatePipe
   ],
   providers: [
     NzModalService

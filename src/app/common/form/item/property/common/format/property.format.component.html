@@ -11,7 +11,7 @@
   <span class="format-display" [class.disabled]="isDisabled">
     {{ selectedLabel }}
     @if (isDisabled) {
-      <span class="disabled-hint">(已禁用)</span>
+      <span class="disabled-hint">{{ '(已禁用)' | translate }}</span>
     }
   </span>
 }

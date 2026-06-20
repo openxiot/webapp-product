@@ -9,6 +9,7 @@ import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-table-events',
@@ -25,6 +26,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
     NzButtonComponent,
     NzRowDirective,
     NzColDirective,
+    TranslatePipe,
   ],
 })
 export class TemplateTableEventsComponent {

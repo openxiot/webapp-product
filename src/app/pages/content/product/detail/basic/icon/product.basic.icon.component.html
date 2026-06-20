@@ -3,7 +3,7 @@
     <nz-row [nzGutter]="[8, 8]">
       <nz-col [nzSpan]="24">
         <div style="color: darkgray; font-size: 12px;">
-          请上传jpeg图片，512*512像素，大小不超过512KB。
+          {{ '请上传jpeg图片，512*512像素，大小不超过512KB。' | translate }}
         </div>
       </nz-col>
       <nz-col [nzSpan]="24">
@@ -21,7 +21,7 @@
         >
           @if (!value) {
             <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'upload'"></span>
-            <div class="ant-upload-text">上传</div>
+            <div class="ant-upload-text">{{ '上传' | translate }}</div>
           } @else {
             <div class="preview-wrapper">
               <img [src]="value" class="preview-img" alt="上传的图标"/>

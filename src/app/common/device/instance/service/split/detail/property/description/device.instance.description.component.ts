@@ -7,6 +7,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-description',
@@ -22,7 +23,8 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     FormsModule,
     ReactiveFormsModule,
     NzRowDirective,
-    NzColDirective
+    NzColDirective,
+    TranslatePipe
   ],
   providers: [
     {

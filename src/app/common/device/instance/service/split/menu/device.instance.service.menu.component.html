@@ -16,7 +16,7 @@
               <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
               <span class="menu-item">{{ p.description.get(language) }}</span>
               @if (version) {
-                <span style="float: right"><nz-tag nzColor="blue">版本 {{ p.type.version }}</nz-tag></span>
+                <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ p.type.version }}</nz-tag></span>
               }
             </li>
           }
@@ -32,7 +32,7 @@
               <nz-tag [nzColor]="'blue'">{{ a.iid }}</nz-tag>
               <span class="menu-item">{{ a.description.get(language) }}</span>
               @if (version) {
-                <span style="float: right"><nz-tag nzColor="blue">版本 {{ a.type.version }}</nz-tag></span>
+                <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ a.type.version }}</nz-tag></span>
               }
             </li>
           }
@@ -48,7 +48,7 @@
               <nz-tag [nzColor]="'blue'">{{ e.iid }}</nz-tag>
               <span class="menu-item">{{ e.description.get(language) }}</span>
               @if (version) {
-                <span style="float: right"><nz-tag nzColor="blue">版本 {{ e.type.version }}</nz-tag></span>
+                <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ e.type.version }}</nz-tag></span>
               }
             </li>
           }
@@ -59,12 +59,12 @@
         <div>
           <nz-space style="font-size: 14px; font-weight: bold;">
             <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>
-            <span *nzSpaceItem>属性({{ service.properties.size }}个)</span>
+            <span *nzSpaceItem>{{ '属性(' | translate }}{{ service.properties.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
           @if (lifecycle === LifeCycle.DEVELOPMENT) {
             <span style="float: right">
-              <button nz-button nzType="primary" nzSize="small" (click)="onAddProperty()">添加</button>
+              <button nz-button nzType="primary" nzSize="small" (click)="onAddProperty()">{{ '添加' | translate }}</button>
             </span>
           }
         </div>
@@ -74,12 +74,12 @@
         <div>
           <nz-space style="font-size: 14px; font-weight: bold;">
             <span *nzSpaceItem nz-icon nzType="thunderbolt" nzTheme="outline"></span>
-            <span *nzSpaceItem>方法({{ service.actions.size }}个)</span>
+            <span *nzSpaceItem>{{ '方法(' | translate }}{{ service.actions.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
           @if (lifecycle === LifeCycle.DEVELOPMENT) {
             <span style="float: right">
-              <button nz-button nzType="primary" nzSize="small"  (click)="onAddAction()">添加</button>
+              <button nz-button nzType="primary" nzSize="small"  (click)="onAddAction()">{{ '添加' | translate }}</button>
             </span>
           }
         </div>
@@ -89,12 +89,12 @@
         <div>
           <nz-space style="font-size: 14px; font-weight: bold;">
             <span *nzSpaceItem nz-icon nzType="fire" nzTheme="outline"></span>
-            <span *nzSpaceItem>事件({{ service.events.size }}个)</span>
+            <span *nzSpaceItem>{{ '事件(' | translate }}{{ service.events.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
           @if (lifecycle === LifeCycle.DEVELOPMENT) {
             <span style="float: right">
-              <button nz-button nzType="primary" nzSize="small" (click)="onAddEvent()">添加</button>
+              <button nz-button nzType="primary" nzSize="small" (click)="onAddEvent()">{{ '添加' | translate }}</button>
             </span>
           }
         </div>

@@ -9,14 +9,14 @@
   <thead>
   <tr>
     <th [nzSortFn]="uuidSortFn">UUID</th>
-    <th [nzSortFn]="codeSortFn">代码</th>
-    <th>描述</th>
-    <th>格式</th>
-    <th>单位</th>
-    <th>访问方式</th>
-    <th>成员</th>
-    <th>状态</th>
-    <th>操作</th>
+    <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
+    <th>{{ '描述' | translate }}</th>
+    <th>{{ '格式' | translate }}</th>
+    <th>{{ '单位' | translate }}</th>
+    <th>{{ '访问方式' | translate }}</th>
+    <th>{{ '成员' | translate }}</th>
+    <th>{{ '状态' | translate }}</th>
+    <th>{{ '操作' | translate }}</th>
   </tr>
   </thead>
 
@@ -30,15 +30,15 @@
         <td>{{ getUnitDescription(p.unit) }}</td>
         <td>
           @if (p.access.isWritable) {
-            <nz-tag [nzColor]="'red'">写</nz-tag>
+            <nz-tag [nzColor]="'red'">{{ '写' | translate }}</nz-tag>
           }
 
           @if (p.access.isReadable) {
-            <nz-tag [nzColor]="'blue'">读</nz-tag>
+            <nz-tag [nzColor]="'blue'">{{ '读' | translate }}</nz-tag>
           }
 
           @if (p.access.isNotifiable) {
-            <nz-tag [nzColor]="'green'">通知</nz-tag>
+            <nz-tag [nzColor]="'green'">{{ '通知' | translate }}</nz-tag>
           }
         </td>
         <td>
@@ -51,26 +51,26 @@
         <td>
           @switch (p.lifecycle) {
             @case (LifeCycle.RELEASED) {
-              <nz-tag nzColor="blue">已发布</nz-tag>
+              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
             }
             @case (LifeCycle.PREVIEW) {
-              <nz-tag nzColor="yellow">预览</nz-tag>
+              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
             }
             @case (LifeCycle.DEVELOPMENT) {
-              <nz-tag nzColor="red">开发中</nz-tag>
+              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
             }
           }
         </td>
         <td>
           @if (account.isEditable()) {
-            <a [routerLink]="['/main/spec/property/edit', p.type.toString()]">修改</a>
+            <a [routerLink]="['/main/spec/property/edit', p.type.toString()]">{{ '修改' | translate }}</a>
 
             @if (p.lifecycle === LifeCycle.DEVELOPMENT) {
               <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(p)">删除</a>
+              <a (click)="onDelete(p)">{{ '删除' | translate }}</a>
             }
           } @else {
-            <a [routerLink]="['/main/spec/property/view', p.type.toString()]">查看</a>
+            <a [routerLink]="['/main/spec/property/view', p.type.toString()]">{{ '查看' | translate }}</a>
           }
         </td>
       </tr>

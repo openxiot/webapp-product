@@ -1,7 +1,7 @@
 @if (lifecycle === LifeCycle.DEVELOPMENT) {
   <nz-space>
     <div *nzSpaceItem>
-      <nz-switch [(ngModel)]="value.valid" nzCheckedChildren="有" nzUnCheckedChildren="无" (ngModelChange)="onValueChanged($event)"></nz-switch>
+      <nz-switch [(ngModel)]="value.valid" [nzCheckedChildren]="'有' | translate" [nzUnCheckedChildren]="'无' | translate" (ngModelChange)="onValueChanged($event)"></nz-switch>
     </div>
 
     @if (value.valid) {

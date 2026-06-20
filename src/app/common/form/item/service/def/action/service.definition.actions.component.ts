@@ -9,6 +9,7 @@ import {ActionDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {ActionDefinitionSelector} from "../../../../../dialog/definition/select/action/ActionDefinitionSelector";
 import {ActionDefinitionSelectComponent} from "../../../../../dialog/definition/select/action/action.definition.select.component";
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'service-definition-actions',
@@ -21,7 +22,8 @@ import {ActionDefinitionSelectComponent} from "../../../../../dialog/definition/
     NzIconModule,
     NzTagModule,
     NzColDirective,
-    NzRowDirective
+    NzRowDirective,
+    TranslatePipe
   ],
   providers: [
     {

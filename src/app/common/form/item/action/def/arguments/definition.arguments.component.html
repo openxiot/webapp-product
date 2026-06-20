@@ -10,11 +10,11 @@
 
         <nz-col [nzSpan]="15">
           <nz-space nzDirection="horizontal">
-            <nz-input-number-group *nzSpaceItem nzAddOnBefore="最少" nzAddOnAfter="次">
+            <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'最少' | translate" [nzAddOnAfter]="'次' | translate">
               <nz-input-number [(ngModel)]="arg.minRepeat" (ngModelChange)="onChanged()" [nzDisabled]="!updatable"></nz-input-number>
             </nz-input-number-group>
 
-            <nz-input-number-group *nzSpaceItem nzAddOnBefore="最多" nzAddOnAfter="次">
+            <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'最多' | translate" [nzAddOnAfter]="'次' | translate">
               <nz-input-number [(ngModel)]="arg.maxRepeat" (ngModelChange)="onChanged()" [nzDisabled]="!updatable"></nz-input-number>
             </nz-input-number-group>
           </nz-space>

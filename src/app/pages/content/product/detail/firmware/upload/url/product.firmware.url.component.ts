@@ -16,6 +16,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, of, Subscription, switchMap, tap} from 'rxjs';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {FirmwareUrl} from './FirmwareUrl';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-firmware-url',
@@ -28,6 +29,7 @@ import {FirmwareUrl} from './FirmwareUrl';
     NzUploadModule,
     NzColDirective,
     NzRowDirective,
+    TranslatePipe,
   ],
   providers: [
     {

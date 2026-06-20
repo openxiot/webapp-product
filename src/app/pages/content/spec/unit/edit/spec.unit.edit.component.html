@@ -15,29 +15,29 @@
     <nz-card nzBorderless nzSize="small">
       <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">代码</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="code">{{ '代码' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="8" [nzErrorTip]="codeErrorTip">
             <spec-code formControlName="code" [updatable]="false"></spec-code>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="description">描述</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="描述">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="description">{{ '描述' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="8" [nzErrorTip]="'描述' | translate">
             <description formControlName="description"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">状态</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="状态">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="lifecycle">{{ '状态' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="8" [nzErrorTip]="'状态' | translate">
             <lifecycle formControlName="lifecycle" [updatable]="true"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-control [nzSpan]="4" [nzOffset]="4">
-            <button nz-button nzType="primary" [disabled]="form.invalid || !form.dirty">提交</button>
+            <button nz-button nzType="primary" [disabled]="form.invalid || !form.dirty">{{ '提交' | translate }}</button>
           </nz-form-control>
         </nz-form-item>
       </form>
@@ -47,9 +47,9 @@
 
 <ng-template #codeErrorTip>
   @if (form.get('code')?.errors?.['required']) {
-    <span>请输入代码</span>
+    <span>{{ '请输入代码' | translate }}</span>
   }
   @if (form.get('code')?.errors?.['pattern']) {
-    <span>代码必须以字母开头，可包含字母、数字、中划线</span>
+    <span>{{ '代码必须以字母开头，可包含字母、数字、中划线' | translate }}</span>
   }
 </ng-template>

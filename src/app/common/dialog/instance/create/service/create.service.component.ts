@@ -42,6 +42,7 @@ import {CreateServiceActionsComponent} from './actions/create.service.actions.co
 import {CreateServiceEventsComponent} from './events/create.service.events.component';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
 import {AccountService} from '../../../../../service/account.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'create-service',
@@ -70,6 +71,7 @@ import {AccountService} from '../../../../../service/account.service';
     CreateServicePropertiesComponent,
     CreateServiceActionsComponent,
     CreateServiceEventsComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

@@ -9,6 +9,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {LanguageAddComponent} from '../../../../dialog/language/add/language.add.component';
 import {LangOption} from '../../../../dialog/language/add/LangOption';
+import {TranslatePipe} from '@ngx-translate/core';
 
 interface LangDesc {
   lang: string;
@@ -30,6 +31,7 @@ interface LangDesc {
     FormsModule,
     NzRowDirective,
     NzColDirective,
+    TranslatePipe,
   ],
   providers: [
     {

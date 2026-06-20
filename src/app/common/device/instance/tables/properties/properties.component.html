@@ -17,16 +17,16 @@
         <thead>
         <tr>
           <th>ID</th>
-          <th>代码</th>
-          <th>描述</th>
-          <th>格式</th>
-          <th>访问方式</th>
-          <th>缺省值</th>
-          <th>成员</th>
+          <th>{{ '代码' | translate }}</th>
+          <th>{{ '描述' | translate }}</th>
+          <th>{{ '格式' | translate }}</th>
+          <th>{{ '访问方式' | translate }}</th>
+          <th>{{ '缺省值' | translate }}</th>
+          <th>{{ '成员' | translate }}</th>
           @if (version) {
-            <th>版本</th>
+            <th>{{ '版本' | translate }}</th>
           }
-          <th>操作</th>
+          <th>{{ '操作' | translate }}</th>
         </tr>
         </thead>
         <tbody>
@@ -70,15 +70,15 @@
               </td>
               <td>
                 @if (p.access.isWritable) {
-                  <nz-tag [nzColor]="'blue'">写</nz-tag>
+                  <nz-tag [nzColor]="'blue'">{{ '写' | translate }}</nz-tag>
                 }
 
                 @if (p.access.isReadable) {
-                  <nz-tag [nzColor]="'blue'">读</nz-tag>
+                  <nz-tag [nzColor]="'blue'">{{ '读' | translate }}</nz-tag>
                 }
 
                 @if (p.access.isNotifiable) {
-                  <nz-tag [nzColor]="'blue'">通知</nz-tag>
+                  <nz-tag [nzColor]="'blue'">{{ '通知' | translate }}</nz-tag>
                 }
               </td>
               <td>
@@ -106,7 +106,7 @@
 
               @if (version) {
                 <td>
-                  <nz-tag [nzColor]="'blue'">版本 {{ p.type.version }}</nz-tag>
+                  <nz-tag [nzColor]="'blue'">{{ '版本' | translate }} {{ p.type.version }}</nz-tag>
                 </td>
               }
 
@@ -145,11 +145,11 @@
       <div>
         <nz-space style="font-size: 14px; font-weight: bold;">
           <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>
-          <span *nzSpaceItem>属性({{ service.properties.size }}个)</span>
+          <span *nzSpaceItem>{{ '属性(' | translate }}{{ service.properties.size }}{{ '个)' | translate }}</span>
         </nz-space>
 
         <span style="float: right">
-          <button nz-button nzType="primary" nzSize="small">添加</button>
+          <button nz-button nzType="primary" nzSize="small">{{ '添加' | translate }}</button>
         </span>
       </div>
     </ng-template>

@@ -20,7 +20,7 @@
       <div style="width: 100%">
         <form nz-form [formGroup]="form">
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-id
                 formControlName="iid"
@@ -31,14 +31,14 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-namespace formControlName="ns"></device-instance-namespace>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '代码' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-name
                 formControlName="code"
@@ -50,7 +50,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '描述' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-description
                 formControlName="description"
@@ -61,7 +61,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>访问方式</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '访问方式' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-service-property-access
                 formControlName="access"
@@ -72,7 +72,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>数据格式</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '数据格式' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-service-property-format
                 formControlName="format"
@@ -84,7 +84,7 @@
 
           @if (constrainable) {
             <nz-form-item nz-flex>
-              <nz-form-label [style.width.px]="120" nzRequired>取值约束</nz-form-label>
+              <nz-form-label [style.width.px]="120" nzRequired>{{ '取值约束' | translate }}</nz-form-label>
               <nz-form-control>
                 <device-instance-service-property-constraint
                   formControlName="constraint"
@@ -97,7 +97,7 @@
             @switch (form.controls.constraint.value) {
               @case (ConstraintType.RANGE) {
                 <nz-form-item nz-flex>
-                  <nz-form-label [style.width.px]="120" nzRequired>取值范围</nz-form-label>
+                  <nz-form-label [style.width.px]="120" nzRequired>{{ '取值范围' | translate }}</nz-form-label>
                   <nz-form-control>
                     <device-instance-service-property-range
                       formControlName="range"
@@ -109,7 +109,7 @@
               }
               @case (ConstraintType.LIST) {
                 <nz-form-item nz-flex>
-                  <nz-form-label [style.width.px]="120" nzRequired>取值列表</nz-form-label>
+                  <nz-form-label [style.width.px]="120" nzRequired>{{ '取值列表' | translate }}</nz-form-label>
                   <nz-form-control>
                     <device-instance-service-property-list
                       formControlName="list"
@@ -140,7 +140,7 @@
 
           @if (current.formatNumber()) {
             <nz-form-item nz-flex>
-              <nz-form-label [style.width.px]="120" nzRequired>单位</nz-form-label>
+              <nz-form-label [style.width.px]="120" nzRequired>{{ '单位' | translate }}</nz-form-label>
               <nz-form-control>
                 <device-instance-service-property-unit
                   formControlName="unit"
@@ -152,7 +152,7 @@
 
           @if (current.format !== DataFormat.COMBINATION) {
             <nz-form-item nz-flex>
-              <nz-form-label [style.width.px]="120" nzRequired>缺省值</nz-form-label>
+              <nz-form-label [style.width.px]="120" nzRequired>{{ '缺省值' | translate }}</nz-form-label>
               <nz-form-control>
                 <device-instance-service-property-default-value
                   formControlName="defaultValue"

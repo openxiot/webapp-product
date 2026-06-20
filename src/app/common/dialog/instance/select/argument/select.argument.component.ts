@@ -11,6 +11,7 @@ import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
 import {PropertyMemberComponent} from '../../../../device/instance/tables/properties/member/property-member.component';
 import {Property} from '@openxiot/xiot-core-spec-ts';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'select-argument',
@@ -29,6 +30,7 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
     NzTableModule,
     NzRadioModule,
     PropertyMemberComponent,
+    TranslatePipe,
   ],
   providers: [],
 })

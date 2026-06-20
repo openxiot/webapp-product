@@ -12,6 +12,7 @@ import {Argument, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {SelectArgumentComponent} from '../../../../../../../dialog/instance/select/argument/select.argument.component';
 import {SelectArgument} from '../../../../../../../dialog/instance/select/argument/SelectArgument';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-arguments',
@@ -31,6 +32,7 @@ import {SelectArgument} from '../../../../../../../dialog/instance/select/argume
     NzSpaceModule,
     NzRowDirective,
     NzColDirective,
+    TranslatePipe,
   ],
   providers: [
     {

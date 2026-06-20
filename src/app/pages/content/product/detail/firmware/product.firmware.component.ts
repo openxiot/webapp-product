@@ -34,6 +34,7 @@ import {UploadFirmware} from './upload/UploadFirmware';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-firmware',
@@ -59,6 +60,7 @@ import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.com
     NzSelectComponent,
     NzDividerModule,
     ToolbarComponent,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

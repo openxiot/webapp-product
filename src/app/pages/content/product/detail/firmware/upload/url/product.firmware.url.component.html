@@ -13,8 +13,8 @@
     >
       @if (!value.url) {
         <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'upload'"></span>
-        <div class="ant-upload-text">上传固件</div>
-        <div class="ant-upload-hint">大小不超过1024M</div>
+        <div class="ant-upload-text">{{ '上传固件' | translate }}</div>
+        <div class="ant-upload-hint">{{ '大小不超过1024M' | translate }}</div>
       } @else {
         <div class="file-info">
           <span nz-icon nzType="file-text" class="file-icon"></span>
@@ -27,11 +27,11 @@
 
   @if (value.url) {
     <nz-col [nzSpan]="24">
-      <a [href]="value.url" target="_blank">下载链接</a>
+      <a [href]="value.url" target="_blank">{{ '下载链接' | translate }}</a>
     </nz-col>
 
     <nz-col [nzSpan]="24">
-      固件大小: {{ value.fileSize }} bytes
+      {{ '固件大小:' | translate }} {{ value.fileSize }} bytes
     </nz-col>
   }
 </nz-row>

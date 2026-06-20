@@ -15,6 +15,7 @@ import {LifeCycle, ProductWizardStep} from '@openxiot/xiot-core-spec-ts';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MainService} from '../../../../../../service/main.service';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-wizard-step',
@@ -34,6 +35,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzIconModule,
     NzColDirective,
     NzRowDirective,
+    TranslatePipe,
   ],
 })
 export class ProductWizardStepComponent implements OnInit, OnDestroy {

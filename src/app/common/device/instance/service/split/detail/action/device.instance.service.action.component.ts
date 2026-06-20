@@ -36,6 +36,7 @@ import {DeviceInstanceDescriptionComponent} from '../property/description/device
 import {DeviceInstanceArgumentsComponent} from './arguments/device.instance.arguments.component';
 import {areMapsEqual} from '../../../../../../../typedef/utils/MapUtils';
 import {NzFlexDirective} from 'ng-zorro-antd/flex';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-action',
@@ -61,6 +62,7 @@ import {NzFlexDirective} from 'ng-zorro-antd/flex';
     DeviceInstanceDescriptionComponent,
     DeviceInstanceArgumentsComponent,
     NzFlexDirective,
+    TranslatePipe,
   ],
   providers: [
     NzModalService

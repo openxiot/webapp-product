@@ -8,6 +8,7 @@ import {MainService} from '../../../../../../service/main.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, of, Subscription, switchMap, tap} from 'rxjs';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-basic-icon',
@@ -20,6 +21,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzUploadModule,
     NzColDirective,
     NzRowDirective,
+    TranslatePipe,
   ],
   providers: [
     {

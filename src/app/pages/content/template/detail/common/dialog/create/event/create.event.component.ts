@@ -12,6 +12,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabelComponent} from 'ng-zorro-antd/form';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'create-event',
@@ -29,6 +30,7 @@ import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
     NzInputDirective,
     NzInputNumberComponent,
     NzRowDirective,
+    TranslatePipe,
   ],
   providers: [],
 })

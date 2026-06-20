@@ -14,6 +14,7 @@ import {NzTableModule} from 'ng-zorro-antd/table';
 import {IPropertyData} from '../IPropertyData';
 import {firstValueFrom, map} from 'rxjs';
 import {PropertyReadValueComponent} from './value/property.read.value.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-reader',
@@ -31,7 +32,8 @@ import {PropertyReadValueComponent} from './value/property.read.value.component'
     NzIconModule,
     NzTableModule,
     FormsModule,
-    PropertyReadValueComponent
+    PropertyReadValueComponent,
+    TranslatePipe
   ],
   providers: [],
   standalone: true

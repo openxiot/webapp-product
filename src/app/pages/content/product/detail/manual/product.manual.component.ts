@@ -16,6 +16,7 @@ import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {LifeCycle, ProductBasic, ProductManual, ProductManualPage, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {ProductManualPageComponent} from './page/product.manual.page.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-manual',
@@ -37,7 +38,8 @@ import {ProductManualPageComponent} from './page/product.manual.page.component';
     NzIconModule,
     NzSpaceModule,
     NzTagComponent,
-    ProductManualPageComponent
+    ProductManualPageComponent,
+    TranslatePipe
   ],
 })
 export class ProductManualComponent implements OnChanges {

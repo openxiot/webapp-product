@@ -3,7 +3,7 @@
     <div class="group-bar">
       <nz-space class="group-title">
         <span *nzSpaceItem><span nz-icon nzType="appstore" nzTheme="outline"></span></span>
-        <span *nzSpaceItem>功能组({{ device.services.size }})</span>
+        <span *nzSpaceItem>{{ '功能组(' | translate }}{{ device.services.size }})</span>
       </nz-space>
 
 <!--      <span style="float: right">-->
@@ -17,7 +17,7 @@
           <nz-tag [nzColor]="'blue'">{{ s.iid }}</nz-tag>
           <span class="service-title">{{ s.description.get(language) }}</span>
           @if (version) {
-            <span style="float: right"><nz-tag nzColor="blue">版本 {{ s.type.version }}</nz-tag></span>
+            <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ s.type.version }}</nz-tag></span>
           }
         </li>
       }

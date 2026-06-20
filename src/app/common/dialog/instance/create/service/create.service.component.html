@@ -20,7 +20,7 @@
       <div style="width: 100%">
         <form nz-form [formGroup]="form">
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>实例ID</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-id
                 formControlName="iid"
@@ -31,14 +31,14 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>名字空间</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-namespace formControlName="ns"></device-instance-namespace>
             </nz-form-control>
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>代码</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '代码' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-name
                 formControlName="code"
@@ -50,7 +50,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>描述</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '描述' | translate }}</nz-form-label>
             <nz-form-control>
               <device-instance-description
                 formControlName="description"
@@ -61,7 +61,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>必选属性</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '必选属性' | translate }}</nz-form-label>
             <nz-form-control>
               <create-service-properties
                 formControlName="requiredProperties"
@@ -71,7 +71,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>可选属性</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '可选属性' | translate }}</nz-form-label>
             <nz-form-control>
               <create-service-properties
                 formControlName="optionalProperties"
@@ -81,7 +81,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>必选方法</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '必选方法' | translate }}</nz-form-label>
             <nz-form-control>
               <create-service-actions
                 formControlName="requiredActions"
@@ -91,7 +91,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>可选方法</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '可选方法' | translate }}</nz-form-label>
             <nz-form-control>
               <create-service-actions
                 formControlName="optionalActions"
@@ -101,7 +101,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>必选事件</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '必选事件' | translate }}</nz-form-label>
             <nz-form-control>
               <create-service-events
                 formControlName="requiredEvents"
@@ -111,7 +111,7 @@
           </nz-form-item>
 
           <nz-form-item nz-flex>
-            <nz-form-label [style.width.px]="120" nzRequired>可选事件</nz-form-label>
+            <nz-form-label [style.width.px]="120" nzRequired>{{ '可选事件' | translate }}</nz-form-label>
             <nz-form-control>
               <create-service-events
                 formControlName="optionalEvents"

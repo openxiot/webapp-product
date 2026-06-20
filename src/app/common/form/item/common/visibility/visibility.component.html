@@ -1,15 +1,15 @@
 @if (lifecycle === LifeCycle.DEVELOPMENT) {
   <nz-radio-group [ngModel]="value" nzButtonStyle="solid" (ngModelChange)="onRadioChange($event)">
-    <label nz-radio-button [nzValue]="Visibility.PUBLIC">公开</label>
-    <label nz-radio-button [nzValue]="Visibility.PRIVATE">私有</label>
+    <label nz-radio-button [nzValue]="Visibility.PUBLIC">{{ '公开' | translate }}</label>
+    <label nz-radio-button [nzValue]="Visibility.PRIVATE">{{ '私有' | translate }}</label>
   </nz-radio-group>
 } @else {
   @switch (value) {
     @case (Visibility.PUBLIC) {
-      <nz-tag nzColor="blue">公开</nz-tag>
+      <nz-tag nzColor="blue">{{ '公开' | translate }}</nz-tag>
     }
     @case (Visibility.PRIVATE) {
-      <nz-tag nzColor="green">私有</nz-tag>
+      <nz-tag nzColor="green">{{ '私有' | translate }}</nz-tag>
     }
   }
 }

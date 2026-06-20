@@ -7,6 +7,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {DataFormat, FormatDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzSelectModule} from 'ng-zorro-antd/select';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-format',
@@ -22,6 +23,7 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
     FormsModule,
     ReactiveFormsModule,
     NzSelectModule,
+    TranslatePipe,
   ],
   providers: [
     {

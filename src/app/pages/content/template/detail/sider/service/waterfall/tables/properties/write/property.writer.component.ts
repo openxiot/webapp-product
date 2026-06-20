@@ -13,6 +13,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {IPropertyData} from '../IPropertyData';
 import {PropertyWriteValueComponent} from './value/property.write.value.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'property-writer',
@@ -30,7 +31,8 @@ import {PropertyWriteValueComponent} from './value/property.write.value.componen
     NzIconModule,
     NzTableModule,
     FormsModule,
-    PropertyWriteValueComponent
+    PropertyWriteValueComponent,
+    TranslatePipe
   ],
   providers: [],
   standalone: true

@@ -17,6 +17,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ArgValue} from './arg/ArgValue';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'action-invocation',
@@ -35,7 +36,8 @@ import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
     NzGridModule,
     NzIconModule,
     NzTableModule,
-    NzToolTipModule
+    NzToolTipModule,
+    TranslatePipe
   ],
   providers: [],
   standalone: true

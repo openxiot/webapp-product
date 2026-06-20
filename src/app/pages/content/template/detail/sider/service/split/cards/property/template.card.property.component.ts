@@ -41,6 +41,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {EditorServicePropertyMemberComponent} from './member/editor.service.property.member.component';
 import {Member} from './member/Member';
 import {EditorNamespaceComponent} from './namespace/editor.namespace.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'template-card-property',
@@ -61,7 +62,8 @@ import {EditorNamespaceComponent} from './namespace/editor.namespace.component';
     NzIconModule,
     NzCardModule,
     EditorServicePropertyMemberComponent,
-    EditorNamespaceComponent
+    EditorNamespaceComponent,
+    TranslatePipe
   ],
   providers: [
     NzModalService

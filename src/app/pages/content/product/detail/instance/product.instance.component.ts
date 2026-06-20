@@ -23,6 +23,7 @@ import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.compon
 import {DeviceInstanceComponent} from '../../../../../common/device/instance/device.instance.component';
 import {MainService} from '../../../../../service/main.service';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-instance',
@@ -43,6 +44,7 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
     NzSpinModule,
     ToolbarComponent,
     DeviceInstanceComponent,
+    TranslatePipe,
   ],
   providers: [
     NzModalService
