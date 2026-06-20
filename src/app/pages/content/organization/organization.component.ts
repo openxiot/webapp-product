@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
+import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {FormsModule} from '@angular/forms';
 import {MainService} from '../../../service/main.service';
@@ -28,6 +29,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     FormsModule,
     NzPageHeaderModule,
     NzBreadCrumbModule,
+    BreadcrumbTranslateDirective,
     NzSpinModule,
     NzCardModule,
     NzTabsModule,

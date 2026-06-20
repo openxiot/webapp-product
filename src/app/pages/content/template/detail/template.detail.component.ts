@@ -2,7 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UrnType, DeviceTemplate} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
-import {NzBreadCrumbComponent} from 'ng-zorro-antd/breadcrumb';
+import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
+import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
 import {
   NzPageHeaderBreadcrumbDirective,
   NzPageHeaderContentDirective,
@@ -34,8 +35,9 @@ import {TranslatePipe} from '@ngx-translate/core';
   standalone: true,
   imports: [
     FormsModule,
-    NzBreadCrumbComponent,
+    NzBreadCrumbModule,
     NzPageHeaderBreadcrumbDirective,
+    BreadcrumbTranslateDirective,
     NzPageHeaderModule,
     NzDescriptionsComponent,
     NzDescriptionsItemComponent,

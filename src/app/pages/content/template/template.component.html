@@ -1,6 +1,6 @@
 <nz-spin [nzSpinning]="loading">
   <nz-page-header [nzTitle]="pageTitle" [nzSubtitle]="subTitle" [nzGhost]="false">
-    <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
+    <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
     <nz-page-header-tags>
       <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"></nz-segmented>

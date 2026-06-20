@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
+import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzButtonModule} from 'ng-zorro-antd/button';
@@ -29,6 +30,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
+    BreadcrumbTranslateDirective,
     NzSpinModule,
     NzCardModule,
     NzButtonModule,
