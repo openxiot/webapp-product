@@ -1,6 +1,6 @@
 <div nz-row [nzGutter]="[8, 8]">
   @for (t of templates; track t.type.toString()) {
-    <div nz-col [nzSpan]="4">
+    <div nz-col [nzSpan]="6">
       <nz-card
         [nzHoverable]="true"
         routerLink="/main/template/detail/{{t.type.toString()}}"
