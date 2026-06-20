@@ -16,6 +16,7 @@ import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {MainService} from '../../../../../service/main.service';
 import {AccountService} from '../../../../../service/account.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-list',
@@ -36,7 +37,8 @@ import {AccountService} from '../../../../../service/account.service';
     NzColDirective,
     NzRowDirective,
     NzCardModule,
-    NzCheckboxModule
+    NzCheckboxModule,
+    TranslatePipe
   ],
 })
 export class ProductListComponent implements OnInit, OnDestroy {

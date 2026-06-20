@@ -27,29 +27,29 @@
           <nz-card-meta [nzTitle]="p.name"></nz-card-meta>
           <nz-divider></nz-divider>
           <nz-descriptions nzSize="small">
-            <nz-descriptions-item nzTitle="产品ID" nzSpan="3">
+            <nz-descriptions-item nzTitle="{{'产品ID' | translate }}" nzSpan="3">
               {{ p.id }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="型号" nzSpan="3">
+            <nz-descriptions-item nzTitle="{{'型号' | translate }}" nzSpan="3">
               {{ p.model }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="设备类型" nzSpan="3">
+            <nz-descriptions-item nzTitle="{{'设备类型' | translate }}" nzSpan="3">
               {{ p.template.name }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="连接方式" nzSpan="3">
+            <nz-descriptions-item nzTitle="{{'连接方式' | translate}}" nzSpan="3">
               {{ p.protocol }}
             </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="固件升级" nzSpan="3">
+            <nz-descriptions-item nzTitle="{{'固件升级' | translate}}" nzSpan="3">
               @for (item of p.upgrade; track item) {
                 @switch (item) {
                   @case ('Direct') {
-                    直接升级
+                    {{ '直接升级' | translate }}
                   }
                   @case ('Gateway') {
-                    网关协助
+                    {{ '网关协助' | translate }}
                   }
                   @case ('Ble') {
-                    蓝牙协助
+                    {{ '蓝牙协助' | translate }}
                   }
                 }
               }
@@ -57,13 +57,13 @@
             <nz-descriptions-item nzTitle="状态" nzSpan="3">
               @switch (p.lifecycle) {
                 @case (LifeCycle.DEVELOPMENT) {
-                  <span style="color: red">开发中</span>
+                  <span style="color: red">{{ '开发中' | translate }}</span>
                 }
                 @case (LifeCycle.PREVIEW) {
-                  <span style="color: blue">上线中</span>
+                  <span style="color: blue">{{ '上线中' | translate }}</span>
                 }
                 @case (LifeCycle.RELEASED) {
-                  <span style="color: green">已上线</span>
+                  <span style="color: green">{{ '已上线' | translate }}</span>
                 }
               }
             </nz-descriptions-item>

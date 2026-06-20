@@ -1,47 +1,51 @@
 <nz-spin [nzSpinning]="loading">
-  <nz-page-header (nzBack)="location.back()" nzBackIcon nzTitle="创建产品" [nzGhost]="false">
+  <nz-page-header (nzBack)="location.back()" nzBackIcon nzTitle="pageTitle" [nzGhost]="false">
   </nz-page-header>
+
+  <ng-template #pageTitle>
+    {{ '创建产品' | translate }}
+  </ng-template>
 
   <div style="padding: 20px 20px">
     <nz-card nzBorderless nzSize="small">
       <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">产品名称</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入产品名称">
-            <input type="text" nz-input formControlName="name" placeholder="请输入产品名称"/>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">{{ '产品名称' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="8">
+            <input type="text" nz-input formControlName="name"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">产品型号</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入产品型号">
-            <input type="text" nz-input formControlName="model" placeholder="请输入产品型号"/>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">{{ '产品型号' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="8">
+            <input type="text" nz-input formControlName="model"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="type">产品模板</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="type">{{ '产品模板' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="8">
             <input type="text" nz-input formControlName="template"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="icon">产品图标</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="icon">{{ '产品图标' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="8">
             <product-basic-icon formControlName="icon" [lifecycle]="product.lifecycle" [productId]="product.id"></product-basic-icon>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="protocols">设备连接</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="protocols">{{ '设备连接' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="8">
             <product-basic-protocol formControlName="protocol" [lifecycle]="product.lifecycle"></product-basic-protocol>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="supported">固件升级</nz-form-label>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="supported">{{ '固件升级' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="8">
             <product-basic-upgrade formControlName="upgrade" [lifecycle]="product.lifecycle"></product-basic-upgrade>
           </nz-form-control>
@@ -49,7 +53,7 @@
 
         <nz-form-item>
           <nz-form-control [nzSpan]="4" [nzOffset]="4">
-            <button nz-button nzType="primary">提交</button>
+            <button nz-button nzType="primary">{{ '提交' | translate }}</button>
           </nz-form-control>
         </nz-form-item>
       </form>

@@ -21,6 +21,7 @@ import {UpgradeType} from '../detail/basic/upgrade/UpgradeType';
 import {MainService} from '../../../../service/main.service';
 import {ProtocolFromArray} from '../detail/basic/protocol/ProtocolType';
 import {Location} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-create',
@@ -42,7 +43,8 @@ import {Location} from '@angular/common';
     ReactiveFormsModule,
     ProductBasicIconComponent,
     ProductBasicProtocolComponent,
-    ProductBasicUpgradeComponent
+    ProductBasicUpgradeComponent,
+    TranslatePipe
   ],
 })
 export class CreateComponent implements OnInit {

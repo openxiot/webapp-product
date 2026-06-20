@@ -3,7 +3,7 @@
 
   @if (account.login) {
     <nz-page-header-extra>
-      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/namespace/create']">创建</button>
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/namespace/create']">{{ '创建' | translate }}</button>
     </nz-page-header-extra>
   }
 </nz-page-header>
@@ -21,12 +21,12 @@
   >
     <thead>
     <tr>
-      <th>代码</th>
-      <th>中文描述</th>
-      <th>英文描述</th>
-      <th>可见性</th>
-      <th>创建者</th>
-      <th>操作</th>
+      <th>{{ '代码' | translate }}</th>
+      <th>{{ '中文描述' | translate }}</th>
+      <th>{{ '英文描述' | translate }}</th>
+      <th>{{ '可见性' | translate }}</th>
+      <th>{{ '创建者' | translate }}</th>
+      <th>{{ '操作' | translate }}</th>
     </tr>
     </thead>
     <tbody>
@@ -62,9 +62,9 @@
           <td>
             @if (account.organization) {
               @if (ns.organization === account.organization.id) {
-                <a [routerLink]="['/main/namespace/edit', ns.namespace]">修改</a>
+                <a [routerLink]="['/main/namespace/edit', ns.namespace]">{{ '修改' | translate }}</a>
                 <nz-divider nzType="vertical"></nz-divider>
-                <a (click)="onDelete(ns)">删除</a>
+                <a (click)="onDelete(ns)">{{ '删除' | translate }}</a>
               }
             }
           </td>

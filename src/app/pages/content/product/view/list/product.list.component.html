@@ -2,12 +2,12 @@
 
   <nz-col nzSpan="24">
     <nz-card nzSize="small">
-      <label nz-checkbox [(ngModel)]="basicChecked">基本信息</label>
-      <label nz-checkbox [(ngModel)]="wizardChecked">配网引导</label>
-      <label nz-checkbox [(ngModel)]="instanceChecked">功能</label>
-      <label nz-checkbox [(ngModel)]="panelChecked">控制页</label>
-      <label nz-checkbox [(ngModel)]="firmwareChecked">固件</label>
-      <label nz-checkbox [(ngModel)]="manualChecked">说明书</label>
+      <label nz-checkbox [(ngModel)]="basicChecked">{{ '基本信息' | translate }}</label>
+      <label nz-checkbox [(ngModel)]="wizardChecked">{{ '配网引导' | translate }}</label>
+      <label nz-checkbox [(ngModel)]="instanceChecked">{{ '功能' | translate }}</label>
+      <label nz-checkbox [(ngModel)]="panelChecked">{{ '控制页' | translate }}</label>
+      <label nz-checkbox [(ngModel)]="firmwareChecked">{{ '固件' | translate }}</label>
+      <label nz-checkbox [(ngModel)]="manualChecked">{{ '说明书' | translate }}</label>
 <!--      <label nz-checkbox [(ngModel)]="visibilityChecked">可见性</label>-->
     </nz-card>
   </nz-col>
@@ -28,66 +28,66 @@
     >
       <thead>
       <tr>
-        <th rowSpan="2">图标</th>
+        <th rowSpan="2">{{ '图标' | translate }}</th>
 
         <th
           rowSpan="2"
           [nzSortFn]="typeSortFn"
-        >型号</th>
+        >{{ '型号' | translate }}</th>
 
         <th
           rowSpan="2"
           [nzSortFn]="templateSortFn"
           [nzFilters]="templateFilters"
           [nzFilterFn]="templateFilterFn"
-        >产品模板</th>
+        >{{ '产品模板' | translate }}</th>
 
         <th
           rowSpan="2"
           [nzSortFn]="typeSortFn"
           [nzFilters]="typeFilters"
           [nzFilterFn]="typeFilterFn"
-        >设备类型</th>
+        >{{ '设备类型' | translate }}</th>
 
         @if (basicChecked) {
           <th colspan="4">
-            基本信息
+            {{ '基本信息' | translate }}
           </th>
         }
 
         @if (wizardChecked) {
           <th colspan="2">
-            配网引导
+            {{ '配网引导' | translate }}
           </th>
         }
 
         @if (instanceChecked) {
           <th colspan="2">
-            功能
+            {{ '功能' | translate }}
           </th>
         }
 
         @if (panelChecked) {
           <th colspan="2">
-            控制页
+            {{ '控制页' | translate }}
           </th>
         }
 
         @if (firmwareChecked) {
           <th colspan="1" rowSpan="2">
-            固件
+            {{ '固件' | translate }}
           </th>
         }
 
         @if (manualChecked) {
           <th colspan="1" rowSpan="2">
-            说明书
+            {{ '说明书' | translate }}
           </th>
         }
 
         @if (visibilityChecked) {
           <th colspan="1" rowSpan="2">
-            可见性
+            {{ '可见性' | translate }}
           </th>
         }
       </tr>
@@ -98,7 +98,7 @@
             [nzSortFn]="nameSortFn"
             nzCustomFilter
           >
-            产品名称
+            {{ '产品名称' | translate }}
             <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchNameValue.length > 0" [nzDropdownMenu]="menuSearchName">
               <span nz-icon nzType="search"></span>
             </nz-filter-trigger>
@@ -108,35 +108,35 @@
             [nzSortFn]="protocolSortFn"
             [nzFilters]="protocolFilters"
             [nzFilterFn]="protocolFilterFn"
-          >连接方式</th>
+          >{{ '连接方式' | translate }}</th>
 
           <th
             [nzSortFn]="upgradeSortFn"
             [nzFilters]="upgradeFilters"
             [nzFilterFn]="upgradeFilterFn"
-          >固件升级</th>
+          >{{ '固件升级' | translate }}</th>
 
           <th
             [nzSortFn]="basicLifecycleSortFn"
             [nzFilters]="basicLifecycleFilters"
             [nzFilterFn]="basicLifecycleFilterFn"
-          >状态</th>
+          >{{ '状态' | translate }}</th>
         }
 
         <!--      <th>操作</th>-->
         @if (wizardChecked) {
-          <th>步骤</th>
-          <th>状态</th>
+          <th>{{ '步骤' | translate }}</th>
+          <th>{{ '状态' | translate }}</th>
         }
 
         @if (instanceChecked) {
-          <th>版本</th>
-          <th>状态</th>
+          <th>{{ '版本' | translate }}</th>
+          <th>{{ '状态' | translate }}</th>
         }
 
         @if (panelChecked) {
-          <th>版本</th>
-          <th>状态</th>
+          <th>{{ '版本' | translate }}</th>
+          <th>{{ '状态' | translate }}</th>
         }
       </tr>
       </thead>
@@ -155,13 +155,13 @@
                 @for (item of p.upgrade; track item) {
                   @switch (item) {
                     @case ('Direct') {
-                      直接升级
+                      {{ '直接升级' | translate }}
                     }
                     @case ('Gateway') {
-                      网关协助
+                      {{ '网关协助' | translate }}
                     }
                     @case ('Ble') {
-                      蓝牙协助
+                      {{ '蓝牙协助' | translate }}
                     }
                   }
                 }
@@ -169,13 +169,13 @@
               <td>
                 @switch (p.lifecycle) {
                   @case (LifeCycle.DEVELOPMENT) {
-                    <nz-tag nzColor="red">开发中</nz-tag>
+                    <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
                   }
                   @case (LifeCycle.PREVIEW) {
-                    <nz-tag nzColor="blue">上线中</nz-tag>
+                    <nz-tag nzColor="blue">{{ '上线中' | translate }}</nz-tag>
                   }
                   @case (LifeCycle.RELEASED) {
-                    <nz-tag nzColor="green">已上线</nz-tag>
+                    <nz-tag nzColor="green">{{ '已上线' | translate }}</nz-tag>
                   }
                 }
               </td>
@@ -272,9 +272,9 @@
       <nz-dropdown-menu #menuSearchName="nzDropdownMenu">
         <div class="ant-table-filter-dropdown">
           <div class="search-box">
-            <input type="text" nz-input placeholder="请输入产品名称" [(ngModel)]="searchNameValue" />
-            <button nz-button nzSize="small" nzType="primary" (click)="searchName()" class="search-button">搜索</button>
-            <button nz-button nzSize="small" (click)="resetName()">复位</button>
+            <input type="text" nz-input [(ngModel)]="searchNameValue" />
+            <button nz-button nzSize="small" nzType="primary" (click)="searchName()" class="search-button">{{ '搜索' | translate }}</button>
+            <button nz-button nzSize="small" (click)="resetName()">{{ '复位' | translate }}</button>
           </div>
         </div>
       </nz-dropdown-menu>

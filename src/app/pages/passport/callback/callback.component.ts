@@ -5,6 +5,7 @@ import {NzI18nService} from "ng-zorro-antd/i18n";
 import {AccountService} from "../../../service/account.service";
 import {Developer} from '../../../typedef/define/developer/Developer';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'passport-callback',
@@ -12,6 +13,7 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
   standalone: true,
   imports: [
     NzSpinModule,
+    TranslatePipe,
   ],
 })
 export class CallbackComponent implements OnInit {

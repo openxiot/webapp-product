@@ -20,6 +20,7 @@ import {AccountService} from '../../../../service/account.service';
 import {VisibilityComponent} from '../../../../common/form/item/common/visibility/visibility.component';
 import {NamespaceNsComponent} from './ns/namespace.ns.component';
 import {Location} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'namespace-edit',
@@ -42,6 +43,7 @@ import {Location} from '@angular/common';
     DescriptionComponent,
     VisibilityComponent,
     NamespaceNsComponent,
+    TranslatePipe,
   ],
 })
 export class NamespaceEditComponent implements OnInit {

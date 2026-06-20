@@ -10,6 +10,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {AccountService} from '../../../../../service/account.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'product-grid',
@@ -25,6 +26,7 @@ import {AccountService} from '../../../../../service/account.service';
     NzTagModule,
     NzDescriptionsModule,
     NzDividerModule,
+    TranslatePipe,
   ],
 })
 export class ProductGridComponent implements OnInit, OnDestroy {

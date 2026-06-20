@@ -19,6 +19,7 @@ import {DescriptionComponent} from '../../../../common/form/item/common/descript
 import {AccountService} from '../../../../service/account.service';
 import {VisibilityComponent} from '../../../../common/form/item/common/visibility/visibility.component';
 import {Location} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'namespace-create',
@@ -40,6 +41,7 @@ import {Location} from '@angular/common';
     ReactiveFormsModule,
     DescriptionComponent,
     VisibilityComponent,
+    TranslatePipe,
   ],
 })
 export class NamespaceCreateComponent implements OnInit {

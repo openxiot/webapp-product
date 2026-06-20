@@ -3,6 +3,7 @@ import {
   NzI18nInterface,
   NzI18nService,
   zh_CN,
+  zh_TW,
   en_US,
   ja_JP,
   de_DE,
@@ -24,9 +25,14 @@ export const SUPPORTED_LANGUAGES: Record<string, { name: string; nzLocale: NzI18
     bcp47: 'en-US'
   },
   zh: {
-    name: '中文',
+    name: '中文(简体)',
     nzLocale: zh_CN,
     bcp47: 'zh-CN'
+  },
+  zh_TW: {
+    name: '中文(繁體)',
+    nzLocale: zh_TW,
+    bcp47: 'zh-TW'
   },
   de: {
     name: 'Deutsch',

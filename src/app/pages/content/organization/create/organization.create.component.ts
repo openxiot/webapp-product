@@ -17,6 +17,7 @@ import {MainService} from '../../../../service/main.service';
 import {AccountService} from '../../../../service/account.service';
 import {CodeComponent} from '../../../../common/form/item/common/code/code.component';
 import {Location} from '@angular/common';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'organization-create',
@@ -37,6 +38,7 @@ import {Location} from '@angular/common';
     NzDividerModule,
     ReactiveFormsModule,
     CodeComponent,
+    TranslatePipe,
   ],
 })
 export class OrganizationCreateComponent implements OnInit {

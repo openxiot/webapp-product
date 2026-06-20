@@ -1,35 +1,39 @@
 <nz-spin [nzSpinning]="loading">
-  <nz-page-header (nzBack)="location.back()" nzBackIcon nzTitle="修改名字空间" [nzGhost]="false">
+  <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="pageTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb></nz-breadcrumb>
   </nz-page-header>
+
+  <ng-template #pageTitle>
+    {{ '修改名字空间' | translate }}
+  </ng-template>
 
   <div style="padding: 20px 20px">
     <nz-card nzBorderless nzSize="small">
       <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">名字空间</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="请输入名称">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">{{ '名字空间' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="8">
             <namespace-ns formControlName="name"></namespace-ns>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">描述</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="描述">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">{{ '描述' }}</nz-form-label>
+          <nz-form-control [nzSpan]="8">
             <description formControlName="description"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">可见度</nz-form-label>
-          <nz-form-control [nzSpan]="8" nzErrorTip="可见度">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="name">{{ '可见度' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="8">
             <visibility formControlName="visibility"/>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-control [nzSpan]="4" [nzOffset]="4">
-            <button nz-button nzType="primary">提交</button>
+            <button nz-button nzType="primary">{{ '提交' | translate }}</button>
           </nz-form-control>
         </nz-form-item>
       </form>

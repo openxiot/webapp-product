@@ -7,9 +7,9 @@
 
   <nz-page-header-extra>
     @if (account.login) {
-      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">创建</button>
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">{{ '创建' | translate }}</button>
     } @else {
-      <button nz-button nzType="primary" nzDanger [routerLink]="['/passport']">创建</button>
+      <button nz-button nzType="primary" nzDanger [routerLink]="['/passport']">{{ '创建' | translate }}</button>
     }
   </nz-page-header-extra>
 </nz-page-header>
