@@ -10,6 +10,7 @@ import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
+import {MainI18nService} from '../../../service/i18n.service';
 
 @Component({
   selector: 'app-namespace-change',
@@ -37,6 +38,7 @@ export class NamespaceChangeComponent {
 
   constructor(
     public account: AccountService,
+    public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
   ) {

@@ -11,8 +11,7 @@
   <tr>
     <th [nzSortFn]="uuidSortFn">UUID</th>
     <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
-    <th>{{ '中文描述' | translate }}</th>
-    <th>{{ '英文描述' | translate }}</th>
+    <th>{{ '描述' | translate }}</th>
     <th>{{ '状态' | translate }}</th>
     @if (account.isEditable()) {
       <th>{{ '操作' | translate }}</th>
@@ -24,8 +23,7 @@
       <tr>
         <td>{{ device.type.shortUUID() }}</td>
         <td>{{ device.type.name }}</td>
-        <td>{{ device.description.get('zh-CN') }}</td>
-        <td>{{ device.description.get('en-US') }}</td>
+        <td>{{ device.description.get(i18n.getCurrentLang()) }}</td>
         <td>
           @switch (device.lifecycle) {
             @case (LifeCycle.RELEASED) {

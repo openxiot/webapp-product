@@ -3,6 +3,7 @@ import {NzTableModule} from 'ng-zorro-antd/table';
 import {RouterLink} from '@angular/router';
 import {TemplateSummary} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'template-list',
@@ -18,4 +19,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class TemplateListComponent {
 
   @Input() templates: TemplateSummary[] = [];
+
+  constructor(
+    public i18n: MainI18nService,
+  ) {
+  }
 }

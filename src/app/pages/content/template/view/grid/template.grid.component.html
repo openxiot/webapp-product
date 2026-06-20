@@ -1,18 +1,15 @@
 <div nz-row [nzGutter]="[8, 8]">
   @for (t of templates; track t.type.toString()) {
-    <div nz-col [nzSpan]="6">
+    <div nz-col [nzSpan]="4">
       <nz-card
-        nzSize="small"
-        [nzTitle]="t.description.get('zh-CN')"
-        [nzExtra]="t.type.ns"
-        [nzActions]="[productExtra]"
+        [nzHoverable]="true"
+        routerLink="/main/template/detail/{{t.type.toString()}}"
       >
-        {{ t.type.model }}
+        <nz-card-meta
+          nzTitle="{{ t.description.get(i18n.getCurrentLang()) }}"
+          [nzDescription]="t.type.model"
+        ></nz-card-meta>
       </nz-card>
-
-      <ng-template #productExtra>
-        <a routerLink="/main/template/detail/{{t.type.toString()}}">{{ '详情' | translate }}</a>
-      </ng-template>
     </div>
   }
 </div>

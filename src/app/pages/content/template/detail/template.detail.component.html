@@ -34,7 +34,7 @@
         <!--      </nz-descriptions-item>-->
 
         <nz-descriptions-item [nzTitle]="'浏览模式' | translate" [nzSpan]="1">
-          <nz-switch [(ngModel)]="expert" nzCheckedChildren="专家模式" nzUnCheckedChildren="普通模式"></nz-switch>
+          <nz-switch [(ngModel)]="expert" nzCheckedChildren="{{'专家模式'| translate}}" nzUnCheckedChildren="{{'普通模式' | translate }}"></nz-switch>
         </nz-descriptions-item>
       </nz-descriptions>
     </nz-page-header-content>

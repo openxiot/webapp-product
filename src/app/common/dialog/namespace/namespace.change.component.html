@@ -23,7 +23,7 @@
       </ng-template>
 
       <ng-template #desc>
-        {{ ns.description.get('zh-CN') }}
+        {{ ns.description.get(i18n.getCurrentLang()) }}
       </ng-template>
     }
   </nz-row>

@@ -1,4 +1,10 @@
 {
+  "专家模式": "Modalità esperto",
+  "普通模式": "Modalità normale",
+  "名称": "Nome",
+  "所有类型": "Tutti i tipi",
+  "设备": "Dispositivo",
+  "服务": "Servizio",
   "(已禁用)": "(Disabilitato)",
   "16进制字符串": "Stringa esadecimale",
   "8位字符十六进制": "Hex 8 car.",

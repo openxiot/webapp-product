@@ -9,8 +9,7 @@
   <thead>
   <tr>
     <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
-    <th>{{ '中文描述' | translate }}</th>
-    <th>{{ '英文描述' | translate }}</th>
+    <th>{{ '描述' | translate }}</th>
     <th>{{ '状态' | translate }}</th>
     @if (account.isEditable()) {
       <th>{{ '操作' | translate }}</th>
@@ -21,8 +20,7 @@
     @for (unit of table.data; track unit.type.name) {
       <tr>
         <td>{{ unit.type.name }}</td>
-        <td>{{ unit.description.get('zh-CN') }}</td>
-        <td>{{ unit.description.get('en-US') }}</td>
+        <td>{{ unit.description.get(i18n.getCurrentLang()) }}</td>
         <td>
           @switch (unit.lifecycle) {
             @case (LifeCycle.RELEASED) {

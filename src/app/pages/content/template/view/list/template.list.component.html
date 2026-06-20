@@ -8,8 +8,7 @@
 >
   <thead>
     <tr>
-      <th>{{ '名字空间' | translate }}</th>
-      <th>{{ '模板名称' | translate }}</th>
+      <th>{{ '名称' | translate }}</th>
       <th>{{ '型号' | translate }}</th>
       <th>{{ '版本' | translate }}</th>
       <th>{{ '操作' | translate }}</th>
@@ -18,8 +17,7 @@
   <tbody>
     @for (p of table.data; track p.type.toString()) {
       <tr>
-        <td>{{ p.type.ns }}</td>
-        <td>{{ p.description.get('zh-CN') }}</td>
+        <td>{{ p.description.get(i18n.getCurrentLang()) }}</td>
         <td>{{ p.type.model }}</td>
         <td>{{ p.type.version }}</td>
         <td>

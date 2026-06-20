@@ -25,6 +25,7 @@ import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../service/i18n.service';
 
 @Component({
   selector: 'spec-service',
@@ -73,6 +74,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     protected account: AccountService,
+    public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -141,7 +143,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
   getPropertyDescription(type: PropertyType): string {
     const x = this.properties.get(type.name);
     if (x) {
-      return x.description.get('zh-CN') || type.name;
+      return x.description.get(this.i18n.getCurrentLang()) || type.name;
     } else {
       return type.name;
     }
@@ -150,7 +152,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
   getActionDescription(type: ActionType): string {
     const x = this.actions.get(type.name);
     if (x) {
-      return x.description.get('zh-CN') || type.name;
+      return x.description.get(this.i18n.getCurrentLang()) || type.name;
     } else {
       return type.name;
     }
@@ -159,7 +161,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
   getEventDescription(type: EventType): string {
     const x = this.events.get(type.name);
     if (x) {
-      return x.description.get('zh-CN') || type.name;
+      return x.description.get(this.i18n.getCurrentLang()) || type.name;
     } else {
       return type.name;
     }

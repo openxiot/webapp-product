@@ -22,8 +22,7 @@
     <thead>
     <tr>
       <th>{{ '代码' | translate }}</th>
-      <th>{{ '中文描述' | translate }}</th>
-      <th>{{ '英文描述' | translate }}</th>
+      <th>{{ '描述' | translate }}</th>
       <th>{{ '可见性' | translate }}</th>
       <th>{{ '创建者' | translate }}</th>
       <th>{{ '操作' | translate }}</th>
@@ -33,8 +32,7 @@
       @for (ns of namespaces; track ns.namespace) {
         <tr>
           <td>{{ ns.namespace }}</td>
-          <td>{{ ns.description.get('zh-CN') }}</td>
-          <td>{{ ns.description.get('en-US') }}</td>
+          <td>{{ ns.description.get(i18n.getCurrentLang()) }}</td>
           <td>
             @switch (ns.visibility) {
               @case (Visibility.PUBLIC) {

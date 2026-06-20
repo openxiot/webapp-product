@@ -1,4 +1,10 @@
 {
+  "专家模式": "Expertenmodus",
+  "普通模式": "Normalmodus",
+  "名称": "Name",
+  "所有类型": "Alle Typen",
+  "设备": "Gerät",
+  "服务": "Dienst",
   "(已禁用)": "(Deaktiviert)",
   "16进制字符串": "Hex-String",
   "8位字符十六进制": "8-stellig Hexadezimal",

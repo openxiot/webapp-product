@@ -22,6 +22,7 @@ import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../service/i18n.service';
 
 @Component({
   selector: 'spec-property',
@@ -68,6 +69,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     public account: AccountService,
+    public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -125,7 +127,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   getFormatDescription(format: string) : string {
     const x = this.formats.get(format);
     if (x) {
-      return x.description.get('zh-CN') || format;
+      return x.description.get(this.i18n.getCurrentLang()) || format;
     }
 
     return format;
@@ -135,7 +137,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
     if (unit) {
       const x = this.units.get(unit);
       if (x) {
-        return x.description.get('zh-CN') || unit;
+        return x.description.get(this.i18n.getCurrentLang()) || unit;
       }
 
       return '';
@@ -147,7 +149,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   getPropertyDescription(type: PropertyType): string {
     const x = this.propertyMap.get(type.name);
     if (x) {
-      return x.description.get('zh-CN') || type.name;
+      return x.description.get(this.i18n.getCurrentLang()) || type.name;
     } else {
       return type.name;
     }

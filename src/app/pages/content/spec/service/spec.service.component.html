@@ -23,7 +23,7 @@
       <tr>
         <td><nz-tag>{{ s.type.shortUUID() }}</nz-tag></td>
         <td>{{ s.type.name }}</td>
-        <td>{{ s.description.get('zh-CN') }}</td>
+        <td>{{ s.description.get(i18n.getCurrentLang()) }}</td>
         <td>
           @for (p of s.requiredProperties; track p) {
             <nz-tag nzColor="blue">{{ getPropertyDescription(p) }}</nz-tag>

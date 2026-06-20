@@ -22,7 +22,7 @@
       <tr>
         <td><nz-tag>{{ a.type.shortUUID() }}</nz-tag></td>
         <td>{{ a.type.name }}</td>
-        <td>{{ a.description.get('zh-CN') }}</td>
+        <td>{{ a.description.get(i18n.getCurrentLang()) }}</td>
         <td>
           @if (a.in.length > 0) {
             @for (arg of a.in; track arg)  {

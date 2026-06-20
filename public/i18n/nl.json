@@ -1,4 +1,10 @@
 {
+  "专家模式": "Expertmodus",
+  "普通模式": "Normale modus",
+  "名称": "Naam",
+  "所有类型": "Alle typen",
+  "设备": "Apparaat",
+  "服务": "Service",
   "(已禁用)": "(Uitgeschakeld)",
   "16进制字符串": "Hex string",
   "8位字符十六进制": "8-kar. hex",

@@ -20,6 +20,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {ConfirmComponent} from '../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {MainI18nService} from '../../../service/i18n.service';
 
 @Component({
   selector: 'main-namespace',
@@ -61,6 +62,7 @@ export class NamespaceComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     public account: AccountService,
     private service: MainService,
+    protected i18n: MainI18nService,
     private msg: NzMessageService,
   ) {
   }

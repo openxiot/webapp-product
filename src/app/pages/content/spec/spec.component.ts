@@ -24,6 +24,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NamespaceChangeComponent} from '../../../common/dialog/namespace/namespace.change.component';
+import {MainI18nService} from '../../../service/i18n.service';
 
 @Component({
   selector: 'main-spec',
@@ -65,6 +66,7 @@ export class SpecComponent implements OnInit {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     public account: AccountService,
+    public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
   ) {

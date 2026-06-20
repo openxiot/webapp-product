@@ -46,8 +46,8 @@
   @if (account.ns) {
     <nz-page-header-footer>
       <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small" (nzSelectChange)="onTabChanged()">
-        <nz-tab [nzTitle]="'设备类型' | translate"></nz-tab>
-        <nz-tab [nzTitle]="'功能' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'设备' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'服务' | translate"></nz-tab>
         <nz-tab [nzTitle]="'属性' | translate"></nz-tab>
         <nz-tab [nzTitle]="'方法' | translate"></nz-tab>
         <nz-tab [nzTitle]="'事件' | translate"></nz-tab>
@@ -71,7 +71,7 @@
 
 <ng-template #subTitle>
   @if (account.ns) {
-    {{ account.ns.description.get('zh-CN') }}
+    {{ account.ns.description.get(i18n.getCurrentLang()) }}
   }
 </ng-template>
 

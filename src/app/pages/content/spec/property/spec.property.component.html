@@ -25,7 +25,7 @@
       <tr>
         <td><nz-tag>{{ p.type.shortUUID() }}</nz-tag></td>
         <td>{{ p.type.name }}</td>
-        <td>{{ p.description.get('zh-CN') }}</td>
+        <td>{{ p.description.get(i18n.getCurrentLang()) }}</td>
         <td>{{ getFormatDescription(p.format) }}</td>
         <td>{{ getUnitDescription(p.unit) }}</td>
         <td>

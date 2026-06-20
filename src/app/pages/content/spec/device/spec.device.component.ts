@@ -16,6 +16,7 @@ import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../service/i18n.service';
 
 @Component({
   selector: 'spec-device',
@@ -55,6 +56,7 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     public account: AccountService,
+    public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
@@ -88,7 +90,7 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
 
   protected onDelete(device: DeviceDefinition) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个设备类型吗？',
+      nzTitle: '您真的要删除这个设备吗？',
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: device.type.toString(),

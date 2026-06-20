@@ -20,7 +20,7 @@
 
   <ng-template #subTitle>
     @if (account.ns) {
-      {{ account.ns.description.get('zh-CN') }}
+      {{ account.ns.description.get(i18n.getCurrentLang()) }}
     }
   </ng-template>
 

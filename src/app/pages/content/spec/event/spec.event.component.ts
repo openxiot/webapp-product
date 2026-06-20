@@ -21,6 +21,7 @@ import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../service/i18n.service';
 
 @Component({
   selector: 'spec-event',
@@ -63,6 +64,7 @@ export class SpecEventComponent implements OnInit, OnChanges {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     protected account: AccountService,
+    public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
