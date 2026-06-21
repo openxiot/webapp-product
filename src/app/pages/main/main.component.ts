@@ -62,7 +62,7 @@ export class MainComponent implements OnInit {
   protected changeLanguage() {
     this.modal.create<LanguageChangeComponent, string, string>({
       nzTitle: '',
-      nzWidth: 800,
+      nzWidth: 1400,
       nzContent: LanguageChangeComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: '',

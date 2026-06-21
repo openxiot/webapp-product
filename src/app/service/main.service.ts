@@ -32,8 +32,6 @@ import {
   UnitDefinitionCodec, ActionType, ServiceType, EventType, FormatType, PropertyType, UnitType, TemplateSummary,
   TemplateSummaryCodec
 } from '@openxiot/xiot-core-spec-ts';
-import {JoyProducts} from '../typedef/define/product/JoyProducts';
-import {JoyProductsCodec} from '../typedef/codec/product/JoyProductsCodec';
 import {OSSUpload} from '../typedef/define/upload/OSSUpload';
 import {OSSUploadCodec} from '../typedef/codec/upload/OSSUploadCodec';
 import {Organization, OrganizationMember} from '../typedef/define/developer/Organization';
@@ -461,19 +459,19 @@ export class MainService {
    * 产品（基本信息、配网引导、功能、控制页、固件、手册）
    *------------------------------------------------------------------------------------------------*/
 
-  /**
-   * 读取产品列表
-   */
-  getFullProducts(organizationCode: string, pageIndex: number, pageSize: number): Observable<JoyProducts> {
-    const params = {
-      organization: organizationCode,
-      index: pageIndex,
-      size: pageSize
-    }
-    return this.http
-      .get<OxResponse>(`${this.server}/v1/product/full/all`, {params})
-      .pipe(map(response => JoyProductsCodec.decode(response.data)));
-  }
+  // /**
+  //  * 读取产品列表
+  //  */
+  // getFullProducts(organizationCode: string, pageIndex: number, pageSize: number): Observable<JoyProducts> {
+  //   const params = {
+  //     organization: organizationCode,
+  //     index: pageIndex,
+  //     size: pageSize
+  //   }
+  //   return this.http
+  //     .get<OxResponse>(`${this.server}/v1/product/full/all`, {params})
+  //     .pipe(map(response => JoyProductsCodec.decode(response.data)));
+  // }
 
   /**------------------------------------------------------------------------------------------------
    * 产品基本信息

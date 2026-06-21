@@ -15,20 +15,7 @@ import {OxHttpInterceptor} from "./service/interceptors/OxHttpInterceptor";
 import {JwtInterceptor} from "./service/interceptors/JwtInterceptor";
 import {provideTranslateService} from "@ngx-translate/core";
 import {provideTranslateHttpLoader} from "@ngx-translate/http-loader";
-import {registerAllModules} from "handsontable/registry";
-import {enUS, registerLanguageDictionary} from "handsontable/i18n";
-import {HOT_GLOBAL_CONFIG, HotGlobalConfig, NON_COMMERCIAL_LICENSE} from "@handsontable/angular-wrapper";
-
 registerLocaleData(zh);
-registerAllModules();
-
-registerLanguageDictionary(enUS);
-
-const globalHotConfig: HotGlobalConfig = {
-  license: NON_COMMERCIAL_LICENSE,
-  layoutDirection: "ltr",
-  language: enUS.languageCode,
-};
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -54,10 +41,5 @@ export const appConfig: ApplicationConfig = {
         suffix: '.json'
       })
     }),
-    {
-      provide: HOT_GLOBAL_CONFIG,
-      useValue:
-      globalHotConfig
-    },
   ]
 };

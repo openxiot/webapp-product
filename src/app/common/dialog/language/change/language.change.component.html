@@ -1,7 +1,7 @@
 <nz-row [nzGutter]="[8, 8]">
   @for (lang of i18n.languages; track lang.code) {
-    <nz-col [nzSpan]="6" (click)="changeLanguage(lang.code)">
-      <nz-card nzHoverable>
+    <nz-col [nzSpan]="3" (click)="changeLanguage(lang.code)">
+      <nz-card nzHoverable nzSize="small">
         <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
       </nz-card>
     </nz-col>
