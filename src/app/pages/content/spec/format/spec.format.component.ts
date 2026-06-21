@@ -12,11 +12,13 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {FormatDefinition, LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzDividerComponent} from 'ng-zorro-antd/divider';
-import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../service/i18n.service';
+import {NzButtonModule} from 'ng-zorro-antd/button';
+import {FormatSelectorComponent} from '../../../../common/dialog/format/format.selector.component';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {FormatsOption} from '../../../../common/dialog/format/FormatsOption';
 
 @Component({
   selector: 'spec-format',
@@ -32,9 +34,10 @@ import {MainI18nService} from '../../../../service/i18n.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
-    NzDividerComponent,
-    RouterLink,
     TranslatePipe,
+    NzButtonModule,
+    NzRowDirective,
+    NzColDirective,
   ],
   providers: [
     NzModalService
@@ -48,6 +51,9 @@ export class SpecFormatComponent implements OnInit, OnChanges {
 
   loading: boolean = true;
   formats: FormatDefinition[] = [];
+
+  // 可添加的格式
+  addable: boolean = true;
 
   codeSortFn: NzTableSortFn<FormatDefinition> = (a: FormatDefinition, b: FormatDefinition): number => a.type.name.localeCompare(b.type.name);
 
@@ -77,6 +83,7 @@ export class SpecFormatComponent implements OnInit, OnChanges {
       .subscribe({
         next: data => {
           this.formats = data;
+          this.addable = this.formats.length < 12;
           this.loading = false;
         },
         error: error => {
@@ -119,10 +126,61 @@ export class SpecFormatComponent implements OnInit, OnChanges {
         next: data => {
           this.formats = this.formats.filter(x => x.type.name !== format.type.name);
           this.loading = false;
+          this.addable = this.formats.length < 12;
         },
         error: error => {
           this.msg.warning('Failed to deleteFormatDefinition: ', error);
         }
       })
+  }
+
+  protected addFormats() {
+    const modal = this.modal.create<FormatSelectorComponent, FormatsOption, FormatDefinition[]>({
+      nzTitle: '',
+      nzWidth: 800,
+      nzContent: FormatSelectorComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: new FormatsOption(new Set(this.formats.map(x => x.type.name))),
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: false,
+          type: 'primary',
+          disabled: component => component!.disabled || false,
+          onClick: component => component!.ok()
+        }
+      ],
+      nzClosable: false,
+      nzMaskClosable: true,
+      nzKeyboard: true
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        if (result.length > 0) {
+          this.addFormatDefinitions(result);
+        }
+      }
+    });
+  }
+
+  protected addFormatDefinitions(defs: FormatDefinition[]) {
+    this.loading = true;
+    this.service.createFormatDefinitions(defs)
+      .subscribe({
+        next: () => {
+          console.log('createFormatDefinitions ok');
+          this.loading = false;
+          this.loadDataFromServer();
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 }

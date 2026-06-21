@@ -26,6 +26,9 @@ import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.compon
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../service/i18n.service';
+import {NzButtonModule} from 'ng-zorro-antd/button';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'spec-service',
@@ -44,6 +47,10 @@ import {MainI18nService} from '../../../../service/i18n.service';
     NzDividerComponent,
     RouterLink,
     TranslatePipe,
+    NzButtonModule,
+    NzWaveDirective,
+    NzColDirective,
+    NzRowDirective,
   ],
   providers: [
     NzModalService

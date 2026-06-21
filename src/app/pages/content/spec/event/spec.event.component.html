@@ -1,60 +1,75 @@
-<nz-table
-  #table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="events"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
->
-  <thead>
-  <tr>
-    <th [nzSortFn]="uuidSortFn">UUID</th>
-    <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
-    <th>{{ '描述' | translate }}</th>
-    <th>{{ '参数' | translate }}</th>
-    <th>{{ '状态' | translate }}</th>
-    <th>{{ '操作' | translate }}</th>
-  </tr>
-  </thead>
-  <tbody>
-    @for (a of table.data; track a.type.name) {
-      <tr>
-        <td><nz-tag>{{ a.type.shortUUID() }}</nz-tag></td>
-        <td>{{ a.type.name }}</td>
-        <td>{{ a.description.get(i18n.getCurrentLang()) }}</td>
-        <td>
-          @if (a.arguments.length > 0) {
-            @for (arg of a.arguments; track arg) {
-              <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
-            }
-          }
-        </td>
-        <td>
-          @switch (a.lifecycle) {
-            @case (LifeCycle.RELEASED) {
-              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.PREVIEW) {
-              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.DEVELOPMENT) {
-              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
-            }
-          }
-        </td>
-        <td>
-          @if (account.isEditable()) {
-            <a [routerLink]="['/main/spec/event/edit', a.type.toString()]">{{ '修改' | translate }}</a>
+<nz-row [nzGutter]="[8, 8]">
 
-            @if (a.lifecycle === LifeCycle.DEVELOPMENT) {
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(a)">{{ '删除' | translate }}</a>
-            }
-          } @else {
-            <a [routerLink]="['/main/spec/event/view', a.type.toString()]">{{ '查看' | translate }}</a>
-          }
-        </td>
+  @if (account.isEditable()) {
+    <nz-col [nzSpan]="24">
+      <div style="float: right">
+        <button nz-button nzType="primary" routerLink="/main/spec/event/create">{{ '创建事件' | translate }}</button>
+      </div>
+    </nz-col>
+  }
+
+  <nz-col [nzSpan]="24">
+    <nz-table
+      #table
+      nzShowSizeChanger
+      nzSize="small"
+      [nzData]="events"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+    >
+      <thead>
+      <tr>
+        <th [nzSortFn]="uuidSortFn">UUID</th>
+        <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
+        <th>{{ '描述' | translate }}</th>
+        <th>{{ '参数' | translate }}</th>
+        <th>{{ '状态' | translate }}</th>
+        <th>{{ '操作' | translate }}</th>
       </tr>
-    }
-  </tbody>
-</nz-table>
+      </thead>
+      <tbody>
+        @for (a of table.data; track a.type.name) {
+          <tr>
+            <td>
+              <nz-tag>{{ a.type.shortUUID() }}</nz-tag>
+            </td>
+            <td>{{ a.type.name }}</td>
+            <td>{{ a.description.get(i18n.getCurrentLang()) }}</td>
+            <td>
+              @if (a.arguments.length > 0) {
+                @for (arg of a.arguments; track arg) {
+                  <nz-tag>{{ getPropertyDescription(arg.type) }}</nz-tag>
+                }
+              }
+            </td>
+            <td>
+              @switch (a.lifecycle) {
+                @case (LifeCycle.RELEASED) {
+                  <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.PREVIEW) {
+                  <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.DEVELOPMENT) {
+                  <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+                }
+              }
+            </td>
+            <td>
+              @if (account.isEditable()) {
+                <a [routerLink]="['/main/spec/event/edit', a.type.toString()]">{{ '修改' | translate }}</a>
+
+                @if (a.lifecycle === LifeCycle.DEVELOPMENT) {
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a (click)="onDelete(a)">{{ '删除' | translate }}</a>
+                }
+              } @else {
+                <a [routerLink]="['/main/spec/event/view', a.type.toString()]">{{ '查看' | translate }}</a>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </nz-col>
+</nz-row>

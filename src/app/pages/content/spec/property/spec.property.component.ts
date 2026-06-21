@@ -17,12 +17,14 @@ import {
   UnitDefinition
 } from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
-import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {NzDividerComponent, NzDividerModule} from 'ng-zorro-antd/divider';
 import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../service/i18n.service';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {NzButtonModule} from 'ng-zorro-antd/button';
 
 @Component({
   selector: 'spec-property',
@@ -38,9 +40,12 @@ import {MainI18nService} from '../../../../service/i18n.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
-    NzDividerComponent,
+    NzDividerModule,
+    NzButtonModule,
     RouterLink,
     TranslatePipe,
+    NzColDirective,
+    NzRowDirective,
   ],
   providers: [
     NzModalService

@@ -16,12 +16,15 @@ import {
   PropertyType
 } from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
-import {NzDividerComponent} from 'ng-zorro-antd/divider';
+import {NzDividerComponent, NzDividerModule} from 'ng-zorro-antd/divider';
 import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../service/i18n.service';
+import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'spec-event',
@@ -37,9 +40,13 @@ import {MainI18nService} from '../../../../service/i18n.service';
     NzTabsModule,
     NzTableModule,
     NzTagModule,
-    NzDividerComponent,
+    NzDividerModule,
     RouterLink,
     TranslatePipe,
+    NzButtonModule,
+    NzWaveDirective,
+    NzColDirective,
+    NzRowDirective,
   ],
   providers: [
     NzModalService

@@ -10,6 +10,7 @@ import {FormatDefinition, FormatType, LifeCycle, Spec, UrnType} from '@openxiot/
 import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {MainI18nService} from '../../../service/i18n.service';
+import {FormatsOption} from './FormatsOption';
 
 @Component({
   selector: 'app-format-selector',
@@ -22,7 +23,6 @@ import {MainI18nService} from '../../../service/i18n.service';
     NzColDirective,
     NzCardModule,
     NzIconModule,
-
   ],
   providers: [],
   standalone: true
@@ -30,10 +30,9 @@ import {MainI18nService} from '../../../service/i18n.service';
 export class FormatSelectorComponent {
 
   readonly #modal = inject(NzModalRef);
-  readonly message: string = inject(NZ_MODAL_DATA);
+  readonly option: FormatsOption = inject(NZ_MODAL_DATA);
 
   loading: boolean = false;
-  formatExist: Set<string> = new Set();
 
   formats: FormatDefinition[] = [];
   formatSelected: Set<string> = new Set();
@@ -50,7 +49,6 @@ export class FormatSelectorComponent {
 
   ngOnInit() {
     this.initDefaultFormats();
-    this.loadDataFromServer();
   }
 
   private initDefaultFormats() {
@@ -68,27 +66,13 @@ export class FormatSelectorComponent {
     this.formats.push(this.createFormat('combination', 'combination', '组合'));
   }
 
-  loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
-      .subscribe({
-        next: data => {
-          this.formatExist = new Set(data.map(x => x.type.name));
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-        }
-      })
-  }
-
   private createFormat(code: string, descriptionENUS: string, descriptionZHCN: string): FormatDefinition {
     const type = FormatType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
     const descriptions = new Map<string, string>();
     descriptions.set(Spec.EN_US, descriptionENUS);
     descriptions.set(Spec.ZH_CN, descriptionZHCN);
     const def = new FormatDefinition(type, descriptions);
-    def.lifecycle = LifeCycle.DEVELOPMENT;
+    def.lifecycle = LifeCycle.RELEASED;
     return def;
   }
 

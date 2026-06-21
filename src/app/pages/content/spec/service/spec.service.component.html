@@ -1,82 +1,97 @@
-<nz-table
-  #table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="services"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
->
-  <thead>
-  <tr>
-    <th [nzSortFn]="uuidSortFn">UUID</th>
-    <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
-    <th>{{ '描述' | translate }}</th>
-    <th>{{ '属性' | translate }}</th>
-    <th>{{ '方法' | translate }}</th>
-    <th>{{ '事件' | translate }}</th>
-    <th>{{ '状态' | translate }}</th>
-    <th>{{ '操作' | translate }}</th>
-  </tr>
-  </thead>
-  <tbody>
-    @for (s of table.data; track s.type.name) {
+<nz-row [nzGutter]="[8, 8]">
+
+  @if (account.isEditable()) {
+    <nz-col [nzSpan]="24">
+      <div style="float: right">
+        <button nz-button nzType="primary" routerLink="/main/spec/service/create">{{ '创建服务' | translate }}</button>
+      </div>
+    </nz-col>
+  }
+
+  <nz-col [nzSpan]="24">
+    <nz-table
+      #table
+      nzShowSizeChanger
+      nzSize="small"
+      [nzData]="services"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+    >
+      <thead>
       <tr>
-        <td><nz-tag>{{ s.type.shortUUID() }}</nz-tag></td>
-        <td>{{ s.type.name }}</td>
-        <td>{{ s.description.get(i18n.getCurrentLang()) }}</td>
-        <td>
-          @for (p of s.requiredProperties; track p) {
-            <nz-tag nzColor="blue">{{ getPropertyDescription(p) }}</nz-tag>
-          }
-
-          @for (p of s.optionalProperties; track p) {
-            <nz-tag nzColor="green">{{ getPropertyDescription(p) }}</nz-tag>
-          }
-        </td>
-        <td>
-          @for (p of s.requiredActions; track p) {
-            <nz-tag nzColor="blue">{{ getActionDescription(p) }}</nz-tag>
-          }
-
-          @for (p of s.optionalActions; track p) {
-            <nz-tag nzColor="green">{{ getActionDescription(p) }}</nz-tag>
-          }
-        </td>
-        <td>
-          @for (p of s.requiredEvents; track p) {
-            <nz-tag nzColor="blue">{{ getEventDescription(p) }}</nz-tag>
-          }
-
-          @for (p of s.optionalEvents; track p) {
-            <nz-tag nzColor="green">{{ getEventDescription(p) }}</nz-tag>
-          }
-        </td>
-        <td>
-          @switch (s.lifecycle) {
-            @case (LifeCycle.RELEASED) {
-              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.PREVIEW) {
-              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.DEVELOPMENT) {
-              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
-            }
-          }
-        </td>
-        <td>
-          @if (account.isEditable()) {
-            <a [routerLink]="['/main/spec/service/edit', s.type.toString()]">{{ '修改' | translate }}</a>
-
-            @if (s.lifecycle === LifeCycle.DEVELOPMENT) {
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(s)">{{ '删除' | translate }}</a>
-            }
-          } @else {
-            <a [routerLink]="['/main/spec/service/view', s.type.toString()]">{{ '查看' | translate }}</a>
-          }
-        </td>
+        <th [nzSortFn]="uuidSortFn">UUID</th>
+        <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
+        <th>{{ '描述' | translate }}</th>
+        <th>{{ '属性' | translate }}</th>
+        <th>{{ '方法' | translate }}</th>
+        <th>{{ '事件' | translate }}</th>
+        <th>{{ '状态' | translate }}</th>
+        <th>{{ '操作' | translate }}</th>
       </tr>
-    }
-  </tbody>
-</nz-table>
+      </thead>
+      <tbody>
+        @for (s of table.data; track s.type.name) {
+          <tr>
+            <td>
+              <nz-tag>{{ s.type.shortUUID() }}</nz-tag>
+            </td>
+            <td>{{ s.type.name }}</td>
+            <td>{{ s.description.get(i18n.getCurrentLang()) }}</td>
+            <td>
+              @for (p of s.requiredProperties; track p) {
+                <nz-tag nzColor="blue">{{ getPropertyDescription(p) }}</nz-tag>
+              }
+
+              @for (p of s.optionalProperties; track p) {
+                <nz-tag nzColor="green">{{ getPropertyDescription(p) }}</nz-tag>
+              }
+            </td>
+            <td>
+              @for (p of s.requiredActions; track p) {
+                <nz-tag nzColor="blue">{{ getActionDescription(p) }}</nz-tag>
+              }
+
+              @for (p of s.optionalActions; track p) {
+                <nz-tag nzColor="green">{{ getActionDescription(p) }}</nz-tag>
+              }
+            </td>
+            <td>
+              @for (p of s.requiredEvents; track p) {
+                <nz-tag nzColor="blue">{{ getEventDescription(p) }}</nz-tag>
+              }
+
+              @for (p of s.optionalEvents; track p) {
+                <nz-tag nzColor="green">{{ getEventDescription(p) }}</nz-tag>
+              }
+            </td>
+            <td>
+              @switch (s.lifecycle) {
+                @case (LifeCycle.RELEASED) {
+                  <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.PREVIEW) {
+                  <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.DEVELOPMENT) {
+                  <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+                }
+              }
+            </td>
+            <td>
+              @if (account.isEditable()) {
+                <a [routerLink]="['/main/spec/service/edit', s.type.toString()]">{{ '修改' | translate }}</a>
+
+                @if (s.lifecycle === LifeCycle.DEVELOPMENT) {
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a (click)="onDelete(s)">{{ '删除' | translate }}</a>
+                }
+              } @else {
+                <a [routerLink]="['/main/spec/service/view', s.type.toString()]">{{ '查看' | translate }}</a>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </nz-col>
+</nz-row>

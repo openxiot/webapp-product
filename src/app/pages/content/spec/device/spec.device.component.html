@@ -1,55 +1,68 @@
-<nz-table
-  #table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="devices"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading"
-  [nzHideOnSinglePage]="true"
->
-  <thead>
-  <tr>
-    <th [nzSortFn]="uuidSortFn">UUID</th>
-    <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
-    <th>{{ '描述' | translate }}</th>
-    <th>{{ '状态' | translate }}</th>
-    @if (account.isEditable()) {
-      <th>{{ '操作' | translate }}</th>
-    }
-  </tr>
-  </thead>
-  <tbody>
-    @for (device of table.data; track device.type.name) {
+<nz-row [nzGutter]="[8, 8]">
+
+  @if (account.isEditable()) {
+    <nz-col [nzSpan]="24">
+      <div style="float: right">
+        <button nz-button nzType="primary" routerLink="/main/spec/device/create">{{ '创建设备' | translate }}</button>
+      </div>
+    </nz-col>
+  }
+
+  <nz-col [nzSpan]="24">
+    <nz-table
+      #table
+      nzShowSizeChanger
+      nzSize="small"
+      [nzData]="devices"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzHideOnSinglePage]="true"
+    >
+      <thead>
       <tr>
-        <td>{{ device.type.shortUUID() }}</td>
-        <td>{{ device.type.name }}</td>
-        <td>{{ device.description.get(i18n.getCurrentLang()) }}</td>
-        <td>
-          @switch (device.lifecycle) {
-            @case (LifeCycle.RELEASED) {
-              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.PREVIEW) {
-              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.DEVELOPMENT) {
-              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
-            }
-            @default {
-              <nz-tag>{{ device.lifecycle }}</nz-tag>
-            }
-          }
-        </td>
+        <th [nzSortFn]="uuidSortFn">UUID</th>
+        <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
+        <th>{{ '描述' | translate }}</th>
+        <th>{{ '状态' | translate }}</th>
         @if (account.isEditable()) {
-          <td>
-            <a [routerLink]="['/main/spec/device/edit', device.type.toString()]">{{ '修改' | translate }}</a>
-            @if (device.lifecycle === LifeCycle.DEVELOPMENT) {
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(device)">{{ '删除' | translate }}</a>
-            }
-          </td>
+          <th>{{ '操作' | translate }}</th>
         }
       </tr>
-    }
-  </tbody>
-</nz-table>
+      </thead>
+      <tbody>
+        @for (device of table.data; track device.type.name) {
+          <tr>
+            <td>{{ device.type.shortUUID() }}</td>
+            <td>{{ device.type.name }}</td>
+            <td>{{ device.description.get(i18n.getCurrentLang()) }}</td>
+            <td>
+              @switch (device.lifecycle) {
+                @case (LifeCycle.RELEASED) {
+                  <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.PREVIEW) {
+                  <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.DEVELOPMENT) {
+                  <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+                }
+                @default {
+                  <nz-tag>{{ device.lifecycle }}</nz-tag>
+                }
+              }
+            </td>
+            @if (account.isEditable()) {
+              <td>
+                <a [routerLink]="['/main/spec/device/edit', device.type.toString()]">{{ '修改' | translate }}</a>
+                @if (device.lifecycle === LifeCycle.DEVELOPMENT) {
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a (click)="onDelete(device)">{{ '删除' | translate }}</a>
+                }
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </nz-col>
+</nz-row>

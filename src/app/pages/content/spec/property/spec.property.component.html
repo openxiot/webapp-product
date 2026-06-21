@@ -1,79 +1,94 @@
-<nz-table
-  #table
-  nzShowSizeChanger
-  nzSize="small"
-  [nzData]="properties"
-  [nzFrontPagination]="false"
-  [nzLoading]="loading || loadingFormats || loadingUnits"
->
-  <thead>
-  <tr>
-    <th [nzSortFn]="uuidSortFn">UUID</th>
-    <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
-    <th>{{ '描述' | translate }}</th>
-    <th>{{ '格式' | translate }}</th>
-    <th>{{ '单位' | translate }}</th>
-    <th>{{ '访问方式' | translate }}</th>
-    <th>{{ '成员' | translate }}</th>
-    <th>{{ '状态' | translate }}</th>
-    <th>{{ '操作' | translate }}</th>
-  </tr>
-  </thead>
+<nz-row [nzGutter]="[8, 8]">
 
-  <tbody>
-    @for (p of table.data; track p.type.name) {
+  @if (account.isEditable()) {
+    <nz-col [nzSpan]="24">
+      <div style="float: right">
+        <button nz-button nzType="primary" routerLink="/main/spec/property/create">{{ '创建属性' | translate }}</button>
+      </div>
+    </nz-col>
+  }
+
+  <nz-col [nzSpan]="24">
+    <nz-table
+      #table
+      nzShowSizeChanger
+      nzSize="small"
+      [nzData]="properties"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading || loadingFormats || loadingUnits"
+    >
+      <thead>
       <tr>
-        <td><nz-tag>{{ p.type.shortUUID() }}</nz-tag></td>
-        <td>{{ p.type.name }}</td>
-        <td>{{ p.description.get(i18n.getCurrentLang()) }}</td>
-        <td>{{ getFormatDescription(p.format) }}</td>
-        <td>{{ getUnitDescription(p.unit) }}</td>
-        <td>
-          @if (p.access.isWritable) {
-            <nz-tag [nzColor]="'red'">{{ '写' | translate }}</nz-tag>
-          }
-
-          @if (p.access.isReadable) {
-            <nz-tag [nzColor]="'blue'">{{ '读' | translate }}</nz-tag>
-          }
-
-          @if (p.access.isNotifiable) {
-            <nz-tag [nzColor]="'green'">{{ '通知' | translate }}</nz-tag>
-          }
-        </td>
-        <td>
-          @if (p.members.length > 0) {
-            @for (member of p.members; track member.value) {
-              <nz-tag>{{ getPropertyDescription(member) }}</nz-tag>
-            }
-          }
-        </td>
-        <td>
-          @switch (p.lifecycle) {
-            @case (LifeCycle.RELEASED) {
-              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.PREVIEW) {
-              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
-            }
-            @case (LifeCycle.DEVELOPMENT) {
-              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
-            }
-          }
-        </td>
-        <td>
-          @if (account.isEditable()) {
-            <a [routerLink]="['/main/spec/property/edit', p.type.toString()]">{{ '修改' | translate }}</a>
-
-            @if (p.lifecycle === LifeCycle.DEVELOPMENT) {
-              <nz-divider nzType="vertical"></nz-divider>
-              <a (click)="onDelete(p)">{{ '删除' | translate }}</a>
-            }
-          } @else {
-            <a [routerLink]="['/main/spec/property/view', p.type.toString()]">{{ '查看' | translate }}</a>
-          }
-        </td>
+        <th [nzSortFn]="uuidSortFn">UUID</th>
+        <th [nzSortFn]="codeSortFn">{{ '代码' | translate }}</th>
+        <th>{{ '描述' | translate }}</th>
+        <th>{{ '格式' | translate }}</th>
+        <th>{{ '单位' | translate }}</th>
+        <th>{{ '访问方式' | translate }}</th>
+        <th>{{ '成员' | translate }}</th>
+        <th>{{ '状态' | translate }}</th>
+        <th>{{ '操作' | translate }}</th>
       </tr>
-    }
-  </tbody>
-</nz-table>
+      </thead>
+
+      <tbody>
+        @for (p of table.data; track p.type.name) {
+          <tr>
+            <td>
+              <nz-tag>{{ p.type.shortUUID() }}</nz-tag>
+            </td>
+            <td>{{ p.type.name }}</td>
+            <td>{{ p.description.get(i18n.getCurrentLang()) }}</td>
+            <td>{{ getFormatDescription(p.format) }}</td>
+            <td>{{ getUnitDescription(p.unit) }}</td>
+            <td>
+              @if (p.access.isWritable) {
+                <nz-tag [nzColor]="'red'">{{ '写' | translate }}</nz-tag>
+              }
+
+              @if (p.access.isReadable) {
+                <nz-tag [nzColor]="'blue'">{{ '读' | translate }}</nz-tag>
+              }
+
+              @if (p.access.isNotifiable) {
+                <nz-tag [nzColor]="'green'">{{ '通知' | translate }}</nz-tag>
+              }
+            </td>
+            <td>
+              @if (p.members.length > 0) {
+                @for (member of p.members; track member.value) {
+                  <nz-tag>{{ getPropertyDescription(member) }}</nz-tag>
+                }
+              }
+            </td>
+            <td>
+              @switch (p.lifecycle) {
+                @case (LifeCycle.RELEASED) {
+                  <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.PREVIEW) {
+                  <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.DEVELOPMENT) {
+                  <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+                }
+              }
+            </td>
+            <td>
+              @if (account.isEditable()) {
+                <a [routerLink]="['/main/spec/property/edit', p.type.toString()]">{{ '修改' | translate }}</a>
+
+                @if (p.lifecycle === LifeCycle.DEVELOPMENT) {
+                  <nz-divider nzType="vertical"></nz-divider>
+                  <a (click)="onDelete(p)">{{ '删除' | translate }}</a>
+                }
+              } @else {
+                <a [routerLink]="['/main/spec/property/view', p.type.toString()]">{{ '查看' | translate }}</a>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </nz-table>
+  </nz-col>
+</nz-row>
