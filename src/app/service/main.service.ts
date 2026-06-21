@@ -347,6 +347,12 @@ export class MainService {
       .pipe(map(() => undefined));
   }
 
+  createFormatDefinitions(defs: FormatDefinition[]): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/spec/format/many`, FormatDefinitionCodec.encodeArray(defs))
+      .pipe(map(() => undefined));
+  }
+
   deleteFormatDefinition(type: FormatType): Observable<void> {
     return this.http
       .delete<OxResponse>(`${this.server}/v1/spec/format/one/${type.toString()}`)

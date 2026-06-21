@@ -25,6 +25,8 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NamespaceChangeComponent} from '../../../common/dialog/namespace/namespace.change.component';
 import {MainI18nService} from '../../../service/i18n.service';
+import {FormatSelectorComponent} from '../../../common/dialog/format/format.selector.component';
+import {FormatDefinition} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'main-spec',
@@ -61,6 +63,7 @@ export class SpecComponent implements OnInit {
 
   tabIndex: number = 0;
   language: string = 'zh-CN'
+  loading: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -93,5 +96,54 @@ export class SpecComponent implements OnInit {
       nzMaskClosable: true,
       nzKeyboard: true
     });
+  }
+
+  protected addFormats() {
+    const modal = this.modal.create<FormatSelectorComponent, string, FormatDefinition[]>({
+      nzTitle: '',
+      nzWidth: 800,
+      nzContent: FormatSelectorComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: '',
+      nzFooter: [
+        {
+          label: '取消',
+          onClick: component => component!.cancel()
+        },
+        {
+          label: '确认',
+          danger: false,
+          type: 'primary',
+          disabled: component => component!.disabled || false,
+          onClick: component => component!.ok()
+        }
+      ],
+      nzClosable: false,
+      nzMaskClosable: true,
+      nzKeyboard: true
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        if (result.length > 0) {
+          this.addFormatDefinitions(result);
+        }
+      }
+    });
+  }
+
+  protected addFormatDefinitions(defs: FormatDefinition[]) {
+    this.loading = true;
+    this.service.createFormatDefinitions(defs)
+      .subscribe({
+        next: () => {
+          console.log('createFormatDefinitions ok');
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 }

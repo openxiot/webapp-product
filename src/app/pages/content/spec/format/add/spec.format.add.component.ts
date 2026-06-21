@@ -107,8 +107,6 @@ export class SpecFormatAddComponent implements OnInit {
       })
   }
 
-
-
   protected select(def: FormatDefinition) {
     this.loading = true;
     this.service.createFormatDefinition(def)

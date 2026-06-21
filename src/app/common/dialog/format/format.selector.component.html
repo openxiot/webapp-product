@@ -1,0 +1,29 @@
+<nz-row [nzGutter]="[8, 8]">
+  @for (format of formats; track format.type.name) {
+    @if (! formatExist.has(format.type.name)) {
+      <nz-col [nzSpan]="8" (click)="select(format)">
+        <nz-card nzHoverable>
+          <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+        </nz-card>
+      </nz-col>
+
+      <ng-template #title>
+        <span>
+          <span>
+            {{ format.type.name }}
+          </span>
+
+          @if (formatSelected.has(format.type.name)) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+      </ng-template>
+
+      <ng-template #desc>
+        {{ format.description.get(i18n.getCurrentLang()) }}
+      </ng-template>
+    }
+  }
+</nz-row>
