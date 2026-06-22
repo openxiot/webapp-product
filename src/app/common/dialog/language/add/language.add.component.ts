@@ -41,10 +41,26 @@ export class LanguageAddComponent {
   // 多选选中的语言
   selectedSet = new Set<string>();
 
+  // "更多语言" 折叠控制
+  protected showAllLanguages = false;
+
   // 未添加的语言
   get availableLanguages(): LangOption[] {
     const used = new Set(this.usedLangs.map(item => item.lang));
     return this.allLanguages.filter(l => !used.has(l.lang));
+  }
+
+  // 当前展示的语言（受 showAllLanguages 控制）
+  get displayedLanguages(): LangOption[] {
+    const all = this.availableLanguages;
+    if (this.showAllLanguages || all.length <= 12) {
+      return all;
+    }
+    return all.slice(0, 12);
+  }
+
+  protected showMore(): void {
+    this.showAllLanguages = true;
   }
 
   // 切换选中

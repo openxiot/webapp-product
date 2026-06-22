@@ -1,6 +1,6 @@
 @if (availableLanguages.length > 0) {
   <nz-row [nzGutter]="[8, 8]">
-    @for (lang of availableLanguages; track lang.lang) {
+    @for (lang of displayedLanguages; track lang.lang) {
       <nz-col [nzSpan]="4" (click)="toggleLang(lang.lang)">
         <nz-card nzHoverable>
           <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
@@ -24,6 +24,17 @@
       <ng-template #desc>
         {{ lang.label | translate }}
       </ng-template>
+    }
+
+    @if (!showAllLanguages && availableLanguages.length > 12) {
+      <nz-col [nzSpan]="4" (click)="showMore()">
+        <nz-card nzHoverable style="text-align: center;">
+          <div style="padding: 8px 0;">
+            <div style="font-size: 16px;">{{ '更多语言' | translate }}</div>
+            <div style="color: #999; font-size: 12px; margin-top: 4px;">{{ '点击展开全部' | translate }}</div>
+          </div>
+        </nz-card>
+      </nz-col>
     }
   </nz-row>
 } @else {

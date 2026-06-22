@@ -1,5 +1,5 @@
 <nz-row [nzGutter]="[8, 8]">
-  @for (lang of i18n.languages; track lang.code) {
+  @for (lang of displayedLanguages; track lang.code) {
     <nz-col [nzSpan]="4" (click)="changeLanguage(lang.code)">
       <nz-card nzHoverable nzSize="small">
         <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
@@ -21,5 +21,16 @@
     <ng-template #desc>
       {{ lang.bcp47 }}
     </ng-template>
+  }
+
+  @if (!showAllLanguages && i18n.languages.length > 12) {
+    <nz-col [nzSpan]="4" (click)="showMore()">
+      <nz-card nzHoverable nzSize="small" style="text-align: center;">
+        <div style="padding: 8px 0;">
+          <div style="font-size: 16px;">{{ '更多语言' | translate }}</div>
+          <div style="color: #999; font-size: 12px; margin-top: 4px;">{{ '点击展开全部' | translate }}</div>
+        </div>
+      </nz-card>
+    </nz-col>
   }
 </nz-row>
