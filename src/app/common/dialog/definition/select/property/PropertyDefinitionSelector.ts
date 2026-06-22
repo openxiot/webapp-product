@@ -5,7 +5,6 @@ export class PropertyDefinitionSelector {
   constructor(
     public properties: PropertyDefinition[],
     public exclusion: Set<string>,
-    public language: string,
   ) {
   }
 }

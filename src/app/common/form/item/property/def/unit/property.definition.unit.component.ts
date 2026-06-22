@@ -1,36 +1,39 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {NzSelectModule} from 'ng-zorro-antd/select';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
-import {NzButtonModule} from 'ng-zorro-antd/button';
-import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
+import {TranslatePipe} from '@ngx-translate/core';
+import {UnitDefinition} from '@openxiot/xiot-core-spec-ts';
+import {MainI18nService} from '../../../../../../service/i18n.service';
 
 @Component({
-  selector: 'property-unit',
-  templateUrl: './property.unit.component.html',
-  styleUrls: ['./property.unit.component.less'],
+  selector: 'property-definition-unit',
+  templateUrl: './property.definition.unit.component.html',
+  styleUrls: ['./property.definition.unit.component.less'],
   standalone: true,
   imports: [
-    NzButtonModule,
-    NzInputModule,
+    NzSelectModule,
     NzToolTipModule,
     NzIconModule,
     NzTagModule,
+    TranslatePipe,
     FormsModule,
     ReactiveFormsModule
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: PropertyUnitComponent,
+      useExisting: PropertyDefinitionUnitComponent,
       multi: true
     }
   ]
 })
-export class PropertyUnitComponent implements ControlValueAccessor {
+export class PropertyDefinitionUnitComponent implements ControlValueAccessor {
 
   @Input() updatable: boolean = false;
+  @Input() units: UnitDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值
@@ -44,6 +47,7 @@ export class PropertyUnitComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   constructor(
+    public i18n: MainI18nService
   ) {
   }
 
@@ -84,5 +88,14 @@ export class PropertyUnitComponent implements ControlValueAccessor {
   // 当表单控件的禁用状态变更时（如调用 control.disable()），Angular 会调用此方法
   setDisabledState?(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
+  }
+
+  protected getValueDescription(): string {
+    const found = this.units.find(x => x.type.name == this._value);
+    if (found) {
+      return found.description.get(this.i18n.getCurrentLang()) || this._value;
+    }
+
+    return this._value;
   }
 }

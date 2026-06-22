@@ -10,6 +10,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
 import {DataFormat, EventDefinition} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'event-definition-select',
@@ -41,6 +42,7 @@ export class EventDefinitionSelectComponent implements OnInit {
   indeterminate: boolean = false;
 
   constructor(
+    public i18n: MainI18nService,
   ) {
   }
 

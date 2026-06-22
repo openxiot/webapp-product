@@ -18,7 +18,7 @@ import {
   Access,
   DataFormat, DataFormatFromString, FormatDefinition, LifeCycle,
   PropertyDefinition,
-  PropertyType,
+  PropertyType, UnitDefinition,
   UrnType, ValueDefinition, ValueList,
   ValueRange
 } from '@openxiot/xiot-core-spec-ts';
@@ -29,7 +29,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
 import {PropertyFormatComponent} from '../../../../../common/form/item/property/common/format/property.format.component';
 import {PropertyAccessComponent} from '../../../../../common/form/item/property/common/access/property.access.component';
-import {PropertyUnitComponent} from '../../../../../common/form/item/property/common/unit/property.unit.component';
+import {PropertyDefinitionUnitComponent} from '../../../../../common/form/item/property/def/unit/property.definition.unit.component';
 import {RangeValue} from '../../../../../common/form/item/property/common/range/RangeValue';
 import {ValueItem} from '../../../../../common/form/item/property/common/list/ValueItem';
 import {ConstraintType} from '../../../../../common/form/item/property/common/constraint/ConstraintType';
@@ -69,7 +69,7 @@ import {Location} from '@angular/common';
     CodeComponent,
     PropertyFormatComponent,
     PropertyAccessComponent,
-    PropertyUnitComponent,
+    PropertyDefinitionUnitComponent,
     PropertyConstraintComponent,
     PropertyRangeComponent,
     PropertyListComponent,
@@ -84,6 +84,9 @@ export class SpecPropertyEditComponent implements OnInit {
 
   loadingFormats: boolean = false;
   formats: FormatDefinition[] = [];
+
+  loadingUnits: boolean = false;
+  units: UnitDefinition[] = [];
 
   loading: boolean = false;
   propertyType: string = '';
@@ -143,6 +146,21 @@ export class SpecPropertyEditComponent implements OnInit {
     });
 
     this.loadFormats();
+    this.loadUnits();
+  }
+
+  private loadUnits(): void {
+    this.loadingUnits = true;
+    this.service.getUnitDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.units = data;
+          this.loadingUnits = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   private load(): void {
@@ -261,11 +279,6 @@ export class SpecPropertyEditComponent implements OnInit {
     return ConstraintType.NONE;
   }
 
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {
-    });
-  }
-
   protected onFormatChanged() {
     this.constrainable = this.toConstrainable(this.form.controls.format.value);
 
@@ -303,12 +316,14 @@ export class SpecPropertyEditComponent implements OnInit {
     const code = this.form.value.code || 'null';
     const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
+    const unit = this.form.value.unit;
 
     const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
     const def: PropertyDefinition = new PropertyDefinition(type, description);
     def.format = DataFormatFromString(this.form.value.format || '');
     def.access = this.form.value.access || new Access();
     def.lifecycle = lifecycle;
+    def.unit = unit || null;
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:

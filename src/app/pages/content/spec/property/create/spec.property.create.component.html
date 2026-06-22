@@ -89,7 +89,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="unit">{{ '单位' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <property-unit formControlName="unit" [updatable]="true"></property-unit>
+            <property-definition-unit formControlName="unit" [updatable]="true" [units]="units"></property-definition-unit>
           </nz-form-control>
         </nz-form-item>
 

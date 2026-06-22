@@ -10,6 +10,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {EventDefinitionSelector} from "../../../../../dialog/definition/select/event/EventDefinitionSelector";
 import {EventDefinitionSelectComponent} from "../../../../../dialog/definition/select/event/event.definition.select.component";
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../service/i18n.service';
 
 @Component({
   selector: 'service-definition-events',
@@ -37,7 +38,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class ServiceDefinitionEventsComponent implements ControlValueAccessor {
 
   @Input() updatable: boolean = true;
-  @Input() language: string = 'en-US';
   @Input() events: EventDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -56,6 +56,7 @@ export class ServiceDefinitionEventsComponent implements ControlValueAccessor {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    public i18n: MainI18nService
   ) {
   }
 
@@ -102,17 +103,17 @@ export class ServiceDefinitionEventsComponent implements ControlValueAccessor {
     const exclusion = new Set(this._value.map(x => x.type.name));
 
     const modal = this.modal.create<EventDefinitionSelectComponent, EventDefinitionSelector, Set<EventDefinition>>({
-      nzTitle: '选择属性',
+      nzTitle: this.i18n.translate.instant('选择属性'),
       nzContent: EventDefinitionSelectComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new EventDefinitionSelector(this.events, exclusion, this.language),
+      nzData: new EventDefinitionSelector(this.events, exclusion),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

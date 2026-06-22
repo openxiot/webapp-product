@@ -22,6 +22,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {PropertyDefinitionSelector} from '../../../../../dialog/definition/select/property/PropertyDefinitionSelector';
 import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definition/select/property/property.definition.select.component';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../service/i18n.service';
 
 @Component({
   selector: 'definition-arguments',
@@ -55,7 +56,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class DefinitionArgumentsComponent implements OnInit, ControlValueAccessor, OnChanges {
 
   @Input() updatable: boolean = true;
-  @Input() language!: string;
   @Input() properties: PropertyDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -72,6 +72,7 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    public i18n: MainI18nService
   ) {
   }
 
@@ -114,7 +115,7 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   protected getDescription(arg: ArgumentDefinition): string {
     const p = this.properties.find(x => x.type.name === arg.type.name);
     if (p) {
-        return p.description.get(this.language) || p.description.get('en-US') || '';
+        return p.description.get(this.i18n.getCurrentLang()) || p.description.get('en-US') || '';
     }
 
     return '?';
@@ -129,18 +130,18 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
     const exclusion = new Set(this.arguments.map(x => x.type.name));
 
     const modal = this.modal.create<PropertyDefinitionSelectComponent, PropertyDefinitionSelector, Set<PropertyDefinition>>({
-      nzTitle: '选择属性作为参数',
+      nzTitle: this.i18n.translate.instant('选择属性作为参数'),
       nzWidth: 1000,
       nzContent: PropertyDefinitionSelectComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new PropertyDefinitionSelector(this.properties, exclusion, this.language),
+      nzData: new PropertyDefinitionSelector(this.properties, exclusion),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

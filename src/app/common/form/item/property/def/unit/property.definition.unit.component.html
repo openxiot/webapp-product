@@ -1,0 +1,12 @@
+@if (updatable) {
+  <nz-select [(ngModel)]="value">
+    <nz-option nzValue="" [nzLabel]="'无' | translate"></nz-option>
+    @for (unit of units; track unit) {
+      <nz-option [nzValue]="unit.type.name" nzLabel="{{ unit.description.get(i18n.getCurrentLang()) || unit.type.name }}"></nz-option>
+    }
+  </nz-select>
+} @else {
+  <div class="iid">
+    {{ getValueDescription() }}
+  </div>
+}

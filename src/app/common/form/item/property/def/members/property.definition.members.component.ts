@@ -11,6 +11,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {PropertyDefinitionSelector} from '../../../../../dialog/definition/select/property/PropertyDefinitionSelector';
 import {PropertyDefinitionSelectComponent} from '../../../../../dialog/definition/select/property/property.definition.select.component';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../service/i18n.service';
 
 @Component({
   selector: 'property-definition-members',
@@ -39,7 +40,6 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class PropertyDefinitionMembersComponent implements ControlValueAccessor {
 
   @Input() updatable: boolean = true;
-  @Input() language: string = 'en-US';
   @Input() properties: PropertyDefinition[] = [];
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -56,6 +56,7 @@ export class PropertyDefinitionMembersComponent implements ControlValueAccessor 
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    public i18n: MainI18nService,
   ) {
   }
 
@@ -105,7 +106,7 @@ export class PropertyDefinitionMembersComponent implements ControlValueAccessor 
       nzTitle: '选择属性作为成员',
       nzContent: PropertyDefinitionSelectComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new PropertyDefinitionSelector(this.properties, exclusion, this.language),
+      nzData: new PropertyDefinitionSelector(this.properties, exclusion),
       nzFooter: [
         {
           label: '取消',

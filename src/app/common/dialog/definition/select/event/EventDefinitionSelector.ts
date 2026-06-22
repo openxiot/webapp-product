@@ -5,7 +5,6 @@ export class EventDefinitionSelector {
   constructor(
     public events: EventDefinition[],
     public exclusion: Set<string>,
-    public language: string,
   ) {
   }
 }

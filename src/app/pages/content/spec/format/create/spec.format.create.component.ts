@@ -86,10 +86,6 @@ export class SpecFormatCreateComponent implements OnInit {
   ngOnInit() {
   }
 
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
-  }
-
   protected submitForm() {
     const code = this.form.value.code || 'null';
     const description = this.form.value.description || new Map<string, string>();

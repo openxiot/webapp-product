@@ -14,7 +14,14 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {Access, DataFormat, FormatDefinition, LifeCycle, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {
+  Access,
+  DataFormat,
+  FormatDefinition,
+  LifeCycle,
+  PropertyDefinition,
+  UnitDefinition
+} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
@@ -22,7 +29,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
 import {PropertyFormatComponent} from '../../../../../common/form/item/property/common/format/property.format.component';
 import {PropertyAccessComponent} from '../../../../../common/form/item/property/common/access/property.access.component';
-import {PropertyUnitComponent} from '../../../../../common/form/item/property/common/unit/property.unit.component';
+import {PropertyDefinitionUnitComponent} from '../../../../../common/form/item/property/def/unit/property.definition.unit.component';
 import {RangeValue} from '../../../../../common/form/item/property/common/range/RangeValue';
 import {ValueItem} from '../../../../../common/form/item/property/common/list/ValueItem';
 import {ConstraintType} from '../../../../../common/form/item/property/common/constraint/ConstraintType';
@@ -62,7 +69,7 @@ import {Location} from '@angular/common';
     CodeComponent,
     PropertyFormatComponent,
     PropertyAccessComponent,
-    PropertyUnitComponent,
+    PropertyDefinitionUnitComponent,
     PropertyConstraintComponent,
     PropertyRangeComponent,
     PropertyListComponent,
@@ -82,6 +89,9 @@ export class SpecPropertyViewComponent implements OnInit {
 
   loadingFormats: boolean = false;
   formats: FormatDefinition[] = [];
+
+  loadingUnits: boolean = false;
+  units: UnitDefinition[] = [];
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -134,6 +144,21 @@ export class SpecPropertyViewComponent implements OnInit {
     });
 
     this.loadFormats();
+    this.loadUnits();
+  }
+
+  private loadUnits(): void {
+    this.loadingUnits = true;
+    this.service.getUnitDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.units = data;
+          this.loadingUnits = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   private loadPropertyDefinitions(): void {
@@ -250,11 +275,6 @@ export class SpecPropertyViewComponent implements OnInit {
     }
 
     return ConstraintType.NONE;
-  }
-
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {
-    });
   }
 
   protected onFormatChanged() {

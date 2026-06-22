@@ -238,10 +238,6 @@ export class SpecServiceEditComponent implements OnInit {
       })
   }
 
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
-  }
-
   protected submitForm() {
     const value = this.form.value.uuid || 0;
     const uuid = value.toString(16).padStart(8, '0');

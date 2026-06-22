@@ -13,6 +13,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {SelectArgumentComponent} from '../../../../../../../dialog/instance/select/argument/select.argument.component';
 import {SelectArgument} from '../../../../../../../dialog/instance/select/argument/SelectArgument';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../../../service/i18n.service';
 
 @Component({
   selector: 'device-instance-arguments',
@@ -67,6 +68,7 @@ export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, O
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    public i18n: MainI18nService
   ) {
   }
 
@@ -123,18 +125,18 @@ export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, O
     const exclusion = new Set(this.arguments.map(x => x.piid));
 
     const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
-      nzTitle: '选择属性作为参数',
+      nzTitle: this.i18n.translate.instant('选择属性作为参数'),
       nzWidth: 1000,
       nzContent: SelectArgumentComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: new SelectArgument(this.service, exclusion, this.language),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

@@ -6,7 +6,7 @@
         <!-- 成员卡片（原来的 member-row） -->
         <div class="member-row">
           <div class="member-info">
-            {{ def.description.get('en-US') || def.description.get('zh-CN') || def.type.name }}
+            {{ def.description.get(i18n.getCurrentLang()) || def.type.name }}
           </div>
         </div>
 
@@ -17,7 +17,6 @@
             nz-button
             nzType="text"
             nzDanger
-            nz-tooltip="删除成员"
             (click)="removeMember(def)"
             [disabled]="isDisabled"
           >

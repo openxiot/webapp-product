@@ -38,29 +38,29 @@
             <td>{{ s.type.name }}</td>
             <td>{{ s.description.get(i18n.getCurrentLang()) }}</td>
             <td>
-              @for (p of s.requiredProperties; track p) {
+              @for (p of s.requiredProperties; track p.toString()) {
                 <nz-tag nzColor="blue">{{ getPropertyDescription(p) }}</nz-tag>
               }
 
-              @for (p of s.optionalProperties; track p) {
+              @for (p of s.optionalProperties; track p.toString()) {
                 <nz-tag nzColor="green">{{ getPropertyDescription(p) }}</nz-tag>
               }
             </td>
             <td>
-              @for (p of s.requiredActions; track p) {
+              @for (p of s.requiredActions; track p.toString()) {
                 <nz-tag nzColor="blue">{{ getActionDescription(p) }}</nz-tag>
               }
 
-              @for (p of s.optionalActions; track p) {
+              @for (p of s.optionalActions; track p.toString()) {
                 <nz-tag nzColor="green">{{ getActionDescription(p) }}</nz-tag>
               }
             </td>
             <td>
-              @for (p of s.requiredEvents; track p) {
+              @for (p of s.requiredEvents; track p.toString()) {
                 <nz-tag nzColor="blue">{{ getEventDescription(p) }}</nz-tag>
               }
 
-              @for (p of s.optionalEvents; track p) {
+              @for (p of s.optionalEvents; track p.toString()) {
                 <nz-tag nzColor="green">{{ getEventDescription(p) }}</nz-tag>
               }
             </td>

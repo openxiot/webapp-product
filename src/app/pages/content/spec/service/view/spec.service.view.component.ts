@@ -237,7 +237,4 @@ export class SpecServiceViewComponent implements OnInit {
       })
   }
 
-  protected onBack() {
-    this.router.navigate(['/main/spec']).then(() => {});
-  }
 }
