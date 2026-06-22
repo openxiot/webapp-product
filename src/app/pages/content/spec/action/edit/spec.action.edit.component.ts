@@ -134,7 +134,7 @@ export class SpecActionEditComponent implements OnInit {
           this.form.controls.lifecycle.setValue(a.lifecycle);
 
           this.form.controls.argumentsIn.setValue(a.in);
-          this.form.controls.argumentsIn.setValue(a.out);
+          this.form.controls.argumentsOut.setValue(a.out);
 
           this.loading = false;
         },
