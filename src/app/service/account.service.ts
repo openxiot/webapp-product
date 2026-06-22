@@ -39,8 +39,10 @@ export class AccountService {
   }
 
   isEditable(): boolean {
-    if (this.organization) {
-      return this.ns.organization === this.organization.id
+    if (this.ns) {
+      if (this.organization) {
+        return this.ns.organization === this.organization.id
+      }
     }
 
     return false;

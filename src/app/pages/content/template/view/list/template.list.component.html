@@ -11,6 +11,7 @@
       <th>{{ '名称' | translate }}</th>
       <th>{{ '型号' | translate }}</th>
       <th>{{ '版本' | translate }}</th>
+      <th>{{ '创建者' | translate }}</th>
       <th>{{ '操作' | translate }}</th>
     </tr>
   </thead>
@@ -20,6 +21,7 @@
         <td>{{ p.description.get(i18n.getCurrentLang()) }}</td>
         <td>{{ p.type.model }}</td>
         <td>{{ p.type.version }}</td>
+        <td>{{ p.type.organization }}</td>
         <td>
           <a routerLink="/main/template/detail/{{p.type.toString()}}">{{ '详情' | translate }}</a>
         </td>

@@ -1,0 +1,42 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="pageTitle" [nzGhost]="false">
+    <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
+  </nz-page-header>
+
+  <ng-template #pageTitle>
+    {{ '创建模板' | translate }}
+  </ng-template>
+
+  <div style="padding: 20px 20px">
+    <nz-card nzBorderless nzSize="small">
+      <form nz-form [formGroup]="form"  (ngSubmit)="submitForm()">
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="device">{{ '设备类型' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+            <device-type formControlName="device" [devices]="devices"></device-type>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">{{ '产品型号' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+            <input type="text" nz-input formControlName="model"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">{{ '描述' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10">
+            <description formControlName="description"/>
+          </nz-form-control>
+        </nz-form-item>
+
+        <nz-form-item>
+          <nz-form-control [nzSpan]="4" [nzOffset]="4">
+            <button nz-button nzType="primary" [disabled]="form.invalid || !form.dirty">{{ '提交' | translate }}</button>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </nz-card>
+  </div>
+</nz-spin>

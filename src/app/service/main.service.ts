@@ -410,6 +410,12 @@ export class MainService {
    * 产品模板
    *------------------------------------------------------------------------------------------------*/
 
+  createTemplate(template: DeviceTemplate): Observable<void> {
+    return this.http
+      .post<OxResponse>(`${this.server}/v1/template/one`, DeviceTemplateCodec.encode(template))
+      .pipe(map(() => undefined));
+  }
+
   /**
    * 读取产品模板列表
    */

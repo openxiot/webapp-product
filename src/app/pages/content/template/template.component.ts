@@ -20,6 +20,8 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NamespaceChangeComponent} from '../../../common/dialog/namespace/namespace.change.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {MainI18nService} from '../../../service/i18n.service';
+import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 
 @Component({
   selector: 'main-template',
@@ -41,6 +43,8 @@ import {MainI18nService} from '../../../service/i18n.service';
     RouterLink,
     TranslatePipe,
     NzIconDirective,
+    NzButtonComponent,
+    NzWaveDirective,
   ],
   providers: [
     NzModalService

@@ -5,6 +5,14 @@
     <nz-page-header-tags>
       <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"></nz-segmented>
     </nz-page-header-tags>
+
+    <nz-page-header-extra>
+      @if (account.login) {
+        @if (account.isEditable()) {
+          <button nz-button nzType="primary" nzDanger [routerLink]="['/main/template/create']">{{ '创建' | translate }}</button>
+        }
+      }
+    </nz-page-header-extra>
   </nz-page-header>
 
   <ng-template #pageTitle>
@@ -27,9 +35,11 @@
   <div style="padding: 20px 20px">
     @if (account.ns) {
       <div nz-row [nzGutter]="[8, 8]">
-        <div nz-col [nzSpan]="24">
-          <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
-        </div>
+        @if (templates.length > 0) {
+          <div nz-col [nzSpan]="24">
+            <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
+          </div>
+        }
 
         <div nz-col [nzSpan]="24">
           @switch (viewMode) {
