@@ -270,5 +270,20 @@
   "页面类型": "Tipus de pàgina",
   "预览": "Vista prèvia",
   "首页": "Inici",
-  "，最少": ", mín. "
+  "，最少": ", mín. ",
+  "确认": "Confirmar",
+  "您真的要删除这个格式吗？": "Esteu segur que voleu suprimir format?",
+  "您真的要删除这个属性吗？": "Esteu segur que voleu suprimir property?",
+  "您真的要删除这个属性定义吗？": "Esteu segur que voleu suprimir property definition?",
+  "您真的要删除这个方法吗？": "Esteu segur que voleu suprimir action?",
+  "您真的要删除这个方法定义吗？": "Esteu segur que voleu suprimir action definition?",
+  "您真的要删除这个功能吗？": "Esteu segur que voleu suprimir service?",
+  "您真的要删除这个事件吗？": "Esteu segur que voleu suprimir event?",
+  "您真的要删除这个单位吗？": "Esteu segur que voleu suprimir unit?",
+  "您真的要删除这个设备吗？": "Esteu segur que voleu suprimir device?",
+  "您真的要删除这个名字空间吗？": "Esteu segur que voleu suprimir namespace?",
+  "您真的要删除这个固件吗？": "Esteu segur que voleu suprimir firmware?",
+  "添加描述语言": "Afegir idioma de descripció",
+  "确定": "D'acord",
+  "简体中文": "Xinès simplificat"
 }

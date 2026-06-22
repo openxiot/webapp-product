@@ -15,6 +15,7 @@ import {FormsModule} from '@angular/forms';
 import {EditStringComponent} from '../../../../dialog/instance/edit/string/edit.string.component';
 import {EditableString} from '../../../../dialog/instance/edit/string/EditableString';
 import {ConfirmComponent} from '../../../../dialog/confirm/confirm.component';
+import {MainI18nService} from '../../../../../service/i18n.service';
 import {NzDividerComponent} from 'ng-zorro-antd/divider';
 import {PropertyValueComponent} from './property-value/property-value.component';
 import {PropertyMemberComponent} from './member/property-member.component';
@@ -58,7 +59,8 @@ export class PropertiesControllerComponent {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    private msg: NzMessageService
+    private msg: NzMessageService,
+    public i18n: MainI18nService
   ) {
     console.log("PropertiesControllerComponent.constructor");
   }
@@ -158,17 +160,17 @@ export class PropertiesControllerComponent {
 
   onRemove(p: Property) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个属性吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个属性吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: p.description.get(this.language),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

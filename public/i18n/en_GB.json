@@ -270,5 +270,21 @@
   "页面类型": "Page Type",
   "预览": "Preview",
   "首页": "Home",
-  "，最少": ", min "
+  "，最少": ", min ",
+  "确认": "Confirm",
+  "您真的要删除这个格式吗？": "Are you sure you want to delete this format?",
+  "您真的要删除这个属性吗？": "Are you sure you want to delete this property?",
+  "您真的要删除这个属性定义吗？": "Are you sure you want to delete this property definition?",
+  "您真的要删除这个方法吗？": "Are you sure you want to delete this action?",
+  "您真的要删除这个方法定义吗？": "Are you sure you want to delete this action definition?",
+  "您真的要删除这个功能吗？": "Are you sure you want to delete this service?",
+  "您真的要删除这个事件吗？": "Are you sure you want to delete this event?",
+  "您真的要删除这个单位吗？": "Are you sure you want to delete this unit?",
+  "您真的要删除这个设备吗？": "Are you sure you want to delete this device?",
+  "您真的要删除这个名字空间吗？": "Are you sure you want to delete this namespace?",
+  "您真的要删除这个固件吗？": "Are you sure you want to delete this firmware?",
+  "添加描述语言": "Add Description Language",
+  "确定": "OK",
+  "简体中文": "Simplified Chinese",
+  "繁体中文": "Traditional Chinese"
 }

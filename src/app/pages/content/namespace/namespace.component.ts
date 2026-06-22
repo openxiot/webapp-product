@@ -96,17 +96,17 @@ export class NamespaceComponent implements OnInit {
 
   protected onDelete(ns: NamespaceDefinition) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个名字空间吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个名字空间吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: ns.namespace,
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

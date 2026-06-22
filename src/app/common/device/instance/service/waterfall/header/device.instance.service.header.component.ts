@@ -7,6 +7,7 @@ import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzSpaceComponent, NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {MainI18nService} from '../../../../../../service/i18n.service';
 import {ConfirmComponent} from '../../../../../dialog/confirm/confirm.component';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
@@ -47,23 +48,24 @@ export class DeviceInstanceServiceHeaderComponent {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    public msg: NzMessageService
+    public msg: NzMessageService,
+    public i18n: MainI18nService
   ) {
   }
 
   onRemove(service: Service) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个功能吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个功能吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: service.description.get(this.language),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

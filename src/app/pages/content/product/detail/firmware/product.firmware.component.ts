@@ -34,6 +34,7 @@ import {UploadFirmware} from './upload/UploadFirmware';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
+import {MainI18nService} from '../../../../../service/i18n.service';
 import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
@@ -88,6 +89,7 @@ export class ProductFirmwareComponent implements OnChanges {
     private route: ActivatedRoute,
     private service: MainService,
     private msg: NzMessageService,
+    public i18n: MainI18nService,
   ) {
   }
 
@@ -357,17 +359,17 @@ export class ProductFirmwareComponent implements OnChanges {
 
   protected onDelete(instance: ProductFirmwareInstance) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个固件吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个固件吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: `版本名称：${instance.version.name}, 版本编码：${instance.version.code}`,
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

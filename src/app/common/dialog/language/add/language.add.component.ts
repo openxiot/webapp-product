@@ -3,7 +3,11 @@ import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LangOption} from './LangOption';
+import {MainI18nService} from '../../../../service/i18n.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
 
 @Component({
   selector: 'language-add',
@@ -12,24 +16,27 @@ import {TranslatePipe} from '@ngx-translate/core';
   imports: [
     NzSpaceModule,
     NzTagModule,
-    TranslatePipe
+    TranslatePipe,
+    NzCardComponent,
+    NzCardMetaComponent,
+    NzColDirective,
+    NzIconDirective,
+    NzRowDirective
   ]
 })
 export class LanguageAddComponent {
 
   readonly modalRef = inject(NzModalRef);
   readonly usedLangs = inject<{ lang: string }[]>(NZ_MODAL_DATA);
+  readonly i18n = inject(MainI18nService);
 
-  allLanguages: LangOption[] = [
-    {lang: 'zh-CN', label: '简体中文'},
-    {lang: 'zh-TW', label: '繁体中文'},
-    {lang: 'ja-JP', label: '日语'},
-    {lang: 'ko-KR', label: '韩语'},
-    {lang: 'fr-FR', label: '法语'},
-    {lang: 'de-DE', label: '德语'},
-    {lang: 'es-ES', label: '西班牙语'},
-    {lang: 'ru-RU', label: '俄语'},
-  ];
+  // 从 i18n 服务动态生成全部 66 种语言
+  get allLanguages(): LangOption[] {
+    return this.i18n.languages.map(l => ({
+      lang: l.bcp47,
+      label: l.name,
+    }));
+  }
 
   // 多选选中的语言
   selectedSet = new Set<string>();

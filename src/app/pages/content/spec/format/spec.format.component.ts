@@ -94,17 +94,17 @@ export class SpecFormatComponent implements OnInit, OnChanges {
 
   protected onDelete(format: FormatDefinition) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个格式吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个格式吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: format.type.toString(),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()
@@ -136,18 +136,18 @@ export class SpecFormatComponent implements OnInit, OnChanges {
 
   protected addFormats() {
     const modal = this.modal.create<FormatSelectorComponent, FormatsOption, FormatDefinition[]>({
-      nzTitle: '',
+      nzTitle: this.i18n.translate.instant('添加格式'),
       nzWidth: 800,
       nzContent: FormatSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: new FormatsOption(new Set(this.formats.map(x => x.type.name))),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: false,
           type: 'primary',
           disabled: component => component!.disabled || false,

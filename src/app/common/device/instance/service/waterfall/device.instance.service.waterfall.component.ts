@@ -10,6 +10,7 @@ import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
+import {MainI18nService} from '../../../../../service/i18n.service';
 import {ConfirmComponent} from '../../../../dialog/confirm/confirm.component';
 import {EditStringComponent} from '../../../../dialog/instance/edit/string/edit.string.component';
 import {EditableString} from '../../../../dialog/instance/edit/string/EditableString';
@@ -52,23 +53,24 @@ export class DeviceInstanceServiceWaterfallComponent {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    public msg: NzMessageService
+    public msg: NzMessageService,
+    public i18n: MainI18nService
   ) {
   }
 
   onServiceRemoved(service: Service) {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个功能吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个功能吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: service.description.get(this.language),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

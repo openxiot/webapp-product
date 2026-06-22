@@ -2,7 +2,7 @@
   @for (item of langList; track item.lang; let i = $index) {
     <nz-col [nzSpan]="24">
       <div style="display: flex; gap: 8px; align-items: center;">
-        <nz-input-group nzAddOnBefore="{{ item.label }}" style="flex: 1;">
+        <nz-input-group nzAddOnBefore="{{ item.label | translate }}" style="flex: 1;">
           <input
             type="text"
             nz-input

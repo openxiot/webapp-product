@@ -10,6 +10,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {LanguageAddComponent} from '../../../../dialog/language/add/language.add.component';
 import {LangOption} from '../../../../dialog/language/add/LangOption';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 interface LangDesc {
   lang: string;
@@ -54,15 +55,31 @@ export class DescriptionComponent implements ControlValueAccessor {
   onTouched: () => void = () => {
   };
 
-  // 动态语言列表
-  langList: LangDesc[] = [
-    {lang: 'en-US', label: '英文', value: ''}
-  ];
+  // bcp47 → 语言名称映射，从 i18n 服务构建
+  private bcp47LabelMap = new Map<string, string>();
+
+  // 动态语言列表（初始只有英文，后续动态添加）
+  langList: LangDesc[] = [];
 
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    public i18n: MainI18nService,
   ) {
+    // 从 i18n 服务构建完整的 bcp47 → 名称映射（覆盖全部 66 种语言）
+    for (const lang of this.i18n.languages) {
+      this.bcp47LabelMap.set(lang.bcp47, lang.name);
+    }
+    // 初始默认值
+    this.langList = [this.createLangDesc('en-US')];
+  }
+
+  private createLangDesc(bcp47: string): LangDesc {
+    return {
+      lang: bcp47,
+      label: this.bcp47LabelMap.get(bcp47) ?? bcp47,
+      value: '',
+    };
   }
 
   writeValue(obj: Map<string, string> | null): void {
@@ -73,30 +90,14 @@ export class DescriptionComponent implements ControlValueAccessor {
 
     const list: LangDesc[] = [];
     obj.forEach((val, lang) => {
-      const label = this.getLangLabel(lang);
-      list.push({lang, label, value: val});
+      list.push({lang, label: this.bcp47LabelMap.get(lang) ?? lang, value: val});
     });
 
-    this.langList = list.length ? list : [{lang: 'en-US', label: '英文', value: ''}];
-  }
-
-  private getLangLabel(lang: string): string {
-    const map: Record<string, string> = {
-      'en-US': '英文',
-      'zh-CN': '简体中文',
-      'zh-TW': '繁体中文',
-      'ja-JP': '日语',
-      'ko-KR': '韩语',
-      'fr-FR': '法语',
-      'de-DE': '德语',
-      'es-ES': '西班牙语',
-      'ru-RU': '俄语',
-    };
-    return map[lang] ?? lang;
+    this.langList = list.length ? list : [this.createLangDesc('en-US')];
   }
 
   private resetToDefault() {
-    this.langList = [{lang: 'en-US', label: '英文', value: ''}];
+    this.langList = [this.createLangDesc('en-US')];
   }
 
   registerOnChange(fn: any): void {
@@ -123,18 +124,18 @@ export class DescriptionComponent implements ControlValueAccessor {
 
   addLang() {
     const modal = this.modal.create<any, LangDesc[], any>({
-      nzTitle: '添加描述语言',
-      nzWidth: 600,
+      nzTitle: this.i18n.translate.instant('添加描述语言'),
+      nzWidth: 1200,
       nzContent: LanguageAddComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: this.langList,
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: c => c.cancel()
         },
         {
-          label: '确定',
+          label: this.i18n.translate.instant('确定'),
           type: 'primary',
           disabled: component => component!.disabled || false,
           onClick: c => c.ok()

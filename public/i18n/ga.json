@@ -270,5 +270,19 @@
   "页面类型": "Cineál Leathanaigh",
   "预览": "Réamhamharc",
   "首页": "Baile",
-  "，最少": ", íosmh. "
+  "，最少": ", íosmh. ",
+  "确认": "Deimhnigh",
+  "您真的要删除这个格式吗？": "An bhfuil tú cinnte gur mhaith leat format a scriosadh?",
+  "您真的要删除这个属性吗？": "An bhfuil tú cinnte gur mhaith leat property a scriosadh?",
+  "您真的要删除这个属性定义吗？": "An bhfuil tú cinnte gur mhaith leat property definition a scriosadh?",
+  "您真的要删除这个方法吗？": "An bhfuil tú cinnte gur mhaith leat action a scriosadh?",
+  "您真的要删除这个方法定义吗？": "An bhfuil tú cinnte gur mhaith leat action definition a scriosadh?",
+  "您真的要删除这个功能吗？": "An bhfuil tú cinnte gur mhaith leat service a scriosadh?",
+  "您真的要删除这个事件吗？": "An bhfuil tú cinnte gur mhaith leat event a scriosadh?",
+  "您真的要删除这个单位吗？": "An bhfuil tú cinnte gur mhaith leat unit a scriosadh?",
+  "您真的要删除这个设备吗？": "An bhfuil tú cinnte gur mhaith leat device a scriosadh?",
+  "您真的要删除这个名字空间吗？": "An bhfuil tú cinnte gur mhaith leat namespace a scriosadh?",
+  "您真的要删除这个固件吗？": "An bhfuil tú cinnte gur mhaith leat firmware a scriosadh?",
+  "添加描述语言": "Add Description Language",
+  "确定": "OK"
 }

@@ -31,6 +31,7 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
+import {MainI18nService} from '../../../../../../../../../service/i18n.service';
 import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
 import {Arg} from '../action/argument/Arg';
 import {EditorServiceActionArgumentComponent} from '../action/argument/editor.service.action.argument.component';
@@ -88,7 +89,8 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    public i18n: MainI18nService
   ) {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
@@ -208,17 +210,17 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
 
   onRemoved() {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个事件吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个事件吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: this.service.description.get('zh-CN'),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

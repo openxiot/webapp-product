@@ -270,5 +270,19 @@
   "页面类型": "Paginatype",
   "预览": "Voorbeeld",
   "首页": "Startpagina",
-  "，最少": ", min. "
+  "，最少": ", min. ",
+  "确认": "Bevestigen",
+  "您真的要删除这个格式吗？": "Weet u zeker dat u format wilt verwijderen?",
+  "您真的要删除这个属性吗？": "Weet u zeker dat u property wilt verwijderen?",
+  "您真的要删除这个属性定义吗？": "Weet u zeker dat u property definition wilt verwijderen?",
+  "您真的要删除这个方法吗？": "Weet u zeker dat u action wilt verwijderen?",
+  "您真的要删除这个方法定义吗？": "Weet u zeker dat u action definition wilt verwijderen?",
+  "您真的要删除这个功能吗？": "Weet u zeker dat u service wilt verwijderen?",
+  "您真的要删除这个事件吗？": "Weet u zeker dat u event wilt verwijderen?",
+  "您真的要删除这个单位吗？": "Weet u zeker dat u unit wilt verwijderen?",
+  "您真的要删除这个设备吗？": "Weet u zeker dat u device wilt verwijderen?",
+  "您真的要删除这个名字空间吗？": "Weet u zeker dat u namespace wilt verwijderen?",
+  "您真的要删除这个固件吗？": "Weet u zeker dat u firmware wilt verwijderen?",
+  "添加描述语言": "Add Description Language",
+  "确定": "OK"
 }

@@ -29,6 +29,7 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ConfirmComponent} from '../../../../../../dialog/confirm/confirm.component';
+import {MainI18nService} from '../../../../../../../service/i18n.service';
 import {DeviceInstanceNamespaceComponent} from '../property/namespace/device.instance.namespace.component';
 import {DeviceInstanceIdComponent} from '../property/iid/device.instance.id.component';
 import {DeviceInstanceNameComponent} from '../property/name/device.instance.name.component';
@@ -92,7 +93,8 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    public i18n: MainI18nService
   ) {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
@@ -125,17 +127,17 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
 
   onRemoved() {
     const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: '您真的要删除这个方法吗？',
+      nzTitle: this.i18n.translate.instant('您真的要删除这个方法吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: this.action.description.get('zh-CN'),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

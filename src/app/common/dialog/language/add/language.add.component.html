@@ -1,18 +1,32 @@
-<nz-space [nzSize]="8">
-  @for (lang of availableLanguages; track lang.lang) {
-    <div *nzSpaceItem>
-      <nz-tag
-        [nzChecked]="isSelected(lang.lang)"
-        (click)="toggleLang(lang.lang)"
-        nzMode="checkable"
-      >
-        {{ lang.label }}
-      </nz-tag>
-    </div>
-  }
-</nz-space>
+@if (availableLanguages.length > 0) {
+  <nz-row [nzGutter]="[8, 8]">
+    @for (lang of availableLanguages; track lang.lang) {
+      <nz-col [nzSpan]="4" (click)="toggleLang(lang.lang)">
+        <nz-card nzHoverable>
+          <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+        </nz-card>
+      </nz-col>
 
-@if (availableLanguages.length === 0) {
+      <ng-template #title>
+        <span>
+          <span>
+            {{ lang.lang }}
+          </span>
+
+          @if (isSelected(lang.lang)) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+      </ng-template>
+
+      <ng-template #desc>
+        {{ lang.label | translate }}
+      </ng-template>
+    }
+  </nz-row>
+} @else {
   <div style="color: #999; padding: 10px 0;">
     {{ '暂无更多语言可添加' | translate }}
   </div>
