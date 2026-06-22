@@ -1,13 +1,14 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
+import {ControlValueAccessor, FormBuilder, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {DataFormat, FormatDefinition} from '@openxiot/xiot-core-spec-ts';
+import {FormatDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../service/i18n.service';
 
 @Component({
   selector: 'property-format',
@@ -39,23 +40,6 @@ export class PropertyFormatComponent implements ControlValueAccessor {
   @Input() updatable: boolean = false;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  // // 使用 readonly 确保 formats 不会被修改
-  // readonly formats: Array<{ value: DataFormat, label: string }> = [
-  //   { value: DataFormat.BOOL, label: '布尔值' },
-  //   { value: DataFormat.UINT8, label: '无符号8位整型' },
-  //   { value: DataFormat.UINT16, label: '无符号16位整型' },
-  //   { value: DataFormat.UINT32, label: '无符号32位整型' },
-  //   { value: DataFormat.INT8, label: '8位整型' },
-  //   { value: DataFormat.INT16, label: '16位整型' },
-  //   { value: DataFormat.INT32, label: '32位整型' },
-  //   { value: DataFormat.INT64, label: '64位整型' },
-  //   { value: DataFormat.FLOAT, label: '浮点数' },
-  //   { value: DataFormat.STRING, label: '字符串' },
-  //   { value: DataFormat.HEX, label: '16进制字符串' },
-  //   { value: DataFormat.TLV8, label: 'TLV8字符串' },
-  //   { value: DataFormat.COMBINATION, label: '组合值' },
-  // ];
-
   // 组件内部维护的值
   _value: string = 'bool';
 
@@ -67,6 +51,7 @@ export class PropertyFormatComponent implements ControlValueAccessor {
   onTouched: () => void = () => {};
 
   constructor(
+    public i18n: MainI18nService
   ) {
   }
 
@@ -87,7 +72,7 @@ export class PropertyFormatComponent implements ControlValueAccessor {
   // 获取当前选中项的显示标签
   get selectedLabel(): string {
     const selected = this.formats.find(item => item.type.name === this._value);
-    return selected ? (selected.description.get('en-US') || selected.type.name) : '未知格式';
+    return selected ? (selected.description.get(this.i18n.getCurrentLang()) || selected.type.name) : 'unknown';
   }
 
   // 选择变化处理

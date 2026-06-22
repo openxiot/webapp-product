@@ -16,7 +16,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {
   Access,
-  DataFormat, LifeCycle,
+  DataFormat, DataFormatFromString, FormatDefinition, LifeCycle,
   PropertyDefinition,
   PropertyType,
   UrnType, ValueDefinition, ValueList,
@@ -82,6 +82,9 @@ export class SpecPropertyEditComponent implements OnInit {
 
   protected readonly ConstraintType = ConstraintType;
 
+  loadingFormats: boolean = false;
+  formats: FormatDefinition[] = [];
+
   loading: boolean = false;
   propertyType: string = '';
   properties: PropertyDefinition[] = [];
@@ -92,7 +95,7 @@ export class SpecPropertyEditComponent implements OnInit {
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
     access: FormControl<Access>,
-    format: FormControl<DataFormat>,
+    format: FormControl<string>,
     constraint: FormControl<ConstraintType>,
     range: FormControl<RangeValue>,
     list: FormControl<ValueItem[]>;
@@ -121,7 +124,7 @@ export class SpecPropertyEditComponent implements OnInit {
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       access: this.fb.control(new Access(), [Validators.required]),
-      format: this.fb.control(DataFormat.STRING, [Validators.required]),
+      format: this.fb.control('string', [Validators.required]),
       constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
       range: this.fb.control(new RangeValue()),
       list: this.fb.control<ValueItem[]>([]),
@@ -138,6 +141,8 @@ export class SpecPropertyEditComponent implements OnInit {
       this.propertyType = params['type'] || '';
       this.load();
     });
+
+    this.loadFormats();
   }
 
   private load(): void {
@@ -149,6 +154,20 @@ export class SpecPropertyEditComponent implements OnInit {
           this.propertyMap = new Map(data.map(item => [item.type.name, item]));
           this.loading = false;
           this.loadPropertyDefinition(this.propertyType);
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
+
+  private loadFormats(): void {
+    this.loadingFormats = true;
+    this.service.getFormatDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.formats = data;
+          this.loadingFormats = false;
         },
         error: error => {
           this.msg.warning(error);
@@ -169,7 +188,7 @@ export class SpecPropertyEditComponent implements OnInit {
           this.form.controls.description.setValue(p.description);
           this.form.controls.lifecycle.setValue(p.lifecycle);
 
-          this.form.controls.format.setValue(p.format);
+          this.form.controls.format.setValue(p.format.toString());
           this.form.controls.access.setValue(p.access);
           this.form.controls.constraint.setValue(this.getConstrainType(p));
           this.constrainable = this.toConstrainable(p.format);
@@ -287,7 +306,7 @@ export class SpecPropertyEditComponent implements OnInit {
 
     const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
     const def: PropertyDefinition = new PropertyDefinition(type, description);
-    def.format = this.form.value.format || DataFormat.STRING;
+    def.format = DataFormatFromString(this.form.value.format || '');
     def.access = this.form.value.access || new Access();
     def.lifecycle = lifecycle;
 

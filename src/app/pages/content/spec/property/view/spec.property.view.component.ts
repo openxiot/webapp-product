@@ -14,7 +14,7 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {Access, DataFormat, LifeCycle, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
+import {Access, DataFormat, FormatDefinition, LifeCycle, PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
@@ -80,6 +80,9 @@ export class SpecPropertyViewComponent implements OnInit {
   properties: PropertyDefinition[] = [];
   propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
+  loadingFormats: boolean = false;
+  formats: FormatDefinition[] = [];
+
   form: FormGroup<{
     uuid: FormControl<number>,
     code: FormControl<string>,
@@ -129,6 +132,8 @@ export class SpecPropertyViewComponent implements OnInit {
       this.propertyType = params['type'] || '';
       this.loadPropertyDefinitions();
     });
+
+    this.loadFormats();
   }
 
   private loadPropertyDefinitions(): void {
@@ -140,6 +145,20 @@ export class SpecPropertyViewComponent implements OnInit {
           this.propertyMap = new Map(data.map(item => [item.type.name, item]));
           this.loading = false;
           this.load(this.propertyType);
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
+
+  private loadFormats(): void {
+    this.loadingFormats = true;
+    this.service.getFormatDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.formats = data;
+          this.loadingFormats = false;
         },
         error: error => {
           this.msg.warning(error);
