@@ -86,7 +86,7 @@ export class ProductDetailComponent implements OnInit {
         this.loading = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProduct', error);
+        this.msg.warning(error);
       }
     });
   }

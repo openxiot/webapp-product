@@ -171,7 +171,7 @@ export class CreatePropertyComponent implements OnInit {
           this.initFormData(this.data);
         },
         error: error => {
-          this.msg.warning('Failed to getSpecProperties: ', error);
+          this.msg.warning(error);
         }
       })
   }

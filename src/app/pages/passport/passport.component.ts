@@ -115,7 +115,7 @@ export class PassportComponent implements OnInit {
         this.loading = false;
       },
       error: error => {
-        this.msg.warning('读取第三份账号平台失败: ' + error.message);
+        this.msg.warning(error);
         this.loading = false;
       }
     });

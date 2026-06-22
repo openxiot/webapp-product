@@ -108,7 +108,7 @@ export class SpecFormatCreateComponent implements OnInit {
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createFormatDefinition', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

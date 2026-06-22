@@ -87,7 +87,7 @@ export class OrganizationCreateComponent implements OnInit {
           this.router.navigate(['/main']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to createOrganization', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

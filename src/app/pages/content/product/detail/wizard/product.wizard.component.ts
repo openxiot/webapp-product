@@ -76,7 +76,7 @@ export class ProductWizardComponent implements OnChanges {
         this.changed = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProductWizard', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -123,7 +123,7 @@ export class ProductWizardComponent implements OnChanges {
           this.changed = false;
         },
         error: error => {
-          this.msg.warning('Failed to updateProductWizard', error);
+          this.msg.warning(error);
           this.loading = false;
           this.loadWizard(this.product.id);
         }
@@ -140,7 +140,7 @@ export class ProductWizardComponent implements OnChanges {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to setProductWizardLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });
@@ -156,7 +156,7 @@ export class ProductWizardComponent implements OnChanges {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to setProductWizardLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

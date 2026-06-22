@@ -10,7 +10,7 @@ import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NamespaceDefinition, Visibility} from '@openxiot/xiot-core-spec-ts';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {AccountService} from '../../../service/account.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
@@ -83,15 +83,9 @@ export class NamespaceComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecNamespaces: ', error);
+          this.msg.warning(error);
         }
       })
-  }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    console.log(params);
-    const { pageSize, pageIndex } = params;
-    this.loadDataFromServer(pageIndex, pageSize);
   }
 
   protected onDelete(ns: NamespaceDefinition) {
@@ -130,7 +124,8 @@ export class NamespaceComponent implements OnInit {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to deleteNamespace: ', error);
+          this.msg.warning(error);
+          this.loading = false;
         }
       })
   }

@@ -192,7 +192,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
           this.onSaved.emit();
         },
         error: error => {
-          this.msg.warning('Failed to updateProduct', error);
+          this.msg.warning(error);
           this.loading = false;
           this.reset();
         }
@@ -213,7 +213,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to setProductLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
           this.reset();
         }
@@ -230,7 +230,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to setProductLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
           this.reset();
         }

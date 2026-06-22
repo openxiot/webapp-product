@@ -99,7 +99,7 @@ export class CreateComponent implements OnInit {
           this.router.navigate(['/main/product']).then(() => {});
         },
         error: error => {
-          this.msg.warning('Failed to updateProduct', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

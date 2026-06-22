@@ -99,7 +99,7 @@ export class ProductInstanceComponent implements OnChanges {
         }
       },
       error: error => {
-        this.msg.warning('Failed to getProductInstances', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -113,7 +113,7 @@ export class ProductInstanceComponent implements OnChanges {
           this.loadingInstance = false;
         },
         error: error => {
-          this.msg.warning('Failed to getProductInstance', error);
+          this.msg.warning(error);
         }
       });
     } else {
@@ -158,7 +158,7 @@ export class ProductInstanceComponent implements OnChanges {
             this.msg.info("更新产品功能：完成！")
           },
           error: error => {
-            this.msg.warning('Failed to updateProductInstance', error);
+            this.msg.warning(error);
             this.loadingInstance = false;
             this.msg.info("更新产品功能：失败!", error)
           }
@@ -185,7 +185,7 @@ export class ProductInstanceComponent implements OnChanges {
               }
             },
             error: error => {
-              this.msg.warning('Failed to setProductInstanceLifecycle', error);
+              this.msg.warning(error);
               this.loadingInstance = false;
               this.loadInstances(this.product.id);
             }
@@ -213,7 +213,7 @@ export class ProductInstanceComponent implements OnChanges {
               }
             },
             error: error => {
-              this.msg.warning('Failed to setProductInstanceLifecycle', error);
+              this.msg.warning(error);
               this.loadingInstance = false;
               this.loadInstances(this.product.id);
             }

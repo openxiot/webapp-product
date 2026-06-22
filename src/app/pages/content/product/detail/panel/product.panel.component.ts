@@ -82,7 +82,7 @@ export class ProductPanelComponent implements OnChanges {
         }
       },
       error: error => {
-        this.msg.warning('Failed to getProductInstances', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -97,7 +97,7 @@ export class ProductPanelComponent implements OnChanges {
         this.loading = false;
       })
       .catch(error => {
-        this.msg.warning('Failed to createDeviceUI', error);
+        this.msg.warning(error);
         this.loading = false;
       })
   }

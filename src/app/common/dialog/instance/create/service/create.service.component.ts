@@ -156,7 +156,7 @@ export class CreateServiceComponent implements OnInit {
           this.initFormData();
         },
         error: error => {
-          this.msg.warning('Failed to getSpecServices: ', error);
+          this.msg.warning(error);
         }
       })
   }
@@ -170,7 +170,7 @@ export class CreateServiceComponent implements OnInit {
           this.loadingProperties = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecProperties: ', error);
+          this.msg.warning(error);
         }
       })
   }
@@ -184,7 +184,7 @@ export class CreateServiceComponent implements OnInit {
           this.loadingActions = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecActions: ', error);
+          this.msg.warning(error);
         }
       })
   }
@@ -199,7 +199,7 @@ export class CreateServiceComponent implements OnInit {
           this.initFormData();
         },
         error: error => {
-          this.msg.warning('Failed to getSpecEvents: ', error);
+          this.msg.warning(error);
         }
       })
   }

@@ -75,7 +75,7 @@ export class OrganizationComponent implements OnInit {
           this.total = this.organizations.length;
         },
         error: error => {
-          this.msg.warning('Failed to getOrganizations: ', error);
+          this.msg.warning(error);
         }
       })
   }

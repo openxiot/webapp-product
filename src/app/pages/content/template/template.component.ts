@@ -88,7 +88,7 @@ export class TemplateComponent implements OnInit {
         this.loading = false;
       },
       error: error => {
-        this.msg.warning('Failed to load products');
+        this.msg.warning(error);
       }
     })
   }

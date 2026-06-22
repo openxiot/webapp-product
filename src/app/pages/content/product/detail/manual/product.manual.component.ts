@@ -76,7 +76,7 @@ export class ProductManualComponent implements OnChanges {
         this.changed = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProductManual', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -123,7 +123,7 @@ export class ProductManualComponent implements OnChanges {
           this.changed = false;
         },
         error: error => {
-          this.msg.warning('Failed to updateProductManual', error);
+          this.msg.warning(error);
           this.loading = false;
           this.loadManual(this.product.id);
         }
@@ -140,7 +140,7 @@ export class ProductManualComponent implements OnChanges {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to setProductManualLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });
@@ -156,7 +156,7 @@ export class ProductManualComponent implements OnChanges {
           this.loading = false;
         },
         error: error => {
-          this.msg.warning('Failed to setProductManualLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

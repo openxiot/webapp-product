@@ -129,7 +129,7 @@ export class SpecFormatComponent implements OnInit, OnChanges {
           this.addable = this.formats.length < 12;
         },
         error: error => {
-          this.msg.warning('Failed to deleteFormatDefinition: ', error);
+          this.msg.warning(error);
         }
       })
   }

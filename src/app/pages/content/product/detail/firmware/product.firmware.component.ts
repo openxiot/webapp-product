@@ -114,7 +114,7 @@ export class ProductFirmwareComponent implements OnChanges {
         this.loadFirmwareInstances(productId, this.currentFirmware);
       },
       error: error => {
-        this.msg.warning('Failed to getProductFirmwares', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -127,7 +127,7 @@ export class ProductFirmwareComponent implements OnChanges {
         this.loadingFirmwareInstances = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProductFirmwareInstances', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -140,7 +140,7 @@ export class ProductFirmwareComponent implements OnChanges {
         this.loadingProductInstances = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProductInstances', error);
+        this.msg.warning(error);
       }
     });
   }
@@ -189,7 +189,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwareInstances(this.product.id, this.currentFirmware);
         },
         error: error => {
-          this.msg.warning('Failed to createProductFirmwareInstance', error);
+          this.msg.warning(error);
           this.loadingFirmwareInstances = false;
         }
       });
@@ -283,7 +283,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwares(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to createProductFirmware', error);
+          this.msg.warning(error);
           this.loadingFirmwares = false;
         }
       });
@@ -299,7 +299,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwares(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to deleteProductFirmware', error);
+          this.msg.warning(error);
           this.loadingFirmwares = false;
         }
       });
@@ -315,7 +315,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwares(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to updateProductFirmware', error);
+          this.msg.warning(error);
           this.loadingFirmwares = false;
         }
       });
@@ -335,7 +335,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwareInstances(this.product.id, this.currentFirmware);
         },
         error: error => {
-          this.msg.warning('Failed to setProductFirmwareInstanceLifecycle', error);
+          this.msg.warning(error);
           this.loadingFirmwareInstances = false;
         }
       });
@@ -351,7 +351,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwareInstances(this.product.id, this.currentFirmware);
         },
         error: error => {
-          this.msg.warning('Failed to setProductFirmwareInstanceLifecycle', error);
+          this.msg.warning(error);
           this.loadingFirmwareInstances = false;
         }
       });
@@ -394,7 +394,7 @@ export class ProductFirmwareComponent implements OnChanges {
           this.loadFirmwareInstances(this.product.id, this.currentFirmware);
         },
         error: error => {
-          this.msg.warning('Failed to deleteProductFirmwareInstance', error);
+          this.msg.warning(error);
           this.loadingFirmwareInstances = false;
         }
       });

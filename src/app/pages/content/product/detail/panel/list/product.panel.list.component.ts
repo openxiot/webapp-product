@@ -80,7 +80,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
         this.loading = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProductPanels', error);
+        this.msg.warning(error);
       }
     })
   }
@@ -104,7 +104,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
           this.loadPanels(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to setProductPanelLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });
@@ -120,7 +120,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
           this.loadPanels(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to setProductPanelLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });
@@ -136,7 +136,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
           this.loadPanels(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to setProductPanelLifecycle', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });
@@ -152,7 +152,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
           this.loadPanels(this.product.id);
         },
         error: error => {
-          this.msg.warning('Failed to deleteProductPanel', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

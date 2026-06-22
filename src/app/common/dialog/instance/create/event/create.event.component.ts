@@ -123,7 +123,7 @@ export class CreateEventComponent implements OnInit {
           this.initFormData();
         },
         error: error => {
-          this.msg.warning('Failed to getSpecServices: ', error);
+          this.msg.warning(error);
         }
       })
   }
@@ -137,7 +137,7 @@ export class CreateEventComponent implements OnInit {
           this.loadingProperties = false;
         },
         error: error => {
-          this.msg.warning('Failed to getSpecProperties: ', error);
+          this.msg.warning(error);
         }
       })
   }

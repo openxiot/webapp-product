@@ -222,7 +222,7 @@ export class SpecPropertyEditComponent implements OnInit {
           setTimeout(() => { this.loading = false;}, 100);
         },
         error: error => {
-          this.msg.warning('Failed to createNamespace', error);
+          this.msg.warning(error);
           this.loading = false;
         }
       });

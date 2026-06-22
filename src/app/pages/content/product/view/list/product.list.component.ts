@@ -152,7 +152,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
         this.loading = false;
       },
       error: error => {
-        this.msg.warning('Failed to getProducts', error);
+        this.msg.warning(error);
       }
     })
   }
