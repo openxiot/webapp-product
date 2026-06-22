@@ -35,7 +35,7 @@
   <div style="padding: 20px 20px">
     @if (account.ns) {
       <div nz-row [nzGutter]="[8, 8]">
-        @if (templates.length > 0) {
+        @if (templatesOriginal.length > 0) {
           <div nz-col [nzSpan]="24">
             <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
           </div>
