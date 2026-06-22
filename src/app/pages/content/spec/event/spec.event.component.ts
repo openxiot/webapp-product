@@ -16,13 +16,13 @@ import {
   PropertyType
 } from '@openxiot/xiot-core-spec-ts';
 import {AccountService} from '../../../../service/account.service';
-import {NzDividerComponent, NzDividerModule} from 'ng-zorro-antd/divider';
+import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {RouterLink} from '@angular/router';
 import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../service/i18n.service';
-import {NzButtonComponent, NzButtonModule} from 'ng-zorro-antd/button';
+import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
@@ -56,8 +56,6 @@ export class SpecEventComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   events: EventDefinition[] = [];
 
@@ -89,7 +87,7 @@ export class SpecEventComponent implements OnInit, OnChanges {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getEventDefinitions(this.namespace)
+    this.service.getEventDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.events = data;
@@ -101,7 +99,7 @@ export class SpecEventComponent implements OnInit, OnChanges {
       })
 
     this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));

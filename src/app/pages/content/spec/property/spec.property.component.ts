@@ -55,8 +55,6 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   properties: PropertyDefinition[] = [];
   propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
@@ -92,7 +90,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getPropertyDefinitions(this.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = data;
@@ -105,7 +103,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
       })
 
     this.loadingFormats = true;
-    this.service.getFormatDefinitions(this.namespace)
+    this.service.getFormatDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.formats = new Map(data.map(item => [item.type.name, item]));
@@ -117,7 +115,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
       })
 
     this.loadingUnits = true;
-    this.service.getUnitDefinitions(this.namespace)
+    this.service.getUnitDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.units = new Map(data.map(item => [item.type.name, item]));

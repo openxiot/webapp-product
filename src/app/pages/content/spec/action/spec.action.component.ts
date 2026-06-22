@@ -53,8 +53,6 @@ export class SpecActionComponent implements OnInit {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   actions: ActionDefinition[] = [];
 
@@ -86,7 +84,7 @@ export class SpecActionComponent implements OnInit {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getActionDefinitions(this.namespace)
+    this.service.getActionDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.actions = data;
@@ -98,7 +96,7 @@ export class SpecActionComponent implements OnInit {
       })
 
     this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));

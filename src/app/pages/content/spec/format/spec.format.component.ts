@@ -47,8 +47,6 @@ export class SpecFormatComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   formats: FormatDefinition[] = [];
 
@@ -79,7 +77,7 @@ export class SpecFormatComponent implements OnInit, OnChanges {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getFormatDefinitions(this.namespace)
+    this.service.getFormatDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.formats = data;

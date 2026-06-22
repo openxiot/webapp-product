@@ -51,8 +51,6 @@ export class SpecUnitComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   units: UnitDefinition[] = [];
 
@@ -80,7 +78,7 @@ export class SpecUnitComponent implements OnInit, OnChanges {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getUnitDefinitions(this.namespace)
+    this.service.getUnitDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.units = data;

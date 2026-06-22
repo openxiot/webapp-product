@@ -37,25 +37,25 @@
   @if (account.ns) {
     @switch (tabIndex) {
       @case (0) {
-        <spec-device [namespace]="account.ns.namespace"></spec-device>
+        <spec-device></spec-device>
       }
       @case (1) {
-        <spec-service [namespace]="account.ns.namespace"></spec-service>
+        <spec-service></spec-service>
       }
       @case (2) {
-        <spec-property [namespace]="account.ns.namespace"></spec-property>
+        <spec-property></spec-property>
       }
       @case (3) {
-        <spec-action [namespace]="account.ns.namespace"></spec-action>
+        <spec-action></spec-action>
       }
       @case (4) {
-        <spec-event [namespace]="account.ns.namespace"></spec-event>
+        <spec-event></spec-event>
       }
       @case (5) {
-        <spec-format [namespace]="account.ns.namespace"></spec-format>
+        <spec-format></spec-format>
       }
       @case (6) {
-        <spec-unit [namespace]="account.ns.namespace"></spec-unit>
+        <spec-unit></spec-unit>
       }
     }
   }

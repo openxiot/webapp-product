@@ -18,7 +18,6 @@ import {SpecUnitComponent} from './unit/spec.unit.component';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzButtonModule} from 'ng-zorro-antd/button';
-import {RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
@@ -49,7 +48,6 @@ import {MainI18nService} from '../../../service/i18n.service';
     SpecUnitComponent,
     NzSpaceModule,
     NzButtonModule,
-    RouterLink,
     TranslatePipe,
     NzIconDirective,
   ],
@@ -60,7 +58,6 @@ import {MainI18nService} from '../../../service/i18n.service';
 export class SpecComponent implements OnInit {
 
   tabIndex: number = 0;
-  language: string = 'zh-CN'
   loading: boolean = false;
 
   constructor(

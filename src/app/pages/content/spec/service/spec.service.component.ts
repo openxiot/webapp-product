@@ -60,8 +60,6 @@ export class SpecServiceComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   services: ServiceDefinition[] = [];
 
@@ -99,7 +97,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
 
   loadDataFromServer(): void {
     this.loading = true;
-    this.service.getServiceDefinitions(this.namespace)
+    this.service.getServiceDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.services = data;
@@ -111,7 +109,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
       });
 
     this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.namespace)
+    this.service.getPropertyDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
@@ -123,7 +121,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
       });
 
     this.loadingActions = true;
-    this.service.getActionDefinitions(this.namespace)
+    this.service.getActionDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.actions = new Map(data.map(item => [item.type.name, item]));
@@ -135,7 +133,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
       });
 
     this.loadingEvents = true;
-    this.service.getEventDefinitions(this.namespace)
+    this.service.getEventDefinitions(this.account.ns.namespace)
       .subscribe({
         next: data => {
           this.events = new Map(data.map(item => [item.type.name, item]));

@@ -3,9 +3,15 @@
   @for (arg of arguments; track arg) {
     <nz-col [nzSpan]="24">
       <nz-row [nzGutter]="[8, 8]">
-        <nz-col [nzSpan]="6" class="argument">
-          <span><nz-tag nzColor="blue">{{ arg.type.name }}</nz-tag></span>
-          <span>{{ getDescription(arg) }}</span>
+        <nz-col [nzSpan]="6">
+          <nz-input-group [nzAddOnBefore]="arg.type.name">
+            <input
+              type="text"
+              nz-input
+              [ngModel]="getDescription(arg)"
+              [disabled]="true"
+            />
+          </nz-input-group>
         </nz-col>
 
         <nz-col [nzSpan]="15">

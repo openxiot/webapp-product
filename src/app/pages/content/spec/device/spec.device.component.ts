@@ -51,8 +51,6 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() namespace!: string;
-
   loading: boolean = true;
   devices: DeviceDefinition[] = [];
 
@@ -80,9 +78,9 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    if (this.namespace) {
+    if (this.account.ns) {
       this.loading = true;
-      this.service.getDeviceDefinitions(this.namespace)
+      this.service.getDeviceDefinitions(this.account.ns.namespace)
         .subscribe({
           next: data => {
             this.devices = data;
