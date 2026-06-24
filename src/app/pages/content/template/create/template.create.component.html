@@ -18,8 +18,8 @@
         </nz-form-item>
 
         <nz-form-item>
-          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">{{ '产品型号' | translate }}</nz-form-label>
-          <nz-form-control [nzSpan]="10">
+          <nz-form-label [nzSpan]="4" nzRequired nzFor="model">{{ '型号' | translate }}</nz-form-label>
+          <nz-form-control [nzSpan]="10" [nzErrorTip]="codeErrorTip">
             <input type="text" nz-input formControlName="model"/>
           </nz-form-control>
         </nz-form-item>
@@ -40,3 +40,13 @@
     </nz-card>
   </div>
 </nz-spin>
+
+
+<ng-template #codeErrorTip>
+  @if (form.get('model')?.errors?.['required']) {
+    <span>{{ '请输入代码' | translate }}</span>
+  }
+  @if (form.get('model')?.errors?.['pattern']) {
+    <span>{{ '代码必须以字母开头，可包含字母、数字、中划线' | translate }}</span>
+  }
+</ng-template>

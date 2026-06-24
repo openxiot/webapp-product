@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {UrnType, DeviceTemplate} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -27,6 +27,11 @@ import {AccountService} from '../../../../service/account.service';
 import {Location} from '@angular/common';
 import {MainI18nService} from '../../../../service/i18n.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {
+  StringValueEditComponent
+} from '../../../../common/dialog/string/string.value.edit.component';
+import {StringValue} from '../../../../common/dialog/string/StringValue';
 
 @Component({
   selector: 'template-detail',
@@ -55,14 +60,13 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzIconModule,
     TranslatePipe,
   ],
-  providers: [],
+  providers: [
+    NzModalService
+  ],
 })
 export class TemplateDetailComponent implements OnInit, OnDestroy {
 
   changed: boolean = false;
-
-  // 语言
-  language: string = 'zh-CN';
 
   // 版本
   version: boolean = false;
@@ -75,6 +79,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   template: DeviceTemplate | undefined = undefined;
 
   constructor(
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
     protected location : Location,
     protected account: AccountService,
     protected i18n: MainI18nService,
@@ -111,6 +117,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
       next: data => {
         this.template = data;
         this.loading = false;
+        this.changed = false;
       },
       error: error => {
         this.msg.warning(error);
@@ -118,7 +125,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     })
   }
 
-  protected readonly UrnType = UrnType;
+  // protected readonly UrnType = UrnType;
 
   // onReload() {
   //   this.load(this.type);
@@ -128,4 +135,55 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   // onRemove(service: Service) {
   //   this.instance?.services.delete(service.iid);
   // }
+
+  protected editTitle() {
+    const modal = this.modal.create<StringValueEditComponent, StringValue, string>({
+      nzTitle: this.i18n.translate.instant('修改模板描述'),
+      nzContent: StringValueEditComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: new StringValue(this.template?.description?.get(this.i18n.getCurrentLang()) || ''),
+      nzFooter: [
+        {
+          label: this.i18n.translate.instant('取消'),
+          onClick: component => component!.cancel()
+        },
+        {
+          label: this.i18n.translate.instant('确认'),
+          danger: true,
+          type: 'primary',
+          disabled: component => ! (component!.changed || false),
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.template?.description.set(this.i18n.getCurrentLang(), result);
+        this.changed = true;
+      }
+    });
+  }
+
+  protected onReload() {
+    this.load(this.type);
+  }
+
+  protected onSave() {
+    if (this.template) {
+      this.loading = true;
+      this.service.updateTemplate(this.template)
+        .subscribe({
+          next: () => {
+            console.log('updateTemplate ok');
+            this.loading = false;
+            this.changed = false;
+          },
+          error: error => {
+            this.msg.warning(error);
+            this.loading = false;
+          }
+        });
+    }
+  }
 }

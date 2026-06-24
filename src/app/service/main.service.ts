@@ -416,6 +416,12 @@ export class MainService {
       .pipe(map(() => undefined));
   }
 
+  updateTemplate(template: DeviceTemplate): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/template/one`, DeviceTemplateCodec.encode(template))
+      .pipe(map(() => undefined));
+  }
+
   /**
    * 读取产品模板列表
    */

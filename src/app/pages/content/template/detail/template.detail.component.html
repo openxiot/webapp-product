@@ -38,6 +38,20 @@
         </nz-descriptions-item>
       </nz-descriptions>
     </nz-page-header-content>
+
+    <nz-page-header-extra>
+      @if (changed) {
+        <nz-space>
+          <div *nzSpaceItem>
+            <button nz-button nzType="primary" (click)="onReload()">{{ '取消' | translate }}</button>
+          </div>
+          <div *nzSpaceItem>
+            <button nz-button nzType="primary" nzDanger (click)="onSave()">{{ '保存' | translate }}</button>
+          </div>
+        </nz-space>
+      }
+    </nz-page-header-extra>
+
   </nz-page-header>
 
   <ng-template #pageTitle>
@@ -48,7 +62,7 @@
 
   <ng-template #pageSubTitle>
     @if (account.isEditable()) {
-      <a>
+      <a (click)="editTitle()">
         <span nz-icon nzType="edit" nzTheme="outline"></span>
       </a>
     }
