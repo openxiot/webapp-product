@@ -5,11 +5,6 @@
 
     <nz-page-header-content>
       <nz-descriptions [nzColumn]="3">
-<!--        <nz-descriptions-item nzTitle="名称" [nzSpan]="1">-->
-<!--          @if (template) {-->
-<!--            <a (click)="onClickType()" target="_blank">{{ template.description.get('zh-CN') }}</a>-->
-<!--          }-->
-<!--        </nz-descriptions-item>-->
         <nz-descriptions-item [nzTitle]="'型号' | translate" [nzSpan]="1">
           @if (template) {
             {{ template.type.model }}
@@ -20,19 +15,6 @@
             {{ template.type.version }}
           }
         </nz-descriptions-item>
-
-        <!--      <nz-descriptions-item nzTitle="语言" [nzSpan]="1">-->
-        <!--        <nz-radio-group [(ngModel)]="language" nzButtonStyle="solid" nzSize="small">-->
-        <!--          <label nz-radio-button nzValue="zh-CN">简体中文</label>-->
-        <!--          <label nz-radio-button nzValue="zh-TW">繁体中文</label>-->
-        <!--          <label nz-radio-button nzValue="en-US">英文</label>-->
-        <!--        </nz-radio-group>-->
-        <!--      </nz-descriptions-item>-->
-
-        <!--      <nz-descriptions-item nzTitle="版本" [nzSpan]="1">-->
-        <!--        <nz-switch [(ngModel)]="version" nzCheckedChildren="显示" nzUnCheckedChildren="隐藏"></nz-switch>-->
-        <!--      </nz-descriptions-item>-->
-
         <nz-descriptions-item [nzTitle]="'浏览模式' | translate" [nzSpan]="1">
           <nz-switch [(ngModel)]="expert" nzCheckedChildren="{{'专家模式'| translate}}" nzUnCheckedChildren="{{'普通模式' | translate }}"></nz-switch>
         </nz-descriptions-item>
@@ -61,7 +43,7 @@
   </ng-template>
 
   <ng-template #pageSubTitle>
-    @if (account.isEditable()) {
+    @if (editable) {
       <a (click)="editTitle()">
         <span nz-icon nzType="edit" nzTheme="outline"></span>
       </a>
@@ -71,8 +53,8 @@
   <div style="padding: 20px 20px">
     @if (template) {
       <template-detail-slider
-        [version]="version"
         [expert]="expert"
+        [editable]="editable"
         [template]="template"
       ></template-detail-slider>
     }

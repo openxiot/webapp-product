@@ -6,7 +6,7 @@ import {TemplateServiceWaterfallComponent} from './service/waterfall/template.se
 import {DeviceTemplate, ObjectWithLifecycle, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DetailServiceGroupComponent} from './group/detail.service.group.component';
+import {TemplateDetailServicesComponent} from './services/template.detail.services.component';
 import {TemplateServiceSplitComponent} from './service/split/template.service.split.component';
 
 @Component({
@@ -19,7 +19,7 @@ import {TemplateServiceSplitComponent} from './service/split/template.service.sp
     NzLayoutModule,
     NzListModule,
     TemplateServiceWaterfallComponent,
-    DetailServiceGroupComponent,
+    TemplateDetailServicesComponent,
     TemplateServiceSplitComponent,
   ],
   providers: [
@@ -30,8 +30,8 @@ export class TemplateDetailSliderComponent implements OnChanges {
 
   @Input() version: boolean = false;
   @Input() expert: boolean = false;
+  @Input() editable: boolean = false;
   @Input() template: DeviceTemplate | undefined = undefined;
-  @Input() language: string = 'zh-CN';
   // @Output() changed = new EventEmitter<ObjectWithLifecycle<DeviceTemplate>>();
   // @Output() removed = new EventEmitter<Service>();
 

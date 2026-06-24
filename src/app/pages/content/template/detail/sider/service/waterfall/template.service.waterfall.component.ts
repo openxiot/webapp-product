@@ -40,6 +40,7 @@ import {TemplateTablePropertiesComponent} from './tables/properties/template.tab
 export class TemplateServiceWaterfallComponent {
 
   @Input() version: boolean = false;
+  @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
   @Input() language: string = 'zh-CN';
   // @Output() changed = new EventEmitter<Service>();

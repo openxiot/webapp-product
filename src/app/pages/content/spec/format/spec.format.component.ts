@@ -16,9 +16,9 @@ import {ConfirmComponent} from '../../../../common/dialog/confirm/confirm.compon
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../service/i18n.service';
 import {NzButtonModule} from 'ng-zorro-antd/button';
-import {FormatSelectorComponent} from '../../../../common/dialog/format/format.selector.component';
+import {FormatsSelectorComponent} from '../../../../common/dialog/definition/select/formats/formats.selector.component';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {FormatsOption} from '../../../../common/dialog/format/FormatsOption';
+import {FormatsOption} from '../../../../common/dialog/definition/select/formats/FormatsOption';
 
 @Component({
   selector: 'spec-format',
@@ -133,10 +133,10 @@ export class SpecFormatComponent implements OnInit, OnChanges {
   }
 
   protected addFormats() {
-    const modal = this.modal.create<FormatSelectorComponent, FormatsOption, FormatDefinition[]>({
+    const modal = this.modal.create<FormatsSelectorComponent, FormatsOption, FormatDefinition[]>({
       nzTitle: this.i18n.translate.instant('添加格式'),
       nzWidth: 800,
-      nzContent: FormatSelectorComponent,
+      nzContent: FormatsSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: new FormatsOption(new Set(this.formats.map(x => x.type.name))),
       nzFooter: [

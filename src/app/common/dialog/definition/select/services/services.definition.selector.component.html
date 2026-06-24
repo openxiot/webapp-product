@@ -1,0 +1,99 @@
+<!--<div style="width: 100%">-->
+<!--  <nz-table-->
+<!--    style="width: 100%"-->
+<!--    #propertyTable-->
+<!--    [nzData]="properties"-->
+<!--    [nzSize]="'small'"-->
+<!--    [nzPageSize]="100"-->
+<!--    [nzHideOnSinglePage]="true"-->
+<!--    [nzBordered]="true"-->
+<!--  >-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--      <th-->
+<!--        [(nzChecked)]="checked"-->
+<!--        [nzIndeterminate]="indeterminate"-->
+<!--        (nzCheckedChange)="onAllChecked($event)"-->
+<!--      ></th>-->
+<!--      <th>{{ '代码' | translate }}</th>-->
+<!--      <th>{{ '描述' | translate }}</th>-->
+<!--      <th>{{ '成员' | translate }}</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--      @for (p of propertyTable.data; track p) {-->
+<!--        <tr>-->
+<!--          <td [nzChecked]="selected.has(p)" (nzCheckedChange)="onItemChecked(p, $event)"></td>-->
+<!--          <td nzAlign="center">-->
+<!--            <nz-tag [nzColor]="'blue'">{{ p.type.name }}</nz-tag>-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            {{ p.description.get(i18n.getCurrentLang()) }}-->
+<!--          </td>-->
+<!--          <td>-->
+<!--            @if (p.format === DataFormat.COMBINATION) {-->
+<!--&lt;!&ndash;              <property-member [property]="p" [language]="data.language"></property-member>&ndash;&gt;-->
+<!--            }-->
+<!--          </td>-->
+<!--        </tr>-->
+<!--      }-->
+<!--    </tbody>-->
+<!--  </nz-table>-->
+<!--</div>-->
+
+<nz-spin [nzSpinning]="loading">
+  <nz-row [nzGutter]="[8, 8]">
+    @for (s of services; track s.type.name) {
+
+      <nz-col [nzSpan]="4" (click)="select(s)">
+        <nz-card nzHoverable nzSize="small">
+          <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+        </nz-card>
+      </nz-col>
+
+      <ng-template #title>
+        <span>
+          <span>
+            {{ s.type.name }}
+          </span>
+
+          @if (selected.has(s.type.name)) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+      </ng-template>
+
+      <ng-template #desc>
+        {{ s.description.get(i18n.getCurrentLang()) }}
+      </ng-template>
+
+<!--      @if (! selected.has(s.type.name)) {-->
+<!--        <nz-col [nzSpan]="8" (click)="select(s)">-->
+<!--          <nz-card nzHoverable>-->
+<!--            <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>-->
+<!--          </nz-card>-->
+<!--        </nz-col>-->
+
+<!--        <ng-template #title>-->
+<!--        <span>-->
+<!--          <span>-->
+<!--            {{ s.type.name }}-->
+<!--          </span>-->
+
+<!--          @if (selected.has(s.type.name)) {-->
+<!--            <span style="float: right">-->
+<!--              <span nz-icon nzType="check" nzTheme="outline"></span>-->
+<!--            </span>-->
+<!--          }-->
+<!--        </span>-->
+<!--        </ng-template>-->
+
+<!--        <ng-template #desc>-->
+<!--          {{ s.description.get(i18n.getCurrentLang()) }}-->
+<!--        </ng-template>-->
+<!--      }-->
+    }
+  </nz-row>
+</nz-spin>

@@ -5,17 +5,15 @@ import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {AccountService} from '../../../service/account.service';
+import {AccountService} from '../../../../../service/account.service';
 import {FormatDefinition, FormatType, LifeCycle, UrnType} from '@openxiot/xiot-core-spec-ts';
-import {MainService} from '../../../service/main.service';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {MainI18nService} from '../../../service/i18n.service';
+import {MainI18nService} from '../../../../../service/i18n.service';
 import {FormatsOption} from './FormatsOption';
 
 @Component({
-  selector: 'app-format-selector',
-  templateUrl: './format.selector.component.html',
-  styleUrls: ['./format.selector.component.less'],
+  selector: 'app-formats-selector',
+  templateUrl: './formats.selector.component.html',
+  styleUrls: ['./formats.selector.component.less'],
   imports: [
     FormsModule,
     NzInputModule,
@@ -27,23 +25,18 @@ import {FormatsOption} from './FormatsOption';
   providers: [],
   standalone: true
 })
-export class FormatSelectorComponent {
+export class FormatsSelectorComponent {
 
   readonly #modal = inject(NzModalRef);
   readonly option: FormatsOption = inject(NZ_MODAL_DATA);
 
-  loading: boolean = false;
-
   formats: FormatDefinition[] = [];
-  formatSelected: Set<string> = new Set();
-
+  selected: Set<string> = new Set();
   disabled: boolean = true;
 
   constructor(
     public account: AccountService,
     public i18n: MainI18nService,
-    private service: MainService,
-    private msg: NzMessageService,
   ) {
   }
 
@@ -313,17 +306,17 @@ export class FormatSelectorComponent {
   }
 
   ok(): void {
-    const list = this.formats.filter(x => this.formatSelected.has(x.type.name));
+    const list = this.formats.filter(x => this.selected.has(x.type.name));
     this.#modal.destroy(list);
   }
 
   protected select(format: FormatDefinition): void {
-    if (this.formatSelected.has(format.type.name)) {
-      this.formatSelected.delete(format.type.name);
+    if (this.selected.has(format.type.name)) {
+      this.selected.delete(format.type.name);
     } else {
-      this.formatSelected.add(format.type.name);
+      this.selected.add(format.type.name);
     }
 
-    this.disabled = this.formatSelected.size == 0;
+    this.disabled = this.selected.size == 0;
   }
 }

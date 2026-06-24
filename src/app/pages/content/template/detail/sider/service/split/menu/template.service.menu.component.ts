@@ -14,9 +14,9 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {CreatePropertyComponent} from '../../../../common/dialog/create/property/create.property.component';
-import {CreateActionComponent} from '../../../../common/dialog/create/action/create.action.component';
-import {CreateEventComponent} from '../../../../common/dialog/create/event/create.event.component';
+import {CreatePropertyComponent} from '../../../../common/dialog/add/property/create.property.component';
+import {CreateActionComponent} from '../../../../common/dialog/add/action/create.action.component';
+import {CreateEventComponent} from '../../../../common/dialog/add/event/create.event.component';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {TranslatePipe} from '@ngx-translate/core';
 

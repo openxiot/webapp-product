@@ -1,15 +1,25 @@
 @if (template) {
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="360px" nzTheme="light">
-      <template-detail-service-group [version]="version" [device]="template" [language]="language" (selected)="onServiceSelected($event)"></template-detail-service-group>
+      <template-detail-services
+        [editable]="editable"
+        [device]="template"
+        (selected)="onServiceSelected($event)"
+      ></template-detail-services>
     </nz-sider>
 
     <nz-content class="inner-content">
       @if (service) {
         @if (expert) {
-          <template-service-waterfall [version]="version" [service]="service" [language]="language"></template-service-waterfall>
+          <template-service-waterfall
+            [editable]="editable"
+            [service]="service"
+          ></template-service-waterfall>
         } @else {
-          <template-service-split [version]="version" [service]="service" [language]="language"></template-service-split>
+          <template-service-split
+            [editable]="editable"
+            [service]="service"
+          ></template-service-split>
         }
       }
     </nz-content>

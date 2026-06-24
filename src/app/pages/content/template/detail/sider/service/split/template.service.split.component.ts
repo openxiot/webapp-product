@@ -51,6 +51,7 @@ import {TemplateCardEventComponent} from './cards/event/template.card.event.comp
 export class TemplateServiceSplitComponent implements OnChanges {
 
   @Input() version: boolean = false;
+  @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
   @Input() language: string = 'zh-CN';
   // @Output() changed = new EventEmitter<Service>();
