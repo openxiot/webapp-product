@@ -18,6 +18,30 @@
         <nz-descriptions-item [nzTitle]="'浏览模式' | translate" [nzSpan]="1">
           <nz-switch [(ngModel)]="expert" nzCheckedChildren="{{'专家模式'| translate}}" nzUnCheckedChildren="{{'普通模式' | translate }}"></nz-switch>
         </nz-descriptions-item>
+
+        <nz-descriptions-item [nzTitle]="'状态' | translate" [nzSpan]="1">
+          @if (template) {
+            @if (editable) {
+              <nz-radio-group nzSize="small" [(ngModel)]="template.lifecycle" nzButtonStyle="solid" (ngModelChange)="onChanged()">
+                <label nz-radio-button [nzValue]="LifeCycle.DEVELOPMENT">{{ '开发中' | translate }}</label>
+                <label nz-radio-button [nzValue]="LifeCycle.PREVIEW">{{ '预览' | translate }}</label>
+                <label nz-radio-button [nzValue]="LifeCycle.RELEASED">{{ '上线' | translate }}</label>
+              </nz-radio-group>
+            } @else {
+              @switch (template.lifecycle) {
+                @case (LifeCycle.DEVELOPMENT) {
+                  <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.PREVIEW) {
+                  <nz-tag nzColor="blue">{{ '预览' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.RELEASED) {
+                  <nz-tag nzColor="green">{{ '上线' | translate }}</nz-tag>
+                }
+              }
+            }
+          }
+        </nz-descriptions-item>
       </nz-descriptions>
     </nz-page-header-content>
 

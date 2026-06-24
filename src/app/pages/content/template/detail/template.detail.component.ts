@@ -66,6 +66,8 @@ import {StringValue} from '../../../../common/dialog/string/StringValue';
 })
 export class TemplateDetailComponent implements OnInit, OnDestroy {
 
+  protected readonly LifeCycle = LifeCycle;
+
   changed: boolean = false;
 
   // 可编辑
@@ -199,5 +201,9 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
           }
         });
     }
+  }
+
+  protected onChanged() {
+    this.changed = true;
   }
 }
