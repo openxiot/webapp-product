@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import {UrnType, DeviceTemplate, LifeCycle} from "@openxiot/xiot-core-spec-ts";
+import {UrnType, DeviceTemplate, LifeCycle, DeviceInstance} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
@@ -108,18 +108,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   }
 
   private isEditable(): boolean {
-    if (this.account.isEditable()) {
-      if (this.template?.lifecycle === LifeCycle.DEVELOPMENT) {
-        return true;
-      }
-    }
-
-    return false;
+    return this.account.isEditable();
   }
-
-  // onChanged(device: DeviceInstance) {
-  //   this.changed = true;
-  // }
 
   onClickType() {
     // if (this.template !== undefined) {

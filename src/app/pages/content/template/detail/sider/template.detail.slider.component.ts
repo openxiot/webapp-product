@@ -1,9 +1,9 @@
-import {Component, Input, OnChanges, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzListModule} from 'ng-zorro-antd/list';
 import {TemplateServiceWaterfallComponent} from './service/waterfall/template.service.waterfall.component';
-import {DeviceTemplate, ObjectWithLifecycle, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
+import {DeviceTemplate, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {TemplateDetailServicesComponent} from './services/template.detail.services.component';
@@ -32,7 +32,7 @@ export class TemplateDetailSliderComponent implements OnChanges {
   @Input() expert: boolean = false;
   @Input() editable: boolean = false;
   @Input() template: DeviceTemplate | undefined = undefined;
-  // @Output() changed = new EventEmitter<ObjectWithLifecycle<DeviceTemplate>>();
+  @Output() changed = new EventEmitter<void>();
   // @Output() removed = new EventEmitter<Service>();
 
   service: ServiceTemplate | undefined = undefined;
@@ -68,4 +68,8 @@ export class TemplateDetailSliderComponent implements OnChanges {
   //   this.service = undefined;
   //   this.removed.emit($event);
   // }
+
+  protected onChanged() {
+    this.changed.emit();
+  }
 }
