@@ -23,9 +23,11 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
-import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
 import {TranslatePipe} from '@ngx-translate/core';
+import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {
+  DescriptionComponent
+} from '../../../../../../../../../common/form/item/common/description/description.component';
 
 @Component({
   selector: 'template-card-service',
@@ -45,8 +47,9 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzButtonModule,
     NzIconModule,
     NzCardModule,
-    EditorNamespaceComponent,
-    TranslatePipe
+    TranslatePipe,
+    CodeComponent,
+    DescriptionComponent
   ],
   providers: [
     NzModalService
@@ -54,20 +57,17 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class TemplateCardServiceComponent implements OnInit {
 
+  @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
   @Input() language!: string;
-  // @Output() removed = new EventEmitter<Service>();
+  @Output() changed = new EventEmitter<void>();
+  @Output() removed = new EventEmitter<void>();
 
   form: FormGroup<{
     iid: FormControl<number>,
-    ns: FormControl<string>,
     code: FormControl<string>,
-    descriptionZHCN: FormControl<string>,
-    descriptionZHTW: FormControl<string>,
-    descriptionENUS: FormControl<string>,
+    description: FormControl<Map<string, string>>,
   }>;
-
-  changed: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -76,28 +76,27 @@ export class TemplateCardServiceComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
-      ns: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
-      descriptionZHCN: this.fb.control('', [Validators.required]),
-      descriptionZHTW: this.fb.control('', [Validators.required]),
-      descriptionENUS: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });
   }
 
   ngOnInit(): void {
     this.form.controls.iid.setValue(this.service.iid);
-    this.form.controls.ns.setValue(this.service.type.ns);
     this.form.controls.code.setValue(this.service.type.name);
-    this.form.controls.descriptionZHCN.setValue(this.service.description.get('zh-CN') || '');
-    this.form.controls.descriptionZHTW.setValue(this.service.description.get('zh-TW') || '');
-    this.form.controls.descriptionENUS.setValue(this.service.description.get('en-US') || '');
+    this.form.controls.description.setValue(this.service.description);
   }
 
   onChanged() {
-    this.changed = true;
+    this.changed.emit()
   }
 
   onRemoved() {
+    this.removed.emit();
+
     // const modal = this.modal.create<ConfirmComponent, string, string>({
     //   nzTitle: '您真的要删除这个功能组吗？',
     //   nzContent: ConfirmComponent,
@@ -125,14 +124,8 @@ export class TemplateCardServiceComponent implements OnInit {
   }
 
   onSubmit() {
-    this.service.iid = this.form.controls.iid.value;
-    this.service.type.name = this.form.controls.code.value;
-    this.service.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
-    this.service.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
-    this.service.description.set('en-US', this.form.controls.descriptionENUS.value);
-
-    // todo: save
-
-    this.changed = false;
+    this.service.iid = this.form.value.iid || 0;
+    this.service.type.name = this.form.value.code || 'null';
+    this.service.description = this.form.value.description || new Map<string, string>();
   }
 }

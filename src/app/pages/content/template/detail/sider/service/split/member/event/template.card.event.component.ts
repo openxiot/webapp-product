@@ -21,7 +21,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {Property, Service, Event, Argument, ServiceTemplate, EventTemplate} from '@openxiot/xiot-core-spec-ts';
+import {
+  Property,
+  Service,
+  Event,
+  Argument,
+  ServiceTemplate,
+  EventTemplate,
+  ActionTemplate
+} from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
@@ -35,9 +43,11 @@ import {MainI18nService} from '../../../../../../../../../service/i18n.service';
 import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
 import {Arg} from '../action/argument/Arg';
 import {EditorServiceActionArgumentComponent} from '../action/argument/editor.service.action.argument.component';
-import {SelectArgumentComponent} from '../../../../../common/dialog/select/argument/select.argument.component';
-import {SelectArgument} from '../../../../../common/dialog/select/argument/SelectArgument';
 import {TranslatePipe} from '@ngx-translate/core';
+import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {
+  DescriptionComponent
+} from '../../../../../../../../../common/form/item/common/description/description.component';
 
 @Component({
   selector: 'template-card-event',
@@ -57,9 +67,10 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzButtonModule,
     NzIconModule,
     NzCardModule,
-    EditorNamespaceComponent,
     EditorServiceActionArgumentComponent,
-    TranslatePipe
+    TranslatePipe,
+    CodeComponent,
+    DescriptionComponent
   ],
   providers: [
     NzModalService
@@ -67,24 +78,22 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class TemplateCardEventComponent implements OnInit, OnChanges {
 
+  @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
   @Input() event!: EventTemplate;
   @Input() language!: string;
-  @Output() removed = new EventEmitter<Event>();
+  @Output() changed = new EventEmitter<void>();
+  @Output() removed = new EventEmitter<EventTemplate>();
 
   form: FormGroup<{
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
-    descriptionZHCN: FormControl<string>,
-    descriptionZHTW: FormControl<string>,
-    descriptionENUS: FormControl<string>,
+    description: FormControl<Map<string, string>>,
     arguments: FormArray<FormGroup<{
       argument: FormControl<Arg>,
     }>>,
   }>;
-
-  changed: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -95,10 +104,11 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
       ns: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
-      descriptionZHCN: this.fb.control('', [Validators.required]),
-      descriptionZHTW: this.fb.control('', [Validators.required]),
-      descriptionENUS: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       arguments: this.fb.array<
         FormGroup<{
           argument: FormControl<Arg>,
@@ -121,9 +131,7 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
     this.form.controls.iid.setValue(this.event.iid);
     this.form.controls.ns.setValue(this.event.type.ns);
     this.form.controls.code.setValue(this.event.type.name);
-    this.form.controls.descriptionZHCN.setValue(this.event.description.get('zh-CN') || '');
-    this.form.controls.descriptionZHTW.setValue(this.event.description.get('zh-TW') || '');
-    this.form.controls.descriptionENUS.setValue(this.event.description.get('en-US') || '');
+    this.form.controls.description.setValue(this.service.description);
 
     this.arguments.clear();
 
@@ -133,8 +141,6 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
         this.addArgument(argument, property);
       }
     }
-
-    this.changed = false;
   }
 
   private addArgument(argument: Argument, property: Property) {
@@ -205,7 +211,7 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
   }
 
   onChanged() {
-    this.changed = true;
+    this.changed.emit();
   }
 
   onRemoved() {
@@ -235,15 +241,13 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
     // });
   }
 
-  onSubmit() {
-    this.event.iid = this.form.controls.iid.value;
-    this.event.type.name = this.form.controls.code.value;
-    this.event.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
-    this.event.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
-    this.event.description.set('en-US', this.form.controls.descriptionENUS.value);
-
-    // todo: save
-
-    this.changed = false;
-  }
+  // onSubmit() {
+  //   this.event.iid = this.form.controls.iid.value;
+  //   this.event.type.name = this.form.controls.code.value;
+  //   this.event.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
+  //   this.event.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
+  //   this.event.description.set('en-US', this.form.controls.descriptionENUS.value);
+  //
+  //   // todo: save
+  // }
 }

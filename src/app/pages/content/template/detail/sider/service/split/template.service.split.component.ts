@@ -54,6 +54,7 @@ export class TemplateServiceSplitComponent implements OnChanges {
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
   @Output() changed = new EventEmitter<void>();
+  @Output() removed = new EventEmitter<ServiceTemplate>();
 
   showServiceDetail: boolean = false;
   property: PropertyTemplate | undefined = undefined;
@@ -83,23 +84,24 @@ export class TemplateServiceSplitComponent implements OnChanges {
   //   this.changed.emit(this.service);
   // }
   //
-  // onPropertyRemoved(property: Property) {
-  //   this.service.properties.delete(property.iid);
-  //   this.changed.emit(this.service);
-  //   this.property = undefined;
-  // }
-  //
-  // onActionRemoved(action: Action) {
-  //   this.service.actions.delete(action.iid);
-  //   this.changed.emit(this.service);
-  //   this.action = undefined;
-  // }
-  //
-  // onEventRemoved(event: Event) {
-  //   this.service.events.delete(event.iid);
-  //   this.changed.emit(this.service);
-  //   this.event = undefined;
-  // }
+
+  onPropertyRemoved(property: PropertyTemplate) {
+    this.service.properties.delete(property.iid);
+    this.changed.emit();
+    this.property = undefined;
+  }
+
+  onActionRemoved(action: ActionTemplate) {
+    this.service.actions.delete(action.iid);
+    this.changed.emit();
+    this.action = undefined;
+  }
+
+  onEventRemoved(event: EventTemplate) {
+    this.service.events.delete(event.iid);
+    this.changed.emit();
+    this.event = undefined;
+  }
 
   onTitleSelected(service: ServiceTemplate) {
     this.showServiceDetail = true;
@@ -131,5 +133,9 @@ export class TemplateServiceSplitComponent implements OnChanges {
 
   protected onChanged() {
     this.changed.emit();
+  }
+
+  protected onRemoved() {
+    this.removed.emit(this.service);
   }
 }

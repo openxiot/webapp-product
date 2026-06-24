@@ -7,12 +7,20 @@
       <span *nzSpaceItem>{{ '属性详情' | translate }}</span>
     </nz-space>
 
-    <span style="float: right">
-      <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()">{{ '删除' | translate }}</button>
-    </span>
+    @if (editable) {
+      <span style="float: right">
+        <span class="selector" (click)="onRemoved()">
+          <span nz-icon nzType="delete" nzTheme="outline"></span>
+        </span>
+      </span>
+    }
+
+<!--    <span style="float: right">-->
+<!--      <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()">{{ '删除' | translate }}</button>-->
+<!--    </span>-->
   </div>
 
-  <form class="content" nz-form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <form class="content" nz-form [formGroup]="form">
     <nz-form-item>
       <nz-form-label [nzSpan]="6" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
@@ -21,37 +29,16 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
-      <nz-form-control [nzSpan]="16">
-        <editor-namespace formControlName="ns"></editor-namespace>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
       <nz-form-label [nzSpan]="6" nzRequired>{{ '代码' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <input nz-input formControlName="code" (ngModelChange)="onChanged()"/>
+        <spec-code formControlName="code" [updatable]="false"></spec-code>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '简体中文描述' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="6" nzRequired>{{ '描述' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <input nz-input formControlName="descriptionZHCN" (ngModelChange)="onChanged()"/>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '繁体中文描述' | translate }}</nz-form-label>
-      <nz-form-control [nzSpan]="16">
-        <input nz-input formControlName="descriptionZHTW" (ngModelChange)="onChanged()"/>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '英文描述' | translate }}</nz-form-label>
-      <nz-form-control [nzSpan]="16">
-        <input nz-input formControlName="descriptionENUS" (ngModelChange)="onChanged()"/>
+        <description formControlName="description" [updatable]="editable"></description>
       </nz-form-control>
     </nz-form-item>
 
@@ -211,11 +198,5 @@
         </nz-form-control>
       </nz-form-item>
     }
-
-    <nz-form-item>
-      <nz-form-control [nzSpan]="16" [nzOffset]="6">
-        <button nz-button nzType="primary" [disabled]="!changed" type="submit">{{ '保存' | translate }}</button>
-      </nz-form-control>
-    </nz-form-item>
   </form>
 </nz-card>

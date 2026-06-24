@@ -21,7 +21,15 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {Action, ActionTemplate, Argument, Property, Service, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
+import {
+  Action,
+  ActionTemplate,
+  Argument,
+  Property,
+  PropertyTemplate,
+  Service,
+  ServiceTemplate
+} from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
@@ -36,6 +44,10 @@ import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.c
 import {Arg} from './argument/Arg';
 import {EditorServiceActionArgumentComponent} from './argument/editor.service.action.argument.component';
 import {TranslatePipe} from '@ngx-translate/core';
+import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {
+  DescriptionComponent
+} from '../../../../../../../../../common/form/item/common/description/description.component';
 
 @Component({
   selector: 'template-card-action',
@@ -57,7 +69,9 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzCardModule,
     EditorNamespaceComponent,
     EditorServiceActionArgumentComponent,
-    TranslatePipe
+    TranslatePipe,
+    CodeComponent,
+    DescriptionComponent
   ],
   providers: [
     NzModalService
@@ -65,17 +79,17 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class TemplateCardActionComponent implements OnInit, OnChanges {
 
+  @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
   @Input() action!: ActionTemplate;
-  @Input() language!: string;
+  @Output() changed = new EventEmitter<void>();
+  @Output() removed = new EventEmitter<ActionTemplate>();
 
   form: FormGroup<{
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
-    descriptionZHCN: FormControl<string>,
-    descriptionZHTW: FormControl<string>,
-    descriptionENUS: FormControl<string>,
+    description: FormControl<Map<string, string>>,
     argumentIn: FormArray<FormGroup<{
       argument: FormControl<Arg>,
     }>>,
@@ -83,8 +97,6 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
       argument: FormControl<Arg>,
     }>>,
   }>;
-
-  changed: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -95,10 +107,11 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
       ns: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
-      descriptionZHCN: this.fb.control('', [Validators.required]),
-      descriptionZHTW: this.fb.control('', [Validators.required]),
-      descriptionENUS: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       argumentIn: this.fb.array<
         FormGroup<{
           argument: FormControl<Arg>,
@@ -126,9 +139,7 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
     this.form.controls.iid.setValue(this.action.iid);
     this.form.controls.ns.setValue(this.action.type.ns);
     this.form.controls.code.setValue(this.action.type.name);
-    this.form.controls.descriptionZHCN.setValue(this.action.description.get('zh-CN') || '');
-    this.form.controls.descriptionZHTW.setValue(this.action.description.get('zh-TW') || '');
-    this.form.controls.descriptionENUS.setValue(this.action.description.get('en-US') || '');
+    this.form.controls.description.setValue(this.service.description);
 
     this.argumentIn.clear();
 
@@ -147,8 +158,6 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
         this.addArgumentOut(argument, property);
       }
     }
-
-    this.changed = false;
   }
 
   private addArgumentIn(argument: Argument, property: Property) {
@@ -177,7 +186,7 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
     argument: FormControl<Arg>,
   }> {
     return this.fb.group({
-      argument: new Arg(argument, property, this.language)
+      argument: new Arg(argument, property, 'zh-CN')
     });
   }
 
@@ -280,7 +289,7 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
   }
 
   onChanged() {
-    this.changed = true;
+    this.changed.emit();
   }
 
   onRemoved() {
@@ -310,15 +319,13 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
     // });
   }
 
-  onSubmit() {
-    this.action.iid = this.form.controls.iid.value;
-    this.action.type.name = this.form.controls.code.value;
-    this.action.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
-    this.action.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
-    this.action.description.set('en-US', this.form.controls.descriptionENUS.value);
-
-    // todo: save
-
-    this.changed = false;
-  }
+  // onSubmit() {
+  //   this.action.iid = this.form.controls.iid.value;
+  //   this.action.type.name = this.form.controls.code.value;
+  //   this.action.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
+  //   this.action.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
+  //   this.action.description.set('en-US', this.form.controls.descriptionENUS.value);
+  //
+  //   // todo: save
+  // }
 }

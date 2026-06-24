@@ -45,6 +45,7 @@ interface LangDesc {
 })
 export class DescriptionComponent implements ControlValueAccessor {
 
+  @Input() multiple = false;
   @Input() updatable = true;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
@@ -144,7 +145,9 @@ export class DescriptionComponent implements ControlValueAccessor {
     });
 
     modal.afterClose.subscribe((selectedLangArray: LangOption[]) => {
-      if (!selectedLangArray || selectedLangArray.length === 0) return;
+      if (!selectedLangArray || selectedLangArray.length === 0) {
+        return;
+      }
 
       selectedLangArray.forEach(langItem => {
         const exist = this.langList.some(item => item.lang === langItem.lang);
@@ -181,12 +184,25 @@ export class DescriptionComponent implements ControlValueAccessor {
     return '?';
   }
 
-  protected getCurrentLangValue(): string {
+  protected get CurrentLangValue(): string {
     const found = this.langList.find(x => x.lang === this.i18n.getCurrentLang());
     if (found) {
       return found.value;
     }
 
     return '';
+  }
+
+  protected set CurrentLangValue(value: string) {
+    const exist = this.langList.some(item => item.lang === this.i18n.getCurrentLang());
+    if (!exist) {
+      this.langList.push({
+        lang: this.i18n.getCurrentLang(),
+        label: this.i18n.getCurrentLang(),
+        value: value
+      });
+    }
+
+    this.emitChange();
   }
 }

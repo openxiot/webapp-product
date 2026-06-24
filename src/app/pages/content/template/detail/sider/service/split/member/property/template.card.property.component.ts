@@ -28,7 +28,7 @@ import {
   ValueRange,
   ValueList,
   ValueDefinition,
-  ServiceTemplate
+  ServiceTemplate, PropertyTemplate
 } from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -42,6 +42,10 @@ import {EditorServicePropertyMemberComponent} from './member/editor.service.prop
 import {Member} from './member/Member';
 import {EditorNamespaceComponent} from './namespace/editor.namespace.component';
 import {TranslatePipe} from '@ngx-translate/core';
+import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {
+  DescriptionComponent
+} from '../../../../../../../../../common/form/item/common/description/description.component';
 
 @Component({
   selector: 'template-card-property',
@@ -63,7 +67,9 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzCardModule,
     EditorServicePropertyMemberComponent,
     EditorNamespaceComponent,
-    TranslatePipe
+    TranslatePipe,
+    CodeComponent,
+    DescriptionComponent
   ],
   providers: [
     NzModalService
@@ -71,18 +77,17 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class TemplateCardPropertyComponent implements OnInit, OnChanges {
 
+  @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
-  @Input() property!: Property;
-  @Input() language!: string;
-  // @Output() removed = new EventEmitter<Property>();
+  @Input() property!: PropertyTemplate;
+  @Output() changed = new EventEmitter<void>();
+  @Output() removed = new EventEmitter<PropertyTemplate>();
 
   form: FormGroup<{
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
-    descriptionZHCN: FormControl<string>,
-    descriptionZHTW: FormControl<string>,
-    descriptionENUS: FormControl<string>,
+    description: FormControl<Map<string, string>>,
     format: FormControl<string>,
     access: FormGroup<{
       isReadable: FormControl<boolean>,
@@ -124,7 +129,6 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
   combinationValue: boolean = false;
   constrainable: boolean = false;
   constraintType: string = 'none';
-  changed: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -134,10 +138,11 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
       ns: this.fb.control('', [Validators.required]),
-      code: this.fb.control('', [Validators.required]),
-      descriptionZHCN: this.fb.control('', [Validators.required]),
-      descriptionZHTW: this.fb.control('', [Validators.required]),
-      descriptionENUS: this.fb.control('', [Validators.required]),
+      code: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+      ]),
+      description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       format: this.fb.control('string', [Validators.required]),
       access: this.fb.group({isReadable: [false], isWritable: [false], isNotifiable: [false]}),
       constraint: this.fb.control('none', [Validators.required]),
@@ -171,10 +176,7 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     this.form.controls.iid.setValue(this.property.iid);
     this.form.controls.ns.setValue(this.property.type.ns);
     this.form.controls.code.setValue(this.property.type.name);
-    this.form.controls.descriptionZHCN.setValue(this.property.description.get('zh-CN') || '');
-    this.form.controls.descriptionZHTW.setValue(this.property.description.get('zh-TW') || '');
-    this.form.controls.descriptionENUS.setValue(this.property.description.get('en-US') || '');
-    this.form.controls.descriptionENUS.setValue(this.property.description.get('en-US') || '');
+    this.form.controls.description.setValue(this.service.description);
     this.form.controls.format.setValue(this.property.format);
     this.form.controls.access.controls.isReadable.setValue(this.property.access.isReadable);
     this.form.controls.access.controls.isWritable.setValue(this.property.access.isWritable);
@@ -221,8 +223,6 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     }
 
     console.log('init combinationValue ok');
-
-    this.changed = false;
   }
 
   get list(): FormArray<FormGroup<{
@@ -239,7 +239,7 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
   }
 
   onChanged() {
-    this.changed = true;
+    this.changed.emit();
   }
 
   onFormatChanged() {
@@ -357,7 +357,7 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     member: FormControl<Member>,
   }> {
     return this.fb.group({
-      member: new Member(property, this.language)
+      member: new Member(property, 'zh-CN')
     });
   }
 
@@ -393,50 +393,48 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     // });
   }
 
-  onSubmit() {
-    console.log('onSubmit');
-
-    this.property.iid = this.form.controls.iid.value;
-    this.property.type.name = this.form.controls.code.value;
-    this.property.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
-    this.property.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
-    this.property.description.set('en-US', this.form.controls.descriptionENUS.value);
-
-    if (this.combinationValue) {
-      this.property.members = [];
-
-      for (let item of this.form.controls.members.value) {
-        if (item.member) {
-          this.property.members.push(item.member.property.iid);
-        }
-      }
-    }
-
-    switch (this.constraintType) {
-      case 'none':
-        break;
-
-      case 'range':
-        const range = [this.form.controls.range.value.min, this.form.controls.range.value.max, this.form.controls.range.value.step];
-        this.property.constraintValue = new ValueRange(this.property.format, range);
-        break;
-
-      case 'list':
-        const list = new ValueList();
-
-        for (let item of this.form.controls.list.value) {
-          const description = new Map<string, string>();
-          description.set('zh-CN', item.description || 'null');
-          const value = new ValueDefinition(this.property.format, item.value || 0, description);
-          list.values.push(value);
-        }
-
-        this.property.constraintValue = list;
-        break;
-    }
-
-    // todo: save
-
-    this.changed = false;
-  }
+  // onSubmit() {
+  //   console.log('onSubmit');
+  //
+  //   this.property.iid = this.form.controls.iid.value;
+  //   this.property.type.name = this.form.controls.code.value;
+  //   this.property.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
+  //   this.property.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
+  //   this.property.description.set('en-US', this.form.controls.descriptionENUS.value);
+  //
+  //   if (this.combinationValue) {
+  //     this.property.members = [];
+  //
+  //     for (let item of this.form.controls.members.value) {
+  //       if (item.member) {
+  //         this.property.members.push(item.member.property.iid);
+  //       }
+  //     }
+  //   }
+  //
+  //   switch (this.constraintType) {
+  //     case 'none':
+  //       break;
+  //
+  //     case 'range':
+  //       const range = [this.form.controls.range.value.min, this.form.controls.range.value.max, this.form.controls.range.value.step];
+  //       this.property.constraintValue = new ValueRange(this.property.format, range);
+  //       break;
+  //
+  //     case 'list':
+  //       const list = new ValueList();
+  //
+  //       for (let item of this.form.controls.list.value) {
+  //         const description = new Map<string, string>();
+  //         description.set('zh-CN', item.description || 'null');
+  //         const value = new ValueDefinition(this.property.format, item.value || 0, description);
+  //         list.values.push(value);
+  //       }
+  //
+  //       this.property.constraintValue = list;
+  //       break;
+  //   }
+  //
+  //   // todo: save
+  // }
 }
