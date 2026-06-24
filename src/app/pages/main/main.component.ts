@@ -16,6 +16,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../service/i18n.service';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {LanguageChangeComponent} from '../../common/dialog/language/change/language.change.component';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-main',
@@ -43,6 +44,7 @@ import {LanguageChangeComponent} from '../../common/dialog/language/change/langu
 })
 export class MainComponent implements OnInit {
 
+  docs: string = environment.docs;
   version: string = pkg.version;
 
   constructor(
@@ -71,5 +73,9 @@ export class MainComponent implements OnInit {
       nzMaskClosable: true,
       nzKeyboard: true
     });
+  }
+
+  protected goToDocs() {
+    window.open(this.docs, '_blank');
   }
 }

@@ -3,4 +3,5 @@ export const environment = {
   server: 'http://localhost:8080',
   account: 'http://localhost:8081',
   storage: 'http://localhost:8082',
+  docs: 'https://openxiot.cn',
 };
