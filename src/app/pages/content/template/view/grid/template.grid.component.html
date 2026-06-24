@@ -6,9 +6,29 @@
         routerLink="/main/template/detail/{{t.type.toString()}}"
       >
         <nz-card-meta
-          nzTitle="{{ t.description.get(i18n.getCurrentLang()) }}"
+          [nzTitle]="title"
           [nzDescription]="t.type.model"
         ></nz-card-meta>
+
+        <ng-template #title>
+          <span>
+            {{ t.description.get(i18n.getCurrentLang()) }}
+          </span>
+
+          <span style="float: right">
+              @switch (t.lifecycle) {
+                @case (LifeCycle.RELEASED) {
+<!--                  <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>-->
+                }
+                @case (LifeCycle.PREVIEW) {
+                  <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
+                }
+                @case (LifeCycle.DEVELOPMENT) {
+                  <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+                }
+              }
+          </span>
+        </ng-template>
       </nz-card>
     </div>
   }

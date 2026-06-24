@@ -136,4 +136,17 @@ export class TemplateComponent implements OnInit {
       }
     });
   }
+
+  protected onRemove(type: string) {
+    this.loading = true;
+    this.service.removeTemplate(type).subscribe({
+      next: data => {
+        this.loadTemplates()
+        this.loading = false;
+      },
+      error: error => {
+        this.msg.warning(error);
+      }
+    })
+  }
 }

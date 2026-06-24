@@ -47,7 +47,7 @@
               <template-grid [templates]="templates"></template-grid>
             }
             @case (1) {
-              <template-list [templates]="templates"></template-list>
+              <template-list [templates]="templates" (removed)="onRemove($event)"></template-list>
             }
           }
         </div>

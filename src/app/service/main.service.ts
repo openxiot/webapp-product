@@ -416,6 +416,12 @@ export class MainService {
       .pipe(map(() => undefined));
   }
 
+  removeTemplate(type: string): Observable<void> {
+    return this.http
+      .delete<OxResponse>(`${this.server}/v1/template/one/${type}`)
+      .pipe(map(() => undefined));
+  }
+
   updateTemplate(template: DeviceTemplate): Observable<void> {
     return this.http
       .put<OxResponse>(`${this.server}/v1/template/one`, DeviceTemplateCodec.encode(template))

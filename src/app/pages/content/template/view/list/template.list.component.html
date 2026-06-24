@@ -11,17 +11,38 @@
       <th>{{ '名称' | translate }}</th>
       <th>{{ '型号' | translate }}</th>
       <th>{{ '版本' | translate }}</th>
+      <th>{{ '状态' | translate }}</th>
       <th>{{ '操作' | translate }}</th>
     </tr>
   </thead>
   <tbody>
-    @for (p of table.data; track p.type.toString()) {
+    @for (t of table.data; track t.type.toString()) {
       <tr>
-        <td>{{ p.description.get(i18n.getCurrentLang()) }}</td>
-        <td>{{ p.type.model }}</td>
-        <td>{{ p.type.version }}</td>
+        <td>{{ t.description.get(i18n.getCurrentLang()) }}</td>
+        <td>{{ t.type.model }}</td>
+        <td>{{ t.type.version }}</td>
         <td>
-          <a routerLink="/main/template/detail/{{p.type.toString()}}">{{ '详情' | translate }}</a>
+          @switch (t.lifecycle) {
+            @case (LifeCycle.RELEASED) {
+              <nz-tag nzColor="blue">{{ '已发布' | translate }}</nz-tag>
+            }
+            @case (LifeCycle.PREVIEW) {
+              <nz-tag nzColor="yellow">{{ '预览' | translate }}</nz-tag>
+            }
+            @case (LifeCycle.DEVELOPMENT) {
+              <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
+            }
+          }
+        </td>
+        <td>
+          <a [routerLink]="['/main/template/detail', t.type.toString()]">{{ '查看' | translate }}</a>
+
+          @if (account.isEditable()) {
+            @if (t.lifecycle === LifeCycle.DEVELOPMENT) {
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onDelete(t)">{{ '删除' | translate }}</a>
+            }
+          }
         </td>
       </tr>
     }
