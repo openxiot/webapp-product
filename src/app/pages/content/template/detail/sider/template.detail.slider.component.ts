@@ -8,6 +8,8 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {TemplateDetailServicesComponent} from './services/template.detail.services.component';
 import {TemplateServiceSplitComponent} from './service/split/template.service.split.component';
+import {NzCardModule} from 'ng-zorro-antd/card';
+import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'template-detail-slider',
@@ -18,9 +20,12 @@ import {TemplateServiceSplitComponent} from './service/split/template.service.sp
     NzMenuModule,
     NzLayoutModule,
     NzListModule,
+    NzCardModule,
     TemplateServiceWaterfallComponent,
     TemplateDetailServicesComponent,
     TemplateServiceSplitComponent,
+    NzRowDirective,
+    NzColDirective,
   ],
   providers: [
     NzModalService

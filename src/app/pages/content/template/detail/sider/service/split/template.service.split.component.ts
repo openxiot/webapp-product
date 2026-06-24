@@ -17,11 +17,11 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
-import {TemplateServiceMenuComponent} from './menu/template.service.menu.component';
-import {TemplateCardPropertyComponent} from './cards/property/template.card.property.component';
-import {TemplateCardServiceComponent} from './cards/service/template.card.service.component';
-import {TemplateCardActionComponent} from './cards/action/template.card.action.component';
-import {TemplateCardEventComponent} from './cards/event/template.card.event.component';
+import {TemplateServiceCardComponent} from './card/template.service.card.component';
+import {TemplateCardPropertyComponent} from './member/property/template.card.property.component';
+import {TemplateCardServiceComponent} from './member/service/template.card.service.component';
+import {TemplateCardActionComponent} from './member/action/template.card.action.component';
+import {TemplateCardEventComponent} from './member/event/template.card.event.component';
 
 @Component({
   selector: 'template-service-split',
@@ -38,7 +38,7 @@ import {TemplateCardEventComponent} from './cards/event/template.card.event.comp
     NzContentComponent,
     NzLayoutComponent,
     NzSiderComponent,
-    TemplateServiceMenuComponent,
+    TemplateServiceCardComponent,
     TemplateCardPropertyComponent,
     TemplateCardServiceComponent,
     TemplateCardActionComponent,
@@ -50,10 +50,9 @@ import {TemplateCardEventComponent} from './cards/event/template.card.event.comp
 })
 export class TemplateServiceSplitComponent implements OnChanges {
 
-  @Input() version: boolean = false;
+  @Input() showVersion: boolean = false;
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
-  @Input() language: string = 'zh-CN';
   // @Output() changed = new EventEmitter<Service>();
   // @Output() removed = new EventEmitter<Service>();
 

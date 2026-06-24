@@ -1,14 +1,13 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {ServicesOption} from './ServicesOption';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
-import {ServiceDefinition} from '@openxiot/xiot-core-spec-ts';
+import {PropertyDefinition} from '@openxiot/xiot-core-spec-ts';
 import {MainI18nService} from '../../../../../service/i18n.service';
 import {NzCardComponent, NzCardMetaComponent} from 'ng-zorro-antd/card';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
@@ -16,11 +15,12 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {MainService} from '../../../../../service/main.service';
 import {AccountService} from '../../../../../service/account.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
+import {PropertiesOption} from './PropertiesOption';
 
 @Component({
-  selector: 'services-definition-selector',
-  styleUrls: ['./services.definition.selector.component.less'],
-  templateUrl: './services.definition.selector.component.html',
+  selector: 'properties-definition-selector',
+  styleUrls: ['./properties.definition.selector.component.less'],
+  templateUrl: './properties.definition.selector.component.html',
   standalone: true,
   imports: [
     FormsModule,
@@ -38,13 +38,13 @@ import {NzMessageService} from 'ng-zorro-antd/message';
   ],
   providers: [],
 })
-export class ServicesDefinitionSelectorComponent implements OnInit {
+export class PropertiesDefinitionSelectorComponent implements OnInit {
 
   readonly #modal = inject(NzModalRef);
-  readonly option: ServicesOption = inject(NZ_MODAL_DATA);
+  readonly option: PropertiesOption = inject(NZ_MODAL_DATA);
 
   loading: boolean = false;
-  services: ServiceDefinition[] = [];
+  properties: PropertyDefinition[] = [];
   selected: Set<string> = new Set<string>();
   disabled: boolean = true;
 
@@ -57,8 +57,8 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.option.services.length > 0) {
-      this.services = this.option.services
+    if (this.option.properties.length > 0) {
+      this.properties = this.option.properties
         .filter(x => ! this.option.exclusion.has(x.type.name));
     } else {
       this.loadDefinitions();
@@ -67,9 +67,9 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
 
   private loadDefinitions(): void {
     this.loading = true;
-    this.main.getServiceDefinitions(this.account.ns.namespace).subscribe({
+    this.main.getPropertyDefinitions(this.account.ns.namespace).subscribe({
         next: data => {
-          this.services = data.filter(x => ! this.option.exclusion.has(x.type.name));
+          this.properties = data.filter(x => ! this.option.exclusion.has(x.type.name));
           this.loading = false;
         },
         error: error => {
@@ -83,11 +83,11 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
   }
 
   ok(): void {
-    const list = this.services.filter(x => this.selected.has(x.type.name));
+    const list = this.properties.filter(x => this.selected.has(x.type.name));
     this.#modal.destroy(list);
   }
 
-  protected select(s: ServiceDefinition) {
+  protected select(s: PropertyDefinition) {
     if (this.selected.has(s.type.name)) {
       this.selected.delete(s.type.name);
     } else {

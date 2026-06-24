@@ -11,6 +11,12 @@
 
     <nz-content class="inner-content">
       @if (service) {
+<!--        <nz-card nzTitle="这是一个服务卡片" [nzBodyStyle]="{ padding: 4 }">-->
+<!--          <template-service-split-->
+<!--            [editable]="editable"-->
+<!--            [service]="service"-->
+<!--          ></template-service-split>-->
+<!--        </nz-card>-->
         @if (expert) {
           <template-service-waterfall
             [editable]="editable"
@@ -26,3 +32,34 @@
     </nz-content>
   </nz-layout>
 }
+
+<!--@if (template) {-->
+<!--  <nz-row [nzGutter]="[8, 8]">-->
+<!--    <nz-col [nzSpan]="5">-->
+<!--      <template-detail-services-->
+<!--        [editable]="editable"-->
+<!--        [device]="template"-->
+<!--        (selected)="onServiceSelected($event)"-->
+<!--        (changed)="onChanged()"-->
+<!--      ></template-detail-services>-->
+<!--    </nz-col>-->
+
+<!--    @if (service) {-->
+<!--      @if (expert) {-->
+<!--        <nz-col [nzSpan]="19">-->
+<!--          <template-service-waterfall-->
+<!--            [editable]="editable"-->
+<!--            [service]="service"-->
+<!--          ></template-service-waterfall>-->
+<!--        </nz-col>-->
+<!--      } @else {-->
+<!--        <nz-col [nzSpan]="19">-->
+<!--          <template-service-split-->
+<!--            [editable]="editable"-->
+<!--            [service]="service"-->
+<!--          ></template-service-split>-->
+<!--        </nz-col>-->
+<!--      }-->
+<!--    }-->
+<!--  </nz-row>-->
+<!--}-->

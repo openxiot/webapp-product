@@ -1,22 +1,21 @@
 @if (service) {
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="360px" nzTheme="light">
-      <template-service-menu
-        [version]="version"
+      <template-service-card
+        [showVersion]="showVersion"
+        [editable]="editable"
         [service]="service"
-        [language]="language"
         (titleSelected)="onTitleSelected($event)"
         (propertySelected)="onPropertySelected($event)"
         (actionSelected)="onActionSelected($event)"
         (eventSelected)="onEventSelected($event)"
-      ></template-service-menu>
+      ></template-service-card>
     </nz-sider>
 
     <nz-content class="inner-content">
       @if (showServiceDetail) {
         <template-card-service
           [service]="service"
-          [language]="language"
         ></template-card-service>
       }
 
@@ -24,7 +23,6 @@
         <template-card-property
           [service]="service"
           [property]="property"
-          [language]="language"
         ></template-card-property>
       }
 
@@ -32,7 +30,6 @@
         <template-card-action
           [service]="service"
           [action]="action"
-          [language]="language"
         ></template-card-action>
       }
 
@@ -40,7 +37,6 @@
         <template-card-event
           [service]="service"
           [event]="event"
-          [language]="language"
         ></template-card-event>
       }
     </nz-content>
