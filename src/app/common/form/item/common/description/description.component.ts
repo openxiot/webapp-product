@@ -164,9 +164,29 @@ export class DescriptionComponent implements ControlValueAccessor {
   // 删除语言（en-US 不可删）
   removeLang(index: number) {
     const item = this.langList[index];
-    if (item.lang === 'en-US') return;
+    if (item.lang === 'en-US') {
+      return;
+    }
 
     this.langList.splice(index, 1);
     this.emitChange();
+  }
+
+  protected getCurrentLangLabel(): string {
+    const found = this.langList.find(x => x.lang === this.i18n.getCurrentLang());
+    if (found) {
+      return found.label;
+    }
+
+    return '?';
+  }
+
+  protected getCurrentLangValue(): string {
+    const found = this.langList.find(x => x.lang === this.i18n.getCurrentLang());
+    if (found) {
+      return found.value;
+    }
+
+    return '';
   }
 }

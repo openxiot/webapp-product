@@ -11,23 +11,11 @@
 
     <nz-content class="inner-content">
       @if (service) {
-<!--        <nz-card nzTitle="这是一个服务卡片" [nzBodyStyle]="{ padding: 4 }">-->
-<!--          <template-service-split-->
-<!--            [editable]="editable"-->
-<!--            [service]="service"-->
-<!--          ></template-service-split>-->
-<!--        </nz-card>-->
-        @if (expert) {
-          <template-service-waterfall
-            [editable]="editable"
-            [service]="service"
-          ></template-service-waterfall>
-        } @else {
-          <template-service-split
-            [editable]="editable"
-            [service]="service"
-          ></template-service-split>
-        }
+        <template-service-split
+          [editable]="editable"
+          [service]="service"
+          (changed)="onChanged()"
+        ></template-service-split>
       }
     </nz-content>
   </nz-layout>

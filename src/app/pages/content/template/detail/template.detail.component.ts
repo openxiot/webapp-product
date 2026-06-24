@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import {UrnType, DeviceTemplate, LifeCycle, DeviceInstance} from "@openxiot/xiot-core-spec-ts";
+import {DeviceTemplate, LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
@@ -76,9 +76,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   // 版本
   version: boolean = false;
 
-  // 专家模式
-  expert: boolean = false;
-
   loading: boolean = true;
   type: string = '';
   template: DeviceTemplate | undefined = undefined;
@@ -111,19 +108,15 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     return this.account.isEditable();
   }
 
-  onClickType() {
-    // if (this.template !== undefined) {
-    //   window.open(this.product.getInstanceUrl(this.instance.type), '_blank');
-    // }
-  }
-
   private load(type: string): void {
+    this.loading = true;
+    this.template = undefined;
     this.service.getTemplate(type).subscribe({
       next: data => {
         this.template = data;
-        this.loading = false;
         this.editable = this.isEditable();
         this.changed = false;
+        this.loading = false;
       },
       error: error => {
         this.msg.warning(error);

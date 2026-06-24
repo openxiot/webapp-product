@@ -8,10 +8,12 @@ import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
-import {PropertyMemberComponent} from '../../../../sider/service/waterfall/tables/properties/member/property-member.component';
-import {Property, PropertyTemplate} from '@openxiot/xiot-core-spec-ts';
+import {PropertyTemplate} from '@openxiot/xiot-core-spec-ts';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {TranslatePipe} from '@ngx-translate/core';
+import {
+  PropertyMemberComponent
+} from '../../../../sider/service/waterfall/tables/properties/member/property-member.component';
 
 @Component({
   selector: 'select-argument',
@@ -29,8 +31,8 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzCellAlignDirective,
     NzTableModule,
     NzRadioModule,
-    PropertyMemberComponent,
     TranslatePipe,
+    PropertyMemberComponent,
   ],
   providers: [],
 })

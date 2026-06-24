@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {
   Action,
   ActionTemplate,
@@ -53,8 +53,7 @@ export class TemplateServiceSplitComponent implements OnChanges {
   @Input() showVersion: boolean = false;
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
-  // @Output() changed = new EventEmitter<Service>();
-  // @Output() removed = new EventEmitter<Service>();
+  @Output() changed = new EventEmitter<void>();
 
   showServiceDetail: boolean = false;
   property: PropertyTemplate | undefined = undefined;
@@ -128,5 +127,9 @@ export class TemplateServiceSplitComponent implements OnChanges {
     this.property = undefined;
     this.action = undefined;
     this.event = event;
+  }
+
+  protected onChanged() {
+    this.changed.emit();
   }
 }

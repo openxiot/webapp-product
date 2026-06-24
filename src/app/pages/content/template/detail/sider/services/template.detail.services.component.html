@@ -9,10 +9,10 @@
 
         @if (editable) {
           <span style="float: right">
-          <div class="selector" (click)="onAddService()">
-            <span nz-icon nzType="plus" nzTheme="outline"></span>
-          </div>
-        </span>
+            <div class="selector" (click)="onAddService()">
+              <span nz-icon nzType="plus" nzTheme="outline"></span>
+            </div>
+          </span>
         }
       </div>
 
@@ -21,9 +21,18 @@
           <li nz-menu-item (click)="onClickService(s)">
             <nz-tag [nzColor]="'blue'">{{ s.iid }}</nz-tag>
             <span class="service-title">{{ s.description.get(i18n.getCurrentLang()) }}</span>
-            @if (showVersion) {
-              <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ s.type.version }}</nz-tag></span>
-            }
+
+            <span style="float: right">
+              @if (s.required) {
+                <nz-tag nzColor="blue">{{ '必选' | translate }}</nz-tag>
+              } @else {
+                <nz-tag nzColor="green">{{ '可选' | translate }}</nz-tag>
+              }
+
+              @if (showVersion) {
+                <nz-tag nzColor="blue">{{ '版本' | translate }} {{ s.type.version }}</nz-tag>
+              }
+            </span>
           </li>
         }
       </ul>

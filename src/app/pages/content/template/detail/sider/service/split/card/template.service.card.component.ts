@@ -55,7 +55,6 @@ export class TemplateServiceCardComponent implements OnInit {
   @Input() showVersion: boolean = false;
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
-  @Input() language: string = 'zh-CN';
   @Output() changed = new EventEmitter<void>();
   @Output() titleSelected = new EventEmitter<ServiceTemplate>();
   @Output() propertySelected = new EventEmitter<PropertyTemplate>();
@@ -76,7 +75,7 @@ export class TemplateServiceCardComponent implements OnInit {
     private viewContainerRef: ViewContainerRef,
     private account: AccountService,
     private main: MainService,
-    private i18n: MainI18nService,
+    protected i18n: MainI18nService,
     private msg: NzMessageService
   ) {
   }

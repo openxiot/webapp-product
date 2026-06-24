@@ -1,19 +1,28 @@
 @if (service) {
   <nz-card nzSize="small" class="service" [nzBodyStyle]="{ padding: 0}" nzBorderless>
-    <div class="service-bar">
-      <nz-space class="service-title">
-        <span *nzSpaceItem class="iid">{{ service.iid }}</span>
-        <span *nzSpaceItem class="title">{{ service.description.get(language) }}</span>
-      </nz-space>
+<!--    <div class="service-bar">-->
+<!--      <nz-space class="service-title">-->
+<!--        <span *nzSpaceItem class="iid">{{ service.iid }}</span>-->
+<!--        <span *nzSpaceItem class="title">-->
+<!--          {{ service.description.get(i18n.getCurrentLang()) || service.type.name }}-->
+<!--        </span>-->
+<!--        <span *nzSpaceItem class="required">-->
+<!--          @if (service.required) {-->
+<!--            {{ '必选' | translate }}-->
+<!--          } @else {-->
+<!--            {{ '可选' | translate }}-->
+<!--          }-->
+<!--        </span>-->
+<!--      </nz-space>-->
 
-      @if (editable) {
-        <span style="float: right">
-          <span class="service-remove">
-            <span nz-icon nzType="delete" nzTheme="outline"></span>
-          </span>
-        </span>
-      }
-    </div>
+<!--      @if (editable) {-->
+<!--        <span style="float: right">-->
+<!--          <span class="service-remove">-->
+<!--            <span nz-icon nzType="delete" nzTheme="outline"></span>-->
+<!--          </span>-->
+<!--        </span>-->
+<!--      }-->
+<!--    </div>-->
 
 <!--    <div class="group-bar">-->
 <!--      <nz-space class="group-title">-->
@@ -27,25 +36,27 @@
 <!--    </div>-->
 
     <ul nz-menu nzMode="inline" nzTheme="light">
-<!--      <li nz-menu-item (click)="onClickTitle(service)" class="title-bar">-->
-<!--        <nz-space>-->
-<!--          <span *nzSpaceItem><span nz-icon nzType="database" nzTheme="outline"></span></span>-->
-<!--&lt;!&ndash;          <span *nzSpaceItem>{{ service.description.get(language) }}</span>&ndash;&gt;-->
-<!--          <span *nzSpaceItem class="menu-title">{{ service.description.get(language) }}</span>-->
-<!--        </nz-space>-->
-<!--&lt;!&ndash;        <nz-tag [nzColor]="'blue'">{{ service.iid }}</nz-tag>&ndash;&gt;-->
-<!--&lt;!&ndash;        <span class="menu-title">{{ service.description.get(language) }}</span>&ndash;&gt;-->
-<!--&lt;!&ndash;        @if (version) {&ndash;&gt;-->
-<!--&lt;!&ndash;          <span style="float: right"><nz-tag nzColor="blue">版本 {{ service.type.version }}</nz-tag></span>&ndash;&gt;-->
-<!--&lt;!&ndash;        }&ndash;&gt;-->
-<!--      </li>-->
+      <li nz-menu-item (click)="onClickTitle(service)" class="title-bar">
+        <nz-space>
+          <span *nzSpaceItem><span nz-icon nzType="database" nzTheme="outline"></span></span>
+<!--          <span *nzSpaceItem>{{ service.description.get(language) }}</span>-->
+          <span *nzSpaceItem class="menu-title">
+            {{ service.description.get(i18n.getCurrentLang()) || service.type.name }}
+          </span>
+        </nz-space>
+<!--        <nz-tag [nzColor]="'blue'">{{ service.iid }}</nz-tag>-->
+<!--        <span class="menu-title">{{ service.description.get(language) }}</span>-->
+<!--        @if (version) {-->
+<!--          <span style="float: right"><nz-tag nzColor="blue">版本 {{ service.type.version }}</nz-tag></span>-->
+<!--        }-->
+      </li>
 
       <li nz-menu-group [nzTitle]="properties">
         <ul>
           @for (p of service.getProperties(); track p.iid) {
             <li nz-menu-item (click)="onClickProperty(p)">
               <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
-              <span class="menu-item">{{ p.description.get(language) }}</span>
+              <span class="menu-item">{{ p.description.get(i18n.getCurrentLang()) }}</span>
               @if (showVersion) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ p.type.version }}</nz-tag></span>
               }
@@ -61,7 +72,7 @@
           @for (a of service.getActions(); track a.iid) {
             <li nz-menu-item (click)="onClickAction(a)">
               <nz-tag [nzColor]="'blue'">{{ a.iid }}</nz-tag>
-              <span class="menu-item">{{ a.description.get(language) }}</span>
+              <span class="menu-item">{{ a.description.get(i18n.getCurrentLang()) }}</span>
               @if (showVersion) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ a.type.version }}</nz-tag></span>
               }
@@ -77,7 +88,7 @@
           @for (e of service.getEvents(); track e.iid) {
             <li nz-menu-item (click)="onClickEvent(e)">
               <nz-tag [nzColor]="'blue'">{{ e.iid }}</nz-tag>
-              <span class="menu-item">{{ e.description.get(language) }}</span>
+              <span class="menu-item">{{ e.description.get(i18n.getCurrentLang()) }}</span>
               @if (showVersion) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ e.type.version }}</nz-tag></span>
               }
@@ -93,33 +104,13 @@
             <span *nzSpaceItem>{{ '属性(' | translate }}{{ service.properties.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          <span style="float: right">
-            <span class="selector" (click)="onAddProperty()">
-              <span nz-icon nzType="plus" nzTheme="outline"></span>
+          @if (editable) {
+            <span style="float: right">
+              <span class="selector" (click)="onAddProperty()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </span>
             </span>
-          </span>
-
-<!--          <span style="float: right">-->
-<!--            <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuAddProperty">{{ '添加' | translate }}</button>-->
-<!--          </span>-->
-
-<!--          <nz-dropdown-menu #menuAddProperty="nzDropdownMenu">-->
-<!--            <ul nz-menu nzSelectable>-->
-<!--              <li nz-menu-item (click)="onAddProperty()">-->
-<!--                <nz-space>-->
-<!--                  <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>-->
-<!--                  <span *nzSpaceItem>{{ '标准属性' | translate }}</span>-->
-<!--                </nz-space>-->
-<!--              </li>-->
-<!--              <li nz-menu-divider></li>-->
-<!--              <li nz-menu-item (click)="onAddProperty()">-->
-<!--                <nz-space>-->
-<!--                  <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>-->
-<!--                  <span *nzSpaceItem>{{ '自定义属性' | translate }}</span>-->
-<!--                </nz-space>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </nz-dropdown-menu>-->
+          }
         </div>
       </ng-template>
 
@@ -130,33 +121,13 @@
             <span *nzSpaceItem>{{ '方法(' | translate }}{{ service.actions.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          <span style="float: right">
-            <span class="selector" (click)="onAddAction()">
-              <span nz-icon nzType="plus" nzTheme="outline"></span>
+          @if (editable) {
+            <span style="float: right">
+              <span class="selector" (click)="onAddAction()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </span>
             </span>
-          </span>
-
-<!--          <span style="float: right">-->
-<!--            <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuAddAction">{{ '添加' | translate }}</button>-->
-<!--          </span>-->
-
-<!--          <nz-dropdown-menu #menuAddAction="nzDropdownMenu">-->
-<!--            <ul nz-menu nzSelectable>-->
-<!--              <li nz-menu-item (click)="onAddAction()">-->
-<!--                <nz-space>-->
-<!--                  <span *nzSpaceItem nz-icon nzType="thunderbolt" nzTheme="outline"></span>-->
-<!--                  <span *nzSpaceItem>{{ '标准方法' | translate }}</span>-->
-<!--                </nz-space>-->
-<!--              </li>-->
-<!--              <li nz-menu-divider></li>-->
-<!--              <li nz-menu-item (click)="onAddAction()">-->
-<!--                <nz-space>-->
-<!--                  <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>-->
-<!--                  <span *nzSpaceItem>{{ '自定义方法' | translate }}</span>-->
-<!--                </nz-space>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </nz-dropdown-menu>-->
+          }
         </div>
       </ng-template>
 
@@ -167,31 +138,13 @@
             <span *nzSpaceItem>{{ '事件(' | translate }}{{ service.events.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          <span style="float: right">
-            <span class="selector" (click)="onAddEvent()">
-              <span nz-icon nzType="plus" nzTheme="outline"></span>
+          @if (editable) {
+            <span style="float: right">
+              <span class="selector" (click)="onAddEvent()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </span>
             </span>
-          </span>
-<!--            <button nz-button nzType="primary" nzSize="small" nz-dropdown nzTrigger="click" [nzDropdownMenu]="menuAddEvent">{{ '添加' | translate }}</button>-->
-<!--          </span>-->
-
-<!--          <nz-dropdown-menu #menuAddEvent="nzDropdownMenu">-->
-<!--            <ul nz-menu nzSelectable>-->
-<!--              <li nz-menu-item (click)="onAddEvent()">-->
-<!--                <nz-space>-->
-<!--                  <span *nzSpaceItem nz-icon nzType="fire" nzTheme="outline"></span>-->
-<!--                  <span *nzSpaceItem>{{ '标准事件' | translate }}</span>-->
-<!--                </nz-space>-->
-<!--              </li>-->
-<!--              <li nz-menu-divider></li>-->
-<!--              <li nz-menu-item (click)="onAddEvent()">-->
-<!--                <nz-space>-->
-<!--                  <span *nzSpaceItem nz-icon nzType="user" nzTheme="outline"></span>-->
-<!--                  <span *nzSpaceItem>{{ '自定义事件' | translate }}</span>-->
-<!--                </nz-space>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </nz-dropdown-menu>-->
+          }
         </div>
       </ng-template>
     </ul>

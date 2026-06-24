@@ -23,7 +23,7 @@ export class ServiceTemplateHelper {
   }
 
   public addPropertyDefinitions(defs: PropertyDefinition[], version: number) {
-    let iid = this.getMaxPropertyIID();
+    let iid = this.getMaxPropertyIID() + 1;
 
     for (let def of defs) {
       if (this.addProperty(iid, def, true, version)) {
@@ -35,7 +35,7 @@ export class ServiceTemplateHelper {
   }
 
   public addActionDefinitions(defs: ActionDefinition[], version: number) {
-    let iid = this.getMaxActionIID();
+    let iid = this.getMaxActionIID() + 1;
 
     for (let def of defs) {
       if (this.addAction(iid, def, true, version)) {
@@ -47,7 +47,7 @@ export class ServiceTemplateHelper {
   }
 
   public addEventDefinitions(defs: EventDefinition[], version: number) {
-    let iid = this.getMaxEventIID();
+    let iid = this.getMaxEventIID() + 1;
 
     for (let def of defs) {
       if (this.addEvent(iid, def, true, version)) {

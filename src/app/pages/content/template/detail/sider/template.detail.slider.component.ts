@@ -2,14 +2,12 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewCo
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzListModule} from 'ng-zorro-antd/list';
-import {TemplateServiceWaterfallComponent} from './service/waterfall/template.service.waterfall.component';
 import {DeviceTemplate, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {TemplateDetailServicesComponent} from './services/template.detail.services.component';
 import {TemplateServiceSplitComponent} from './service/split/template.service.split.component';
 import {NzCardModule} from 'ng-zorro-antd/card';
-import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 
 @Component({
   selector: 'template-detail-slider',
@@ -21,11 +19,8 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
     NzLayoutModule,
     NzListModule,
     NzCardModule,
-    TemplateServiceWaterfallComponent,
     TemplateDetailServicesComponent,
     TemplateServiceSplitComponent,
-    NzRowDirective,
-    NzColDirective,
   ],
   providers: [
     NzModalService
@@ -34,7 +29,6 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 export class TemplateDetailSliderComponent implements OnChanges {
 
   @Input() version: boolean = false;
-  @Input() expert: boolean = false;
   @Input() editable: boolean = false;
   @Input() template: DeviceTemplate | undefined = undefined;
   @Output() changed = new EventEmitter<void>();
