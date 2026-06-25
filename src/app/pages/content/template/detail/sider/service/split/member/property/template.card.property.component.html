@@ -45,14 +45,14 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '访问方式' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <property-access formControlName="access" [updatable]="true"/>
+        <property-access formControlName="access" [updatable]="editable"/>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '数据格式' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <property-format formControlName="format" [updatable]="true" [formats]="formats" (changed)="onFormatChanged()"></property-format>
+        <property-format formControlName="format" [updatable]="editable" [formats]="formats" (changed)="onFormatChanged()"></property-format>
       </nz-form-control>
     </nz-form-item>
 
@@ -60,7 +60,7 @@
       <nz-form-item>
         <nz-form-label [nzSpan]="5" nzRequired>{{ '取值约束' | translate }}</nz-form-label>
         <nz-form-control [nzSpan]="16">
-          <property-constraint formControlName="constraint" [updatable]="true"></property-constraint>
+          <property-constraint formControlName="constraint" [updatable]="editable"></property-constraint>
         </nz-form-control>
       </nz-form-item>
 
@@ -69,7 +69,7 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="5" nzRequired>{{ '取值范围' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="16">
-              <property-range formControlName="range" [updatable]="true"></property-range>
+              <property-range formControlName="range" [updatable]="editable"></property-range>
             </nz-form-control>
           </nz-form-item>
         }
@@ -77,7 +77,7 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="5" nzRequired>{{ '取值列表' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="16">
-              <property-list formControlName="list" [updatable]="true"></property-list>
+              <property-list formControlName="list" [updatable]="editable"></property-list>
             </nz-form-control>
           </nz-form-item>
         }

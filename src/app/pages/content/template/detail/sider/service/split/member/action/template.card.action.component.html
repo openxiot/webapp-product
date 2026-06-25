@@ -25,13 +25,6 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
-      <nz-form-control [nzSpan]="19">
-        <editor-namespace formControlName="ns"></editor-namespace>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '代码' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <spec-code formControlName="code" [updatable]="false"></spec-code>
