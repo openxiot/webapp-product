@@ -131,7 +131,7 @@ export class TemplateCardEventComponent implements OnInit, OnChanges {
     this.form.controls.iid.setValue(this.event.iid);
     this.form.controls.ns.setValue(this.event.type.ns);
     this.form.controls.code.setValue(this.event.type.name);
-    this.form.controls.description.setValue(this.service.description);
+    this.form.controls.description.setValue(this.event.description);
 
     this.arguments.clear();
 

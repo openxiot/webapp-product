@@ -196,7 +196,7 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     this.form.controls.iid.setValue(this.property.iid);
     this.form.controls.ns.setValue(this.property.type.ns);
     this.form.controls.code.setValue(this.property.type.name);
-    this.form.controls.description.setValue(this.service.description);
+    this.form.controls.description.setValue(this.property.description);
     this.form.controls.format.setValue(this.property.format.toString());
     this.form.controls.access.setValue(this.property.access);
     this.constrainable = this.getConstrainable(this.property.format);

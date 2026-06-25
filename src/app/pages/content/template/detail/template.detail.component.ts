@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
 import {DeviceTemplate, LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -83,6 +83,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    private cdr: ChangeDetectorRef,
     protected location : Location,
     protected account: AccountService,
     protected i18n: MainI18nService,
@@ -188,5 +189,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
 
   protected onChanged() {
     this.changed = true;
+    this.cdr.detectChanges();
   }
 }

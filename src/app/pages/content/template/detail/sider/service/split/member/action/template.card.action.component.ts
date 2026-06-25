@@ -139,7 +139,7 @@ export class TemplateCardActionComponent implements OnInit, OnChanges {
     this.form.controls.iid.setValue(this.action.iid);
     this.form.controls.ns.setValue(this.action.type.ns);
     this.form.controls.code.setValue(this.action.type.name);
-    this.form.controls.description.setValue(this.service.description);
+    this.form.controls.description.setValue(this.action.description);
 
     this.argumentIn.clear();
 

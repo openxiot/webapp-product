@@ -44,7 +44,7 @@ export class TemplateDetailSliderComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['device']) {
+    if (changes['template']) {
       if (this.service) {
         if (this.template) {
           this.service = this.template.services.get(this.service.iid);
