@@ -1,13 +1,13 @@
 import {
   ActionDefinition,
-  ActionTemplate,
-  ActionType, Argument,
-  DeviceTemplate, EventDefinition, EventTemplate, EventType, PropertyDefinition, PropertyTemplate,
-  PropertyType,
+  DeviceTemplate,
+  EventDefinition,
+  PropertyDefinition,
   ServiceDefinition,
   ServiceTemplate,
   ServiceType
 } from '@openxiot/xiot-core-spec-ts';
+import {ServiceTemplateHelper} from './ServiceTemplateHelper';
 
 export class DeviceTemplateHelper {
 
@@ -44,164 +44,103 @@ export class DeviceTemplateHelper {
       source
     );
 
-    this.addProperties(service, def, version);
-    this.addActions(service, def, version);
-    this.addEvents(service, def, version);
+    const helper = new ServiceTemplateHelper(service, this.properties, this.actions, this.events);
+
+    this.addProperties(helper, def, version);
+    this.addActions(helper, def, version);
+    this.addEvents(helper, def, version);
 
     this.device.services.set(iid, service);
   }
 
-  private addProperties(service: ServiceTemplate, def: ServiceDefinition, version: number) {
+  private addProperties(helper: ServiceTemplateHelper, def: ServiceDefinition, version: number) {
     let iid = 1;
 
     for (let type of def.requiredProperties) {
-      if (this.addProperty(service, iid, type, true, version)) {
-        iid++;
+      const property = this.properties.get(type.name);
+      if (property) {
+        if (helper.addProperty(iid, property, true, version)) {
+          iid++;
+        } else {
+          console.error('addProperty failed');
+        }
       } else {
-        console.error('addProperty failed');
+        console.error('property definition not found: ' + type.toString());
       }
     }
 
     for (let type of def.optionalProperties) {
-      if (this.addProperty(service, iid, type, false, version)) {
-        iid++;
+      const property = this.properties.get(type.name);
+      if (property) {
+        if (helper.addProperty(iid, property, false, version)) {
+          iid++;
+        } else {
+          console.error('addProperty failed');
+        }
       } else {
-        console.error('addProperty failed');
+        console.error('property definition not found: ' + type.toString());
       }
     }
   }
 
-  private addActions(service: ServiceTemplate, def: ServiceDefinition, version: number) {
+  private addActions(helper: ServiceTemplateHelper, def: ServiceDefinition, version: number) {
     let iid = 1;
 
     for (let type of def.requiredActions) {
-      if (this.addAction(service, iid, type, true, version)) {
-        iid++;
+      const action = this.actions.get(type.name);
+      if (action) {
+        if (helper.addAction(iid, action, true, version)) {
+          iid++;
+        } else {
+          console.error('addAction failed');
+        }
       } else {
-        console.error('action definition not found');
+        console.error('action definition not found: ' + type.toString());
       }
     }
 
     for (let type of def.optionalActions) {
-      if (this.addAction(service, iid, type, false, version)) {
-        iid++;
+      const action = this.actions.get(type.name);
+      if (action) {
+        if (helper.addAction(iid, action, false, version)) {
+          iid++;
+        } else {
+          console.error('addAction failed');
+        }
       } else {
-        console.error('action definition not found');
+        console.error('action definition not found: ' + type.toString());
       }
     }
   }
 
-  private addEvents(service: ServiceTemplate, def: ServiceDefinition, version: number) {
+  private addEvents(helper: ServiceTemplateHelper, def: ServiceDefinition, version: number) {
     let iid = 1;
 
     for (let type of def.optionalEvents) {
-      if (this.addEvent(service, iid, type, true, version)) {
-        iid++;
+      const event = this.events.get(type.name);
+      if (event) {
+        if (helper.addEvent(iid, event, true, version)) {
+          iid++;
+        } else {
+          console.error('addEvent failed');
+        }
       } else {
-        console.error('action definition not found');
+        console.error('event definition not found: ' + type.toString());
       }
     }
 
     for (let type of def.optionalEvents) {
-      if (this.addEvent(service, iid, type, false, version)) {
-        iid++;
+      const event = this.events.get(type.name);
+      if (event) {
+        if (helper.addEvent(iid, event, false, version)) {
+          iid++;
+        } else {
+          console.error('addEvent failed');
+        }
       } else {
-        console.error('action definition not found');
+        console.error('event definition not found: ' + type.toString());
       }
     }
-  }
-
-  private addProperty(service: ServiceTemplate, iid: number, type: PropertyType, required: boolean, version: number): boolean {
-    const def = this.properties.get(type.name);
-    if (def == null) {
-      return false;
-    }
-
-    const vendor: string = this.device?.type.organization || "null";
-    const model: string = this.device?.type.model || "null";
-    const t = new PropertyType(def.type.toString() + ":" + vendor + ":" + model + ":" + version);
-    const description = def.description;
-    const source: string = ''; //  todo：这TM个是啥？
-
-    // todo: 组合属性待完成
-
-    // members: Array<number> | undefined, required: boolean, source: string
-    const property =  new PropertyTemplate(
-      iid,
-      t,
-      description,
-      def.format,
-      def.access,
-      def.constraintValue,
-      def.unit,
-      [],
-      required,
-      source,
-    );
-
-    service.properties.set(iid, property);
-
-    return true;
-  }
-
-  private addAction(service: ServiceTemplate, iid: number, type: ActionType, required: boolean, version: number): boolean {
-    const def = this.actions.get(type.name);
-    if (def == null) {
-      return false;
-    }
-
-    const vendor: string = this.device?.type.organization || "null";
-    const model: string = this.device?.type.model || "null";
-    const t = new ActionType(def.type.toString() + ":" + vendor + ":" + model + ":" + version);
-    const description = def.description;
-    const source: string = ''; //  todo：这TM个是啥？
-    const argumentsIn: Argument[] = [];
-    const argumentsOut: Argument[] = [];
-
-    // todo: 参数依赖属性，待添加。
-
-    const action = new ActionTemplate(
-      iid,
-      required,
-      t,
-      description,
-      argumentsIn,
-      argumentsOut,
-      source,
-    );
-
-    service.actions.set(iid, action);
-
-    return true;
-  }
-
-  private addEvent(service: ServiceTemplate, iid: number, type: EventType, required: boolean, version: number): boolean {
-    const def = this.events.get(type.name);
-    if (def == null) {
-      return false;
-    }
-
-    const vendor: string = this.device?.type.organization || "null";
-    const model: string = this.device?.type.model || "null";
-    const t = new EventType(def.type.toString() + ":" + vendor + ":" + model + ":" + version);
-    const description = def.description;
-    const source: string = ''; //  todo：这TM个是啥？
-    const args: Argument[] = [];
-
-    // todo: 参数依赖属性，待添加。
-
-    const event = new EventTemplate(
-      iid,
-      required,
-      t,
-      description,
-      args,
-      source,
-    );
-
-    service.events.set(iid, event);
-
-    return true;
   }
 
   private getMaxServiceIID() {

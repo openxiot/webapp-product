@@ -58,7 +58,7 @@ export class ServiceTemplateHelper {
     }
   }
 
-  private addProperty(iid: number, def: PropertyDefinition, required: boolean, version: number): boolean {
+  public addProperty(iid: number, def: PropertyDefinition, required: boolean, version: number): boolean {
     const vendor: string = this.service?.type.organization || "null";
     const model: string = this.service?.type.model || "null";
     const t = new PropertyType(def.type.toString() + ":" + vendor + ":" + model + ":" + version);
@@ -86,7 +86,23 @@ export class ServiceTemplateHelper {
     return true;
   }
 
-  private addAction(iid: number, def: ActionDefinition, required: boolean, version: number): boolean {
+  private findProperty(type: PropertyType): PropertyTemplate | undefined {
+    for (let property of this.service.getProperties()) {
+      if (property.type.name === type.name) {
+        return property;
+      }
+    }
+
+    return undefined;
+  }
+
+  private addArgument(def: PropertyDefinition, required: boolean, version: number): number {
+    const iid = this.getMaxPropertyIID() + 1;
+    this.addProperty(iid, def, true, version);
+    return iid;
+  }
+
+  public addAction(iid: number, def: ActionDefinition, required: boolean, version: number): boolean {
     const vendor: string = this.service.type.organization || "null";
     const model: string = this.service.type.model || "null";
     const t = new ActionType(def.type.toString() + ":" + vendor + ":" + model + ":" + version);
@@ -95,7 +111,35 @@ export class ServiceTemplateHelper {
     const argumentsIn: Argument[] = [];
     const argumentsOut: Argument[] = [];
 
-    // todo: 参数依赖属性，待添加。
+    for (let arg of def.in) {
+      const found = this.findProperty(arg.type);
+      if (found) {
+        argumentsIn.push(Argument.of(found.iid, arg.minRepeat, arg.maxRepeat));
+      } else {
+        const p = this.properties.get(arg.type.name);
+        if (p) {
+          const iid = this.addArgument(p, true, version)
+          argumentsIn.push(Argument.of(iid, arg.minRepeat, arg.maxRepeat));
+        } else {
+          console.log('error: property not found: ' + arg.type.toString())
+        }
+      }
+    }
+
+    for (let arg of def.out) {
+      const found = this.findProperty(arg.type);
+      if (found) {
+        argumentsIn.push(Argument.of(found.iid, arg.minRepeat, arg.maxRepeat));
+      } else {
+        const p = this.properties.get(arg.type.name);
+        if (p) {
+          const iid = this.addArgument(p, true, version)
+          argumentsIn.push(Argument.of(iid, arg.minRepeat, arg.maxRepeat));
+        } else {
+          console.log('error: property not found: ' + arg.type.toString())
+        }
+      }
+    }
 
     const action = new ActionTemplate(
       iid,
@@ -112,7 +156,7 @@ export class ServiceTemplateHelper {
     return true;
   }
 
-  private addEvent(iid: number, def: EventDefinition, required: boolean, version: number): boolean {
+  public addEvent(iid: number, def: EventDefinition, required: boolean, version: number): boolean {
     const vendor: string = this.service.type.organization || "null";
     const model: string = this.service.type.model || "null";
     const t = new EventType(def.type.toString() + ":" + vendor + ":" + model + ":" + version);
@@ -120,7 +164,20 @@ export class ServiceTemplateHelper {
     const source: string = ''; //  todo：这TM个是啥？
     const args: Argument[] = [];
 
-    // todo: 参数依赖属性，待添加。
+    for (let arg of def.arguments) {
+      const found = this.findProperty(arg.type);
+      if (found) {
+        args.push(Argument.of(found.iid, arg.minRepeat, arg.maxRepeat));
+      } else {
+        const p = this.properties.get(arg.type.name);
+        if (p) {
+          const iid = this.addArgument(p, true, version)
+          args.push(Argument.of(iid, arg.minRepeat, arg.maxRepeat));
+        } else {
+          console.log('error: property not found: ' + arg.type.toString())
+        }
+      }
+    }
 
     const event = new EventTemplate(
       iid,
