@@ -99,7 +99,7 @@ export class SpecPropertyCreateComponent implements OnInit {
     format: FormControl<string>,
     constraint: FormControl<ConstraintType>,
     range: FormControl<RangeValue>,
-    list: FormControl<ValueItem[]>;
+    list: FormControl<ValueItem[]>,
     unit: FormControl<string>,
     members: FormControl<PropertyDefinition[]>,
     lifecycle: FormControl<LifeCycle>,

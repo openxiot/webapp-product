@@ -28,17 +28,38 @@
       </nz-col>
     </nz-row>
   } @else {
+    @if (prefix) {
+      <nz-input-group [nzAddOnBefore]=" '描述' | translate " style="flex: 1;">
+        <input
+          type="text"
+          nz-input
+          [(ngModel)]="CurrentLangValue"
+        />
+      </nz-input-group>
+    } @else {
+      <input
+        type="text"
+        nz-input
+        [(ngModel)]="CurrentLangValue"
+      />
+    }
+  }
+} @else {
+  @if (prefix) {
+    <nz-input-group [nzAddOnBefore]=" '描述' | translate " style="flex: 1;">
+      <input
+        type="text"
+        nz-input
+        [ngModel]="CurrentLangValue"
+        [disabled]="true"
+      />
+    </nz-input-group>
+  } @else {
     <input
       type="text"
       nz-input
-      [(ngModel)]="CurrentLangValue"
+      [ngModel]="CurrentLangValue"
+      [disabled]="true"
     />
   }
-} @else {
-  <input
-    type="text"
-    nz-input
-    [ngModel]="CurrentLangValue"
-    [disabled]="true"
-  />
 }

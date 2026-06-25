@@ -47,6 +47,7 @@ export class DescriptionComponent implements ControlValueAccessor {
 
   @Input() multiple = false;
   @Input() updatable = true;
+  @Input() prefix = false;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   isDisabled = false;
@@ -175,7 +176,7 @@ export class DescriptionComponent implements ControlValueAccessor {
     this.emitChange();
   }
 
-  protected getCurrentLangLabel(): string {
+  protected get CurrentLangLabel(): string {
     const found = this.langList.find(x => x.lang === this.i18n.getCurrentLang());
     if (found) {
       return found.label;

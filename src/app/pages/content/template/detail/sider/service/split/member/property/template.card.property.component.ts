@@ -21,15 +21,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {
-  DataFormat,
-  Property,
-  Service,
-  ValueRange,
-  ValueList,
-  ValueDefinition,
-  ServiceTemplate, PropertyTemplate
-} from '@openxiot/xiot-core-spec-ts';
+import {DataFormat, ServiceTemplate, PropertyTemplate, FormatDefinition, UnitDefinition, Access} from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
@@ -38,14 +30,33 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {EditorServicePropertyMemberComponent} from './member/editor.service.property.member.component';
 import {Member} from './member/Member';
-import {EditorNamespaceComponent} from './namespace/editor.namespace.component';
 import {TranslatePipe} from '@ngx-translate/core';
 import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
 import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
+import {
+  PropertyAccessComponent
+} from '../../../../../../../../../common/form/item/property/common/access/property.access.component';
+import {
+  PropertyFormatComponent
+} from '../../../../../../../../../common/form/item/property/common/format/property.format.component';
+import {MainService} from '../../../../../../../../../service/main.service';
+import {AccountService} from '../../../../../../../../../service/account.service';
+import {NzMessageService} from 'ng-zorro-antd/message';
+import {
+  PropertyConstraintComponent
+} from '../../../../../../../../../common/form/item/property/common/constraint/property.constraint.component';
+import {
+  PropertyRangeComponent
+} from '../../../../../../../../../common/form/item/property/common/range/property.range.component';
+import {
+  PropertyListComponent
+} from '../../../../../../../../../common/form/item/property/common/list/property.list.component';
+import {ConstraintType} from '../../../../../../../../../common/form/item/property/common/constraint/ConstraintType';
+import {RangeValue} from '../../../../../../../../../common/form/item/property/common/range/RangeValue';
+import {ValueItem} from '../../../../../../../../../common/form/item/property/common/list/ValueItem';
 
 @Component({
   selector: 'template-card-property',
@@ -65,11 +76,14 @@ import {
     NzButtonModule,
     NzIconModule,
     NzCardModule,
-    EditorServicePropertyMemberComponent,
-    EditorNamespaceComponent,
     TranslatePipe,
     CodeComponent,
-    DescriptionComponent
+    DescriptionComponent,
+    PropertyAccessComponent,
+    PropertyFormatComponent,
+    PropertyConstraintComponent,
+    PropertyRangeComponent,
+    PropertyListComponent
   ],
   providers: [
     NzModalService
@@ -83,57 +97,38 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
   @Output() changed = new EventEmitter<void>();
   @Output() removed = new EventEmitter<PropertyTemplate>();
 
+  loadingFormats: boolean = false;
+  formats: FormatDefinition[] = [];
+
+  loadingUnits: boolean = false;
+  units: UnitDefinition[] = [];
+
   form: FormGroup<{
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    access: FormControl<Access>,
     format: FormControl<string>,
-    access: FormGroup<{
-      isReadable: FormControl<boolean>,
-      isWritable: FormControl<boolean>,
-      isNotifiable: FormControl<boolean>,
-    }>,
-    constraint: FormControl<string>,
-    range: FormGroup<{
-      min: FormControl<number>,
-      max: FormControl<number>,
-      step: FormControl<number>,
-    }>,
-    list: FormArray<FormGroup<{
-      value: FormControl<number>,
-      description: FormControl<string>,
-    }>>,
+    constraint: FormControl<ConstraintType>,
+    range: FormControl<RangeValue>,
+    list: FormControl<ValueItem[]>,
     hasDefaultValue: FormControl<boolean>,
     members: FormArray<FormGroup<{
       member: FormControl<Member>,
     }>>,
   }>;
 
-  formats: { value: string, label: string } [] = [
-    {value: 'bool', label: '布尔值'},
-    {value: 'uint8', label: '无符号8位整型'},
-    {value: 'uint16', label: '无符号16位整型'},
-    {value: 'uint32', label: '无符号32位整型'},
-    {value: 'int8', label: '8位整型'},
-    {value: 'int16', label: '16位整型'},
-    {value: 'int32', label: '32位整型'},
-    {value: 'int64', label: '64位整型'},
-    {value: 'float', label: '浮点数'},
-    {value: 'string', label: '字符串'},
-    {value: 'hex', label: '16进制字符串'},
-    {value: 'tlv8', label: 'TLV8字符串'},
-    {value: 'combination', label: '组合值'},
-  ]
-
   combinationValue: boolean = false;
   constrainable: boolean = false;
-  constraintType: string = 'none';
 
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    private main: MainService,
+    protected account: AccountService,
+    private msg: NzMessageService,
   ) {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
@@ -144,15 +139,10 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
       ]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       format: this.fb.control('string', [Validators.required]),
-      access: this.fb.group({isReadable: [false], isWritable: [false], isNotifiable: [false]}),
-      constraint: this.fb.control('none', [Validators.required]),
-      range: this.fb.group({min: [0], max: [100], step: [1]}),
-      list: this.fb.array<
-        FormGroup<{
-          value: FormControl<number>,
-          description: FormControl<string>,
-        }>
-      >([]),
+      access: this.fb.control(new Access(), [Validators.required]),
+      constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
+      range: this.fb.control(new RangeValue()),
+      list: this.fb.control<ValueItem[]>([]),
       hasDefaultValue: this.fb.control(false),
       members: this.fb.array<
         FormGroup<{
@@ -170,6 +160,36 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.reload();
+    this.loadFormats();
+    this.loadUnits();
+  }
+
+  private loadUnits(): void {
+    this.loadingUnits = true;
+    this.main.getUnitDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.units = data;
+          this.loadingUnits = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+  }
+
+  private loadFormats(): void {
+    this.loadingFormats = true;
+    this.main.getFormatDefinitions(this.account.ns.namespace)
+      .subscribe({
+        next: data => {
+          this.formats = data;
+          this.loadingFormats = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
   }
 
   private reload() {
@@ -177,33 +197,31 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     this.form.controls.ns.setValue(this.property.type.ns);
     this.form.controls.code.setValue(this.property.type.name);
     this.form.controls.description.setValue(this.service.description);
-    this.form.controls.format.setValue(this.property.format);
-    this.form.controls.access.controls.isReadable.setValue(this.property.access.isReadable);
-    this.form.controls.access.controls.isWritable.setValue(this.property.access.isWritable);
-    this.form.controls.access.controls.isNotifiable.setValue(this.property.access.isNotifiable);
-
+    this.form.controls.format.setValue(this.property.format.toString());
+    this.form.controls.access.setValue(this.property.access);
     this.constrainable = this.getConstrainable(this.property.format);
-    this.constraintType = this.getConstrainType();
-    this.form.controls.constraint.setValue(this.constraintType);
+    this.form.controls.constraint.setValue(this.getConstrainType(this.property));
 
-    switch (this.constraintType) {
-      case 'none':
+    switch (this.form.controls.constraint.value) {
+      case ConstraintType.NONE:
         break;
 
-      case 'range':
+      case ConstraintType.RANGE:
         const min = this.property.valueRange()?.minValue?.rawValue() || 0;
         const max = this.property.valueRange()?.maxValue?.rawValue() || 0;
         const step = this.property.valueRange()?.stepValue?.rawValue() || 0;
         this.form.controls.range.setValue({min: min, max: max, step: step});
         break;
 
-      case 'list':
-        this.list.clear();
+      case ConstraintType.LIST:
+        this.form.controls.list.setValue([]);
+
         const list = this.property.valueList();
         if (list) {
-          for (let value of list.values) {
-            this.addValueItem(value);
-          }
+          // 转换数据格式
+          const array: ValueItem[] = list.values.map(value => ValueItem.of(value));
+          console.log('Setting list value:', array);
+          this.form.controls.list.setValue(array);
         }
         break;
     }
@@ -212,25 +230,33 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
 
     this.combinationValue = this.property.format === DataFormat.COMBINATION;
     if (this.combinationValue) {
-      this.members.clear();
+      console.log('init combinationValue');
 
-      for (let member of this.property.members) {
-        const p = this.service.properties.get(member);
-        if (p) {
-          this.addMember(p);
-        }
-      }
+      // let members: PropertyDefinition[] = [];
+      // for (let member of this.property.members) {
+      //   const x = this.propertyMap.get(member.name);
+      //   if (x) {
+      //     members.push(x);
+      //   }
+      // }
+      //
+      // this.form.controls.members.setValue(members);
+      console.log('init combinationValue ok');
     }
+
+    // if (p.formatNumber()) {
+    //   this.form.controls.unit.setValue(p.unit || '');
+    // }
 
     console.log('init combinationValue ok');
   }
 
-  get list(): FormArray<FormGroup<{
-    value: FormControl<number>,
-    description: FormControl<string>,
-  }>> {
-    return this.form.controls.list;
-  }
+  // get list(): FormArray<FormGroup<{
+  //   value: FormControl<number>,
+  //   description: FormControl<string>,
+  // }>> {
+  //   return this.form.controls.list;
+  // }
 
   get members(): FormArray<FormGroup<{
     member: FormControl<Member>
@@ -265,53 +291,53 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     }
   }
 
-  private getConstrainType(): string {
-    if (this.property.hasConstraintValue()) {
-      if (this.property.hasValueRange()) {
-        return 'range';
+  private getConstrainType(p: PropertyTemplate): ConstraintType {
+    if (p.hasConstraintValue()) {
+      if (p.hasValueRange()) {
+        return ConstraintType.RANGE;
       }
 
-      if (this.property.hasValueList()) {
-        return 'list';
+      if (p.hasValueList()) {
+        return ConstraintType.LIST;
       }
     }
 
-    return 'none';
+    return ConstraintType.NONE;
   }
 
-  onConstraintChanged(value: string) {
-    console.log('onConstraintChanged: ', value);
-    this.constraintType = value;
-    this.onChanged();
-  }
+  // onConstraintChanged(value: string) {
+  //   console.log('onConstraintChanged: ', value);
+  //   this.constraintType = value;
+  //   this.onChanged();
+  // }
+  //
+  // addValueItem(value: ValueDefinition) {
+  //   const v = value.description.get('zh-CN') || value.description.get('en-US') || '?';
+  //   this.list.push(this.createValueItem(value.value.rawValue(), v));
+  // }
+  //
+  // addDefaultValueItem() {
+  //   this.list.push(this.createValueItem(0, ''));
+  //   this.onChanged();
+  // }
 
-  addValueItem(value: ValueDefinition) {
-    const v = value.description.get('zh-CN') || value.description.get('en-US') || '?';
-    this.list.push(this.createValueItem(value.value.rawValue(), v));
-  }
+  // createValueItem(value: number, description: string): FormGroup<{
+  //   value: FormControl<number>,
+  //   description: FormControl<string>,
+  // }> {
+  //   return this.fb.group({
+  //     value: value,
+  //     description: description,
+  //   });
+  // }
+  //
+  // removeValueItem(item: FormGroup<{ value: FormControl<number>; description: FormControl<string> }>, i: number) {
+  //   console.log('removeValueItem: ' + i);
+  //   this.list.removeAt(i);
+  //   this.onChanged();
+  // }
 
-  addDefaultValueItem() {
-    this.list.push(this.createValueItem(0, ''));
-    this.onChanged();
-  }
-
-  createValueItem(value: number, description: string): FormGroup<{
-    value: FormControl<number>,
-    description: FormControl<string>,
-  }> {
-    return this.fb.group({
-      value: value,
-      description: description,
-    });
-  }
-
-  removeValueItem(item: FormGroup<{ value: FormControl<number>; description: FormControl<string> }>, i: number) {
-    console.log('removeValueItem: ' + i);
-    this.list.removeAt(i);
-    this.onChanged();
-  }
-
-  addMemberItem() {
+  // addMemberItem() {
     // const modal = this.modal.create<SelectMemberComponent, SelectMember, Set<number>>({
     //   nzTitle: '选择属性作为成员',
     //   nzContent: SelectMemberComponent,
@@ -346,25 +372,25 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
     //     this.onChanged();
     //   }
     // });
-  }
+  // }
 
-  addMember(property: Property) {
-    console.log('addMember: ', property.iid);
-    this.members.push(this.createMemberItem(property));
-  }
-
-  createMemberItem(property: Property): FormGroup<{
-    member: FormControl<Member>,
-  }> {
-    return this.fb.group({
-      member: new Member(property, 'zh-CN')
-    });
-  }
-
-  removeMemberItem(item: FormGroup<{ member: FormControl<Member> }>, i: number) {
-    this.members.removeAt(i);
-    this.onChanged();
-  }
+  // addMember(property: Property) {
+  //   console.log('addMember: ', property.iid);
+  //   this.members.push(this.createMemberItem(property));
+  // }
+  //
+  // createMemberItem(property: Property): FormGroup<{
+  //   member: FormControl<Member>,
+  // }> {
+  //   return this.fb.group({
+  //     member: new Member(property, 'zh-CN')
+  //   });
+  // }
+  //
+  // removeMemberItem(item: FormGroup<{ member: FormControl<Member> }>, i: number) {
+  //   this.members.removeAt(i);
+  //   this.onChanged();
+  // }
 
   onRemoved() {
     // const modal = this.modal.create<ConfirmComponent, string, string>({
@@ -437,4 +463,5 @@ export class TemplateCardPropertyComponent implements OnInit, OnChanges {
   //
   //   // todo: save
   // }
+  protected readonly ConstraintType = ConstraintType;
 }
