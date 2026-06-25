@@ -29,6 +29,7 @@ import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
+import {SpecAddableComponent} from '../../../../../../../../../common/form/item/common/addable/spec.addable.component';
 
 @Component({
   selector: 'template-card-service',
@@ -51,7 +52,8 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
     TranslatePipe,
     SpecCodeComponent,
     DescriptionComponent,
-    SpecIidComponent
+    SpecIidComponent,
+    SpecAddableComponent
   ],
   providers: [
     NzModalService
@@ -108,6 +110,21 @@ export class TemplateCardServiceComponent implements OnInit {
 
   onDescriptionChanged() {
     this.service.description = this.form.value.description || new Map<string, string>();
+    this.changed.emit()
+  }
+
+  protected onPropertyAddableChanged() {
+    this.service.propertyAddable = this.form.value.propertyAddable || false;
+    this.changed.emit()
+  }
+
+  protected onActionAddableChanged() {
+    this.service.actionAddable = this.form.value.actionAddable || false;
+    this.changed.emit()
+  }
+
+  protected onEventAddable() {
+    this.service.eventAddable = this.form.value.eventAddable || false;
     this.changed.emit()
   }
 
