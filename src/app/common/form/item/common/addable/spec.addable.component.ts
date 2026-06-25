@@ -1,6 +1,10 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzSwitchModule} from 'ng-zorro-antd/switch';
+import {NzTagModule} from 'ng-zorro-antd/tag';
+import {TranslatePipe} from '@ngx-translate/core';
+import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
+import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'spec-addable',
@@ -10,6 +14,10 @@ import {NzSwitchModule} from 'ng-zorro-antd/switch';
   imports: [
     NzSwitchModule,
     FormsModule,
+    NzTagModule,
+    TranslatePipe,
+    NzRadioComponent,
+    NzRadioGroupComponent
   ],
   providers: [
     {
@@ -72,4 +80,6 @@ export class SpecAddableComponent implements ControlValueAccessor {
   setDisabledState?(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
+
+  protected readonly LifeCycle = LifeCycle;
 }

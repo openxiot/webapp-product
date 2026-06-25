@@ -1,4 +1,12 @@
-<nz-switch
-  [(ngModel)]="value"
-  [nzDisabled]="!updatable"
-></nz-switch>
+@if (updatable) {
+  <nz-radio-group [(ngModel)]="value" nzButtonStyle="solid">
+    <label nz-radio-button [nzValue]="true">{{ '可添加' | translate }}</label>
+    <label nz-radio-button [nzValue]="false">{{ '不可添加' | translate }}</label>
+  </nz-radio-group>
+} @else {
+  @if (value) {
+    <nz-tag nzColor="blue">{{ '可添加' | translate }}</nz-tag>
+  } @else {
+    <nz-tag nzColor="red">{{ '不可添加' | translate }}</nz-tag>
+  }
+}

@@ -43,21 +43,21 @@
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>{{ '可添加属性' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '属性' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <spec-addable formControlName="propertyAddable" [updatable]="editable" (changed)="onPropertyAddableChanged()"></spec-addable>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>{{ '可添加方法' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '方法' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <spec-addable formControlName="actionAddable" [updatable]="editable" (changed)="onActionAddableChanged()"></spec-addable>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="5" nzRequired>{{ '可添加事件' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '事件' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <spec-addable formControlName="eventAddable" [updatable]="editable" (changed)="onEventAddable()"></spec-addable>
       </nz-form-control>
