@@ -22,21 +22,21 @@
 
   <form class="content" nz-form [formGroup]="form">
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <nz-input-number formControlName="iid" [nzMin]="1" [nzMax]="10" [nzStep]="1" (ngModelChange)="onIIDChanged()"></nz-input-number>
+        <spec-iid formControlName="iid" [updatable]="editable"></spec-iid>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '代码' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '代码' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <spec-code formControlName="code" [updatable]="false"></spec-code>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
-      <nz-form-label [nzSpan]="6" nzRequired>{{ '描述' | translate }}</nz-form-label>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '描述' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
         <description formControlName="description" [updatable]="editable" (changed)="onDescriptionChanged()"></description>
       </nz-form-control>

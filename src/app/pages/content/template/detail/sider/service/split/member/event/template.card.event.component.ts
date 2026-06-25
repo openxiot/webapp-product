@@ -48,6 +48,7 @@ import {SpecCodeComponent} from '../../../../../../../../../common/form/item/com
 import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
+import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
 
 @Component({
   selector: 'template-card-event',
@@ -70,7 +71,8 @@ import {
     EditorServiceActionArgumentComponent,
     TranslatePipe,
     SpecCodeComponent,
-    DescriptionComponent
+    DescriptionComponent,
+    SpecIidComponent
   ],
   providers: [
     NzModalService

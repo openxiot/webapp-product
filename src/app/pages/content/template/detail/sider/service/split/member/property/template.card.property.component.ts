@@ -57,6 +57,7 @@ import {
 import {ConstraintType} from '../../../../../../../../../common/form/item/property/common/constraint/ConstraintType';
 import {RangeValue} from '../../../../../../../../../common/form/item/property/common/range/RangeValue';
 import {ValueItem} from '../../../../../../../../../common/form/item/property/common/list/ValueItem';
+import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
 
 @Component({
   selector: 'template-card-property',
@@ -83,7 +84,8 @@ import {ValueItem} from '../../../../../../../../../common/form/item/property/co
     PropertyFormatComponent,
     PropertyConstraintComponent,
     PropertyRangeComponent,
-    PropertyListComponent
+    PropertyListComponent,
+    SpecIidComponent
   ],
   providers: [
     NzModalService
