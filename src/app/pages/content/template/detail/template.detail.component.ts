@@ -70,7 +70,10 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
 
   changed: boolean = false;
 
-  // 可编辑
+  /** 当前用户是否有生命周期编辑权限（已登录 + 组织匹配） */
+  canEditLifecycle: boolean = false;
+
+  /** 是否有完整编辑权限（组织匹配 + 模板处于开发状态） */
   editable: boolean = false;
 
   // 版本
@@ -105,8 +108,30 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     console.log('ngOnDestroy');
   }
 
-  private isEditable(): boolean {
-    return this.account.isEditable();
+  /**
+   * 当前用户的组织是否匹配模板创建者的组织
+   * 有组织的前提是已登录
+   */
+  private isOrgMatch(): boolean {
+    if (!this.account.login || !this.account.organization || !this.template) {
+      return false;
+    }
+    return this.template.type.organization === this.account.organization.id;
+  }
+
+  /**
+   * 计算是否可编辑生命周期（已登录 + 组织匹配）
+   */
+  private computeCanEditLifecycle(): boolean {
+    return this.isOrgMatch();
+  }
+
+  /**
+   * 计算是否有完整编辑权限（已登录 + 组织匹配 + 开发状态）
+   */
+  private computeEditable(): boolean {
+    if (!this.isOrgMatch()) return false;
+    return this.template!.lifecycle === LifeCycle.DEVELOPMENT;
   }
 
   private load(type: string): void {
@@ -115,7 +140,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     this.service.getTemplate(type).subscribe({
       next: data => {
         this.template = data;
-        this.editable = this.isEditable();
+        this.canEditLifecycle = this.computeCanEditLifecycle();
+        this.editable = this.computeEditable();
         this.changed = false;
         this.loading = false;
       },
@@ -137,6 +163,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   // }
 
   protected editTitle() {
+    if (!this.editable) return;
+
     const modal = this.modal.create<StringValueEditComponent, StringValue, string>({
       nzTitle: this.i18n.translate.instant('修改模板描述'),
       nzContent: StringValueEditComponent,
@@ -190,5 +218,11 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   protected onChanged() {
     this.changed = true;
     this.cdr.detectChanges();
+  }
+
+  /** 生命周期变更时重新计算 editable 状态 */
+  protected onLifecycleChanged() {
+    this.editable = this.computeEditable();
+    this.onChanged();
   }
 }
