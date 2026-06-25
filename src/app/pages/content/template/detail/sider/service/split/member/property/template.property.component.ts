@@ -60,9 +60,9 @@ import {ValueItem} from '../../../../../../../../../common/form/item/property/co
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
 
 @Component({
-  selector: 'template-card-property',
-  templateUrl: './template.card.property.component.html',
-  styleUrls: ['./template.card.property.component.less'],
+  selector: 'template-property',
+  templateUrl: './template.property.component.html',
+  styleUrls: ['./template.property.component.less'],
   standalone: true,
   imports: [
     FormsModule,
@@ -91,7 +91,7 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
     NzModalService
   ],
 })
-export class TemplateCardPropertyComponent implements OnInit, OnChanges {
+export class TemplatePropertyComponent implements OnInit, OnChanges {
 
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;

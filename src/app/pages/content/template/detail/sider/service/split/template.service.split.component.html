@@ -15,42 +15,42 @@
 
     <nz-content class="inner-content">
       @if (showServiceDetail) {
-        <template-card-service
+        <template-service
           [editable]="editable"
           [service]="service"
           (changed)="onChanged()"
           (removed)="onRemoved()"
-        ></template-card-service>
+        ></template-service>
       }
 
       @if (property) {
-        <template-card-property
+        <template-property
           [editable]="editable"
           [service]="service"
           [property]="property"
           (changed)="onChanged()"
           (removed)="onPropertyRemoved($event)"
-        ></template-card-property>
+        ></template-property>
       }
 
       @if (action) {
-        <template-card-action
+        <template-action
           [editable]="editable"
           [service]="service"
           [action]="action"
           (changed)="onChanged()"
           (removed)="onActionRemoved($event)"
-        ></template-card-action>
+        ></template-action>
       }
 
       @if (event) {
-        <template-card-event
+        <template-event
           [editable]="editable"
           [service]="service"
           [event]="event"
           (changed)="onChanged()"
           (removed)="onEventRemoved($event)"
-        ></template-card-event>
+        ></template-event>
       }
     </nz-content>
   </nz-layout>

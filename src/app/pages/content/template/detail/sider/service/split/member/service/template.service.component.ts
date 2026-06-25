@@ -32,9 +32,9 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
 import {SpecAddableComponent} from '../../../../../../../../../common/form/item/common/addable/spec.addable.component';
 
 @Component({
-  selector: 'template-card-service',
-  templateUrl: './template.card.service.component.html',
-  styleUrls: ['./template.card.service.component.less'],
+  selector: 'template-service',
+  templateUrl: './template.service.component.html',
+  styleUrls: ['./template.service.component.less'],
   standalone: true,
   imports: [
     FormsModule,
@@ -59,7 +59,7 @@ import {SpecAddableComponent} from '../../../../../../../../../common/form/item/
     NzModalService
   ],
 })
-export class TemplateCardServiceComponent implements OnInit {
+export class TemplateServiceComponent implements OnInit {
 
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;

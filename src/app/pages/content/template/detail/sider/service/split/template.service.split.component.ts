@@ -18,10 +18,10 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {TemplateServiceCardComponent} from './card/template.service.card.component';
-import {TemplateCardPropertyComponent} from './member/property/template.card.property.component';
-import {TemplateCardServiceComponent} from './member/service/template.card.service.component';
-import {TemplateCardActionComponent} from './member/action/template.card.action.component';
-import {TemplateCardEventComponent} from './member/event/template.card.event.component';
+import {TemplatePropertyComponent} from './member/property/template.property.component';
+import {TemplateServiceComponent} from './member/service/template.service.component';
+import {TemplateActionComponent} from './member/action/template.action.component';
+import {TemplateEventComponent} from './member/event/template.event.component';
 
 @Component({
   selector: 'template-service-split',
@@ -39,10 +39,10 @@ import {TemplateCardEventComponent} from './member/event/template.card.event.com
     NzLayoutComponent,
     NzSiderComponent,
     TemplateServiceCardComponent,
-    TemplateCardPropertyComponent,
-    TemplateCardServiceComponent,
-    TemplateCardActionComponent,
-    TemplateCardEventComponent,
+    TemplatePropertyComponent,
+    TemplateServiceComponent,
+    TemplateActionComponent,
+    TemplateEventComponent,
   ],
   providers: [
     NzModalService

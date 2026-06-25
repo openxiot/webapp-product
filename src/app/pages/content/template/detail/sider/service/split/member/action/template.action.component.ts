@@ -51,9 +51,9 @@ import {
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
 
 @Component({
-  selector: 'template-card-action',
-  templateUrl: './template.card.action.component.html',
-  styleUrls: ['./template.card.action.component.less'],
+  selector: 'template-action',
+  templateUrl: './template.action.component.html',
+  styleUrls: ['./template.action.component.less'],
   standalone: true,
   imports: [
     FormsModule,
@@ -79,7 +79,7 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
     NzModalService
   ],
 })
-export class TemplateCardActionComponent implements OnInit, OnChanges {
+export class TemplateActionComponent implements OnInit, OnChanges {
 
   @Input() editable: boolean = false;
   @Input() service!: ServiceTemplate;
