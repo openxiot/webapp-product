@@ -365,5 +365,8 @@
   "更多语言": "More Languages",
   "点击展开全部": "Click to expand all",
   "选择属性作为参数": "Izberite lastnost kot parameter",
-  "选择属性": "Izberite lastnost"
+  "选择属性": "Izberite lastnost",
+  "可添加事件": "Dodatni dogodki",
+  "可添加方法": "Dodatna dejanja",
+  "可添加属性": "Dodatne lastnosti"
 }

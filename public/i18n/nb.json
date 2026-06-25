@@ -365,5 +365,8 @@
   "更多语言": "More Languages",
   "点击展开全部": "Click to expand all",
   "选择属性作为参数": "Velg egenskap som parameter",
-  "选择属性": "Velg egenskap"
+  "选择属性": "Velg egenskap",
+  "可添加事件": "Tilleggbare hendelser",
+  "可添加方法": "Tilleggbare handlinger",
+  "可添加属性": "Tilleggbare egenskaper"
 }

@@ -365,5 +365,8 @@
   "更多语言": "More Languages",
   "点击展开全部": "Click to expand all",
   "选择属性作为参数": "Veldu eiginleika sem breytu",
-  "选择属性": "Veldu eiginleika"
+  "选择属性": "Veldu eiginleika",
+  "可添加事件": "Viðbætanlegir atburðir",
+  "可添加方法": "Viðbætanlegar aðgerðir",
+  "可添加属性": "Viðbætanleg eigindi"
 }

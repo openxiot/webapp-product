@@ -365,5 +365,8 @@
   "更多语言": "More Languages",
   "点击展开全部": "Click to expand all",
   "选择属性作为参数": "Özelliği parametre olarak seç",
-  "选择属性": "Özelliği seç"
+  "选择属性": "Özelliği seç",
+  "可添加事件": "Eklenebilir Olaylar",
+  "可添加方法": "Eklenebilir Eylemler",
+  "可添加属性": "Eklenebilir Özellikler"
 }

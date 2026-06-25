@@ -365,5 +365,8 @@
   "更多语言": "More Languages",
   "点击展开全部": "Click to expand all",
   "选择属性作为参数": "Wybierz właściwość jako parametr",
-  "选择属性": "Wybierz właściwość"
+  "选择属性": "Wybierz właściwość",
+  "可添加事件": "Dodawalne zdarzenia",
+  "可添加方法": "Dodawalne akcje",
+  "可添加属性": "Dodawalne właściwości"
 }
