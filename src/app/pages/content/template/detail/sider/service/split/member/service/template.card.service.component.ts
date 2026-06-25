@@ -14,7 +14,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {Property, Service, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
+import {ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
@@ -90,7 +90,13 @@ export class TemplateCardServiceComponent implements OnInit {
     this.form.controls.description.setValue(this.service.description);
   }
 
-  onChanged() {
+  onIIDChanged() {
+    this.service.iid = this.form.value.iid || 0;
+    this.changed.emit()
+  }
+
+  onDescriptionChanged() {
+    this.service.description = this.form.value.description || new Map<string, string>();
     this.changed.emit()
   }
 
@@ -121,11 +127,5 @@ export class TemplateCardServiceComponent implements OnInit {
     //     this.removed.emit(this.service);
     //   }
     // });
-  }
-
-  onSubmit() {
-    this.service.iid = this.form.value.iid || 0;
-    this.service.type.name = this.form.value.code || 'null';
-    this.service.description = this.form.value.description || new Map<string, string>();
   }
 }

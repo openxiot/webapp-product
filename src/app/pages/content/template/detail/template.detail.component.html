@@ -47,10 +47,10 @@
       @if (changed) {
         <nz-space>
           <div *nzSpaceItem>
-            <button nz-button nzType="primary" (click)="onReload()">{{ '取消' | translate }}</button>
+            <button nz-button nzType="primary" nzDanger (click)="onReload()">{{ '取消' | translate }}</button>
           </div>
           <div *nzSpaceItem>
-            <button nz-button nzType="primary" nzDanger (click)="onSave()">{{ '保存' | translate }}</button>
+            <button nz-button nzType="primary" (click)="onSave()">{{ '保存' | translate }}</button>
           </div>
         </nz-space>
       }

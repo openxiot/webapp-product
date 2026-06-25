@@ -195,8 +195,10 @@ export class DescriptionComponent implements ControlValueAccessor {
   }
 
   protected set CurrentLangValue(value: string) {
-    const exist = this.langList.some(item => item.lang === this.i18n.getCurrentLang());
-    if (!exist) {
+    const found = this.langList.find(item => item.lang === this.i18n.getCurrentLang());
+    if (found) {
+      found.value = value;
+    } else {
       this.langList.push({
         lang: this.i18n.getCurrentLang(),
         label: this.i18n.getCurrentLang(),
