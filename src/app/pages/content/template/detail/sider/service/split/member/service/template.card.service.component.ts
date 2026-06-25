@@ -24,7 +24,7 @@ import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {TranslatePipe} from '@ngx-translate/core';
-import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../../../../../../common/form/item/common/code/spec.code.component';
 import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
@@ -48,7 +48,7 @@ import {
     NzIconModule,
     NzCardModule,
     TranslatePipe,
-    CodeComponent,
+    SpecCodeComponent,
     DescriptionComponent
   ],
   providers: [

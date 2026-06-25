@@ -20,7 +20,7 @@ import {DescriptionComponent} from '../../../../../common/form/item/common/descr
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
-import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../../common/form/item/common/code/spec.code.component';
 import {Location} from '@angular/common';
 
 @Component({
@@ -45,7 +45,7 @@ import {Location} from '@angular/common';
     DescriptionComponent,
     TranslatePipe,
     LifecycleComponent,
-    CodeComponent,
+    SpecCodeComponent,
   ],
 })
 export class SpecUnitEditComponent implements OnInit {

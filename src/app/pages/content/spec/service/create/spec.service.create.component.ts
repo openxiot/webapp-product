@@ -24,7 +24,7 @@ import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
-import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../../common/form/item/common/code/spec.code.component';
 import {LifecycleComponent} from '../../../../../common/form/item/common/lifecycle/lifecycle.component';
 import {UuidComponent} from '../../../../../common/form/item/common/uuid/uuid.component';
 import {
@@ -59,7 +59,7 @@ import {Location} from '@angular/common';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
-    CodeComponent,
+    SpecCodeComponent,
     LifecycleComponent,
     UuidComponent,
     ServiceDefinitionPropertiesComponent,

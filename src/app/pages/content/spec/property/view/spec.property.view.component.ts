@@ -26,7 +26,7 @@ import {MainService} from '../../../../../service/main.service';
 import {DescriptionComponent} from '../../../../../common/form/item/common/description/description.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
-import {CodeComponent} from '../../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../../common/form/item/common/code/spec.code.component';
 import {PropertyFormatComponent} from '../../../../../common/form/item/property/common/format/property.format.component';
 import {PropertyAccessComponent} from '../../../../../common/form/item/property/common/access/property.access.component';
 import {PropertyDefinitionUnitComponent} from '../../../../../common/form/item/property/def/unit/property.definition.unit.component';
@@ -66,7 +66,7 @@ import {Location} from '@angular/common';
     ReactiveFormsModule,
     DescriptionComponent,
     TranslatePipe,
-    CodeComponent,
+    SpecCodeComponent,
     PropertyFormatComponent,
     PropertyAccessComponent,
     PropertyDefinitionUnitComponent,

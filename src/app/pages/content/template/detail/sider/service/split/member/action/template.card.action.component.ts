@@ -44,7 +44,7 @@ import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.c
 import {Arg} from './argument/Arg';
 import {EditorServiceActionArgumentComponent} from './argument/editor.service.action.argument.component';
 import {TranslatePipe} from '@ngx-translate/core';
-import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../../../../../../common/form/item/common/code/spec.code.component';
 import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
@@ -70,7 +70,7 @@ import {
     EditorNamespaceComponent,
     EditorServiceActionArgumentComponent,
     TranslatePipe,
-    CodeComponent,
+    SpecCodeComponent,
     DescriptionComponent
   ],
   providers: [

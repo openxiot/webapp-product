@@ -15,7 +15,7 @@ import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Val
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {MainService} from '../../../../service/main.service';
 import {AccountService} from '../../../../service/account.service';
-import {CodeComponent} from '../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../common/form/item/common/code/spec.code.component';
 import {Location} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
 
@@ -37,7 +37,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzSpaceModule,
     NzDividerModule,
     ReactiveFormsModule,
-    CodeComponent,
+    SpecCodeComponent,
     TranslatePipe,
   ],
 })

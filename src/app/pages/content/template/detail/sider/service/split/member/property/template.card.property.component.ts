@@ -32,7 +32,7 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {Member} from './member/Member';
 import {TranslatePipe} from '@ngx-translate/core';
-import {CodeComponent} from '../../../../../../../../../common/form/item/common/code/code.component';
+import {SpecCodeComponent} from '../../../../../../../../../common/form/item/common/code/spec.code.component';
 import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
@@ -77,7 +77,7 @@ import {ValueItem} from '../../../../../../../../../common/form/item/property/co
     NzIconModule,
     NzCardModule,
     TranslatePipe,
-    CodeComponent,
+    SpecCodeComponent,
     DescriptionComponent,
     PropertyAccessComponent,
     PropertyFormatComponent,

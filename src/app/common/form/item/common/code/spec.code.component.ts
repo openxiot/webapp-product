@@ -9,8 +9,8 @@ import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 
 @Component({
   selector: 'spec-code',
-  templateUrl: './code.component.html',
-  styleUrls: ['./code.component.less'],
+  templateUrl: './spec.code.component.html',
+  styleUrls: ['./spec.code.component.less'],
   standalone: true,
   imports: [
     NzButtonModule,
@@ -24,12 +24,12 @@ import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: CodeComponent,
+      useExisting: SpecCodeComponent,
       multi: true
     }
   ]
 })
-export class CodeComponent implements ControlValueAccessor {
+export class SpecCodeComponent implements ControlValueAccessor {
 
   protected readonly LifeCycle = LifeCycle;
 
