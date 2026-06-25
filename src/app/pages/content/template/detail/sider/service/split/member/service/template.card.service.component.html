@@ -24,7 +24,7 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <spec-iid formControlName="iid" [updatable]="editable"></spec-iid>
+        <spec-iid formControlName="iid" [updatable]="editable" (changed)="onIIDChanged()"></spec-iid>
       </nz-form-control>
     </nz-form-item>
 
@@ -41,6 +41,14 @@
         <description formControlName="description" [updatable]="editable" (changed)="onDescriptionChanged()"></description>
       </nz-form-control>
     </nz-form-item>
+
+    <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '可添加属性' | translate }}</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <template-addable-property formControlName="code" [updatable]="editable"></-code>
+      </nz-form-control>
+    </nz-form-item>
+
   </form>
 </nz-card>
 

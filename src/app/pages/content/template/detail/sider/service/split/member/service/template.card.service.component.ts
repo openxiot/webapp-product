@@ -69,6 +69,9 @@ export class TemplateCardServiceComponent implements OnInit {
     iid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
+    propertyAddable: FormControl<boolean>,
+    actionAddable: FormControl<boolean>,
+    eventAddable: FormControl<boolean>
   }>;
 
   constructor(
@@ -83,6 +86,9 @@ export class TemplateCardServiceComponent implements OnInit {
         Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
       ]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
+      propertyAddable: this.fb.control(true, [Validators.required]),
+      actionAddable: this.fb.control(true, [Validators.required]),
+      eventAddable: this.fb.control(true, [Validators.required]),
     });
   }
 
@@ -90,6 +96,9 @@ export class TemplateCardServiceComponent implements OnInit {
     this.form.controls.iid.setValue(this.service.iid);
     this.form.controls.code.setValue(this.service.type.name);
     this.form.controls.description.setValue(this.service.description);
+    this.form.controls.propertyAddable.setValue(this.service.propertyAddable);
+    this.form.controls.actionAddable.setValue(this.service.actionAddable);
+    this.form.controls.eventAddable.setValue(this.service.eventAddable);
   }
 
   onIIDChanged() {
