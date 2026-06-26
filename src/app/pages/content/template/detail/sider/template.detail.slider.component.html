@@ -1,22 +1,22 @@
 @if (template) {
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="360px" nzTheme="light">
-      <template-detail-services
+      <template-services
         [editable]="editable"
         [device]="template"
         (selected)="onServiceSelected($event)"
         (changed)="onChanged()"
-      ></template-detail-services>
+      ></template-services>
     </nz-sider>
 
     <nz-content class="inner-content">
       @if (service) {
-        <template-service-split
+        <template-service
           [editable]="editable"
           [service]="service"
           (changed)="onChanged()"
           (removed)="onRemoved($event)"
-        ></template-service-split>
+        ></template-service>
       }
     </nz-content>
   </nz-layout>

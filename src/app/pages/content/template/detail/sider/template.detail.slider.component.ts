@@ -5,8 +5,8 @@ import {NzListModule} from 'ng-zorro-antd/list';
 import {DeviceTemplate, ServiceTemplate} from '@openxiot/xiot-core-spec-ts';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {TemplateDetailServicesComponent} from './services/template.detail.services.component';
-import {TemplateServiceSplitComponent} from './service/split/template.service.split.component';
+import {TemplateServicesComponent} from './services/template.services.component';
+import {TemplateServiceComponent} from './service/template.service.component';
 import {NzCardModule} from 'ng-zorro-antd/card';
 
 @Component({
@@ -19,8 +19,8 @@ import {NzCardModule} from 'ng-zorro-antd/card';
     NzLayoutModule,
     NzListModule,
     NzCardModule,
-    TemplateDetailServicesComponent,
-    TemplateServiceSplitComponent,
+    TemplateServicesComponent,
+    TemplateServiceComponent,
   ],
   providers: [
     NzModalService
