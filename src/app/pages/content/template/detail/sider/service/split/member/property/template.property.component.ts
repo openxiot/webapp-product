@@ -58,6 +58,9 @@ import {ConstraintType} from '../../../../../../../../../common/form/item/proper
 import {RangeValue} from '../../../../../../../../../common/form/item/property/common/range/RangeValue';
 import {ValueItem} from '../../../../../../../../../common/form/item/property/common/list/ValueItem';
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
+import {
+  SpecRequiredComponent
+} from '../../../../../../../../../common/form/item/common/required/spec.required.component';
 
 @Component({
   selector: 'template-property',
@@ -85,7 +88,8 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
     PropertyConstraintComponent,
     PropertyRangeComponent,
     PropertyListComponent,
-    SpecIidComponent
+    SpecIidComponent,
+    SpecRequiredComponent
   ],
   providers: [
     NzModalService
@@ -106,6 +110,7 @@ export class TemplatePropertyComponent implements OnInit, OnChanges {
   units: UnitDefinition[] = [];
 
   form: FormGroup<{
+    required: FormControl<boolean>,
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
@@ -133,6 +138,7 @@ export class TemplatePropertyComponent implements OnInit, OnChanges {
     private msg: NzMessageService,
   ) {
     this.form = this.fb.group({
+      required: this.fb.control(true, [Validators.required]),
       iid: this.fb.control(0, [Validators.required]),
       ns: this.fb.control('', [Validators.required]),
       code: this.fb.control('', [
@@ -195,6 +201,7 @@ export class TemplatePropertyComponent implements OnInit, OnChanges {
   }
 
   private reload() {
+    this.form.controls.required.setValue(this.service.required);
     this.form.controls.iid.setValue(this.property.iid);
     this.form.controls.ns.setValue(this.property.type.ns);
     this.form.controls.code.setValue(this.property.type.name);
@@ -260,20 +267,21 @@ export class TemplatePropertyComponent implements OnInit, OnChanges {
   //   return this.form.controls.list;
   // }
 
-  get members(): FormArray<FormGroup<{
-    member: FormControl<Member>
-  }>> {
-    return this.form.controls.members;
+  // get members(): FormArray<FormGroup<{
+  //   member: FormControl<Member>
+  // }>> {
+  //   return this.form.controls.members;
+  // }
+
+  protected onRequiredChanged() {
+    this.property.required = this.form.value.required || false;
+    this.changed.emit()
   }
 
-  onChanged() {
-    this.changed.emit();
-  }
-
-  onFormatChanged() {
+  protected onFormatChanged() {
     this.constrainable = this.getConstrainable(this.form.controls.format.value);
     this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
-    this.onChanged();
+    this.changed.emit();
   }
 
   private getConstrainable(format: string): boolean {
@@ -395,30 +403,7 @@ export class TemplatePropertyComponent implements OnInit, OnChanges {
   // }
 
   onRemoved() {
-    // const modal = this.modal.create<ConfirmComponent, string, string>({
-    //   nzTitle: '您真的要删除这个属性吗？',
-    //   nzContent: ConfirmComponent,
-    //   nzViewContainerRef: this.viewContainerRef,
-    //   nzData: this.property.description.get('zh-CN'),
-    //   nzFooter: [
-    //     {
-    //       label: '取消',
-    //       onClick: component => component!.cancel()
-    //     },
-    //     {
-    //       label: '确认',
-    //       danger: true,
-    //       type: 'primary',
-    //       onClick: component => component!.ok()
-    //     }
-    //   ],
-    // });
-    //
-    // modal.afterClose.subscribe(result => {
-    //   if (result) {
-    //     this.removed.emit(this.property);
-    //   }
-    // });
+    this.removed.emit(this.property);
   }
 
   // onSubmit() {

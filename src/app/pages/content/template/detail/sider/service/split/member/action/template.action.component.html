@@ -18,6 +18,13 @@
 
   <form class="content" nz-form [formGroup]="form">
     <nz-form-item>
+      <nz-form-label [nzSpan]="5" nzRequired>{{ '是否必选' | translate }}</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <spec-required formControlName="required" [updatable]="editable" (changed)="onRequiredChanged()"></spec-required>
+      </nz-form-control>
+    </nz-form-item>
+
+    <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
         <spec-iid formControlName="iid" [updatable]="editable"></spec-iid>

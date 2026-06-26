@@ -32,7 +32,7 @@ export class TemplateDetailSliderComponent implements OnChanges {
   @Input() editable: boolean = false;
   @Input() template: DeviceTemplate | undefined = undefined;
   @Output() changed = new EventEmitter<void>();
-  // @Output() removed = new EventEmitter<Service>();
+  @Output() removed = new EventEmitter<ServiceTemplate>();
 
   service: ServiceTemplate | undefined = undefined;
 
@@ -59,16 +59,12 @@ export class TemplateDetailSliderComponent implements OnChanges {
     this.service = s;
   }
 
-  // onChanged(service: ServiceTemplate) {
-  //   this.changed.emit(this.template);
-  // }
-  //
-  // onRemoved($event: Service) {
-  //   this.service = undefined;
-  //   this.removed.emit($event);
-  // }
-
   protected onChanged() {
     this.changed.emit();
+  }
+
+  protected onRemoved(s: ServiceTemplate) {
+    this.service = undefined;
+    this.removed.emit(s);
   }
 }

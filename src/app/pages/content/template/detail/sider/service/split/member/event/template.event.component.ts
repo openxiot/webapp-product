@@ -49,6 +49,9 @@ import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
+import {
+  SpecRequiredComponent
+} from '../../../../../../../../../common/form/item/common/required/spec.required.component';
 
 @Component({
   selector: 'template-event',
@@ -72,7 +75,8 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
     TranslatePipe,
     SpecCodeComponent,
     DescriptionComponent,
-    SpecIidComponent
+    SpecIidComponent,
+    SpecRequiredComponent
   ],
   providers: [
     NzModalService
@@ -88,6 +92,7 @@ export class TemplateEventComponent implements OnInit, OnChanges {
   @Output() removed = new EventEmitter<EventTemplate>();
 
   form: FormGroup<{
+    required: FormControl<boolean>,
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
@@ -104,6 +109,7 @@ export class TemplateEventComponent implements OnInit, OnChanges {
     public i18n: MainI18nService
   ) {
     this.form = this.fb.group({
+      required: this.fb.control(true, [Validators.required]),
       iid: this.fb.control(0, [Validators.required]),
       ns: this.fb.control('', [Validators.required]),
       code: this.fb.control('', [
@@ -130,6 +136,7 @@ export class TemplateEventComponent implements OnInit, OnChanges {
   }
 
   private reload() {
+    this.form.controls.required.setValue(this.service.required);
     this.form.controls.iid.setValue(this.event.iid);
     this.form.controls.ns.setValue(this.event.type.ns);
     this.form.controls.code.setValue(this.event.type.name);
@@ -209,47 +216,15 @@ export class TemplateEventComponent implements OnInit, OnChanges {
 
   removeArgument(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
     this.arguments.removeAt(i);
-    this.onChanged();
-  }
-
-  onChanged() {
     this.changed.emit();
   }
 
-  onRemoved() {
-    const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: this.i18n.translate.instant('您真的要删除这个事件吗？'),
-      nzContent: ConfirmComponent,
-      nzViewContainerRef: this.viewContainerRef,
-      nzData: this.service.description.get('zh-CN'),
-      nzFooter: [
-        {
-          label: this.i18n.translate.instant('取消'),
-          onClick: component => component!.cancel()
-        },
-        {
-          label: this.i18n.translate.instant('确认'),
-          danger: true,
-          type: 'primary',
-          onClick: component => component!.ok()
-        }
-      ],
-    });
-
-    // modal.afterClose.subscribe(result => {
-    //   if (result) {
-    //     this.removed.emit(this.event);
-    //   }
-    // });
+  protected onRequiredChanged() {
+    this.event.required = this.form.value.required || false;
+    this.changed.emit()
   }
 
-  // onSubmit() {
-  //   this.event.iid = this.form.controls.iid.value;
-  //   this.event.type.name = this.form.controls.code.value;
-  //   this.event.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
-  //   this.event.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
-  //   this.event.description.set('en-US', this.form.controls.descriptionENUS.value);
-  //
-  //   // todo: save
-  // }
+  onRemoved() {
+    this.removed.emit(this.event);
+  }
 }

@@ -78,6 +78,7 @@
         [editable]="editable"
         [template]="template"
         (changed)="onChanged()"
+        (removed)="onRemoved($event)"
       ></template-detail-slider>
     }
   </div>

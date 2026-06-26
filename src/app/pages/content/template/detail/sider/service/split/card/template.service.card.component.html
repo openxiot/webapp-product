@@ -57,9 +57,18 @@
             <li nz-menu-item (click)="onClickProperty(p)">
               <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
               <span class="menu-item">{{ p.description.get(i18n.getCurrentLang()) }}</span>
-              @if (showVersion) {
-                <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ p.type.version }}</nz-tag></span>
-              }
+
+              <span style="float: right">
+                @if (p.required) {
+                  <nz-tag nzColor="blue">{{ '必选' | translate }}</nz-tag>
+                } @else {
+                  <nz-tag nzColor="green">{{ '可选' | translate }}</nz-tag>
+                }
+
+                @if (showVersion) {
+                  <nz-tag nzColor="blue">{{ '版本' | translate }} {{ p.type.version }}</nz-tag>
+                }
+              </span>
             </li>
           }
         </ul>
@@ -73,9 +82,17 @@
             <li nz-menu-item (click)="onClickAction(a)">
               <nz-tag [nzColor]="'blue'">{{ a.iid }}</nz-tag>
               <span class="menu-item">{{ a.description.get(i18n.getCurrentLang()) }}</span>
-              @if (showVersion) {
-                <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ a.type.version }}</nz-tag></span>
-              }
+              <span style="float: right">
+                @if (a.required) {
+                  <nz-tag nzColor="blue">{{ '必选' | translate }}</nz-tag>
+                } @else {
+                  <nz-tag nzColor="green">{{ '可选' | translate }}</nz-tag>
+                }
+
+                @if (showVersion) {
+                  <nz-tag nzColor="blue">{{ '版本' | translate }} {{ a.type.version }}</nz-tag>
+                }
+              </span>
             </li>
           }
         </ul>
@@ -89,9 +106,17 @@
             <li nz-menu-item (click)="onClickEvent(e)">
               <nz-tag [nzColor]="'blue'">{{ e.iid }}</nz-tag>
               <span class="menu-item">{{ e.description.get(i18n.getCurrentLang()) }}</span>
-              @if (showVersion) {
-                <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ e.type.version }}</nz-tag></span>
-              }
+              <span style="float: right">
+                @if (e.required) {
+                  <nz-tag nzColor="blue">{{ '必选' | translate }}</nz-tag>
+                } @else {
+                  <nz-tag nzColor="green">{{ '可选' | translate }}</nz-tag>
+                }
+
+                @if (showVersion) {
+                  <nz-tag nzColor="blue">{{ '版本' | translate }} {{ e.type.version }}</nz-tag>
+                }
+              </span>
             </li>
           }
         </ul>

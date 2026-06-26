@@ -30,6 +30,9 @@ import {
 } from '../../../../../../../../../common/form/item/common/description/description.component';
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
 import {SpecAddableComponent} from '../../../../../../../../../common/form/item/common/addable/spec.addable.component';
+import {
+  SpecRequiredComponent
+} from '../../../../../../../../../common/form/item/common/required/spec.required.component';
 
 @Component({
   selector: 'template-service',
@@ -53,7 +56,8 @@ import {SpecAddableComponent} from '../../../../../../../../../common/form/item/
     SpecCodeComponent,
     DescriptionComponent,
     SpecIidComponent,
-    SpecAddableComponent
+    SpecAddableComponent,
+    SpecRequiredComponent
   ],
   providers: [
     NzModalService
@@ -68,6 +72,7 @@ export class TemplateServiceComponent implements OnInit {
   @Output() removed = new EventEmitter<void>();
 
   form: FormGroup<{
+    required: FormControl<boolean>,
     iid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
@@ -82,6 +87,7 @@ export class TemplateServiceComponent implements OnInit {
     private fb: NonNullableFormBuilder
   ) {
     this.form = this.fb.group({
+      required: this.fb.control(true, [Validators.required]),
       iid: this.fb.control(0, [Validators.required]),
       code: this.fb.control('', [
         Validators.required,
@@ -95,6 +101,7 @@ export class TemplateServiceComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.form.controls.required.setValue(this.service.required);
     this.form.controls.iid.setValue(this.service.iid);
     this.form.controls.code.setValue(this.service.type.name);
     this.form.controls.description.setValue(this.service.description);
@@ -103,12 +110,17 @@ export class TemplateServiceComponent implements OnInit {
     this.form.controls.eventAddable.setValue(this.service.eventAddable);
   }
 
-  onIIDChanged() {
+  protected onRequiredChanged() {
+    this.service.required = this.form.value.required || false;
+    this.changed.emit()
+  }
+
+  protected onIIDChanged() {
     this.service.iid = this.form.value.iid || 0;
     this.changed.emit()
   }
 
-  onDescriptionChanged() {
+  protected onDescriptionChanged() {
     this.service.description = this.form.value.description || new Map<string, string>();
     this.changed.emit()
   }

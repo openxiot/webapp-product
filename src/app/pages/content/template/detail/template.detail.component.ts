@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
-import {DeviceTemplate, LifeCycle} from "@openxiot/xiot-core-spec-ts";
+import {DeviceTemplate, LifeCycle, ServiceTemplate} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
@@ -216,6 +216,12 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   }
 
   protected onChanged() {
+    this.changed = true;
+    this.cdr.detectChanges();
+  }
+
+  protected onRemoved(s: ServiceTemplate) {
+    this.template?.services.delete(s.iid);
     this.changed = true;
     this.cdr.detectChanges();
   }

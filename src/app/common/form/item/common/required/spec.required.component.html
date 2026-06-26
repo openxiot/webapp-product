@@ -1,0 +1,12 @@
+@if (updatable) {
+  <nz-radio-group [(ngModel)]="value" nzButtonStyle="solid">
+    <label nz-radio-button [nzValue]="true">{{ '是' | translate }}</label>
+    <label nz-radio-button [nzValue]="false">{{ '否' | translate }}</label>
+  </nz-radio-group>
+} @else {
+  @if (value) {
+    <nz-tag nzColor="blue">{{ '是' | translate }}</nz-tag>
+  } @else {
+    <nz-tag nzColor="red">{{ '否' | translate }}</nz-tag>
+  }
+}

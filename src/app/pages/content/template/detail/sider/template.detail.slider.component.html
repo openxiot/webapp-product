@@ -15,6 +15,7 @@
           [editable]="editable"
           [service]="service"
           (changed)="onChanged()"
+          (removed)="onRemoved($event)"
         ></template-service-split>
       }
     </nz-content>

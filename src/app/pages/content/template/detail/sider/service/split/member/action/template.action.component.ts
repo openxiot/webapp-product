@@ -22,12 +22,9 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  Action,
   ActionTemplate,
   Argument,
   Property,
-  PropertyTemplate,
-  Service,
   ServiceTemplate
 } from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
@@ -40,7 +37,6 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
 import {MainI18nService} from '../../../../../../../../../service/i18n.service';
-import {EditorNamespaceComponent} from '../property/namespace/editor.namespace.component';
 import {Arg} from './argument/Arg';
 import {EditorServiceActionArgumentComponent} from './argument/editor.service.action.argument.component';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -49,6 +45,9 @@ import {
   DescriptionComponent
 } from '../../../../../../../../../common/form/item/common/description/description.component';
 import {SpecIidComponent} from '../../../../../../../../../common/form/item/common/iid/spec.iid.component';
+import {
+  SpecRequiredComponent
+} from '../../../../../../../../../common/form/item/common/required/spec.required.component';
 
 @Component({
   selector: 'template-action',
@@ -68,12 +67,12 @@ import {SpecIidComponent} from '../../../../../../../../../common/form/item/comm
     NzButtonModule,
     NzIconModule,
     NzCardModule,
-    EditorNamespaceComponent,
     EditorServiceActionArgumentComponent,
     TranslatePipe,
     SpecCodeComponent,
     DescriptionComponent,
-    SpecIidComponent
+    SpecIidComponent,
+    SpecRequiredComponent
   ],
   providers: [
     NzModalService
@@ -88,6 +87,7 @@ export class TemplateActionComponent implements OnInit, OnChanges {
   @Output() removed = new EventEmitter<ActionTemplate>();
 
   form: FormGroup<{
+    required: FormControl<boolean>,
     iid: FormControl<number>,
     ns: FormControl<string>,
     code: FormControl<string>,
@@ -107,6 +107,7 @@ export class TemplateActionComponent implements OnInit, OnChanges {
     public i18n: MainI18nService
   ) {
     this.form = this.fb.group({
+      required: this.fb.control(true, [Validators.required]),
       iid: this.fb.control(0, [Validators.required]),
       ns: this.fb.control('', [Validators.required]),
       code: this.fb.control('', [
@@ -138,6 +139,7 @@ export class TemplateActionComponent implements OnInit, OnChanges {
   }
 
   private reload() {
+    this.form.controls.required.setValue(this.service.required);
     this.form.controls.iid.setValue(this.action.iid);
     this.form.controls.ns.setValue(this.action.type.ns);
     this.form.controls.code.setValue(this.action.type.name);
@@ -194,7 +196,7 @@ export class TemplateActionComponent implements OnInit, OnChanges {
 
   removeArgumentIn(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
     this.argumentIn.removeAt(i);
-    this.onChanged();
+    this.changed.emit();
   }
 
   addArgumentInItem() {
@@ -243,7 +245,7 @@ export class TemplateActionComponent implements OnInit, OnChanges {
 
   removeArgumentOut(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
     this.argumentOut.removeAt(i);
-    this.onChanged();
+    this.changed.emit();
   }
 
   addArgumentOutItem() {
@@ -290,44 +292,12 @@ export class TemplateActionComponent implements OnInit, OnChanges {
     // });
   }
 
-  onChanged() {
-    this.changed.emit();
+  protected onRequiredChanged() {
+    this.action.required = this.form.value.required || false;
+    this.changed.emit()
   }
 
   onRemoved() {
-    const modal = this.modal.create<ConfirmComponent, string, string>({
-      nzTitle: this.i18n.translate.instant('您真的要删除这个方法吗？'),
-      nzContent: ConfirmComponent,
-      nzViewContainerRef: this.viewContainerRef,
-      nzData: this.action.description.get('zh-CN'),
-      nzFooter: [
-        {
-          label: this.i18n.translate.instant('取消'),
-          onClick: component => component!.cancel()
-        },
-        {
-          label: this.i18n.translate.instant('确认'),
-          danger: true,
-          type: 'primary',
-          onClick: component => component!.ok()
-        }
-      ],
-    });
-
-    // modal.afterClose.subscribe(result => {
-    //   if (result) {
-    //     this.removed.emit(this.action);
-    //   }
-    // });
+    this.removed.emit(this.action);
   }
-
-  // onSubmit() {
-  //   this.action.iid = this.form.controls.iid.value;
-  //   this.action.type.name = this.form.controls.code.value;
-  //   this.action.description.set('zh-CN', this.form.controls.descriptionZHCN.value);
-  //   this.action.description.set('zh-TW', this.form.controls.descriptionZHTW.value);
-  //   this.action.description.set('en-US', this.form.controls.descriptionENUS.value);
-  //
-  //   // todo: save
-  // }
 }
