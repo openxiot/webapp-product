@@ -9,6 +9,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, of, Subscription, switchMap, tap} from 'rxjs';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {TranslatePipe} from '@ngx-translate/core';
+import {AccountService} from '../../../../../../service/account.service';
 
 @Component({
   selector: 'product-basic-icon',
@@ -33,6 +34,11 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductBasicIconComponent implements ControlValueAccessor, OnDestroy {
 
+  protected readonly LifeCycle = LifeCycle;
+
+  @Input() productId: number = 0;
+  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+
   private _value!: string;
 
   disabled = false;
@@ -44,6 +50,7 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
 
   constructor(
     private http: HttpClient,
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService
   ) {
@@ -80,10 +87,9 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
     this.disabled = isDisabled;
   }
 
-  protected readonly LifeCycle = LifeCycle;
-
-  @Input() productId: number = 0;
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  //------------------------------------------------------------
+  // 上传图片
+  //------------------------------------------------------------
 
   loading = false;
   iconUrl?: string;
@@ -108,7 +114,7 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
     this.loading = true;
 
     // 构建完整的上传流程 observable
-    const uploadFlow$ = this.service.getFileUploadUrl(this.productId, 'icon', item.file.name).pipe(
+    const uploadFlow$ = this.service.getFileUploadUrl(this.account.organization.id, "product", "icon", item.file.name).pipe(
       // 切换到上传请求
       switchMap(uploadInfo => this.uploadToServer(item, uploadInfo.upload, uploadInfo.download)),
       // 处理整体流程错误
@@ -132,8 +138,10 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
    * @param downloadUrl 上传成功后的访问地址
    */
   private uploadToServer(item: NzUploadXHRArgs, uploadUrl: string, downloadUrl: string) {
-    // S3 预签名 URL 不需要额外请求头，保持 headers 为空
-    const headers = new HttpHeaders({});
+    const headers = new HttpHeaders({
+      'x-ms-blob-type': 'BlockBlob',
+      'Content-Type': item.file.type || 'application/octet-stream'
+    });
 
     return this.http.put(uploadUrl, item.file, {
       headers,
@@ -172,7 +180,7 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
           item.onSuccess?.(event.body, item.file, event); // 通知组件成功
         } else {
           // 非成功状态码（如 400/403），触发错误处理
-          this.handleUploadError(new Error(`S3 响应错误: ${event.statusText}`), item);
+          this.handleUploadError(new Error(`响应错误: ${event.statusText}`), item);
         }
         break;
     }

@@ -17,6 +17,7 @@ import {catchError, of, Subscription, switchMap, tap} from 'rxjs';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {FirmwareUrl} from './FirmwareUrl';
 import {TranslatePipe} from '@ngx-translate/core';
+import {AccountService} from '../../../../../../../service/account.service';
 
 @Component({
   selector: 'product-firmware-url',
@@ -58,6 +59,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
     private injector: Injector,
     private http: HttpClient,
     private service: MainService,
+    private account: AccountService,
     private msg: NzMessageService
   ) {
     // 延迟设置valueAccessor（在构造函数执行完毕后）
@@ -157,7 +159,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
     this.loading = true;
 
     // 构建完整的上传流程 observable
-    const uploadFlow$ = this.service.getFileUploadUrl(this.productId, 'firmware', item.file.name).pipe(
+    const uploadFlow$ = this.service.getFileUploadUrl(this.account.organization.id, "product", "firmware", item.file.name).pipe(
       // 切换到上传请求
       switchMap(uploadInfo => this.uploadToServer(item, uploadInfo.upload, uploadInfo.download)),
       // 处理整体流程错误

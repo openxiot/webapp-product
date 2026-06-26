@@ -16,6 +16,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {MainService} from '../../../../../../service/main.service';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {TranslatePipe} from '@ngx-translate/core';
+import {AccountService} from '../../../../../../service/account.service';
 
 @Component({
   selector: 'product-wizard-step',
@@ -50,6 +51,7 @@ export class ProductWizardStepComponent implements OnInit, OnDestroy {
 
   constructor(
     private http: HttpClient,
+    private account: AccountService,
     private service: MainService,
     private msg: NzMessageService
   ) {
@@ -88,7 +90,7 @@ export class ProductWizardStepComponent implements OnInit, OnDestroy {
     this.loading = true;
 
     // 构建完整的上传流程 observable
-    const uploadFlow$ = this.service.getFileUploadUrl(this.productId, 'wizard', item.file.name).pipe(
+    const uploadFlow$ = this.service.getFileUploadUrl(this.account.organization.id, "product", "wizard", item.file.name).pipe(
       // 切换到上传请求
       switchMap(uploadInfo => this.uploadToServer(item, uploadInfo.upload, uploadInfo.download)),
       // 处理整体流程错误

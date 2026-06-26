@@ -951,16 +951,16 @@ export class MainService {
   /**------------------------------------------------------------------------------------------------
    * 文件上传
    *------------------------------------------------------------------------------------------------*/
-  getFileUploadUrl(productId: number, type: string, filename: string): Observable<OSSUpload> {
+  getFileUploadUrl(organizationId: string, classify: string, type: string, filename: string): Observable<OSSUpload> {
     const params = {
-      category: 'product',
-      id: productId,
-      fileType: type,
-      fileName: filename
+      organizationId: organizationId,
+      classify: classify,
+      type: type,
+      filename: filename
     };
 
-      return this.http
-      .get<OxResponse>(`${this.server}/v1/file/upload/url`, {params})
+    return this.http
+      .get<OxResponse>(`${this.storage}/storage/upload/url`, {params})
       .pipe(map(response => OSSUploadCodec.decode(response.data)));
   }
 
@@ -1000,7 +1000,7 @@ export class MainService {
 
     return lastValueFrom(
       this.http
-        .get<OxResponse>(`${this.server}/v1/product/instance/one`, { params })
+        .get<OxResponse>(`${this.server}/v1/product/instance/one`, {params})
         .pipe(map(response => response.data.definition))
     );
   }
@@ -1015,7 +1015,7 @@ export class MainService {
       panel: {
         category: 'mobile',
         type: 'web',
-        version: { name: 'xxx'},
+        version: {name: 'xxx'},
         instance: type
       },
       prompt: {
