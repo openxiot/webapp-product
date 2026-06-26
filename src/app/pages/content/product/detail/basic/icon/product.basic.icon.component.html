@@ -25,11 +25,9 @@
           } @else {
             <div class="preview-wrapper">
               <img [src]="value" class="preview-img" alt="上传的图标"/>
-              <button
-                class="delete-btn"
-                nz-icon nzType="delete"
-                (click)="handleDelete($event)"
-              ></button>
+              <span class="delete-btn" (click)="handleDelete($event)">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </span>
             </div>
           }
         </nz-upload>

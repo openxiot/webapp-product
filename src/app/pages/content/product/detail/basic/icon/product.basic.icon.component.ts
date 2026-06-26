@@ -174,13 +174,13 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
 
       case 4: // Response 事件：上传完成（成功收到响应）
         // 验证 S3 成功响应状态码（200 或 204）
-        if (event.status === 200 || event.status === 204) {
+        if (event.status === 200 || event.status === 201 || event.status === 204) {
           this.iconUrl = downloadUrl;
           this.value = downloadUrl; // 同步表单值
           item.onSuccess?.(event.body, item.file, event); // 通知组件成功
         } else {
           // 非成功状态码（如 400/403），触发错误处理
-          this.handleUploadError(new Error(`响应错误: ${event.statusText}`), item);
+          this.handleUploadError(new Error(`S3 响应错误: ${event.statusText}`), item);
         }
         break;
     }
@@ -239,11 +239,32 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
   // 新增删除方法
   protected handleDelete(event: MouseEvent): void {
     event.stopPropagation(); // 阻止事件冒泡到上传组件
-    // 1. 清除当前图片
-    this.value = '';
-    this.iconUrl = undefined;
-    this.uploaded = false;
-    // 2. 可选：调用后端接口删除服务器上的文件
-    // this.service.deleteFile(this.productId, this.iconUrl).subscribe();
+
+    // 1. 可选：调用后端接口删除服务器上的文件
+    if (this.iconUrl) {
+      this.loading = true;
+
+      this.service.removeUrl(this.iconUrl)
+        .subscribe({
+          next: () => {
+            console.log('removeUrl ok: ' + this.iconUrl);
+            this.loading = false;
+
+            this.value = '';
+            this.iconUrl = undefined;
+            this.uploaded = false;
+          },
+          error: error => {
+            console.log('removeUrl: ', error);
+            this.msg.warning(error);
+            this.loading = false;
+          }
+        });
+    } else {
+      // 2. 清除当前图片
+      this.value = '';
+      this.iconUrl = undefined;
+      this.uploaded = false;
+    }
   }
 }

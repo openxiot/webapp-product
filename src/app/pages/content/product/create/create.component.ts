@@ -44,7 +44,8 @@ import {TranslatePipe} from '@ngx-translate/core';
     ProductBasicIconComponent,
     ProductBasicProtocolComponent,
     ProductBasicUpgradeComponent,
-    TranslatePipe
+    TranslatePipe,
+    ProductBasicIconComponent
   ],
 })
 export class CreateComponent implements OnInit {

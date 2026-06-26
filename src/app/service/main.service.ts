@@ -964,6 +964,13 @@ export class MainService {
       .pipe(map(response => OSSUploadCodec.decode(response.data)));
   }
 
+  removeUrl(url: string): Observable<void> {
+    const params = {url: url};
+    return this.http
+      .delete<OxResponse>(`${this.storage}/storage/upload/url`, {params})
+      .pipe(map(() => undefined));
+  }
+
   /**------------------------------------------------------------------------------------------------
    * 借助AI生成设备控制界面
    *------------------------------------------------------------------------------------------------*/
