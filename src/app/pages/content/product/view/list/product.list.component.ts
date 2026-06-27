@@ -127,6 +127,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadProductsFromServer(0, 1000);
     // this.loadProductsFromServer(this.pageIndex, this.pageSize);
     // 无需加载，因为onQueryParamsChange会被触发。
 
@@ -148,6 +149,7 @@ export class ProductListComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.service.getAllProducts(this.account.organization).subscribe({
       next: data => {
+        console.log('products: ', data.length);
         this.products = data;
         this.loading = false;
       },

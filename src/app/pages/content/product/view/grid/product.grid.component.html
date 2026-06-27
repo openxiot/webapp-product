@@ -71,7 +71,7 @@
         </nz-card>
 
         <ng-template #coverTemplate>
-          <img [src]="p.icon" alt="{{ p.name }}" class="cover-image">
+          <img [src]="p.icon" alt="{{ p.name.value.get(i18n.getCurrentLang()) }}" class="cover-image">
         </ng-template>
       </div>
     }

@@ -120,36 +120,40 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   private loadDevices() {
-    if (this._value.ns.length > 0) {
-      this.loading = true;
-      this.service.getDeviceDefinitions(this._value.ns)
-        .subscribe({
-          next: data => {
-            this.devices = new Map(data.map(item => [item.type.name, item]));
-            this.loading = false;
-            console.log('getDeviceDefinitions: ' + this.devices.size);
-          },
-          error: error => {
-            console.log(error);
-          }
-        })
+    if (this._value) {
+      if (this._value.ns.length > 0) {
+        this.loading = true;
+        this.service.getDeviceDefinitions(this._value.ns)
+          .subscribe({
+            next: data => {
+              this.devices = new Map(data.map(item => [item.type.name, item]));
+              this.loading = false;
+              console.log('getDeviceDefinitions: ' + this.devices.size);
+            },
+            error: error => {
+              console.log(error);
+            }
+          })
+      }
     }
   }
 
   private loadTemplates() {
-    if (this._value.ns.length > 0) {
-      this.loading = true;
-      this.service.getTemplates(this._value.ns)
-        .subscribe({
-          next: data => {
-            this.templates = new Map(data.map(item => [item.type.toString(), item]));
-            this.loading = false;
-            console.log('getTemplates: ' + this.templates.size);
-          },
-          error: error => {
-            console.log(error);
-          }
-        })
+    if (this._value) {
+      if (this._value.ns.length > 0) {
+        this.loading = true;
+        this.service.getTemplates(this._value.ns)
+          .subscribe({
+            next: data => {
+              this.templates = new Map(data.map(item => [item.type.toString(), item]));
+              this.loading = false;
+              console.log('getTemplates: ' + this.templates.size);
+            },
+            error: error => {
+              console.log(error);
+            }
+          })
+      }
     }
   }
 

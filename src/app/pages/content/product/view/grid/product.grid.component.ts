@@ -32,7 +32,8 @@ import {MainI18nService} from '../../../../../service/i18n.service';
 })
 export class ProductGridComponent implements OnInit, OnDestroy {
 
-  // private subscription: any;
+  protected readonly LifeCycle = LifeCycle;
+
   loading: boolean = true;
   products: ProductBasic[] = [];
 
@@ -45,23 +46,17 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.subscription = this.organization.data$.subscribe(data => {
-    //   if (data) {
-    //     this.loadProductsFromServer();
-    //   }
-    // });
-
     this.loadProductsFromServer();
   }
 
   ngOnDestroy() {
-    // this.subscription.unsubscribe();
   }
 
   loadProductsFromServer() {
     this.loading = true;
     this.service.getAllProducts(this.account.organization).subscribe({
       next: data => {
+        console.log('products: ', data.length);
         this.products = data;
         this.loading = false;
       },
@@ -70,6 +65,4 @@ export class ProductGridComponent implements OnInit, OnDestroy {
       }
     })
   }
-
-  protected readonly LifeCycle = LifeCycle;
 }
