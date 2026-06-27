@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -11,6 +11,7 @@ import {MainService} from '../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {MainI18nService} from '../../../service/i18n.service';
+import {NamespaceOption} from './NamespaceOption';
 
 @Component({
   selector: 'namespace-selector',
@@ -28,13 +29,12 @@ import {MainI18nService} from '../../../service/i18n.service';
   providers: [],
   standalone: true
 })
-export class NamespaceSelectorComponent {
+export class NamespaceSelectorComponent implements OnInit {
 
   readonly #modal = inject(NzModalRef);
-  readonly currentNamespace: string = inject(NZ_MODAL_DATA);
+  readonly option: NamespaceOption = inject(NZ_MODAL_DATA);
 
-  loading: boolean = true;
-  namespaces: NamespaceDefinition[] = [];
+  loading: boolean = false;
 
   constructor(
     private account: AccountService,
@@ -45,14 +45,17 @@ export class NamespaceSelectorComponent {
   }
 
   ngOnInit() {
-    this.loadNamespaces();
+    if (this.option.namespaces.length === 0) {
+      this.loadNamespaces();
+    }
   }
 
   private loadNamespaces() {
+    this.loading = true;
     this.service.getAllNamespaces(this.account.organization)
       .subscribe({
         next: data => {
-          this.namespaces = data;
+          this.option.namespaces = data;
           this.loading = false;
         },
         error: error => {

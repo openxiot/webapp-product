@@ -22,6 +22,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {MainI18nService} from '../../../service/i18n.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
+import {NamespaceOption} from '../../../common/dialog/namespace/NamespaceOption';
 
 @Component({
   selector: 'main-template',
@@ -118,12 +119,12 @@ export class TemplateComponent implements OnInit {
   }
 
   protected changeNamespace(): void {
-    const modal = this.modal.create<NamespaceSelectorComponent, string, NamespaceDefinition>({
+    const modal = this.modal.create<NamespaceSelectorComponent, NamespaceOption, NamespaceDefinition>({
       nzTitle: '',
       nzWidth: 800,
       nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: this.account.ns?.namespace || '',
+      nzData: new NamespaceOption(this.account.ns?.namespace || ''),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,

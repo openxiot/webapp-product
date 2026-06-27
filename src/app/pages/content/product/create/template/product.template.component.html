@@ -8,16 +8,8 @@
 
     <nz-col [nzSpan]="16">
       <nz-card nzHoverable (click)="onClickTemplate()">
-        <nz-card-meta [nzTitle]="nsTitle" [nzDescription]="nsDesc"></nz-card-meta>
+        <nz-card-meta [nzTitle]="CurrentTemplateTitle" [nzDescription]="CurrentTemplateDescription"></nz-card-meta>
       </nz-card>
-
-      <ng-template #nsTitle>
-        {{ value.ns }}
-      </ng-template>
-
-      <ng-template #nsDesc>
-        {{ value.ns }}
-      </ng-template>
     </nz-col>
   </nz-row>
 </nz-spin>

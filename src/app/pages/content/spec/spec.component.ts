@@ -25,6 +25,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NamespaceSelectorComponent} from '../../../common/dialog/namespace/namespace.selector.component';
 import {MainI18nService} from '../../../service/i18n.service';
 import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
+import {NamespaceOption} from '../../../common/dialog/namespace/NamespaceOption';
 
 @Component({
   selector: 'main-spec',
@@ -81,12 +82,12 @@ export class SpecComponent implements OnInit {
   }
 
   protected changeNamespace(): void {
-    const modal = this.modal.create<NamespaceSelectorComponent, string, NamespaceDefinition>({
+    const modal = this.modal.create<NamespaceSelectorComponent, NamespaceOption, NamespaceDefinition>({
       nzTitle: '',
       nzWidth: 800,
       nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: this.account.ns?.namespace || '',
+      nzData: new NamespaceOption(this.account.ns?.namespace || ''),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,

@@ -1,7 +1,7 @@
 <nz-spin [nzSpinning]="loading">
 
   <nz-row [nzGutter]="[8, 8]">
-    @for (ns of namespaces; track ns.namespace) {
+    @for (ns of option.namespaces; track ns.namespace) {
       <nz-col [nzSpan]="6" (click)="onSelected(ns)">
         <nz-card nzHoverable>
           <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
@@ -12,7 +12,7 @@
         <span>
           <span>{{ ns.namespace }}</span>
 
-          @if (ns.namespace === currentNamespace) {
+          @if (ns.namespace === option.current) {
             <span style="float: right">
               <span nz-icon nzType="check" nzTheme="outline"></span>
             </span>

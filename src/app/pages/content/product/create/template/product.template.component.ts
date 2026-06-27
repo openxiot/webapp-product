@@ -11,6 +11,8 @@ import {NamespaceSelectorComponent} from '../../../../../common/dialog/namespace
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {TemplateSelectorComponent} from './dialog/template.selector.component';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
+import {TemplatesOption} from './dialog/TemplatesOption';
+import {NamespaceOption} from '../../../../../common/dialog/namespace/NamespaceOption';
 
 @Component({
   selector: 'product-template',
@@ -154,28 +156,56 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   protected get CurrentNamespaceTitle(): string {
     const def = this.namespaces.get(this._value.ns);
     if (def) {
-      return def.namespace;
+      return def.namespace || '?';
     }
 
-    return this._value.ns;
+    return this._value.ns || '?';
   }
 
   protected get CurrentNamespaceDescription(): string {
     const def = this.namespaces.get(this._value.ns);
     if (def) {
-      return def.description.get(this.i18n.getCurrentLang()) || def.namespace;
+      return def.description.get(this.i18n.getCurrentLang()) || def.namespace || '?';
     }
 
-    return this._value.ns;
+    return this._value.ns || '?';
+  }
+
+  protected get CurrentTemplateTitle(): string {
+    const template = this.templates.get(this._value.toString());
+    if (template) {
+      return template.type.name;
+    }
+
+    const def = this.devices.get(this._value.name);
+    if (def) {
+      return def.type.name;
+    }
+
+    return '?';
+  }
+
+  protected get CurrentTemplateDescription(): string {
+    const template = this.templates.get(this._value.toString());
+    if (template) {
+      return template.description.get(this.i18n.getCurrentLang()) || template.type.name;
+    }
+
+    const def = this.devices.get(this._value.name);
+    if (def) {
+      return def.description.get(this.i18n.getCurrentLang()) || def.type.name;
+    }
+
+    return '?';
   }
 
   protected onClickNamespace() {
-    const modal = this.modal.create<NamespaceSelectorComponent, string, NamespaceDefinition>({
-      nzTitle: '',
+    const modal = this.modal.create<NamespaceSelectorComponent, NamespaceOption, NamespaceDefinition>({
+      nzTitle: this.i18n.translate.instant('请选择名字空间'),
       nzWidth: 800,
       nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: this._value.ns || '',
+      nzData: new NamespaceOption(this._value.ns || '', Array.from(this.namespaces.values())),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
@@ -192,12 +222,12 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected onClickTemplate() {
-    const modal = this.modal.create<TemplateSelectorComponent, Urn, Urn>({
-      nzTitle: '',
-      nzWidth: 800,
+    const modal = this.modal.create<TemplateSelectorComponent, TemplatesOption, Urn>({
+      nzTitle: this.i18n.translate.instant('请选择模板'),
+      nzWidth: 1024,
       nzContent: TemplateSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: this._value,
+      nzData: new TemplatesOption(Array.from(this.devices.values()), Array.from(this.templates.values())),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
@@ -206,7 +236,8 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this._value = result;
+        this.value = result;
+        this.changed.emit();
       }
     });
   }

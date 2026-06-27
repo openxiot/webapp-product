@@ -5,12 +5,13 @@ import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {NamespaceDefinition, Urn} from '@openxiot/xiot-core-spec-ts';
+import {DeviceDefinition, NamespaceDefinition, Urn} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {AccountService} from '../../../../../../service/account.service';
 import {MainI18nService} from '../../../../../../service/i18n.service';
 import {MainService} from '../../../../../../service/main.service';
+import {TemplatesOption} from './TemplatesOption';
 
 @Component({
   selector: 'template-selector',
@@ -31,10 +32,7 @@ import {MainService} from '../../../../../../service/main.service';
 export class TemplateSelectorComponent {
 
   readonly #modal = inject(NzModalRef);
-  readonly type: Urn = inject(NZ_MODAL_DATA);
-
-  loading: boolean = true;
-  namespaces: NamespaceDefinition[] = [];
+  readonly option: TemplatesOption = inject(NZ_MODAL_DATA);
 
   constructor(
     private account: AccountService,
@@ -44,24 +42,7 @@ export class TemplateSelectorComponent {
   ) {
   }
 
-  ngOnInit() {
-    this.loadNamespaces();
-  }
-
-  private loadNamespaces() {
-    this.service.getAllNamespaces(this.account.organization)
-      .subscribe({
-        next: data => {
-          this.namespaces = data;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-        }
-      })
-  }
-
-  protected onSelected(ns: NamespaceDefinition): void {
-    this.#modal.destroy(ns);
+  protected onDeviceSelected(device: DeviceDefinition): void {
+    this.#modal.destroy(device.type);
   }
 }
