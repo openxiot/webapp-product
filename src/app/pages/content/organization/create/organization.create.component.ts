@@ -62,7 +62,7 @@ export class OrganizationCreateComponent implements OnInit {
     this.form = this.fb.group({
       code: this.fb.control('', [
         Validators.required,
-        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+        Validators.pattern(/^[a-z][a-z0-9-]*$/)
       ]),
       name: this.fb.control('', [Validators.required]),
     });

@@ -43,7 +43,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductPanelComponent implements OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '');
 
   @ViewChild('productPanel') productPanel!: ProductPanelListComponent;
 
@@ -67,7 +67,7 @@ export class ProductPanelComponent implements OnChanges {
     }
   }
 
-  private loadInstances(productId: number) {
+  private loadInstances(productId: string) {
     this.loadingInstances = true;
     this.service.getProductInstances(productId).subscribe({
       next: data => {

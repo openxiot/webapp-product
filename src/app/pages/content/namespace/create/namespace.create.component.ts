@@ -68,7 +68,7 @@ export class NamespaceCreateComponent implements OnInit {
     this.form = this.fb.group({
       name: this.fb.control('', [
         Validators.required,
-        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+        Validators.pattern(/^[a-z][a-z0-9-]*$/)
       ]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
       visibility: this.fb.control(Visibility.PUBLIC, [Validators.required]),

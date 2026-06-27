@@ -12,12 +12,12 @@ import {TemplateListComponent} from './view/list/template.list.component';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {TemplateFilterTypeComponent} from './filter/type/template.filter.type.component';
 import {Type} from '../../../typedef/define/Type';
-import {TemplateSummary, Urn} from '@openxiot/xiot-core-spec-ts';
+import {NamespaceDefinition, TemplateSummary, Urn} from '@openxiot/xiot-core-spec-ts';
 import {RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
-import {NamespaceChangeComponent} from '../../../common/dialog/namespace/namespace.change.component';
+import {NamespaceSelectorComponent} from '../../../common/dialog/namespace/namespace.selector.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {MainI18nService} from '../../../service/i18n.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
@@ -118,12 +118,12 @@ export class TemplateComponent implements OnInit {
   }
 
   protected changeNamespace(): void {
-    const modal = this.modal.create<NamespaceChangeComponent, string, string>({
+    const modal = this.modal.create<NamespaceSelectorComponent, string, NamespaceDefinition>({
       nzTitle: '',
       nzWidth: 800,
-      nzContent: NamespaceChangeComponent,
+      nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: '',
+      nzData: this.account.ns?.namespace || '',
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
@@ -132,6 +132,7 @@ export class TemplateComponent implements OnInit {
 
     modal.afterClose.subscribe(result => {
       if (result) {
+        this.account.ns = result;
         this.loadTemplates();
       }
     });

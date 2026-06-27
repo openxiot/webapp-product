@@ -69,7 +69,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductFirmwareComponent implements OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic("", '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
 
   protected readonly LifeCycle = LifeCycle;
 
@@ -100,7 +100,7 @@ export class ProductFirmwareComponent implements OnChanges {
     }
   }
 
-  private loadFirmwares(productId: number) {
+  private loadFirmwares(productId: string) {
     this.loadingFirmwares = true;
     this.service.getProductFirmwares(productId).subscribe({
       next: data => {
@@ -119,7 +119,7 @@ export class ProductFirmwareComponent implements OnChanges {
     });
   }
 
-  private loadFirmwareInstances(productId: number, name: string) {
+  private loadFirmwareInstances(productId: string, name: string) {
     this.loadingFirmwareInstances = true;
     this.service.getProductFirmwareInstances(productId, name).subscribe({
       next: data => {
@@ -132,7 +132,7 @@ export class ProductFirmwareComponent implements OnChanges {
     });
   }
 
-  private loadProductInstances(productId: number) {
+  private loadProductInstances(productId: string) {
     this.loadingProductInstances = true;
     this.service.getProductInstances(productId).subscribe({
       next: data => {

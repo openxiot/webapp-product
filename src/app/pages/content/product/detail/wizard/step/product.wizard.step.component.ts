@@ -43,7 +43,7 @@ export class ProductWizardStepComponent implements OnInit, OnDestroy {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() productId: number = 0;
+  @Input() productId: string = '';
   @Input() step: ProductWizardStep = new ProductWizardStep(0);
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Output() removed = new EventEmitter<ProductWizardStep>();

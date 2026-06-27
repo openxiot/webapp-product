@@ -581,7 +581,7 @@ export class MainService {
   /**
    * 修改产品配网引导
    */
-  updateProductWizard(productId: number, wizard: ProductWizard): Observable<void> {
+  updateProductWizard(productId: string, wizard: ProductWizard): Observable<void> {
     const body = {
       productId: productId,
       wizard: ProductWizardCodec.encode(wizard)
@@ -595,7 +595,7 @@ export class MainService {
   /**
    * 读取产品配网引导
    */
-  getProductWizard(productId: number): Observable<ProductWizard> {
+  getProductWizard(productId: string): Observable<ProductWizard> {
     const params = {
       productId: productId,
     }
@@ -607,7 +607,7 @@ export class MainService {
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductWizardLifecycle(productId: number, lifecycle: LifeCycle): Observable<void> {
+  setProductWizardLifecycle(productId: string, lifecycle: LifeCycle): Observable<void> {
     const body = {
       productId: productId,
     }
@@ -623,7 +623,7 @@ export class MainService {
   /**
    * 读取产品功能版本
    */
-  getProductInstances(productId: number): Observable<ProductInstance[]> {
+  getProductInstances(productId: string): Observable<ProductInstance[]> {
     const params = {
       productId: productId,
     }
@@ -695,7 +695,7 @@ export class MainService {
   /**
    * 创建产品控制页
    */
-  createProductPanel(productId: number, panel: ProductPanel): Observable<void> {
+  createProductPanel(productId: string, panel: ProductPanel): Observable<void> {
     const body = {
       productId: productId,
       panel: ProductPanelCodec.encode(panel)
@@ -709,7 +709,7 @@ export class MainService {
   /**
    * 删除产品控制页
    */
-  deleteProductPanel(productId: number, category: string, versionCode: number): Observable<void> {
+  deleteProductPanel(productId: string, category: string, versionCode: number): Observable<void> {
     const params = {
       productId: productId,
       category: category,
@@ -723,7 +723,7 @@ export class MainService {
   /**
    * 读取产品控制页
    */
-  getProductPanels(productId: number): Observable<ProductPanel[]> {
+  getProductPanels(productId: string): Observable<ProductPanel[]> {
     const params = {
       productId: productId,
     }
@@ -747,7 +747,7 @@ export class MainService {
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductPanelLifecycle(productId: number, category: string, versionCode: number, lifecycle: LifeCycle): Observable<void> {
+  setProductPanelLifecycle(productId: string, category: string, versionCode: number, lifecycle: LifeCycle): Observable<void> {
     const body = {
       productId: productId,
       category: category,
@@ -767,7 +767,7 @@ export class MainService {
   /**
    * 创建产品固件
    */
-  createProductFirmware(productId: number, firmware: ProductFirmware): Observable<void> {
+  createProductFirmware(productId: string, firmware: ProductFirmware): Observable<void> {
     const body = {
       productId: productId,
       firmware: ProductFirmwareCodec.encode(firmware),
@@ -781,7 +781,7 @@ export class MainService {
   /**
    * 删除产品固件
    */
-  deleteProductFirmware(productId: number, firmwareName: string): Observable<void> {
+  deleteProductFirmware(productId: string, firmwareName: string): Observable<void> {
     const params = {
       productId: productId,
       name: firmwareName
@@ -794,7 +794,7 @@ export class MainService {
   /**
    * 修改产品固件
    */
-  updateProductFirmware(productId: number, firmware: ProductFirmware): Observable<void> {
+  updateProductFirmware(productId: string, firmware: ProductFirmware): Observable<void> {
     const body = {
       productId: productId,
       firmware: ProductFirmwareCodec.encode(firmware),
@@ -808,7 +808,7 @@ export class MainService {
   /**
    * 读取产品固件
    */
-  getProductFirmwares(productId: number): Observable<ProductFirmware[]> {
+  getProductFirmwares(productId: string): Observable<ProductFirmware[]> {
     const params = {
       productId: productId,
     }
@@ -824,7 +824,7 @@ export class MainService {
   /**
    * 创建产品固件实例
    */
-  createProductFirmwareInstance(productId: number, firmwareName: string, instance: ProductFirmwareInstance): Observable<ProductFirmwareInstance> {
+  createProductFirmwareInstance(productId: string, firmwareName: string, instance: ProductFirmwareInstance): Observable<ProductFirmwareInstance> {
     const body = {
       productId: productId,
       name: firmwareName,
@@ -839,7 +839,7 @@ export class MainService {
   /**
    * 删除产品固件实例
    */
-  deleteProductFirmwareInstance(productId: number, firmwareName: string, versionCode: number): Observable<void> {
+  deleteProductFirmwareInstance(productId: string, firmwareName: string, versionCode: number): Observable<void> {
     const params = {
       productId: productId,
       name: firmwareName,
@@ -853,7 +853,7 @@ export class MainService {
   /**
    * 修改产品固件实例
    */
-  updateProductFirmwareInstance(productId: number, firmwareName: string, instance: ProductFirmwareInstance): Observable<void> {
+  updateProductFirmwareInstance(productId: string, firmwareName: string, instance: ProductFirmwareInstance): Observable<void> {
     const body = {
       productId: productId,
       name: firmwareName,
@@ -868,7 +868,7 @@ export class MainService {
   /**
    * 读取产品固件实例
    */
-  getProductFirmwareInstances(productId: number, firmwareName: string): Observable<ProductFirmwareInstance[]> {
+  getProductFirmwareInstances(productId: string, firmwareName: string): Observable<ProductFirmwareInstance[]> {
     const params = {
       productId: productId,
       name: firmwareName,
@@ -881,7 +881,7 @@ export class MainService {
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductFirmwareInstanceLifecycle(productId: number, firmwareName: string, code: number, lifecycle: LifeCycle): Observable<void> {
+  setProductFirmwareInstanceLifecycle(productId: string, firmwareName: string, code: number, lifecycle: LifeCycle): Observable<void> {
     const body = {
       productId: productId,
       name: firmwareName,
@@ -901,7 +901,7 @@ export class MainService {
   /**
    * 修改产品手册
    */
-  updateProductManual(productId: number, manual: ProductManual): Observable<void> {
+  updateProductManual(productId: string, manual: ProductManual): Observable<void> {
     const body = {
       productId: productId,
       manual: ProductManualCodec.encode(manual)
@@ -915,7 +915,7 @@ export class MainService {
   /**
    * 读取产品配网引导
    */
-  getProductManual(productId: number): Observable<ProductManual> {
+  getProductManual(productId: string): Observable<ProductManual> {
     const params = {
       productId: productId,
     }
@@ -927,7 +927,7 @@ export class MainService {
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductManualLifecycle(productId: number, lifecycle: LifeCycle): Observable<void> {
+  setProductManualLifecycle(productId: string, lifecycle: LifeCycle): Observable<void> {
     const body = {
       productId: productId,
     }
@@ -939,7 +939,7 @@ export class MainService {
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductVisibilityLifecycle(productId: number, lifecycle: LifeCycle): Observable<void> {
+  setProductVisibilityLifecycle(productId: string, lifecycle: LifeCycle): Observable<void> {
     const body = {
       productId: productId,
     }
@@ -1012,7 +1012,7 @@ export class MainService {
     );
   }
 
-  async createDeviceUI(productId: number, type: string): Promise<any> {
+  async createDeviceUI(productId: string, type: string): Promise<any> {
     const design = await this.getDesignDoc();
     const device = await this.getDeviceDoc();
     const prompt = await this.getPromptDoc();

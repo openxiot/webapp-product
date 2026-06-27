@@ -11,6 +11,7 @@ import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'product-grid',
@@ -38,6 +39,7 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   constructor(
     private account: AccountService,
     private service: MainService,
+    public i18n: MainI18nService,
     private msg: NzMessageService,
   ) {
   }

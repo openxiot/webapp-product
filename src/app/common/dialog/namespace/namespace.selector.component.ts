@@ -13,9 +13,9 @@ import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {MainI18nService} from '../../../service/i18n.service';
 
 @Component({
-  selector: 'app-namespace-change',
-  templateUrl: './namespace.change.component.html',
-  styleUrls: ['./namespace.change.component.less'],
+  selector: 'namespace-selector',
+  templateUrl: './namespace.selector.component.html',
+  styleUrls: ['./namespace.selector.component.less'],
   imports: [
     FormsModule,
     NzInputModule,
@@ -28,16 +28,16 @@ import {MainI18nService} from '../../../service/i18n.service';
   providers: [],
   standalone: true
 })
-export class NamespaceChangeComponent {
+export class NamespaceSelectorComponent {
 
   readonly #modal = inject(NzModalRef);
-  readonly message: string = inject(NZ_MODAL_DATA);
+  readonly currentNamespace: string = inject(NZ_MODAL_DATA);
 
   loading: boolean = true;
   namespaces: NamespaceDefinition[] = [];
 
   constructor(
-    public account: AccountService,
+    private account: AccountService,
     public i18n: MainI18nService,
     private service: MainService,
     private msg: NzMessageService,
@@ -61,16 +61,7 @@ export class NamespaceChangeComponent {
       })
   }
 
-  cancel(): void {
-    this.#modal.destroy(undefined);
-  }
-
-  ok(): void {
-    this.#modal.destroy(undefined);
-  }
-
-  protected changeNamespace(ns: NamespaceDefinition): void {
-    this.account.ns = ns;
+  protected onSelected(ns: NamespaceDefinition): void {
     this.#modal.destroy(ns);
   }
 }

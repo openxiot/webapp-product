@@ -22,8 +22,9 @@ import {AccountService} from '../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
-import {NamespaceChangeComponent} from '../../../common/dialog/namespace/namespace.change.component';
+import {NamespaceSelectorComponent} from '../../../common/dialog/namespace/namespace.selector.component';
 import {MainI18nService} from '../../../service/i18n.service';
+import {NamespaceDefinition} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'main-spec',
@@ -80,16 +81,22 @@ export class SpecComponent implements OnInit {
   }
 
   protected changeNamespace(): void {
-    this.modal.create<NamespaceChangeComponent, string, string>({
+    const modal = this.modal.create<NamespaceSelectorComponent, string, NamespaceDefinition>({
       nzTitle: '',
       nzWidth: 800,
-      nzContent: NamespaceChangeComponent,
+      nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: '',
+      nzData: this.account.ns?.namespace || '',
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
       nzKeyboard: true
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.account.ns = result;
+      }
     });
   }
 }

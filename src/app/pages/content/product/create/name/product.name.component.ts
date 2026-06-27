@@ -1,47 +1,49 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzInputDirective} from 'ng-zorro-antd/input';
-import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
-import {TranslatePipe} from '@ngx-translate/core';
+import {LocalizedName} from '@openxiot/xiot-core-spec-ts';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
-  selector: 'product-basic-name',
+  selector: 'product-name',
   standalone: true,
-  templateUrl: './product.basic.name.component.html',
-  styleUrls: ['./product.basic.name.component.less'],
+  templateUrl: './product.name.component.html',
+  styleUrls: ['./product.name.component.less'],
   imports: [
     FormsModule,
     NzInputDirective,
     ReactiveFormsModule,
-    TranslatePipe
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: ProductBasicNameComponent,
+      useExisting: ProductNameComponent,
       multi: true
     }
   ]
 })
-export class ProductBasicNameComponent implements ControlValueAccessor {
+export class ProductNameComponent implements ControlValueAccessor {
 
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable: boolean = false;
+  @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  private _value!: string;
+  private _value!: LocalizedName;
 
   disabled = false;
 
-  onChange: (value: string) => void = () => {};
+  onChange: (value: LocalizedName) => void = () => {};
   onTouched: () => void = () => {};
 
-  constructor() {
+  constructor(
+    public i18n: MainI18nService
+  ) {
   }
 
-  get value(): string {
+  get value(): LocalizedName {
     return this._value;
   }
 
-  set value(val: string) {
+  set value(val: LocalizedName) {
     if (val !== this._value) {
       this._value = val;
       this.onChange(val);
@@ -67,6 +69,4 @@ export class ProductBasicNameComponent implements ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
-
-  protected readonly LifeCycle = LifeCycle;
 }

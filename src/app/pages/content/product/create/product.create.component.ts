@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {ProductBasicIconComponent} from '../detail/basic/icon/product.basic.icon.component';
-import {DeviceType, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {LocalizedName, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ProductBasicProtocolComponent} from '../detail/basic/protocol/product.basic.protocol.component';
 import {ProductBasicUpgradeComponent} from '../detail/basic/upgrade/product.basic.upgrade.component';
 import {UpgradeType} from '../detail/basic/upgrade/UpgradeType';
@@ -22,12 +22,17 @@ import {MainService} from '../../../../service/main.service';
 import {ProtocolFromArray} from '../detail/basic/protocol/ProtocolType';
 import {Location} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ProductNameComponent} from './name/product.name.component';
+import {SpecModelComponent} from '../../../../common/form/item/common/model/spec.model.component';
+import {ProductAliasComponent} from './alias/product.alias.component';
+import {ProductTemplateComponent} from './template/product.template.component';
+import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
 
 @Component({
   selector: 'product-create',
   standalone: true,
-  templateUrl: './create.component.html',
-  styleUrls: ['./create.component.less'],
+  templateUrl: './product.create.component.html',
+  styleUrls: ['./product.create.component.less'],
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,
@@ -45,18 +50,23 @@ import {TranslatePipe} from '@ngx-translate/core';
     ProductBasicProtocolComponent,
     ProductBasicUpgradeComponent,
     TranslatePipe,
-    ProductBasicIconComponent
+    ProductNameComponent,
+    SpecModelComponent,
+    ProductAliasComponent,
+    ProductTemplateComponent,
+    BreadcrumbTranslateDirective
   ],
 })
-export class CreateComponent implements OnInit {
+export class ProductCreateComponent implements OnInit {
 
-  product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  product: ProductBasic = new ProductBasic("", '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
   loading: boolean = false;
 
   form: FormGroup<{
-    name: FormControl<string>,
+    name: FormControl<LocalizedName>,
+    alias: FormControl<LocalizedName[]>,
     model: FormControl<string>,
-    template: FormControl<string>,
+    template: FormControl<Urn>,
     icon: FormControl<string>,
     protocol: FormControl<string[]>,
     upgrade: FormControl<UpgradeType>
@@ -71,9 +81,13 @@ export class CreateComponent implements OnInit {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      name: this.fb.control('', [Validators.required]),
-      model: this.fb.control('', [Validators.required]),
-      template: this.fb.control('', [Validators.required]),
+      name: this.fb.control<LocalizedName>(new LocalizedName(), [Validators.required]),
+      alias: this.fb.control<LocalizedName[]>([], [Validators.required]),
+      model: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-z][a-z0-9-]*$/)
+      ]),
+      template: this.fb.control<Urn>(Urn.create('', UrnType.DEVICE, '', '0000'), [Validators.required]),
       icon: this.fb.control(''),
       protocol: this.fb.control(['Directly', 'wifi']),
       upgrade: this.fb.control(new UpgradeType())
@@ -85,8 +99,9 @@ export class CreateComponent implements OnInit {
 
   protected submitForm() {
     this.product.name = this.form.controls.name.value;
+    this.product.alias = this.form.controls.alias.value;
     this.product.model = this.form.controls.model.value;
-    this.product.template = new DeviceType(this.form.controls.template.value);
+    this.product.template = this.form.controls.template.value;
     this.product.icon = this.form.controls.icon.value;
     this.product.protocol = ProtocolFromArray(this.form.controls.protocol.value)
     this.product.upgrade = this.form.controls.upgrade.value.toArray();

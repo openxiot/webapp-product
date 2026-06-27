@@ -49,7 +49,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '');
 
   loading: boolean = false;
   panels: ProductPanel[] = [];
@@ -72,7 +72,7 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
     }
   }
 
-  private loadPanels(productId: number) {
+  private loadPanels(productId: string) {
     this.loading = true;
     this.service.getProductPanels(productId).subscribe({
       next: data => {

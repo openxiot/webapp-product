@@ -23,7 +23,7 @@ import {NzSwitchModule} from 'ng-zorro-antd/switch';
 import {Subject, takeUntil} from 'rxjs';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {DeviceInstance, LifeCycle, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {LifeCycle, LocalizedName, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {ProductBasicModelComponent} from './model/product.basic.model.component';
 import {ProductBasicIdComponent} from './id/product.basic.id.component';
@@ -34,8 +34,8 @@ import {UpgradeType} from './upgrade/UpgradeType';
 import {ProductBasicProtocolComponent} from './protocol/product.basic.protocol.component';
 import {MainService} from '../../../../../service/main.service';
 import {ProtocolFromArray, ProtocolToArray} from './protocol/ProtocolType';
-import {ProductBasicNameComponent} from './name/product.basic.name.component';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ProductNameComponent} from '../../create/name/product.name.component';
 
 @Component({
   selector: 'product-basic',
@@ -66,13 +66,13 @@ import {TranslatePipe} from '@ngx-translate/core';
     ProductBasicIconComponent,
     ProductBasicUpgradeComponent,
     ProductBasicProtocolComponent,
-    ProductBasicNameComponent,
     TranslatePipe,
+    ProductNameComponent,
   ],
 })
 export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
   @Output() onSaved = new EventEmitter<void>();
 
   loading: boolean = false;
@@ -81,8 +81,8 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   private destroy$ = new Subject<void>();
 
   form: FormGroup<{
-    id: FormControl<number>,
-    name: FormControl<string>,
+    id: FormControl<string>,
+    name: FormControl<LocalizedName>,
     model: FormControl<string>,
     type: FormControl<string>,
     icon: FormControl<string>,
@@ -99,8 +99,8 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     private service: MainService,
   ) {
     this.form = this.fb.group({
-      id: this.fb.control(0, [Validators.required]),
-      name: this.fb.control('', [Validators.required]),
+      id: this.fb.control('', [Validators.required]),
+      name: this.fb.control<LocalizedName>(new LocalizedName(), [Validators.required]),
       model: this.fb.control('', [Validators.required]),
       type: this.fb.control('', [Validators.required]),
       icon: this.fb.control(''),
@@ -204,37 +204,37 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected onPreview() {
-    this.loading = true;
-    this.service.setProductLifecycle(this.product.id, LifeCycle.PREVIEW)
-      .subscribe({
-        next: () => {
-          console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.PREVIEW;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loading = false;
-          this.reset();
-        }
-      });
+    // this.loading = true;
+    // this.service.setProductLifecycle(this.product.id, LifeCycle.PREVIEW)
+    //   .subscribe({
+    //     next: () => {
+    //       console.log('setProductLifecycle ok');
+    //       this.product.lifecycle = LifeCycle.PREVIEW;
+    //       this.loading = false;
+    //     },
+    //     error: error => {
+    //       this.msg.warning(error);
+    //       this.loading = false;
+    //       this.reset();
+    //     }
+    //   });
   }
 
   protected cancelPreview() {
-    this.loading = true;
-    this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
-      .subscribe({
-        next: () => {
-          console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.DEVELOPMENT;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loading = false;
-          this.reset();
-        }
-      });
+    // this.loading = true;
+    // this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
+    //   .subscribe({
+    //     next: () => {
+    //       console.log('setProductLifecycle ok');
+    //       this.product.lifecycle = LifeCycle.DEVELOPMENT;
+    //       this.loading = false;
+    //     },
+    //     error: error => {
+    //       this.msg.warning(error);
+    //       this.loading = false;
+    //       this.reset();
+    //     }
+    //   });
   }
 
   private reset() {

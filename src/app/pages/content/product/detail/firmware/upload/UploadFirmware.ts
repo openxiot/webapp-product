@@ -3,7 +3,7 @@ import {ProductFirmware, ProductFirmwareInstance, ProductInstance} from '@openxi
 export class UploadFirmware {
 
   constructor(
-    public productId: number,
+    public productId: string,
     public productInstances: ProductInstance[] = [],
     public firmware: ProductFirmware,
     public firmwareInstances: ProductFirmwareInstance[],

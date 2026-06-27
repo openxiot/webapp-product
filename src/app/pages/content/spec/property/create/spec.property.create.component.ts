@@ -120,7 +120,7 @@ export class SpecPropertyCreateComponent implements OnInit {
     this.form = this.fb.group({
       code: this.fb.control('', [
         Validators.required,
-        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+        Validators.pattern(/^[a-z][a-z0-9-]*$/)
       ]),
       uuid: this.fb.control(0, [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),

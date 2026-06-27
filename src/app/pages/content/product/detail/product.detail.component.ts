@@ -59,7 +59,7 @@ export class ProductDetailComponent implements OnInit {
 
   loading: boolean = true;
   productId: number = 0;
-  product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
   instances: ObjectWithLifecycle<DeviceInstance>[] = [];
 
   constructor(

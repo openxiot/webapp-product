@@ -44,7 +44,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductWizardComponent implements OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
 
   protected readonly LifeCycle = LifeCycle;
 
@@ -65,7 +65,7 @@ export class ProductWizardComponent implements OnChanges {
     }
   }
 
-  private loadWizard(productId: number) {
+  private loadWizard(productId: string) {
     this.loading = true;
     this.service.getProductWizard(productId).subscribe({
       next: data => {

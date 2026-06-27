@@ -1,12 +1,7 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
-import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
-import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
-import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {ProductBasic, LifeCycle, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
-import {NzTagComponent} from 'ng-zorro-antd/tag';
-import {NzOptionComponent, NzSelectModule} from 'ng-zorro-antd/select';
+import {NzSelectModule} from 'ng-zorro-antd/select';
 import {FormsModule} from '@angular/forms';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTableModule} from 'ng-zorro-antd/table';
@@ -21,21 +16,14 @@ import {MainService} from '../../../../../service/main.service';
   imports: [
     FormsModule,
     NzCardModule,
-    NzButtonComponent,
-    NzColDirective,
-    NzRowDirective,
-    NzWaveDirective,
-    NzTagComponent,
-    NzOptionComponent,
     NzSelectModule,
     NzSpaceModule,
     NzTableModule,
-    ToolbarComponent
   ],
 })
 export class ProductVisibilityComponent implements OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
 
   protected readonly LifeCycle = LifeCycle;
 
@@ -54,7 +42,7 @@ export class ProductVisibilityComponent implements OnChanges {
     }
   }
 
-  private loadVisibility(productId: number) {
+  private loadVisibility(productId: string) {
     // this.loading = true;
     // this.service.getProductVisibility(productId).subscribe({
     //   next: data => {

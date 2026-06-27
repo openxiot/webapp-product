@@ -1,0 +1,23 @@
+<nz-spin [nzSpinning]="loading">
+  <nz-row [nzGutter]="[8, 8]">
+    <nz-col [nzSpan]="8">
+      <nz-card nzHoverable (click)="onClickNamespace()">
+        <nz-card-meta [nzTitle]="CurrentNamespaceTitle" [nzDescription]="CurrentNamespaceDescription"></nz-card-meta>
+      </nz-card>
+    </nz-col>
+
+    <nz-col [nzSpan]="16">
+      <nz-card nzHoverable (click)="onClickTemplate()">
+        <nz-card-meta [nzTitle]="nsTitle" [nzDescription]="nsDesc"></nz-card-meta>
+      </nz-card>
+
+      <ng-template #nsTitle>
+        {{ value.ns }}
+      </ng-template>
+
+      <ng-template #nsDesc>
+        {{ value.ns }}
+      </ng-template>
+    </nz-col>
+  </nz-row>
+</nz-spin>

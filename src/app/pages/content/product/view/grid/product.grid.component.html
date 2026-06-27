@@ -24,7 +24,7 @@
           [nzCover]="coverTemplate"
           routerLink="/main/product/detail/{{p.id}}"
         >
-          <nz-card-meta [nzTitle]="p.name"></nz-card-meta>
+          <nz-card-meta nzTitle="{{ p.name.value.get(i18n.getCurrentLang()) }}"></nz-card-meta>
           <nz-divider></nz-divider>
           <nz-descriptions nzSize="small">
             <nz-descriptions-item nzTitle="{{'产品ID' | translate }}" nzSpan="3">

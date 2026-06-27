@@ -36,7 +36,7 @@ export class ProductBasicIconComponent implements ControlValueAccessor, OnDestro
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() productId: number = 0;
+  @Input() productId: string = '';
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
 
   private _value!: string;

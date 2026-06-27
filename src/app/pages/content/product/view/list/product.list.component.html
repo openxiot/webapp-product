@@ -32,22 +32,23 @@
 
         <th
           rowSpan="2"
-          [nzSortFn]="typeSortFn"
         >{{ '型号' | translate }}</th>
 
-        <th
-          rowSpan="2"
-          [nzSortFn]="templateSortFn"
-          [nzFilters]="templateFilters"
-          [nzFilterFn]="templateFilterFn"
-        >{{ '产品模板' | translate }}</th>
+<!--        [nzSortFn]="typeSortFn"-->
 
         <th
           rowSpan="2"
-          [nzSortFn]="typeSortFn"
-          [nzFilters]="typeFilters"
-          [nzFilterFn]="typeFilterFn"
+        >{{ '产品模板' | translate }}</th>
+<!--        [nzSortFn]="templateSortFn"-->
+<!--        [nzFilters]="templateFilters"-->
+<!--        [nzFilterFn]="templateFilterFn"-->
+
+        <th
+          rowSpan="2"
         >{{ '设备类型' | translate }}</th>
+<!--        [nzSortFn]="typeSortFn"-->
+<!--        [nzFilters]="typeFilters"-->
+<!--        [nzFilterFn]="typeFilterFn"-->
 
         @if (basicChecked) {
           <th colspan="4">
@@ -95,32 +96,32 @@
       <tr>
         @if (basicChecked) {
           <th
-            [nzSortFn]="nameSortFn"
             nzCustomFilter
           >
+<!--            [nzSortFn]="nameSortFn"-->
             {{ '产品名称' | translate }}
-            <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchNameValue.length > 0" [nzDropdownMenu]="menuSearchName">
-              <span nz-icon nzType="search"></span>
-            </nz-filter-trigger>
+<!--            <nz-filter-trigger [(nzVisible)]="visible" [nzActive]="searchNameValue.length > 0" [nzDropdownMenu]="menuSearchName">-->
+<!--              <span nz-icon nzType="search"></span>-->
+<!--            </nz-filter-trigger>-->
           </th>
 
           <th
-            [nzSortFn]="protocolSortFn"
-            [nzFilters]="protocolFilters"
-            [nzFilterFn]="protocolFilterFn"
           >{{ '连接方式' | translate }}</th>
+<!--          [nzSortFn]="protocolSortFn"-->
+<!--            [nzFilters]="protocolFilters"-->
+<!--            [nzFilterFn]="protocolFilterFn"-->
 
           <th
-            [nzSortFn]="upgradeSortFn"
-            [nzFilters]="upgradeFilters"
-            [nzFilterFn]="upgradeFilterFn"
           >{{ '固件升级' | translate }}</th>
+<!--          [nzSortFn]="upgradeSortFn"-->
+<!--            [nzFilters]="upgradeFilters"-->
+<!--            [nzFilterFn]="upgradeFilterFn"-->
 
           <th
-            [nzSortFn]="basicLifecycleSortFn"
-            [nzFilters]="basicLifecycleFilters"
-            [nzFilterFn]="basicLifecycleFilterFn"
           >{{ '状态' | translate }}</th>
+<!--          [nzSortFn]="basicLifecycleSortFn"-->
+<!--            [nzFilters]="basicLifecycleFilters"-->
+<!--            [nzFilterFn]="basicLifecycleFilterFn"-->
         }
 
         <!--      <th>操作</th>-->
@@ -272,7 +273,7 @@
       <nz-dropdown-menu #menuSearchName="nzDropdownMenu">
         <div class="ant-table-filter-dropdown">
           <div class="search-box">
-            <input type="text" nz-input [(ngModel)]="searchNameValue" />
+<!--            <input type="text" nz-input [(ngModel)]="searchNameValue" />-->
             <button nz-button nzSize="small" nzType="primary" (click)="searchName()" class="search-button">{{ '搜索' | translate }}</button>
             <button nz-button nzSize="small" (click)="resetName()">{{ '复位' | translate }}</button>
           </div>

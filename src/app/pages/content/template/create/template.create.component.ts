@@ -70,7 +70,7 @@ export class TemplateCreateComponent implements OnInit {
       device: this.fb.control('', [Validators.required]),
       model: this.fb.control('', [
         Validators.required,
-        Validators.pattern(/^[a-zA-Z][a-zA-Z0-9-]*$/)
+        Validators.pattern(/^[a-z][a-z0-9-]*$/)
       ]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });

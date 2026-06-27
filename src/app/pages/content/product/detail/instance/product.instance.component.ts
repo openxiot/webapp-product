@@ -52,7 +52,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductInstanceComponent implements OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic(0, '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '', '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
   @Output() changed = new EventEmitter<DeviceInstance>();
   @Output() removed = new EventEmitter<Service>();
 
@@ -82,7 +82,7 @@ export class ProductInstanceComponent implements OnChanges {
     }
   }
 
-  private loadInstances(productId: number) {
+  private loadInstances(productId: string) {
     this.loadingInstances = true;
     this.device = undefined;
     this.service.getProductInstances(productId).subscribe({

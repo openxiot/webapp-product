@@ -69,7 +69,7 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="2" nzRequired nzFor="name">{{ '产品名称' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="6">
-              <product-basic-name formControlName="name" [lifecycle]="product.lifecycle"></product-basic-name>
+              <product-name formControlName="name" [updatable]="product.lifecycle === LifeCycle.DEVELOPMENT"></product-name>
             </nz-form-control>
           </nz-form-item>
 

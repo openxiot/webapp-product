@@ -43,7 +43,7 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() productId: number = 0;
+  @Input() productId: string = '';
   @Input() page: ProductManualPage = new ProductManualPage(0);
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Output() removed = new EventEmitter<ProductManualPage>();
