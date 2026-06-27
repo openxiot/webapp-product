@@ -14,7 +14,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {ProductBasicIconComponent} from '../detail/basic/icon/product.basic.icon.component';
-import {LocalizedName, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
+import {LocalizedName, ProductBasic, ProductBasicCodec, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ProductBasicProtocolComponent} from '../detail/basic/protocol/product.basic.protocol.component';
 import {ProductBasicUpgradeComponent} from '../detail/basic/upgrade/product.basic.upgrade.component';
 import {UpgradeType} from '../detail/basic/upgrade/UpgradeType';
@@ -27,6 +27,7 @@ import {SpecModelComponent} from '../../../../common/form/item/common/model/spec
 import {ProductAliasComponent} from './alias/product.alias.component';
 import {ProductTemplateComponent} from './template/product.template.component';
 import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
+import {AccountService} from '../../../../service/account.service';
 
 @Component({
   selector: 'product-create',
@@ -73,6 +74,7 @@ export class ProductCreateComponent implements OnInit {
   }>;
 
   constructor(
+    private account: AccountService,
     protected location: Location,
     private router: Router,
     private route: ActivatedRoute,
@@ -98,6 +100,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   protected submitForm() {
+    this.product.organization = this.account.organization.id,
     this.product.name = this.form.controls.name.value;
     this.product.alias = this.form.controls.alias.value;
     this.product.model = this.form.controls.model.value;
@@ -105,6 +108,9 @@ export class ProductCreateComponent implements OnInit {
     this.product.icon = this.form.controls.icon.value;
     this.product.protocol = ProtocolFromArray(this.form.controls.protocol.value)
     this.product.upgrade = this.form.controls.upgrade.value.toArray();
+
+    console.log('product: ', this.product);
+    console.log('product => ', ProductBasicCodec.encode(this.product));
 
     this.loading = true;
     this.service.createProduct(this.product)

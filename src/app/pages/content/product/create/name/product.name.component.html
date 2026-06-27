@@ -3,4 +3,5 @@
   nz-input
   [ngModel]="value.value.get(i18n.getCurrentLang())"
   [disabled]="! updatable"
+  (ngModelChange)="onValueChanged($event)"
 />

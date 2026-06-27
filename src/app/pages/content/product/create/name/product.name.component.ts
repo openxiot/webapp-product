@@ -69,4 +69,11 @@ export class ProductNameComponent implements ControlValueAccessor {
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
   }
+
+  protected onValueChanged(newValue: string) {
+    this._value.value.set(this.i18n.getCurrentLang(), newValue);
+    this.onChange(this._value);
+    this.onTouched();
+    this.changed.emit();
+  }
 }
