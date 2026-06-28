@@ -1,4 +1,14 @@
-import {Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges} from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewContainerRef
+} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -36,6 +46,11 @@ import {MainService} from '../../../../../service/main.service';
 import {ProtocolFromArray, ProtocolToArray} from './protocol/ProtocolType';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductNameComponent} from '../../create/name/product.name.component';
+import {AccountService} from '../../../../../service/account.service';
+import {Location} from '@angular/common';
+import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'product-basic',
@@ -69,6 +84,9 @@ import {ProductNameComponent} from '../../create/name/product.name.component';
     TranslatePipe,
     ProductNameComponent,
   ],
+  providers: [
+    NzModalService
+  ],
 })
 export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
 
@@ -93,6 +111,11 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   changed: boolean = false;
 
   constructor(
+    public i18n: MainI18nService,
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
+    protected location: Location,
+    private account: AccountService,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
     private msg: NzMessageService,
@@ -200,41 +223,80 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected onRemove() {
+    const modal = this.modal.create<ConfirmComponent, string, string>({
+      nzTitle: this.i18n.translate.instant('您真的要删除这个产品吗？'),
+      nzContent: ConfirmComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: this.product.name.value.get(this.i18n.getCurrentLang()),
+      nzFooter: [
+        {
+          label: this.i18n.translate.instant('取消'),
+          onClick: component => component!.cancel()
+        },
+        {
+          label: this.i18n.translate.instant('确认'),
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
 
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.doRemove();
+      }
+    });
+  }
+
+  private doRemove() {
+    this.loading = true;
+    this.service.deleteProduct(this.account.organization.id, this.product.id)
+      .subscribe({
+        next: () => {
+          console.log('deleteProduct ok');
+          this.loading = false;
+          this.location.back();
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+        }
+      });
   }
 
   protected onPreview() {
-    // this.loading = true;
-    // this.service.setProductLifecycle(this.product.id, LifeCycle.PREVIEW)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('setProductLifecycle ok');
-    //       this.product.lifecycle = LifeCycle.PREVIEW;
-    //       this.loading = false;
-    //     },
-    //     error: error => {
-    //       this.msg.warning(error);
-    //       this.loading = false;
-    //       this.reset();
-    //     }
-    //   });
+    this.loading = true;
+    this.service.setProductLifecycle(this.product.id, LifeCycle.PREVIEW)
+      .subscribe({
+        next: () => {
+          console.log('setProductLifecycle ok');
+          this.product.lifecycle = LifeCycle.PREVIEW;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+          this.reset();
+        }
+      });
   }
 
   protected cancelPreview() {
-    // this.loading = true;
-    // this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
-    //   .subscribe({
-    //     next: () => {
-    //       console.log('setProductLifecycle ok');
-    //       this.product.lifecycle = LifeCycle.DEVELOPMENT;
-    //       this.loading = false;
-    //     },
-    //     error: error => {
-    //       this.msg.warning(error);
-    //       this.loading = false;
-    //       this.reset();
-    //     }
-    //   });
+    this.loading = true;
+    this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
+      .subscribe({
+        next: () => {
+          console.log('setProductLifecycle ok');
+          this.product.lifecycle = LifeCycle.PREVIEW;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+          this.reset();
+        }
+      });
   }
 
   private reset() {

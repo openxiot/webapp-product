@@ -527,8 +527,9 @@ export class MainService {
   /**
    * 删除产品基本信息
    */
-  deleteProduct(productId: number): Observable<void> {
+  deleteProduct(orgId: string, productId: string): Observable<void> {
     const params = {
+      organizationId: orgId,
       productId: productId,
     }
     return this.http
@@ -565,12 +566,9 @@ export class MainService {
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductLifecycle(productId: number, lifecycle: LifeCycle): Observable<void> {
-    const body = {
-      productId: productId,
-    }
+  setProductLifecycle(productId: string, lifecycle: LifeCycle): Observable<void> {
     return this.http
-      .put<OxResponse>(`${this.server}/v1/product/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}//v1/product/basic/lifecycle/${productId}/${lifecycle.toString()}`, {})
       .pipe(map(() => undefined));
   }
 

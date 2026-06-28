@@ -24,6 +24,7 @@ import {ProductInstanceComponent} from './instance/product.instance.component';
 import {ProductVisibilityComponent} from './visibility/product.visibility.component';
 import {Location} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
+import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
 
 @Component({
   selector: 'product-detail',
@@ -51,6 +52,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     ProductPanelComponent,
     ProductVisibilityComponent,
     TranslatePipe,
+    BreadcrumbTranslateDirective,
   ],
 })
 export class ProductDetailComponent implements OnInit {
