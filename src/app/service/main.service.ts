@@ -568,7 +568,7 @@ export class MainService {
    */
   setProductLifecycle(productId: string, lifecycle: LifeCycle): Observable<void> {
     return this.http
-      .put<OxResponse>(`${this.server}//v1/product/basic/lifecycle/${productId}/${lifecycle.toString()}`, {})
+      .put<OxResponse>(`${this.server}/v1/product/basic/one/lifecycle/${productId}/${lifecycle.toString()}`, {})
       .pipe(map(() => undefined));
   }
 

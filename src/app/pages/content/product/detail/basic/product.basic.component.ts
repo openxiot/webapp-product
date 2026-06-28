@@ -37,7 +37,6 @@ import {LifeCycle, LocalizedName, ProductBasic, Urn, UrnType} from '@openxiot/xi
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
 import {ProductBasicModelComponent} from './model/product.basic.model.component';
 import {ProductBasicIdComponent} from './id/product.basic.id.component';
-import {ProductBasicTypeComponent} from './type/product.basic.type.component';
 import {ProductBasicIconComponent} from './icon/product.basic.icon.component';
 import {ProductBasicUpgradeComponent} from './upgrade/product.basic.upgrade.component';
 import {UpgradeType} from './upgrade/UpgradeType';
@@ -51,6 +50,8 @@ import {Location} from '@angular/common';
 import {ConfirmComponent} from '../../../../../common/dialog/confirm/confirm.component';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {MainI18nService} from '../../../../../service/i18n.service';
+import {ProductAliasComponent} from '../../create/alias/product.alias.component';
+import {ProductTemplateComponent} from '../../create/template/product.template.component';
 
 @Component({
   selector: 'product-basic',
@@ -77,12 +78,13 @@ import {MainI18nService} from '../../../../../service/i18n.service';
     ToolbarComponent,
     ProductBasicModelComponent,
     ProductBasicIdComponent,
-    ProductBasicTypeComponent,
     ProductBasicIconComponent,
     ProductBasicUpgradeComponent,
     ProductBasicProtocolComponent,
     TranslatePipe,
     ProductNameComponent,
+    ProductAliasComponent,
+    ProductTemplateComponent,
   ],
   providers: [
     NzModalService
@@ -101,8 +103,9 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   form: FormGroup<{
     id: FormControl<string>,
     name: FormControl<LocalizedName>,
+    alias: FormControl<LocalizedName[]>,
     model: FormControl<string>,
-    type: FormControl<string>,
+    template: FormControl<Urn>,
     icon: FormControl<string>,
     protocol: FormControl<string[]>,
     upgrade: FormControl<UpgradeType>
@@ -124,8 +127,12 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     this.form = this.fb.group({
       id: this.fb.control('', [Validators.required]),
       name: this.fb.control<LocalizedName>(new LocalizedName(), [Validators.required]),
-      model: this.fb.control('', [Validators.required]),
-      type: this.fb.control('', [Validators.required]),
+      alias: this.fb.control<LocalizedName[]>([], [Validators.required]),
+      model: this.fb.control('', [
+        Validators.required,
+        Validators.pattern(/^[a-z][a-z0-9-]*$/)
+      ]),
+      template: this.fb.control<Urn>(Urn.create('', UrnType.DEVICE, '', '0000'), [Validators.required]),
       icon: this.fb.control(''),
       protocol: this.fb.control(['Directly', 'wifi']),
       upgrade: this.fb.control(new UpgradeType())
@@ -288,7 +295,41 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe({
         next: () => {
           console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.PREVIEW;
+          this.product.lifecycle = LifeCycle.DEVELOPMENT;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+          this.reset();
+        }
+      });
+  }
+
+  protected onRelease() {
+    this.loading = true;
+    this.service.setProductLifecycle(this.product.id, LifeCycle.RELEASED)
+      .subscribe({
+        next: () => {
+          console.log('setProductLifecycle ok');
+          this.product.lifecycle = LifeCycle.RELEASED;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loading = false;
+          this.reset();
+        }
+      });
+  }
+
+  protected onDevelopment() {
+    this.loading = true;
+    this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
+      .subscribe({
+        next: () => {
+          console.log('setProductLifecycle ok');
+          this.product.lifecycle = LifeCycle.DEVELOPMENT;
           this.loading = false;
         },
         error: error => {
@@ -302,8 +343,9 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   private reset() {
     this.form.controls.id.setValue(this.product.id);
     this.form.controls.name.setValue(this.product.name);
+    this.form.controls.alias.setValue(this.product.alias);
     this.form.controls.model.setValue(this.product.model);
-    this.form.controls.type.setValue(this.product.template.name);
+    this.form.controls.template.setValue(this.product.template);
     this.form.controls.icon.setValue(this.product.icon);
     this.form.controls.protocol.setValue(ProtocolToArray(this.product.protocol));
     this.form.controls.upgrade.setValue(UpgradeType.of(this.product.upgrade));

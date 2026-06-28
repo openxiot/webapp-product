@@ -100,7 +100,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   protected submitForm() {
-    this.product.organization = this.account.organization.id,
+    this.product.organization = this.account.organization.id;
     this.product.name = this.form.controls.name.value;
     this.product.alias = this.form.controls.alias.value;
     this.product.model = this.form.controls.model.value;

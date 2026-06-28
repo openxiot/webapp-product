@@ -11,9 +11,11 @@
           (ngModelChange)="onValueChanged($event, item)"
         />
 
-        <button type="button" nz-button nzType="text" nzDanger (click)="removeItem(item)">
-          <span nz-icon nzType="delete"></span>
-        </button>
+        @if (updatable) {
+          <button type="button" nz-button nzType="text" nzDanger (click)="removeItem(item)">
+            <span nz-icon nzType="delete"></span>
+          </button>
+        }
       </div>
     </nz-col>
   }

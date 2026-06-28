@@ -1,13 +1,13 @@
 <nz-spin [nzSpinning]="loading">
   <nz-row [nzGutter]="[8, 8]">
     <nz-col [nzSpan]="8">
-      <nz-card nzHoverable (click)="onClickNamespace()">
+      <nz-card [nzHoverable]="updatable" (click)="onClickNamespace()">
         <nz-card-meta [nzTitle]="CurrentNamespaceTitle" [nzDescription]="CurrentNamespaceDescription"></nz-card-meta>
       </nz-card>
     </nz-col>
 
     <nz-col [nzSpan]="16">
-      <nz-card nzHoverable (click)="onClickTemplate()">
+      <nz-card [nzHoverable]="updatable" (click)="onClickTemplate()">
         <nz-card-meta [nzTitle]="CurrentTemplateTitle" [nzDescription]="CurrentTemplateDescription"></nz-card-meta>
       </nz-card>
     </nz-col>

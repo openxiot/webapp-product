@@ -46,8 +46,10 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
 
   disabled = false;
 
-  onChange: (value: Urn) => void = () => {};
-  onTouched: () => void = () => {};
+  onChange: (value: Urn) => void = () => {
+  };
+  onTouched: () => void = () => {
+  };
 
   constructor(
     private modal: NzModalService,
@@ -204,45 +206,49 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected onClickNamespace() {
-    const modal = this.modal.create<NamespaceSelectorComponent, NamespaceOption, NamespaceDefinition>({
-      nzTitle: this.i18n.translate.instant('请选择名字空间'),
-      nzWidth: 800,
-      nzContent: NamespaceSelectorComponent,
-      nzViewContainerRef: this.viewContainerRef,
-      nzData: new NamespaceOption(this._value.ns || '', Array.from(this.namespaces.values())),
-      nzFooter: null,
-      nzClosable: false,
-      nzMaskClosable: true,
-      nzKeyboard: true
-    });
+    if (this.updatable) {
+      const modal = this.modal.create<NamespaceSelectorComponent, NamespaceOption, NamespaceDefinition>({
+        nzTitle: this.i18n.translate.instant('请选择名字空间'),
+        nzWidth: 800,
+        nzContent: NamespaceSelectorComponent,
+        nzViewContainerRef: this.viewContainerRef,
+        nzData: new NamespaceOption(this._value.ns || '', Array.from(this.namespaces.values())),
+        nzFooter: null,
+        nzClosable: false,
+        nzMaskClosable: true,
+        nzKeyboard: true
+      });
 
-    modal.afterClose.subscribe(result => {
-      if (result) {
-        this._value.ns = result.namespace;
-        this.loadDevices();
-        this.loadTemplates();
-      }
-    });
+      modal.afterClose.subscribe(result => {
+        if (result) {
+          this._value.ns = result.namespace;
+          this.loadDevices();
+          this.loadTemplates();
+        }
+      });
+    }
   }
 
   protected onClickTemplate() {
-    const modal = this.modal.create<TemplateSelectorComponent, TemplatesOption, Urn>({
-      nzTitle: this.i18n.translate.instant('请选择模板'),
-      nzWidth: 1024,
-      nzContent: TemplateSelectorComponent,
-      nzViewContainerRef: this.viewContainerRef,
-      nzData: new TemplatesOption(Array.from(this.devices.values()), Array.from(this.templates.values())),
-      nzFooter: null,
-      nzClosable: false,
-      nzMaskClosable: true,
-      nzKeyboard: true
-    });
+    if (this.updatable) {
+      const modal = this.modal.create<TemplateSelectorComponent, TemplatesOption, Urn>({
+        nzTitle: this.i18n.translate.instant('请选择模板'),
+        nzWidth: 1024,
+        nzContent: TemplateSelectorComponent,
+        nzViewContainerRef: this.viewContainerRef,
+        nzData: new TemplatesOption(Array.from(this.devices.values()), Array.from(this.templates.values())),
+        nzFooter: null,
+        nzClosable: false,
+        nzMaskClosable: true,
+        nzKeyboard: true
+      });
 
-    modal.afterClose.subscribe(result => {
-      if (result) {
-        this.value = result;
-        this.changed.emit();
-      }
-    });
+      modal.afterClose.subscribe(result => {
+        if (result) {
+          this.value = result;
+          this.changed.emit();
+        }
+      });
+    }
   }
 }

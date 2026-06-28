@@ -4,8 +4,7 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {UpgradeType} from './UpgradeType';
 import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
-import {NzTabsModule} from 'ng-zorro-antd/tabs';
-import {NzTagComponent, NzTagModule} from 'ng-zorro-antd/tag';
+import {NzTagModule} from 'ng-zorro-antd/tag';
 import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({

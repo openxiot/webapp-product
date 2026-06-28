@@ -5,19 +5,19 @@
     <nz-page-header-footer>
       <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
         <nz-tab [nzTitle]="'基本信息' | translate"></nz-tab>
-        <nz-tab [nzTitle]="'配网引导' | translate"></nz-tab>
         <nz-tab [nzTitle]="'功能' | translate"></nz-tab>
-        <nz-tab [nzTitle]="'控制页' | translate"></nz-tab>
-        @if (product.upgrade.length > 0) {
-          <nz-tab [nzTitle]="'固件' | translate"></nz-tab>
-        }
-        <nz-tab [nzTitle]="'说明书' | translate"></nz-tab>
+<!--        <nz-tab [nzTitle]="'配网引导' | translate"></nz-tab>-->
+<!--        <nz-tab [nzTitle]="'控制页' | translate"></nz-tab>-->
+<!--        @if (product.upgrade.length > 0) {-->
+<!--          <nz-tab [nzTitle]="'固件' | translate"></nz-tab>-->
+<!--        }-->
+<!--        <nz-tab [nzTitle]="'说明书' | translate"></nz-tab>-->
       </nz-tabset>
     </nz-page-header-footer>
   </nz-page-header>
 
   <ng-template #productTitle>
-    {{ product.name }}
+    {{ product.name.value.get(i18n.getCurrentLang()) }}
   </ng-template>
 
   <ng-template #productModel>
@@ -31,10 +31,10 @@
         <product-basic [product]="product" (onSaved)="onSaved()"></product-basic>
       }
       @case (1) {
-        <product-wizard [product]="product"></product-wizard>
+        <product-instance [product]="product"></product-instance>
       }
       @case (2) {
-        <product-instance [product]="product"></product-instance>
+        <product-wizard [product]="product"></product-wizard>
       }
       @case (3) {
         <product-panel [product]="product"></product-panel>

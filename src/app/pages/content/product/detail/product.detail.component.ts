@@ -25,6 +25,7 @@ import {ProductVisibilityComponent} from './visibility/product.visibility.compon
 import {Location} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
 import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
+import {MainI18nService} from '../../../../service/i18n.service';
 
 @Component({
   selector: 'product-detail',
@@ -66,6 +67,7 @@ export class ProductDetailComponent implements OnInit {
 
   constructor(
     protected location: Location,
+    protected i18n: MainI18nService,
     private route: ActivatedRoute,
     private msg: NzMessageService,
     private router: Router,

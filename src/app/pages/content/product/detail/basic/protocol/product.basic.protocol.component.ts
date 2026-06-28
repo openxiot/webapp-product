@@ -3,6 +3,7 @@ import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModul
 import {NzCascaderComponent, NzCascaderOption} from 'ng-zorro-antd/cascader';
 import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
+import {NzTagModule} from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'product-basic-protocol',
@@ -13,7 +14,8 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
     FormsModule,
     NzCascaderComponent,
     ReactiveFormsModule,
-    NzDividerModule
+    NzDividerModule,
+    NzTagModule
   ],
   providers: [
     {
