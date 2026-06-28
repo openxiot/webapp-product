@@ -498,21 +498,21 @@ export class MainService {
   /**
    * 读取公开产品列表
    */
-  getPublicProducts(): Observable<ProductBasic[]> {
+  private getPublicProducts(): Observable<ProductBasic[]> {
     console.log('getPublicProducts');
     return this.http
       .get<OxResponse>(`${this.server}/v1/product/basic/public`)
-      .pipe(map(response => ProductBasicCodec.decodeArray(response.data.products)));
+      .pipe(map(response => ProductBasicCodec.decodeArray(response.data)));
   }
 
   /**
    * 读取组织可见的产品列表
    */
-  getVisibleProducts(organization: string): Observable<ProductBasic[]> {
+  private getVisibleProducts(organization: string): Observable<ProductBasic[]> {
     console.log('getVisibleProducts: ', organization);
     return this.http
       .get<OxResponse>(`${this.server}/v1/product/basic/visible/${organization}`)
-      .pipe(map(response => ProductBasicCodec.decodeArray(response.data.products)));
+      .pipe(map(response => ProductBasicCodec.decodeArray(response.data)));
   }
 
   /**
