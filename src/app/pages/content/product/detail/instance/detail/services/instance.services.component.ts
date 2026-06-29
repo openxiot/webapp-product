@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
 import {DeviceType, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzCardModule} from 'ng-zorro-antd/card';
@@ -10,7 +9,6 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {CreateServiceComponent} from '../../../../../../../common/dialog/instance/create/service/create.service.component';
-import {ServiceType} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../../../service/i18n.service';
 import {ServiceOption} from '../../../../../../../common/dialog/instance/create/service/ServiceOption';
@@ -57,22 +55,12 @@ export class InstanceServicesComponent {
   }
 
   onAddService() {
-    // let siid: number = 1024;
-    //
-    // for (let service of this.services) {
-    //   if (service.iid > siid) {
-    //     siid = service.iid;
-    //   }
-    // }
-    //
-    // siid ++;
-
     const modal = this.modal.create<CreateServiceComponent, ServiceOption, Service>({
       nzTitle: '添加功能',
       nzWidth: 1000,
       nzContent: CreateServiceComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new ServiceOption(this.type),
+      nzData: new ServiceOption(this.type, this.getNewServiceIId()),
       nzFooter: [
         {
           label: '取消',
@@ -96,5 +84,19 @@ export class InstanceServicesComponent {
 
   private addService(service: Service) {
     this.serviceAdded.emit(service);
+  }
+
+  private getNewServiceIId() {
+    let siid: number = 1;
+
+    for (let service of this.services) {
+      if (service.iid > siid) {
+        siid = service.iid;
+      }
+    }
+
+    siid ++;
+
+    return siid;
   }
 }

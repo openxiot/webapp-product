@@ -144,7 +144,7 @@ export class CreateServiceComponent implements OnInit {
     const type = new ServiceType(`urn:${org}:service:unnamed:00000000:${org}:${model}:${version}`);
     const description = new Map<string, string>();
     description.set('zh-CN', '自定义功能');
-    return new Service(0, type, description, [], [], []);
+    return new Service(this.option.siid, type, description, [], [], []);
   }
 
   ngOnInit(): void {
@@ -163,7 +163,7 @@ export class CreateServiceComponent implements OnInit {
           this.services = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Service(0, x.type, x.description, [], [], []);
+              return new Service(this.option.siid, x.type, x.description, [], [], []);
             });
 
           this.loadingServices = false;

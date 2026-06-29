@@ -136,7 +136,7 @@ export class ProductInstanceComponent implements OnChanges {
       return false;
     }
 
-    console.log('instance.lifecycle: ' + this.instance.lifecycle);
+    // console.log('instance.lifecycle: ' + this.instance.lifecycle);
 
     return this.instance.lifecycle === LifeCycle.DEVELOPMENT;
   }
@@ -169,6 +169,8 @@ export class ProductInstanceComponent implements OnChanges {
           this.instance = data;
           this.editable = this.computeEditable();
           this.loadingInstance = false;
+
+          console.log('this.instance.services.size: ' + this.instance.services.size);
 
           console.log('editable: ' + this.editable);
         },

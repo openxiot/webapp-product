@@ -49,7 +49,7 @@ export class ProductInstanceDetailComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['device']) {
+    if (changes['instance']) {
       this.services = this.instance?.getServices() || [];
 
       if (this.service) {
