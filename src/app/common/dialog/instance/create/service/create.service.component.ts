@@ -26,7 +26,7 @@ import {
   Event,
   EventType,
   EventDefinition,
-  DataFormat,
+  DataFormat, ServiceType,
 } from '@openxiot/xiot-core-spec-ts';
 import {DeviceInstanceNamespaceComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/namespace/device.instance.namespace.component';
 import {DeviceInstanceDescriptionComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/description/device.instance.description.component';
@@ -43,6 +43,8 @@ import {CreateServiceEventsComponent} from './events/create.service.events.compo
 import {NzFlexModule} from 'ng-zorro-antd/flex';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../service/i18n.service';
+import {ServiceOption} from './ServiceOption';
 
 @Component({
   selector: 'create-service',
@@ -81,7 +83,7 @@ export class CreateServiceComponent implements OnInit {
   protected loadingServices: boolean = false;
 
   readonly #modal: NzModalRef<Service, Service> = inject(NzModalRef);
-  readonly data: Service = inject(NZ_MODAL_DATA);
+  readonly option: ServiceOption = inject(NZ_MODAL_DATA);
 
   form: FormGroup<{
     iid: FormControl<number>,
@@ -96,8 +98,9 @@ export class CreateServiceComponent implements OnInit {
     optionalEvents: FormControl<Event[]>;
   }>;
 
+  custom: Service;
   services: Service[] = [];
-  current: Service;
+  selected: Service;
 
   definitions: ServiceDefinition[] = [];
 
@@ -111,7 +114,8 @@ export class CreateServiceComponent implements OnInit {
   events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
-    private account: AccountService,
+    public i18n: MainI18nService,
+    // private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
     private fb: NonNullableFormBuilder
@@ -129,7 +133,18 @@ export class CreateServiceComponent implements OnInit {
       optionalEvents: this.fb.control<Event[]>([]),
     });
 
-    this.current = this.data;
+    this.custom = this.createCustomService();
+    this.selected = this.custom;
+  }
+
+  private createCustomService(): Service {
+    const org = this.option.type.organization || 'org';
+    const model = this.option.type.model || 'model';
+    const version = this.option.type.version || 0;
+    const type = new ServiceType(`urn:${org}:service:unnamed:00000000:${org}:${model}:${version}`);
+    const description = new Map<string, string>();
+    description.set('zh-CN', '自定义功能');
+    return new Service(0, type, description, [], [], []);
   }
 
   ngOnInit(): void {
@@ -141,14 +156,14 @@ export class CreateServiceComponent implements OnInit {
 
   private loadServices(): void {
     this.loadingServices = true;
-    this.service.getServiceDefinitions(this.account.ns.namespace)
+    this.service.getServiceDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.definitions = data;
           this.services = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Service(this.data.iid, x.type, x.description, [], [], []);
+              return new Service(0, x.type, x.description, [], [], []);
             });
 
           this.loadingServices = false;
@@ -163,7 +178,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
@@ -177,7 +192,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadActions(): void {
     this.loadingActions = true;
-    this.service.getActionDefinitions(this.account.ns.namespace)
+    this.service.getActionDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.actions = new Map(data.map(item => [item.type.name, item]));
@@ -191,7 +206,7 @@ export class CreateServiceComponent implements OnInit {
 
   private loadEvents(): void {
     this.loadingEvents = true;
-    this.service.getEventDefinitions(this.account.ns.namespace)
+    this.service.getEventDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.events = new Map(data.map(item => [item.type.name, item]));
@@ -209,11 +224,10 @@ export class CreateServiceComponent implements OnInit {
   }
 
   ok(): void {
-    this.data.iid = this.form.controls.iid.value;
-    this.data.type.ns = this.form.controls.ns.value;
-    this.data.type.value = this.current.type.value;
-    this.data.type.name = this.form.controls.code.value;
-    this.data.description = this.form.controls.description.value;
+    this.selected.iid = this.form.controls.iid.value;
+    this.selected.type.ns = this.form.controls.ns.value;
+    this.selected.type.name = this.form.controls.code.value;
+    this.selected.description = this.form.controls.description.value;
 
     // --------------------------------------------------------
     // 构造属性列表
@@ -224,14 +238,14 @@ export class CreateServiceComponent implements OnInit {
 
     for (let property of this.form.controls.requiredProperties.value) {
       property.iid = piid;
-      this.data.properties.set(property.iid, property);
+      this.selected.properties.set(property.iid, property);
       piid ++;
     }
 
     for (let property of this.form.controls.optionalProperties.value) {
       if (property.type._checked) {
         property.iid = piid;
-        this.data.properties.set(property.iid, property);
+        this.selected.properties.set(property.iid, property);
         piid ++;
       }
     }
@@ -245,14 +259,14 @@ export class CreateServiceComponent implements OnInit {
 
     for (let action of this.form.controls.requiredActions.value) {
       action.iid = aiid;
-      this.data.actions.set(action.iid, action);
+      this.selected.actions.set(action.iid, action);
       aiid ++;
     }
 
     for (let action of this.form.controls.optionalActions.value) {
       if (action.type._checked) {
         action.iid = aiid;
-        this.data.actions.set(action.iid, action);
+        this.selected.actions.set(action.iid, action);
         aiid ++;
       }
     }
@@ -266,27 +280,27 @@ export class CreateServiceComponent implements OnInit {
 
     for (let event of this.form.controls.requiredEvents.value) {
       event.iid = eiid;
-      this.data.events.set(event.iid, event);
+      this.selected.events.set(event.iid, event);
       eiid ++;
     }
 
     for (let event of this.form.controls.requiredEvents.value) {
       if (event.type._checked) {
         event.iid = eiid;
-        this.data.events.set(event.iid, event);
+        this.selected.events.set(event.iid, event);
         eiid ++;
       }
     }
 
-    this.#modal.destroy(this.data);
+    this.#modal.destroy(this.selected);
   }
 
   private initFormData() {
     this.loadingServices = true;
-    this.form.controls.iid.setValue(this.data.iid);
-    this.form.controls.ns.setValue(this.data.type.ns);
-    this.form.controls.code.setValue(this.data.type.name);
-    this.form.controls.description.setValue(this.data.description);
+    this.form.controls.iid.setValue(this.selected.iid);
+    this.form.controls.ns.setValue(this.selected.type.ns);
+    this.form.controls.code.setValue(this.selected.type.name);
+    this.form.controls.description.setValue(this.selected.description);
     this.loadingServices = false;
   }
 
@@ -372,7 +386,7 @@ export class CreateServiceComponent implements OnInit {
 
   protected onClickService(s: Service) {
     this.loadingServices = true;
-    this.current = s;
+    this.selected = s;
 
     this.form.controls.iid.setValue(s.iid);
     this.form.controls.ns.setValue(s.type.ns);

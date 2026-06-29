@@ -13,6 +13,7 @@ import {CreateServiceComponent} from '../../../../../../../common/dialog/instanc
 import {ServiceType} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../../../service/i18n.service';
+import {ServiceOption} from '../../../../../../../common/dialog/instance/create/service/ServiceOption';
 
 @Component({
   selector: 'instance-services',
@@ -56,29 +57,22 @@ export class InstanceServicesComponent {
   }
 
   onAddService() {
-    let siid: number = 1024;
+    // let siid: number = 1024;
+    //
+    // for (let service of this.services) {
+    //   if (service.iid > siid) {
+    //     siid = service.iid;
+    //   }
+    // }
+    //
+    // siid ++;
 
-    for (let service of this.services) {
-      if (service.iid > siid) {
-        siid = service.iid;
-      }
-    }
-
-    siid ++;
-
-    const org = this.type.organization || 'org';
-    const model = this.type.model || 'model';
-    const version = this.type.version || 0;
-    const type = new ServiceType(`urn:${org}:service:unnamed:00000000:${org}:${model}:${version}`);
-    const description = new Map<string, string>();
-    description.set('zh-CN', '自定义功能');
-
-    const modal = this.modal.create<CreateServiceComponent, Service, Service>({
+    const modal = this.modal.create<CreateServiceComponent, ServiceOption, Service>({
       nzTitle: '添加功能',
       nzWidth: 1000,
       nzContent: CreateServiceComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new Service(siid, type, description, [], [], []),
+      nzData: new ServiceOption(this.type),
       nzFooter: [
         {
           label: '取消',
