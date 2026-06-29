@@ -1,0 +1,48 @@
+<nz-row [nzGutter]="[8, 8]">
+
+  <nz-col [nzSpan]="6" (click)="onEmptyTemplateSelected()">
+    <nz-card nzHoverable>
+      <nz-card-meta [nzTitle]="emptyTitle" [nzDescription]="emptyDesc"></nz-card-meta>
+    </nz-card>
+  </nz-col>
+
+  <ng-template #emptyTitle>
+        <span>
+          <span>{{ 'empty' }}</span>
+
+          @if (option.model.length === 0) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+  </ng-template>
+
+  <ng-template #emptyDesc>
+    {{ '空模板' | translate }}
+  </ng-template>
+
+  @for (template of option.templates; track template.type.name) {
+    <nz-col [nzSpan]="6" (click)="onTemplateSelected(template)">
+      <nz-card nzHoverable>
+        <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+      </nz-card>
+    </nz-col>
+
+    <ng-template #title>
+        <span>
+          <span>{{ template.type.name }}</span>
+
+          @if (template.type.model === option.model) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+    </ng-template>
+
+    <ng-template #desc>
+      {{ template.description.get(i18n.getCurrentLang()) }}
+    </ng-template>
+  }
+</nz-row>

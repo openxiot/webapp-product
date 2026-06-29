@@ -92,7 +92,7 @@ import {ProductTemplateComponent} from '../../create/template/product.template.c
 })
 export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
   @Output() onSaved = new EventEmitter<void>();
 
   loading: boolean = false;

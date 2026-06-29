@@ -8,15 +8,15 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
 import {DeviceDefinition, NamespaceDefinition, Urn} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
-import {AccountService} from '../../../../../../service/account.service';
-import {MainI18nService} from '../../../../../../service/i18n.service';
-import {MainService} from '../../../../../../service/main.service';
-import {TemplatesOption} from './TemplatesOption';
+import {AccountService} from '../../../../../../../service/account.service';
+import {MainI18nService} from '../../../../../../../service/i18n.service';
+import {MainService} from '../../../../../../../service/main.service';
+import {DevicesOption} from './DevicesOption';
 
 @Component({
-  selector: 'template-selector',
-  templateUrl: './template.selector.component.html',
-  styleUrls: ['./template.selector.component.less'],
+  selector: 'device-selector',
+  templateUrl: './device.selector.component.html',
+  styleUrls: ['./device.selector.component.less'],
   imports: [
     FormsModule,
     NzInputModule,
@@ -29,10 +29,10 @@ import {TemplatesOption} from './TemplatesOption';
   providers: [],
   standalone: true
 })
-export class TemplateSelectorComponent {
+export class DeviceSelectorComponent {
 
   readonly #modal = inject(NzModalRef);
-  readonly option: TemplatesOption = inject(NZ_MODAL_DATA);
+  readonly option: DevicesOption = inject(NZ_MODAL_DATA);
 
   constructor(
     private account: AccountService,

@@ -23,7 +23,7 @@ import {MainService} from '../../../../../service/main.service';
 })
 export class ProductVisibilityComponent implements OnChanges {
 
-  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('joy-spec', UrnType.DEVICE, 'switch', '00000000'), '');
+  @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
 
   protected readonly LifeCycle = LifeCycle;
 

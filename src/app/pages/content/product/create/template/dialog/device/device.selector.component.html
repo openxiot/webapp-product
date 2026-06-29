@@ -10,11 +10,11 @@
         <span>
           <span>{{ device.type.name }}</span>
 
-          <!--          @if (ns.namespace === currentNamespace) {-->
-          <!--            <span style="float: right">-->
-          <!--              <span nz-icon nzType="check" nzTheme="outline"></span>-->
-          <!--            </span>-->
-          <!--          }-->
+          @if (device.type.name === option.name) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
         </span>
     </ng-template>
 

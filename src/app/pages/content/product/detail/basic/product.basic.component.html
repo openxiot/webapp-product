@@ -101,7 +101,7 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="2" nzRequired nzFor="template">{{ '模板' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="14">
-              <product-template formControlName="template" [updatable]="product.lifecycle === LifeCycle.DEVELOPMENT"/>
+              <product-template formControlName="template" [updatable]="false"/>
             </nz-form-control>
           </nz-form-item>
 
