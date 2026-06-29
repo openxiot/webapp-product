@@ -83,8 +83,12 @@
             }
           </div>
         } @else {
+          <div>
+            {{ '没有产品功能定义，请创建产品功能!' | translate }}
+          </div>
+
           <div style="margin-left: auto;">
-            <button nz-button nzType="primary" nzDanger (click)="onFirstInstance()">{{ '创建产品功能' | translate }}</button>
+            <button nz-button nzType="primary" nzDanger (click)="onCreateFirstInstance()">{{ '创建产品功能' | translate }}</button>
           </div>
         }
       </toolbar>

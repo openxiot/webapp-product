@@ -1,25 +1,31 @@
-<nz-spin [nzSpinning]="loadingNamespaces || loadingDevices || loadingTemplates">
-  <nz-row [nzGutter]="[8, 8]">
-    <nz-col [nzSpan]="8">
-      <nz-card [nzHoverable]="updatable" (click)="onClickNamespace()">
-        <nz-card-meta [nzTitle]="CurrentNamespaceDescription"></nz-card-meta>
-      </nz-card>
-    </nz-col>
-
-    @if (this.value.ns.length) {
+@if (updatable) {
+  <nz-spin [nzSpinning]="loadingNamespaces || loadingDevices || loadingTemplates">
+    <nz-row [nzGutter]="[8, 8]">
       <nz-col [nzSpan]="8">
-        <nz-card [nzHoverable]="updatable" (click)="onClickDeviceType()">
-          <nz-card-meta [nzTitle]="CurrentDeviceTypeDescription"></nz-card-meta>
+        <nz-card [nzHoverable]="true" (click)="onClickNamespace()">
+          <nz-card-meta [nzTitle]="CurrentNamespaceDescription"></nz-card-meta>
         </nz-card>
       </nz-col>
-    }
 
-    @if (this.value.name.length > 0) {
-      <nz-col [nzSpan]="8">
-        <nz-card [nzHoverable]="updatable" (click)="onClickTemplate()">
-          <nz-card-meta [nzTitle]="CurrentTemplateDescription"></nz-card-meta>
-        </nz-card>
-      </nz-col>
-    }
-  </nz-row>
-</nz-spin>
+      @if (this.value.ns.length) {
+        <nz-col [nzSpan]="8">
+          <nz-card [nzHoverable]="true" (click)="onClickDeviceType()">
+            <nz-card-meta [nzTitle]="CurrentDeviceTypeDescription"></nz-card-meta>
+          </nz-card>
+        </nz-col>
+      }
+
+      @if (this.value.name.length > 0) {
+        <nz-col [nzSpan]="8">
+          <nz-card [nzHoverable]="true" (click)="onClickTemplate()">
+            <nz-card-meta [nzTitle]="CurrentTemplateDescription"></nz-card-meta>
+          </nz-card>
+        </nz-col>
+      }
+    </nz-row>
+  </nz-spin>
+} @else {
+  <nz-tag>{{ CurrentNamespaceDescription }}</nz-tag>
+  <nz-tag>{{ CurrentDeviceTypeDescription }}</nz-tag>
+  <nz-tag>{{ CurrentTemplateDescription }}</nz-tag>
+}

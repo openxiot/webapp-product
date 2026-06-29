@@ -15,6 +15,7 @@ import {TemplatesOption} from './dialog/template/TemplatesOption';
 import {NamespaceOption} from '../../../../../common/dialog/namespace/NamespaceOption';
 import {DeviceSelectorComponent} from './dialog/device/device.selector.component';
 import {DevicesOption} from './dialog/device/DevicesOption';
+import {NzTagModule} from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'product-template',
@@ -28,7 +29,8 @@ import {DevicesOption} from './dialog/device/DevicesOption';
     NzColDirective,
     NzCardComponent,
     NzCardMetaComponent,
-    NzSpinModule
+    NzSpinModule,
+    NzTagModule,
   ],
   providers: [
     {

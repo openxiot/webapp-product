@@ -77,8 +77,6 @@ export class ProductPanelComponent implements OnChanges {
 
         if (this.instances.length > 0) {
           this.currentVersion = this.instances[0].type?.version.toString() || '0';
-        } else {
-          this.msg.warning('没有产品功能定义，请创建产品功能');
         }
       },
       error: error => {

@@ -633,14 +633,13 @@ export class MainService {
   /**
    * 创建产品功能版本
    */
-  createProductInstance(productId: number, instance: DeviceInstance): Observable<void> {
-    const body = {
-      productId: productId,
-      definition: DeviceInstanceCodec.encode(instance)
-    };
+  createProductInstance(instance: DeviceInstance): Observable<void> {
+    const x = DeviceInstanceCodec.encode(instance);
+    console.log('type: ' + instance.type.toString());
+    console.log(x);
 
     return this.http
-      .post<OxResponse>(`${this.server}/v1/product/instance/one`, body)
+      .post<OxResponse>(`${this.server}/v1/product/instance/one`, DeviceInstanceCodec.encode(instance))
       .pipe(map(() => undefined));
   }
 
