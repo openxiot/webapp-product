@@ -2,13 +2,15 @@
   <div class="group-bar">
     <nz-space class="group-title">
       <span *nzSpaceItem><span nz-icon nzType="appstore" nzTheme="outline"></span></span>
-      <span *nzSpaceItem>{{ '功能(' | translate }}{{ services.length }})</span>
+      <span *nzSpaceItem>{{ '服务' | translate }}({{ services.length }})</span>
     </nz-space>
 
-    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+    @if (editable) {
       <span style="float: right">
-          <button nz-button nzType="primary" nzSize="small" (click)="onAddService()">{{ '添加' | translate }}</button>
-        </span>
+        <div class="selector" (click)="onAddService()">
+          <span nz-icon nzType="plus" nzTheme="outline"></span>
+        </div>
+      </span>
     }
   </div>
 
@@ -16,10 +18,19 @@
     @for (s of services; track s.iid) {
       <li nz-menu-item (click)="onClickService(s)">
         <nz-tag [nzColor]="'blue'">{{ s.iid }}</nz-tag>
-        <span class="service-title">{{ s.description.get(language) }}</span>
-        @if (version) {
-          <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ s.type.version }}</nz-tag></span>
-        }
+        <span class="service-title">{{ s.description.get(i18n.getCurrentLang()) }}</span>
+
+        <span style="float: right">
+<!--          @if (s.required) {-->
+<!--            <nz-tag nzColor="blue">{{ '必选' | translate }}</nz-tag>-->
+<!--          } @else {-->
+<!--            <nz-tag nzColor="green">{{ '可选' | translate }}</nz-tag>-->
+<!--          }-->
+
+          @if (showVersion) {
+            <nz-tag nzColor="blue">{{ '版本' | translate }} {{ s.type.version }}</nz-tag>
+          }
+        </span>
       </li>
     }
   </ul>

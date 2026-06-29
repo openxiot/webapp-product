@@ -12,6 +12,7 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {CreateServiceComponent} from '../../../../../../../common/dialog/instance/create/service/create.service.component';
 import {ServiceType} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../../service/i18n.service';
 
 @Component({
   selector: 'instance-services',
@@ -19,14 +20,13 @@ import {TranslatePipe} from '@ngx-translate/core';
   styleUrls: ['./instance.services.component.less'],
   standalone: true,
   imports: [
-    NzButtonComponent,
     NzTagComponent,
     NzMenuModule,
     NzCardModule,
     NzSpaceModule,
     NzIconModule,
     NzDropDownModule,
-    TranslatePipe
+    TranslatePipe,
   ],
   providers: [
     NzModalService
@@ -36,15 +36,15 @@ export class InstanceServicesComponent {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() version: boolean = false;
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() editable: boolean = false;
+  @Input() showVersion: boolean = false;
   @Input() type!: DeviceType;
   @Input() services: Service[] = [];
-  @Input() language: string = 'zh-CN';
   @Output() selected = new EventEmitter<Service>();
   @Output() serviceAdded = new EventEmitter<Service>();
 
   constructor(
+    public i18n: MainI18nService,
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     private msg: NzMessageService

@@ -2,10 +2,10 @@
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="300px" nzTheme="light">
       <instance-services
-        [version]="version"
+        [showVersion]="version"
         [type]="instance.type"
         [services]="services"
-        [lifecycle]="instance.lifecycle"
+        [editable]="editable"
         (selected)="onServiceSelected($event)"
         (serviceAdded)="onServiceAdded($event)"
       ></instance-services>
@@ -16,7 +16,7 @@
         <instance-service
           [version]="version"
           [service]="service"
-          [lifecycle]="instance.lifecycle"
+          [editable]="editable"
           (changed)="onServiceChanged($event)"
           (removed)="onServiceRemoved($event)"
         ></instance-service>

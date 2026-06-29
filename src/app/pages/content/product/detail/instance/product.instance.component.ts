@@ -11,10 +11,8 @@ import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzListModule} from 'ng-zorro-antd/list';
 import {
-  DeviceDefinition,
   DeviceInstance,
   DeviceInstanceCodec,
-  DeviceTemplate,
   LifeCycle,
   ProductBasic,
   ProductInstance,
@@ -37,6 +35,7 @@ import {MainService} from '../../../../../service/main.service';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductInstanceHelper} from '../../../../../typedef/instance/ProductInstanceHelper';
+import {AccountService} from '../../../../../service/account.service';
 
 @Component({
   selector: 'product-instance',
@@ -71,7 +70,9 @@ export class ProductInstanceComponent implements OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  style: number = 1;
+  /** 是否有完整编辑权限（组织匹配 + 产品实例开发状态） */
+  editable: boolean = false;
+
   version: boolean = false;
   language: string = 'zh-CN';
 
@@ -91,6 +92,7 @@ export class ProductInstanceComponent implements OnChanges {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    private account: AccountService,
     private msg: NzMessageService,
     private service: MainService,
   ) {
@@ -100,6 +102,43 @@ export class ProductInstanceComponent implements OnChanges {
     if (changes['product']) {
       this.loadInstances(this.product.id);
     }
+  }
+
+  /**
+   * 当前用户的组织是否匹配模板创建者的组织
+   * 有组织的前提是已登录
+   */
+  private isOrgMatch(): boolean {
+    if (!this.account.login || !this.account.organization || !this.instance) {
+      return false;
+    }
+    return this.instance.type.organization === this.account.organization.id;
+  }
+
+  /**
+   * 计算是否可编辑生命周期（已登录 + 组织匹配）
+   */
+  private computeCanEditLifecycle(): boolean {
+    return this.isOrgMatch();
+  }
+
+  /**
+   * 计算是否有完整编辑权限（已登录 + 组织匹配 + 开发状态）
+   */
+  private computeEditable(): boolean {
+    if (! this.isOrgMatch()) {
+      console.log('isOrgMatch: ', this.isOrgMatch());
+      return false;
+    }
+
+    if (! this.instance) {
+      console.log('instance is null');
+      return false;
+    }
+
+    console.log('instance.lifecycle: ' + this.instance.lifecycle);
+
+    return this.instance.lifecycle === LifeCycle.DEVELOPMENT;
   }
 
   private loadInstances(productId: string) {
@@ -115,7 +154,7 @@ export class ProductInstanceComponent implements OnChanges {
           this.currentVersion = this.instances[0].type?.version.toString() || '0';
           this.loadInstance(this.instances[0].type?.toString() || '');
         }
-      },
+        },
       error: error => {
         this.msg.warning(error);
       }
@@ -128,7 +167,10 @@ export class ProductInstanceComponent implements OnChanges {
       this.service.getProductInstance(type).subscribe({
         next: data => {
           this.instance = data;
+          this.editable = this.computeEditable();
           this.loadingInstance = false;
+
+          console.log('editable: ' + this.editable);
         },
         error: error => {
           this.msg.warning(error);

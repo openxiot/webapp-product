@@ -42,6 +42,7 @@ export class InstanceServiceComponent implements OnChanges {
 
   @Input() version: boolean = false;
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() editable: boolean = false;
   @Input() service!: Service;
   @Input() language: string = 'zh-CN';
   @Output() changed = new EventEmitter<Service>();

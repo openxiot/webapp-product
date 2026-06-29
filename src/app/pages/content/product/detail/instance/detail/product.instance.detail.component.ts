@@ -32,6 +32,7 @@ import {InstanceServiceComponent} from './service/instance.service.component';
 })
 export class ProductInstanceDetailComponent implements OnChanges {
 
+  @Input() editable: boolean = false;
   @Input() version: boolean = false;
   @Input() instance: DeviceInstance | undefined = undefined;
   @Output() changed = new EventEmitter<DeviceInstance>();
