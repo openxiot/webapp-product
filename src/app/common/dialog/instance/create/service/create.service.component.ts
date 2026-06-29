@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzFormModule} from 'ng-zorro-antd/form';
-import {DeviceInstanceIdComponent} from '../../../../device/instance/service/split/detail/property/iid/device.instance.id.component';
+import {DeviceInstanceIdComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/iid/device.instance.id.component';
 import {
   Access,
   LifeCycle,
@@ -28,9 +28,9 @@ import {
   EventDefinition,
   DataFormat,
 } from '@openxiot/xiot-core-spec-ts';
-import {DeviceInstanceNamespaceComponent} from '../../../../device/instance/service/split/detail/property/namespace/device.instance.namespace.component';
-import {DeviceInstanceDescriptionComponent} from '../../../../device/instance/service/split/detail/property/description/device.instance.description.component';
-import {DeviceInstanceNameComponent} from '../../../../device/instance/service/split/detail/property/name/device.instance.name.component';
+import {DeviceInstanceNamespaceComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/namespace/device.instance.namespace.component';
+import {DeviceInstanceDescriptionComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/description/device.instance.description.component';
+import {DeviceInstanceNameComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/name/device.instance.name.component';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
 import {NzSpaceModule} from 'ng-zorro-antd/space';

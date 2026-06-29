@@ -626,8 +626,8 @@ export class MainService {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v1/product/instance/all`, {params})
-      .pipe(map(response => ProductInstanceCodec.decodeArray(response.data.instances)));
+      .get<OxResponse>(`${this.server}/v1/product/instance/many`, {params})
+      .pipe(map(response => ProductInstanceCodec.decodeArray(response.data)));
   }
 
   /**
@@ -665,11 +665,8 @@ export class MainService {
    * 读取产品功能版本
    */
   getProductInstance(type: string): Observable<DeviceInstance> {
-    const params = {
-      type: type,
-    }
     return this.http
-      .get<OxResponse>(`${this.server}/v1/product/instance/one`, {params})
+      .get<OxResponse>(`${this.server}/v1/product/instance/one/${type}`)
       .pipe(map(response => DeviceInstanceCodec.decode(response.data)));
   }
 

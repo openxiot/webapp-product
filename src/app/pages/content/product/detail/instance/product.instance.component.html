@@ -1,4 +1,4 @@
-<nz-row [nzGutter]="[8, 8]">
+<nz-row [nzGutter]="[8, 8]" xmlns="">
   <nz-col [nzSpan]="24">
     <nz-spin [nzSpinning]="loadingInstances">
       <toolbar>
@@ -97,12 +97,12 @@
 
   <nz-col [nzSpan]="24">
     <nz-spin [nzSpinning]="loadingInstance">
-      @if (device) {
-        <device-instance
-          [device]="device"
-          [lifecycle]="device.lifecycle"
+      @if (instance) {
+        <product-instance-detail
+          [version]="true"
+          [instance]="instance"
           (changed)="onChanged($event)"
-        ></device-instance>
+        ></product-instance-detail>
       }
     </nz-spin>
   </nz-col>

@@ -32,7 +32,7 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
-import {DeviceInstanceComponent} from '../../../../../common/device/instance/device.instance.component';
+import {ProductInstanceDetailComponent} from './detail/product.instance.detail.component';
 import {MainService} from '../../../../../service/main.service';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -56,7 +56,7 @@ import {ProductInstanceHelper} from '../../../../../typedef/instance/ProductInst
     NzRowDirective,
     NzSpinModule,
     ToolbarComponent,
-    DeviceInstanceComponent,
+    ProductInstanceDetailComponent,
     TranslatePipe,
   ],
   providers: [
@@ -79,7 +79,7 @@ export class ProductInstanceComponent implements OnChanges {
   instances: ProductInstance[] = [];
 
   loadingInstance: boolean = false;
-  device: DeviceInstance | undefined = undefined;
+  instance: DeviceInstance | undefined = undefined;
 
   currentVersion: string = '1';
   isChanged: boolean = false;
@@ -104,7 +104,7 @@ export class ProductInstanceComponent implements OnChanges {
 
   private loadInstances(productId: string) {
     this.loadingInstances = true;
-    this.device = undefined;
+    this.instance = undefined;
     this.service.getProductInstances(productId).subscribe({
       next: data => {
         this.instances = data;
@@ -127,7 +127,7 @@ export class ProductInstanceComponent implements OnChanges {
       this.loadingInstance = true;
       this.service.getProductInstance(type).subscribe({
         next: data => {
-          this.device = data;
+          this.instance = data;
           this.loadingInstance = false;
         },
         error: error => {
@@ -164,10 +164,10 @@ export class ProductInstanceComponent implements OnChanges {
   }
 
   protected onSave() {
-    if (this.device) {
+    if (this.instance) {
       if (this.firstInstance) {
         this.loadingInstance = true;
-        this.service.createProductInstance(this.device).subscribe({
+        this.service.createProductInstance(this.instance).subscribe({
             next: () => {
               console.log('createProductInstance ok');
               this.loadingInstance = false;
@@ -182,7 +182,7 @@ export class ProductInstanceComponent implements OnChanges {
           });
       } else {
         this.loadingInstance = true;
-        this.service.updateProductInstance(this.device).subscribe({
+        this.service.updateProductInstance(this.instance).subscribe({
             next: () => {
               console.log('updateProductInstance ok');
               this.loadingInstance = false;
@@ -213,8 +213,8 @@ export class ProductInstanceComponent implements OnChanges {
 
               instance.lifecycle = LifeCycle.PREVIEW;
 
-              if (this.device) {
-                this.device.lifecycle = LifeCycle.PREVIEW;
+              if (this.instance) {
+                this.instance.lifecycle = LifeCycle.PREVIEW;
               }
             },
             error: error => {
@@ -241,8 +241,8 @@ export class ProductInstanceComponent implements OnChanges {
 
               instance.lifecycle = LifeCycle.DEVELOPMENT;
 
-              if (this.device) {
-                this.device.lifecycle = LifeCycle.DEVELOPMENT;
+              if (this.instance) {
+                this.instance.lifecycle = LifeCycle.DEVELOPMENT;
               }
             },
             error: error => {
@@ -278,9 +278,9 @@ export class ProductInstanceComponent implements OnChanges {
     this.service.getTemplate(type).subscribe({
       next: data => {
         console.log('getTemplate ok');
-        this.device = ProductInstanceHelper.fromTemplate(this.product.organization, this.product.model, data);
+        this.instance = ProductInstanceHelper.fromTemplate(this.product.organization, this.product.model, data);
         this.isChanged = true;
-        this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.device.type))
+        this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.instance.type))
         this.firstInstance = true;
 
         this.loadingTemplate = false;
@@ -298,9 +298,9 @@ export class ProductInstanceComponent implements OnChanges {
       next: data => {
         console.log('getDeviceDefinition ok');
 
-        this.device = ProductInstanceHelper.fromDefinition(this.product.organization, this.product.model, data);
+        this.instance = ProductInstanceHelper.fromDefinition(this.product.organization, this.product.model, data);
         this.isChanged = true;
-        this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.device.type))
+        this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.instance.type))
         this.firstInstance = true;
 
         this.loadingDeviceDefinition = false;
@@ -321,8 +321,8 @@ export class ProductInstanceComponent implements OnChanges {
   }
 
   protected onDownload() {
-    if (this.device) {
-      const data = DeviceInstanceCodec.encode(this.device);
+    if (this.instance) {
+      const data = DeviceInstanceCodec.encode(this.instance);
 
       // 1. 将数据转换为 JSON 字符串
       const jsonString = JSON.stringify(data, null, 2); // 第三个参数是缩进空格数

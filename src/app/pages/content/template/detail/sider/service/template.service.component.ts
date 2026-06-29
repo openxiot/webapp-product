@@ -18,10 +18,10 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzTableModule} from 'ng-zorro-antd/table';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {TemplateServiceCardComponent} from './card/template.service.card.component';
-import {TemplatePropertyDetailComponent} from './member/property/template.property.detail.component';
-import {TemplateServiceDetailComponent} from './member/service/template.service.detail.component';
-import {TemplateActionDetailComponent} from './member/action/template.action.detail.component';
-import {TemplateEventDetailComponent} from './member/event/template.event.detail.component';
+import {TemplatePropertyDetailComponent} from './detail/property/template.property.detail.component';
+import {TemplateServiceDetailComponent} from './detail/service/template.service.detail.component';
+import {TemplateActionDetailComponent} from './detail/action/template.action.detail.component';
+import {TemplateEventDetailComponent} from './detail/event/template.event.detail.component';
 
 @Component({
   selector: 'template-service',

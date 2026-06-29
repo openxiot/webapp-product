@@ -18,32 +18,32 @@ import {
   Property,
   PropertyDefinition, ValueDefinition, ValueList, ValueRange,
 } from '@openxiot/xiot-core-spec-ts';
-import {DeviceInstanceDescriptionComponent} from '../../../../device/instance/service/split/detail/property/description/device.instance.description.component';
-import {DeviceInstanceIdComponent} from '../../../../device/instance/service/split/detail/property/iid/device.instance.id.component';
-import {DeviceInstanceNameComponent} from '../../../../device/instance/service/split/detail/property/name/device.instance.name.component';
-import {DeviceInstanceNamespaceComponent} from '../../../../device/instance/service/split/detail/property/namespace/device.instance.namespace.component';
+import {DeviceInstanceDescriptionComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/description/device.instance.description.component';
+import {DeviceInstanceIdComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/iid/device.instance.id.component';
+import {DeviceInstanceNameComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/name/device.instance.name.component';
+import {DeviceInstanceNamespaceComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/namespace/device.instance.namespace.component';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
 import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {MainService} from '../../../../../service/main.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {DeviceInstanceServicePropertyAccessComponent} from '../../../../device/instance/service/split/detail/property/access/device.instance.service.property.access.component';
-import {DeviceInstanceServicePropertyConstraintComponent} from '../../../../device/instance/service/split/detail/property/constraint/device.instance.service.property.constraint.component';
-import {DeviceInstanceServicePropertyFormatComponent} from '../../../../device/instance/service/split/detail/property/format/device.instance.service.property.format.component';
-import {DeviceInstanceServicePropertyListComponent} from '../../../../device/instance/service/split/detail/property/list/device.instance.service.property.list.component';
-import {DeviceInstanceServicePropertyMembersComponent} from '../../../../device/instance/service/split/detail/property/members/device.instance.service.property.members.component';
-import {DeviceInstanceServicePropertyRangeComponent} from '../../../../device/instance/service/split/detail/property/range/device.instance.service.property.range.component';
-import {ConstraintType} from '../../../../device/instance/service/split/detail/property/constraint/ConstraintType';
-import {RangeValue} from '../../../../device/instance/service/split/detail/property/range/RangeValue';
-import {ValueItem} from '../../../../device/instance/service/split/detail/property/list/ValueItem';
+import {DeviceInstanceServicePropertyAccessComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/access/device.instance.service.property.access.component';
+import {DeviceInstanceServicePropertyConstraintComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/constraint/device.instance.service.property.constraint.component';
+import {DeviceInstanceServicePropertyFormatComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/format/device.instance.service.property.format.component';
+import {DeviceInstanceServicePropertyListComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/list/device.instance.service.property.list.component';
+import {DeviceInstanceServicePropertyMembersComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/members/device.instance.service.property.members.component';
+import {DeviceInstanceServicePropertyRangeComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/range/device.instance.service.property.range.component';
+import {ConstraintType} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/constraint/ConstraintType';
+import {RangeValue} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/range/RangeValue';
+import {ValueItem} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/list/ValueItem';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
-import {DefaultValue} from '../../../../device/instance/service/split/detail/property/value/DefaultValue';
+import {DefaultValue} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/value/DefaultValue';
 import {
   DeviceInstanceServicePropertyUnitComponent
-} from '../../../../device/instance/service/split/detail/property/unit/device.instance.service.property.unit.component';
+} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/unit/device.instance.service.property.unit.component';
 import {
   DeviceInstanceServicePropertyDefaultValueComponent
-} from '../../../../device/instance/service/split/detail/property/value/device.instance.service.property.default.value.component';
+} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/value/device.instance.service.property.default.value.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 

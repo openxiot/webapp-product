@@ -1,0 +1,26 @@
+@if (instance) {
+  <nz-layout class="inner-layout">
+    <nz-sider nzWidth="300px" nzTheme="light">
+      <instance-services
+        [version]="version"
+        [type]="instance.type"
+        [services]="services"
+        [lifecycle]="instance.lifecycle"
+        (selected)="onServiceSelected($event)"
+        (serviceAdded)="onServiceAdded($event)"
+      ></instance-services>
+    </nz-sider>
+
+    <nz-content class="inner-content">
+      @if (service) {
+        <instance-service
+          [version]="version"
+          [service]="service"
+          [lifecycle]="instance.lifecycle"
+          (changed)="onServiceChanged($event)"
+          (removed)="onServiceRemoved($event)"
+        ></instance-service>
+      }
+    </nz-content>
+  </nz-layout>
+}

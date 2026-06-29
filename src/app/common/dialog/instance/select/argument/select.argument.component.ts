@@ -8,7 +8,6 @@ import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCellAlignDirective, NzTableModule} from 'ng-zorro-antd/table';
-import {PropertyMemberComponent} from '../../../../device/instance/tables/properties/member/property-member.component';
 import {Property} from '@openxiot/xiot-core-spec-ts';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -29,7 +28,6 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzCellAlignDirective,
     NzTableModule,
     NzRadioModule,
-    PropertyMemberComponent,
     TranslatePipe,
   ],
   providers: [],
