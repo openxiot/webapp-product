@@ -36,6 +36,8 @@ import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductInstanceHelper} from '../../../../../typedef/instance/ProductInstanceHelper';
 import {AccountService} from '../../../../../service/account.service';
+import {ProductInstanceViewJsonComponent} from './dialog/product.instance.view.json.component';
+import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'product-instance',
@@ -93,6 +95,7 @@ export class ProductInstanceComponent implements OnChanges {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     private account: AccountService,
+    private i18n: MainI18nService,
     private msg: NzMessageService,
     private service: MainService,
   ) {
@@ -126,12 +129,12 @@ export class ProductInstanceComponent implements OnChanges {
    * 计算是否有完整编辑权限（已登录 + 组织匹配 + 开发状态）
    */
   private computeEditable(): boolean {
-    if (! this.isOrgMatch()) {
+    if (!this.isOrgMatch()) {
       console.log('isOrgMatch: ', this.isOrgMatch());
       return false;
     }
 
-    if (! this.instance) {
+    if (!this.instance) {
       console.log('instance is null');
       return false;
     }
@@ -154,7 +157,7 @@ export class ProductInstanceComponent implements OnChanges {
           this.currentVersion = this.instances[0].type?.version.toString() || '0';
           this.loadInstance(this.instances[0].type?.toString() || '');
         }
-        },
+      },
       error: error => {
         this.msg.warning(error);
       }
@@ -212,33 +215,33 @@ export class ProductInstanceComponent implements OnChanges {
       if (this.firstInstance) {
         this.loadingInstance = true;
         this.service.createProductInstance(this.instance).subscribe({
-            next: () => {
-              console.log('createProductInstance ok');
-              this.loadingInstance = false;
-              this.isChanged = false;
-              this.msg.info("创建产品功能：完成！")
-            },
-            error: error => {
-              this.msg.warning(error);
-              this.loadingInstance = false;
-              this.msg.info("创建产品功能：失败!", error)
-            }
-          });
+          next: () => {
+            console.log('createProductInstance ok');
+            this.loadingInstance = false;
+            this.isChanged = false;
+            this.msg.info("创建产品功能：完成！")
+          },
+          error: error => {
+            this.msg.warning(error);
+            this.loadingInstance = false;
+            this.msg.info("创建产品功能：失败!", error)
+          }
+        });
       } else {
         this.loadingInstance = true;
         this.service.updateProductInstance(this.instance).subscribe({
-            next: () => {
-              console.log('updateProductInstance ok');
-              this.loadingInstance = false;
-              this.isChanged = false;
-              this.msg.info("更新产品功能：完成！")
-            },
-            error: error => {
-              this.msg.warning(error);
-              this.loadingInstance = false;
-              this.msg.info("更新产品功能：失败!", error)
-            }
-          });
+          next: () => {
+            console.log('updateProductInstance ok');
+            this.loadingInstance = false;
+            this.isChanged = false;
+            this.msg.info("更新产品功能：完成！")
+          },
+          error: error => {
+            this.msg.warning(error);
+            this.loadingInstance = false;
+            this.msg.info("更新产品功能：失败!", error)
+          }
+        });
       }
     }
   }
@@ -364,29 +367,55 @@ export class ProductInstanceComponent implements OnChanges {
     }
   }
 
-  protected onDownload() {
+  protected onViewJson() {
     if (this.instance) {
-      const data = DeviceInstanceCodec.encode(this.instance);
+      const modal = this.modal.create<ProductInstanceViewJsonComponent, any, any>({
+        nzWidth: 1024,
+        nzTitle: this.i18n.translate.instant('产品功能'),
+        nzContent: ProductInstanceViewJsonComponent,
+        nzViewContainerRef: this.viewContainerRef,
+        nzData: DeviceInstanceCodec.encode(this.instance),
+        nzFooter: [
+          {
+            label: this.i18n.translate.instant('下载'),
+            onClick: component => component!.ok()
+          },
+          {
+            label: this.i18n.translate.instant('关闭'),
+            type: 'primary',
+            onClick: component => component!.cancel()
+          }
+        ],
+      });
 
-      // 1. 将数据转换为 JSON 字符串
-      const jsonString = JSON.stringify(data, null, 2); // 第三个参数是缩进空格数
-
-      // 2. 创建 Blob 对象
-      const blob = new Blob([jsonString], {type: 'application/json'});
-
-      // 3. 创建下载链接
-      const url = window.URL.createObjectURL(blob);
-
-      // 4. 创建临时链接元素
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `data-${new Date().getTime()}.json`; // 设置文件名
-
-      // 5. 触发点击下载
-      link.click();
-
-      // 6. 清理 URL 对象
-      window.URL.revokeObjectURL(url);
+      modal.afterClose.subscribe(result => {
+        if (result) {
+          this.onDownload(result, this.instance!.type!.version || 0);
+        }
+      });
     }
+  }
+
+  protected onDownload(data: any, version: number) {
+    // 1. 将数据转换为 JSON 字符串
+    const jsonString = JSON.stringify(data, null, 2); // 第三个参数是缩进空格数
+
+    // 2. 创建 Blob 对象
+    const blob = new Blob([jsonString], {type: 'application/json'});
+
+    // 3. 创建下载链接
+    const url = window.URL.createObjectURL(blob);
+
+    // 4. 创建临时链接元素
+    const link = document.createElement('a');
+    link.href = url;
+    // link.download = `product-${new Date().getTime()}.json`; // 设置文件名
+    link.download = `product-${this.product.id}-${version}.json`; // 设置文件名
+
+    // 5. 触发点击下载
+    link.click();
+
+    // 6. 清理 URL 对象
+    window.URL.revokeObjectURL(url);
   }
 }
