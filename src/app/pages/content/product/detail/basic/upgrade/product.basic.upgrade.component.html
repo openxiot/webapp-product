@@ -1,23 +1,36 @@
-@switch (lifecycle) {
-  @case (LifeCycle.DEVELOPMENT) {
-    <div>
-      <label nz-checkbox [(ngModel)]="value.direct" (nzCheckedChange)="notifyChange()">{{ '直接升级' | translate }}</label>
-      <label nz-checkbox [(ngModel)]="value.gateway" (nzCheckedChange)="notifyChange()">{{ '网关升级' | translate }}</label>
-      <label nz-checkbox [(ngModel)]="value.ble" (nzCheckedChange)="notifyChange()">{{ 'BLE升级' | translate }}</label>
-    </div>
+@if (updatable) {
+  <div>
+    <label nz-checkbox
+           [(ngModel)]="value.direct"
+           (nzCheckedChange)="notifyChange()"
+    >
+      {{ '直接升级' | translate }}
+    </label>
+
+    <label nz-checkbox
+           [(ngModel)]="value.gateway"
+           (nzCheckedChange)="notifyChange()"
+    >
+      {{ '网关升级' | translate }}
+    </label>
+
+    <label nz-checkbox
+           [(ngModel)]="value.ble"
+           (nzCheckedChange)="notifyChange()"
+    >
+      {{ 'BLE升级' | translate }}
+    </label>
+  </div>
+} @else {
+  @if (value.direct) {
+    <nz-tag nzColor="blue">{{ '直接升级' | translate }}</nz-tag>
   }
 
-  @default {
-    @if (value.direct) {
-      <nz-tag nzColor="blue">{{ '直接升级' | translate }}</nz-tag>
-    }
+  @if (value.gateway) {
+    <nz-tag nzColor="green">{{ '网关升级' | translate }}</nz-tag>
+  }
 
-    @if (value.gateway) {
-      <nz-tag nzColor="green">{{ '网关升级' | translate }}</nz-tag>
-    }
-
-    @if (value.ble) {
-      <nz-tag nzColor="geekblue">{{ 'BLE升级' | translate }}</nz-tag>
-    }
+  @if (value.ble) {
+    <nz-tag nzColor="geekblue">{{ 'BLE升级' | translate }}</nz-tag>
   }
 }

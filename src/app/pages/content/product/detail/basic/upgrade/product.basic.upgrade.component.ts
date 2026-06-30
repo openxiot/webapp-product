@@ -29,7 +29,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductBasicUpgradeComponent implements ControlValueAccessor {
 
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable: boolean = false;
 
   private _value: UpgradeType = new UpgradeType();
 
@@ -79,6 +79,4 @@ export class ProductBasicUpgradeComponent implements ControlValueAccessor {
     // 调用 onTouched 标记控件为已触碰（用于表单验证状态）
     this.onTouched();
   }
-
-  protected readonly LifeCycle = LifeCycle;
 }

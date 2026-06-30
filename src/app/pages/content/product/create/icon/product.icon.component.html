@@ -1,0 +1,39 @@
+@if (updatable) {
+  <nz-row [nzGutter]="[8, 8]">
+    <nz-col [nzSpan]="24">
+      <div style="color: darkgray; font-size: 12px;">
+        {{ '请上传jpeg图片，512*512像素，大小不超过512KB。' | translate }}
+      </div>
+    </nz-col>
+    <nz-col [nzSpan]="24">
+      <nz-upload
+        class="icon-uploader"
+        nzType="drag"
+        nzListType="picture-card"
+        [nzCustomRequest]="customUpload"
+        [nzBeforeUpload]="beforeUpload"
+        [nzFileType]="supportFileType"
+        [nzMultiple]="false"
+        (nzChange)="handleChange($event)"
+        [nzShowUploadList]="false"
+        [nzDisabled]="loading"
+      >
+        @if (!value) {
+          <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'upload'"></span>
+          <div class="ant-upload-text">{{ '上传' | translate }}</div>
+        } @else {
+          <div class="preview-wrapper">
+            <img [src]="value" class="preview-img" alt="上传的图标"/>
+            <span class="delete-btn" (click)="handleDelete($event)">
+                <span nz-icon nzType="delete" nzTheme="outline"></span>
+              </span>
+          </div>
+        }
+      </nz-upload>
+    </nz-col>
+  </nz-row>
+} @else {
+  <div class="preview">
+    <img [src]="value" style="width: 100%; height: 100%;"/>
+  </div>
+}

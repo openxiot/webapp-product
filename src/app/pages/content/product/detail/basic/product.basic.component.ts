@@ -35,14 +35,13 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle, LocalizedName, ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {ToolbarComponent} from '../../../../../components/toolbar/toolbar.component';
-import {ProductBasicModelComponent} from './model/product.basic.model.component';
 import {ProductBasicIdComponent} from './id/product.basic.id.component';
-import {ProductBasicIconComponent} from './icon/product.basic.icon.component';
+import {ProductIconComponent} from '../../create/icon/product.icon.component';
 import {ProductBasicUpgradeComponent} from './upgrade/product.basic.upgrade.component';
 import {UpgradeType} from './upgrade/UpgradeType';
-import {ProductBasicProtocolComponent} from './protocol/product.basic.protocol.component';
+import {ProductBasicProtocolComponent} from '../../create/protocol/product.basic.protocol.component';
 import {MainService} from '../../../../../service/main.service';
-import {ProtocolFromArray, ProtocolToArray} from './protocol/ProtocolType';
+import {ProtocolFromArray, ProtocolToArray} from '../../create/protocol/ProtocolType';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductNameComponent} from '../../create/name/product.name.component';
 import {AccountService} from '../../../../../service/account.service';
@@ -52,6 +51,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {MainI18nService} from '../../../../../service/i18n.service';
 import {ProductAliasComponent} from '../../create/alias/product.alias.component';
 import {ProductTemplateComponent} from '../../create/template/product.template.component';
+import {SpecModelComponent} from '../../../../../common/form/item/common/model/spec.model.component';
 
 @Component({
   selector: 'product-basic',
@@ -76,15 +76,15 @@ import {ProductTemplateComponent} from '../../create/template/product.template.c
     NzSpaceModule,
     NzTagModule,
     ToolbarComponent,
-    ProductBasicModelComponent,
     ProductBasicIdComponent,
-    ProductBasicIconComponent,
+    ProductIconComponent,
     ProductBasicUpgradeComponent,
     ProductBasicProtocolComponent,
     TranslatePipe,
     ProductNameComponent,
     ProductAliasComponent,
     ProductTemplateComponent,
+    SpecModelComponent,
   ],
   providers: [
     NzModalService
@@ -111,6 +111,8 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     upgrade: FormControl<UpgradeType>
   }>;
 
+  editable: boolean = false;
+  manageable: boolean = false;
   changed: boolean = false;
 
   constructor(
@@ -118,7 +120,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
     protected location: Location,
-    private account: AccountService,
+    protected account: AccountService,
     private route: ActivatedRoute,
     private fb: NonNullableFormBuilder,
     private msg: NzMessageService,
@@ -146,6 +148,33 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
       .subscribe(values => {
         this.changed = this.checkChanged(values);
       });
+  }
+
+  /**
+   * 当前用户的组织是否匹配模板创建者的组织
+   * 有组织的前提是已登录
+   */
+  private isOrgMatch(): boolean {
+    if (!this.account.login || !this.account.organization || !this.product) {
+      return false;
+    }
+    console.log("this.account.organization.id: " + this.account.organization.id);
+    return this.product.organization === this.account.organization.id;
+  }
+
+  /**
+   * 计算是否可管理（已登录 + 组织匹配）
+   */
+  private computeManageable(): boolean {
+    return this.isOrgMatch();
+  }
+
+  /**
+   * 计算是否有完整编辑权限（已登录 + 组织匹配 + 开发状态）
+   */
+  private computeEditable(): boolean {
+    if (!this.isOrgMatch()) return false;
+    return this.product!.lifecycle === LifeCycle.DEVELOPMENT;
   }
 
   private checkChanged(values: Partial<any>): boolean {
@@ -186,34 +215,15 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     this.reset();
   }
 
-  private getChangedFields(): Map<string, any> {
-    let fields: Map<string, any> = new Map<string, any>();
-
-    if (this.form.controls.name.value !== this.product.name) {
-      fields.set('name', this.form.controls.name.value);
-    }
-
-    if (this.form.controls.icon.value !== this.product.icon) {
-      fields.set('icon', this.form.controls.icon.value);
-    }
-
-    const newProtocol = ProtocolFromArray(this.form.controls.protocol.value)
-    if (newProtocol !== this.product.protocol) {
-      fields.set('protocol', newProtocol);
-    }
-
-    const upgrade = UpgradeType.of(this.product.upgrade);
-    const newUpgrade = this.form.controls.upgrade.value;
-    if (! upgrade.equals(newUpgrade)) {
-      fields.set('upgrade', newUpgrade.toArray());
-    }
-
-    return fields;
-  }
-
   protected onSave() {
+    this.product.name = this.form.controls.name.value;
+    this.product.alias = this.form.controls.alias.value;
+    this.product.icon = this.form.controls.icon.value;
+    this.product.protocol = ProtocolFromArray(this.form.controls.protocol.value);
+    this.product.upgrade = this.form.controls.upgrade.value.toArray();
+
     this.loading = true;
-    this.service.updateProduct(this.product, this.getChangedFields())
+    this.service.updateProduct(this.product)
       .subscribe({
         next: () => {
           console.log('updateProduct ok');
@@ -273,63 +283,29 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   protected onPreview() {
-    this.loading = true;
-    this.service.setProductLifecycle(this.product.id, LifeCycle.PREVIEW)
-      .subscribe({
-        next: () => {
-          console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.PREVIEW;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loading = false;
-          this.reset();
-        }
-      });
+    this.doChangeLifecycle(LifeCycle.PREVIEW);
   }
 
   protected cancelPreview() {
-    this.loading = true;
-    this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
-      .subscribe({
-        next: () => {
-          console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.DEVELOPMENT;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loading = false;
-          this.reset();
-        }
-      });
+    this.doChangeLifecycle(LifeCycle.DEVELOPMENT);
   }
 
   protected onRelease() {
-    this.loading = true;
-    this.service.setProductLifecycle(this.product.id, LifeCycle.RELEASED)
-      .subscribe({
-        next: () => {
-          console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.RELEASED;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-          this.loading = false;
-          this.reset();
-        }
-      });
+    this.doChangeLifecycle(LifeCycle.RELEASED);
   }
 
   protected onDevelopment() {
+    this.doChangeLifecycle(LifeCycle.DEVELOPMENT);
+  }
+
+  private doChangeLifecycle(lifecycle: LifeCycle) {
     this.loading = true;
-    this.service.setProductLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
+    this.service.setProductLifecycle(this.product.id, lifecycle)
       .subscribe({
         next: () => {
           console.log('setProductLifecycle ok');
-          this.product.lifecycle = LifeCycle.DEVELOPMENT;
+          this.product.lifecycle = lifecycle;
+          this.editable = this.computeEditable();
           this.loading = false;
         },
         error: error => {
@@ -349,6 +325,9 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     this.form.controls.icon.setValue(this.product.icon);
     this.form.controls.protocol.setValue(ProtocolToArray(this.product.protocol));
     this.form.controls.upgrade.setValue(UpgradeType.of(this.product.upgrade));
+
+    this.manageable = this.computeManageable();
+    this.editable = this.computeEditable();
     this.changed = false;
   }
 

@@ -540,14 +540,9 @@ export class MainService {
   /**
    * 修改产品基本信息
    */
-  updateProduct(product: ProductBasic, fields: Map<string, any>): Observable<void> {
-    fields.set('organization', product.organization);
-    fields.set('model', product.model);
-
-    const body = Object.fromEntries(fields);
-
+  updateProduct(product: ProductBasic): Observable<void> {
     return this.http
-      .put<OxResponse>(`${this.server}/v1/product/basic/one`, body)
+      .put<OxResponse>(`${this.server}/v1/product/basic/one`, ProductBasicCodec.encode(product))
       .pipe(map(() => undefined));
   }
 

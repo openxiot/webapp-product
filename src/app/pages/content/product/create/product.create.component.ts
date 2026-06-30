@@ -13,13 +13,13 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {ProductBasicIconComponent} from '../detail/basic/icon/product.basic.icon.component';
+import {ProductIconComponent} from './icon/product.icon.component';
 import {LocalizedName, ProductBasic, ProductBasicCodec, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
-import {ProductBasicProtocolComponent} from '../detail/basic/protocol/product.basic.protocol.component';
+import {ProductBasicProtocolComponent} from './protocol/product.basic.protocol.component';
 import {ProductBasicUpgradeComponent} from '../detail/basic/upgrade/product.basic.upgrade.component';
 import {UpgradeType} from '../detail/basic/upgrade/UpgradeType';
 import {MainService} from '../../../../service/main.service';
-import {ProtocolFromArray} from '../detail/basic/protocol/ProtocolType';
+import {ProtocolFromArray} from './protocol/ProtocolType';
 import {Location} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductNameComponent} from './name/product.name.component';
@@ -47,7 +47,7 @@ import {AccountService} from '../../../../service/account.service';
     NzSpaceModule,
     NzDividerModule,
     ReactiveFormsModule,
-    ProductBasicIconComponent,
+    ProductIconComponent,
     ProductBasicProtocolComponent,
     ProductBasicUpgradeComponent,
     TranslatePipe,

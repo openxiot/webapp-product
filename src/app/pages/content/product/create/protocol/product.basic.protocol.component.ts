@@ -27,7 +27,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 })
 export class ProductBasicProtocolComponent implements ControlValueAccessor {
 
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable: boolean = false;
 
   nzOptions: NzCascaderOption[] = [
     {

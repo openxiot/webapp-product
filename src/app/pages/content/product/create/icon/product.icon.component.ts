@@ -4,18 +4,18 @@ import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzUploadChangeParam, NzUploadFile, NzUploadModule, NzUploadXHRArgs} from 'ng-zorro-antd/upload';
-import {MainService} from '../../../../../../service/main.service';
+import {MainService} from '../../../../../service/main.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {catchError, of, Subscription, switchMap, tap} from 'rxjs';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {TranslatePipe} from '@ngx-translate/core';
-import {AccountService} from '../../../../../../service/account.service';
+import {AccountService} from '../../../../../service/account.service';
 
 @Component({
-  selector: 'product-basic-icon',
+  selector: 'product-icon',
   standalone: true,
-  templateUrl: './product.basic.icon.component.html',
-  styleUrls: ['./product.basic.icon.component.less'],
+  templateUrl: './product.icon.component.html',
+  styleUrls: ['./product.icon.component.less'],
   imports: [
     FormsModule,
     NzIconModule,
@@ -27,17 +27,15 @@ import {AccountService} from '../../../../../../service/account.service';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: ProductBasicIconComponent,
+      useExisting: ProductIconComponent,
       multi: true
     }
   ]
 })
-export class ProductBasicIconComponent implements ControlValueAccessor, OnDestroy {
-
-  protected readonly LifeCycle = LifeCycle;
+export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
 
   @Input() productId: string = '';
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() updatable: boolean = false;
 
   private _value!: string;
 
