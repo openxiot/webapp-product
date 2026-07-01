@@ -2,10 +2,9 @@
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="300px" nzTheme="light">
       <instance-service-card
-        [version]="version"
-        [lifecycle]="lifecycle"
+        [showVersion]="version"
+        [editable]="editable"
         [service]="service"
-        [language]="language"
         (titleSelected)="onTitleSelected($event)"
         (propertySelected)="onPropertySelected($event)"
         (actionSelected)="onActionSelected($event)"

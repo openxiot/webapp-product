@@ -1,11 +1,13 @@
 {
   "name": "product-developer",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
+
+
     "test": "ng test"
   },
   "private": true,

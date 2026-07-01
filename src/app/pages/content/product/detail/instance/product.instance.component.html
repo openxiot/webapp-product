@@ -63,18 +63,24 @@
                 @switch (currentInstance?.lifecycle) {
                   @case (LifeCycle.DEVELOPMENT) {
                     <div *nzSpaceItem>
-                      <button nz-button nzType="primary" (click)="onPreview()">{{ '上线' | translate }}</button>
+                      <button nz-button nzType="primary" (click)="onPreview()">{{ '预览' | translate }}</button>
                     </div>
                   }
                   @case (LifeCycle.PREVIEW) {
                     <div *nzSpaceItem>
-                      <button nz-button nzType="primary" (click)="onCancelPreview()">{{ '取消上线' | translate }}</button>
+                      <button nz-button nzType="primary" (click)="onReleased()">{{ '上线' | translate }}</button>
+                    </div>
+                    <div *nzSpaceItem>
+                      <button nz-button nzType="primary" nzDanger (click)="onDevelopment()">{{ '取消上线' | translate }}</button>
                     </div>
                   }
                   @case (LifeCycle.RELEASED) {
                     @if (lastVersion) {
                       <div *nzSpaceItem>
                         <button nz-button nzType="primary">{{ '升级' | translate }}</button>
+                      </div>
+                      <div *nzSpaceItem>
+                        <button nz-button nzType="primary" nzDanger (click)="onDevelopment()">{{ '下线' | translate }}</button>
                       </div>
                     }
                   }

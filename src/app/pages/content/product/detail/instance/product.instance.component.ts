@@ -38,6 +38,7 @@ import {ProductInstanceHelper} from '../../../../../typedef/instance/ProductInst
 import {AccountService} from '../../../../../service/account.service';
 import {ProductInstanceViewJsonComponent} from './dialog/product.instance.view.json.component';
 import {MainI18nService} from '../../../../../service/i18n.service';
+import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 
 @Component({
   selector: 'product-instance',
@@ -59,6 +60,7 @@ import {MainI18nService} from '../../../../../service/i18n.service';
     ToolbarComponent,
     ProductInstanceDetailComponent,
     TranslatePipe,
+    NzWaveDirective,
   ],
   providers: [
     NzModalService
@@ -138,8 +140,6 @@ export class ProductInstanceComponent implements OnChanges {
       console.log('instance is null');
       return false;
     }
-
-    // console.log('instance.lifecycle: ' + this.instance.lifecycle);
 
     return this.instance.lifecycle === LifeCycle.DEVELOPMENT;
   }
@@ -245,52 +245,37 @@ export class ProductInstanceComponent implements OnChanges {
       }
     }
   }
-
-  protected onPreview() {
-    const instance = this.currentInstance;
-    if (instance) {
-      const type = instance.type?.toString() || '';
-      if (type.length > 0) {
-        this.loadingInstance = true;
-        this.service.setProductInstanceLifecycle(type, LifeCycle.PREVIEW)
-          .subscribe({
-            next: () => {
-              console.log('setProductInstanceLifecycle ok');
-              this.loadingInstance = false;
-
-              instance.lifecycle = LifeCycle.PREVIEW;
-
-              if (this.instance) {
-                this.instance.lifecycle = LifeCycle.PREVIEW;
-              }
-            },
-            error: error => {
-              this.msg.warning(error);
-              this.loadingInstance = false;
-              this.loadInstances(this.product.id);
-            }
-          });
-      }
-    }
+  protected onReleased() {
+    this.setLifecycle(LifeCycle.RELEASED);
   }
 
-  protected onCancelPreview() {
+  protected onPreview() {
+    this.setLifecycle(LifeCycle.PREVIEW);
+  }
+
+  protected onDevelopment() {
+    this.setLifecycle(LifeCycle.DEVELOPMENT);
+  }
+
+  private setLifecycle(lifecycle: LifeCycle) {
     const instance = this.currentInstance;
     if (instance) {
       const type = instance.type?.toString() || '';
       if (type.length > 0) {
         this.loadingInstance = true;
-        this.service.setProductInstanceLifecycle(type, LifeCycle.DEVELOPMENT)
+        this.service.setProductInstanceLifecycle(type, lifecycle)
           .subscribe({
             next: () => {
               console.log('setProductInstanceLifecycle ok');
               this.loadingInstance = false;
 
-              instance.lifecycle = LifeCycle.DEVELOPMENT;
+              instance.lifecycle = lifecycle;
 
               if (this.instance) {
-                this.instance.lifecycle = LifeCycle.DEVELOPMENT;
+                this.instance.lifecycle = lifecycle;
               }
+
+              this.editable = this.computeEditable();
             },
             error: error => {
               this.msg.warning(error);

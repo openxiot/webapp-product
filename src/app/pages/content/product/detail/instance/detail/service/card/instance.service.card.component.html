@@ -5,7 +5,7 @@
       <li nz-menu-item (click)="onClickTitle(service)" class="title-bar">
         <nz-space>
           <span *nzSpaceItem><span nz-icon nzType="database" nzTheme="outline"></span></span>
-          <span *nzSpaceItem class="menu-title">{{ service.description.get(language) }}</span>
+          <span *nzSpaceItem class="menu-title">{{ service.description.get(i18n.getCurrentLang()) }}</span>
         </nz-space>
       </li>
 
@@ -14,8 +14,8 @@
           @for (p of service.getProperties(); track p.iid) {
             <li nz-menu-item (click)="onClickProperty(p)">
               <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
-              <span class="menu-item">{{ p.description.get(language) }}</span>
-              @if (version) {
+              <span class="menu-item">{{ p.description.get(i18n.getCurrentLang()) }}</span>
+              @if (showVersion) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ p.type.version }}</nz-tag></span>
               }
             </li>
@@ -30,8 +30,8 @@
           @for (a of service.getActions(); track a.iid) {
             <li nz-menu-item (click)="onClickAction(a)">
               <nz-tag [nzColor]="'blue'">{{ a.iid }}</nz-tag>
-              <span class="menu-item">{{ a.description.get(language) }}</span>
-              @if (version) {
+              <span class="menu-item">{{ a.description.get(i18n.getCurrentLang()) }}</span>
+              @if (showVersion) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ a.type.version }}</nz-tag></span>
               }
             </li>
@@ -46,8 +46,8 @@
           @for (e of service.getEvents(); track e.iid) {
             <li nz-menu-item (click)="onClickEvent(e)">
               <nz-tag [nzColor]="'blue'">{{ e.iid }}</nz-tag>
-              <span class="menu-item">{{ e.description.get(language) }}</span>
-              @if (version) {
+              <span class="menu-item">{{ e.description.get(i18n.getCurrentLang()) }}</span>
+              @if (showVersion) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ e.type.version }}</nz-tag></span>
               }
             </li>
@@ -62,9 +62,11 @@
             <span *nzSpaceItem>{{ '属性(' | translate }}{{ service.properties.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          @if (lifecycle === LifeCycle.DEVELOPMENT) {
+          @if (editable) {
             <span style="float: right">
-              <button nz-button nzType="primary" nzSize="small" (click)="onAddProperty()">{{ '添加' | translate }}</button>
+              <div class="selector" (click)="onAddProperty()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </div>
             </span>
           }
         </div>
@@ -77,9 +79,11 @@
             <span *nzSpaceItem>{{ '方法(' | translate }}{{ service.actions.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          @if (lifecycle === LifeCycle.DEVELOPMENT) {
+          @if (editable) {
             <span style="float: right">
-              <button nz-button nzType="primary" nzSize="small"  (click)="onAddAction()">{{ '添加' | translate }}</button>
+              <div class="selector" (click)="onAddAction()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </div>
             </span>
           }
         </div>
@@ -92,9 +96,11 @@
             <span *nzSpaceItem>{{ '事件(' | translate }}{{ service.events.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          @if (lifecycle === LifeCycle.DEVELOPMENT) {
+          @if (editable) {
             <span style="float: right">
-              <button nz-button nzType="primary" nzSize="small" (click)="onAddEvent()">{{ '添加' | translate }}</button>
+              <div class="selector" (click)="onAddEvent()">
+                <span nz-icon nzType="plus" nzTheme="outline"></span>
+              </div>
             </span>
           }
         </div>

@@ -669,11 +669,8 @@ export class MainService {
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
   setProductInstanceLifecycle(type: string, lifecycle: LifeCycle): Observable<void> {
-    const body = {
-      instance: type,
-    }
     return this.http
-      .put<OxResponse>(`${this.server}/v1/product/instance/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/instance/one/lifecycle/${type}/${lifecycle.toString()}`, {})
       .pipe(map(() => undefined));
   }
 

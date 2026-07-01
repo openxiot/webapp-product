@@ -15,6 +15,7 @@ import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {DataFormat} from '@openxiot/xiot-core-spec-ts';
 import {Access} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../../../service/i18n.service';
 
 @Component({
   selector: 'instance-service-card',
@@ -39,10 +40,9 @@ export class InstanceServiceCardComponent {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() version: boolean = false;
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
+  @Input() showVersion: boolean = false;
+  @Input() editable: boolean = false;
   @Input() service!: Service;
-  @Input() language: string = 'zh-CN';
   @Output() titleSelected = new EventEmitter<Service>();
   @Output() propertySelected = new EventEmitter<Property>();
   @Output() actionSelected = new EventEmitter<Action>();
@@ -52,6 +52,7 @@ export class InstanceServiceCardComponent {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
+    public i18n: MainI18nService,
     private msg: NzMessageService
   ) {
   }
