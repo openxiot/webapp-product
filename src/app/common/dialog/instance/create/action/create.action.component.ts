@@ -19,7 +19,7 @@ import {
   Action,
   PropertyDefinition,
   ActionDefinition,
-  Event
+  ActionType
 } from '@openxiot/xiot-core-spec-ts';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -30,6 +30,9 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {ActionOption} from './ActionOption';
+import {MainI18nService} from '../../../../../service/i18n.service';
+import {DescriptionComponent} from '../../../../form/item/common/description/description.component';
 
 @Component({
   selector: 'create-action',
@@ -54,11 +57,11 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzMenuItemComponent,
     NzMenuDividerDirective,
     NzFlexModule,
-    DeviceInstanceDescriptionComponent,
     DeviceInstanceIdComponent,
     DeviceInstanceNameComponent,
     DeviceInstanceNamespaceComponent,
     TranslatePipe,
+    DescriptionComponent,
   ],
   providers: [
   ],
@@ -68,7 +71,7 @@ export class CreateActionComponent implements OnInit {
   protected readonly LifeCycle = LifeCycle;
 
   readonly #modal = inject(NzModalRef);
-  readonly data: Action = inject(NZ_MODAL_DATA);
+  readonly option: ActionOption = inject(NZ_MODAL_DATA);
 
   form: FormGroup<{
     iid: FormControl<number>,
@@ -77,16 +80,18 @@ export class CreateActionComponent implements OnInit {
     description: FormControl<Map<string, string>>,
   }>;
 
-  loading: boolean = false;
+  custom: Action;
   actions: Action[] = [];
-  current: Action;
+  selected: Action;
 
+  loading: boolean = false;
   definitions: ActionDefinition[] = [];
 
   loadingProperties: boolean = true;
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
+    public i18n: MainI18nService,
     private account: AccountService,
     private main: MainService,
     private msg: NzMessageService,
@@ -99,7 +104,18 @@ export class CreateActionComponent implements OnInit {
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });
 
-    this.current = this.data;
+    this.custom = this.createCustomAction();
+    this.selected = this.custom;
+  }
+
+  private createCustomAction(): Action {
+    const org = this.option.type.organization || 'org';
+    const model = this.option.type.model || 'model';
+    const version = this.option.type.version || 0;
+    const type = new ActionType(`urn:${org}:action:unnamed:00000000:${org}:${model}:${version}`);
+    const description = new Map<string, string>();
+    description.set(this.i18n.getCurrentLang(), this.i18n.translate.instant('自定义方法'));
+    return new Action(this.option.iid, type, description, [], [])
   }
 
   ngOnInit(): void {
@@ -109,7 +125,7 @@ export class CreateActionComponent implements OnInit {
 
   private loadActions(): void {
     this.loading = true;
-    this.main.getActionDefinitions(this.account.ns.namespace)
+    this.main.getActionDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.definitions = data;
@@ -117,29 +133,32 @@ export class CreateActionComponent implements OnInit {
           this.actions = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Action(this.data.iid, x.type, x.description, [], []);
+              return new Action(this.option.iid, x.type, x.description, [], []);
             });
 
-          this.loading = false;
-
           this.initFormData();
+          this.loading = false;
         },
         error: error => {
-          this.msg.warning(error);
+          console.log(error);
+
+          this.initFormData();
+          this.loading = false;
         }
       })
   }
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.main.getPropertyDefinitions(this.account.ns.namespace)
+    this.main.getPropertyDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
           this.loadingProperties = false;
         },
         error: error => {
-          this.msg.warning(error);
+          console.log(error);
+          this.loadingProperties = false;
         }
       })
   }
@@ -147,10 +166,13 @@ export class CreateActionComponent implements OnInit {
   initFormData(): void {
     this.loading = true;
 
-    this.form.controls.iid.setValue(this.data.iid);
-    this.form.controls.ns.setValue(this.data.type.ns);
-    this.form.controls.code.setValue(this.data.type.name);
-    this.form.controls.description.setValue(this.data.description);
+    const description: Map<string, string> = new Map<string, string>();
+    description.set(this.i18n.getCurrentLang(), this.selected.description.get(this.i18n.getCurrentLang()) || '');
+
+    this.form.controls.iid.setValue(this.selected.iid);
+    this.form.controls.ns.setValue(this.selected.type.ns);
+    this.form.controls.code.setValue(this.selected.type.name);
+    this.form.controls.description.setValue(description);
 
     this.loading = false;
   }
@@ -160,32 +182,25 @@ export class CreateActionComponent implements OnInit {
   }
 
   ok(): void {
-    this.data.iid = this.form.controls.iid.value;
-    this.data.type.ns = this.form.controls.ns.value;
-    this.data.type.value = this.current.type.value;
-    this.data.type.name = this.form.controls.code.value;
-    this.data.description = this.form.controls.description.value;
+    this.selected.iid = this.form.controls.iid.value;
+    this.selected.type.ns = this.form.controls.ns.value;
+    this.selected.type.name = this.form.controls.code.value;
+    this.selected.description = this.form.controls.description.value;
 
-    this.#modal.destroy(this.data);
+    this.#modal.destroy(this.selected);
   }
 
   protected onClickAction(a: Action) {
-    this.loading = true;
-    this.current = a;
+    this.selected = a;
 
-    this.form.controls.iid.setValue(a.iid);
-    this.form.controls.ns.setValue(a.type.ns);
-    this.form.controls.code.setValue(a.type.name);
-    this.form.controls.description.setValue(a.description);
-
-    this.loading = false;
+    this.initFormData();
   }
 
   protected onIIDChanged(): void {
     console.log('onIIDChanged');
 
     if (! this.loading) {
-      this.data.iid = this.form.controls.iid.value;
+      this.selected.iid = this.form.controls.iid.value;
     }
   }
 
@@ -193,7 +208,7 @@ export class CreateActionComponent implements OnInit {
     console.log('onCodeChanged');
 
     if (! this.loading) {
-      this.data.type.name = this.form.controls.code.value;
+      this.selected.type.name = this.form.controls.code.value;
     }
   }
 
@@ -201,7 +216,7 @@ export class CreateActionComponent implements OnInit {
     console.log('onDescriptionChanged');
 
     if (! this.loading) {
-      this.data.description = this.form.controls.description.value;
+      this.selected.description = this.form.controls.description.value;
     }
   }
 }

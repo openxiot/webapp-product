@@ -60,7 +60,7 @@ export class InstanceServicesComponent {
       nzWidth: 1000,
       nzContent: CreateServiceComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new ServiceOption(this.type, this.getNewServiceIId()),
+      nzData: new ServiceOption(this.type, this.getNewServiceIID()),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -86,7 +86,7 @@ export class InstanceServicesComponent {
     this.serviceAdded.emit(service);
   }
 
-  private getNewServiceIId() {
+  private getNewServiceIID() {
     let siid: number = 1;
 
     for (let service of this.services) {

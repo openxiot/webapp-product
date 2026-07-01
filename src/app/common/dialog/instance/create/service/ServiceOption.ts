@@ -4,7 +4,7 @@ export class ServiceOption {
 
   constructor(
     public type: DeviceType,
-    public siid: number,
+    public iid: number,
   ) {
   }
 }

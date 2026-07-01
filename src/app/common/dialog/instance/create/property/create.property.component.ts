@@ -14,11 +14,9 @@ import {
   Access,
   DataFormat,
   LifeCycle,
-  ObjectWithLifecycle,
   Property,
-  PropertyDefinition, ValueDefinition, ValueList, ValueRange,
+  PropertyDefinition, PropertyType, ValueDefinition, ValueList, ValueRange,
 } from '@openxiot/xiot-core-spec-ts';
-import {DeviceInstanceDescriptionComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/description/device.instance.description.component';
 import {DeviceInstanceIdComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/iid/device.instance.id.component';
 import {DeviceInstanceNameComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/name/device.instance.name.component';
 import {DeviceInstanceNamespaceComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/namespace/device.instance.namespace.component';
@@ -31,7 +29,6 @@ import {DeviceInstanceServicePropertyAccessComponent} from '../../../../../pages
 import {DeviceInstanceServicePropertyConstraintComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/constraint/device.instance.service.property.constraint.component';
 import {DeviceInstanceServicePropertyFormatComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/format/device.instance.service.property.format.component';
 import {DeviceInstanceServicePropertyListComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/list/device.instance.service.property.list.component';
-import {DeviceInstanceServicePropertyMembersComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/members/device.instance.service.property.members.component';
 import {DeviceInstanceServicePropertyRangeComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/range/device.instance.service.property.range.component';
 import {ConstraintType} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/constraint/ConstraintType';
 import {RangeValue} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/range/RangeValue';
@@ -46,6 +43,9 @@ import {
 } from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/value/device.instance.service.property.default.value.component';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {PropertyOption} from './PropertyOption';
+import {MainI18nService} from '../../../../../service/i18n.service';
+import {DescriptionComponent} from '../../../../form/item/common/description/description.component';
 
 @Component({
   selector: 'create-property',
@@ -61,7 +61,6 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzFormItemComponent,
     NzFormLabelComponent,
     NzRowDirective,
-    DeviceInstanceDescriptionComponent,
     DeviceInstanceIdComponent,
     DeviceInstanceNameComponent,
     DeviceInstanceNamespaceComponent,
@@ -81,6 +80,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     DeviceInstanceServicePropertyDefaultValueComponent,
     DeviceInstanceServicePropertyUnitComponent,
     TranslatePipe,
+    DescriptionComponent,
   ],
   providers: [],
 })
@@ -90,7 +90,7 @@ export class CreatePropertyComponent implements OnInit {
   protected readonly ConstraintType = ConstraintType;
 
   readonly #modal = inject(NzModalRef);
-  readonly data: Property = inject(NZ_MODAL_DATA);
+  readonly option: PropertyOption = inject(NZ_MODAL_DATA);
 
   form: FormGroup<{
     iid: FormControl<number>,
@@ -110,13 +110,15 @@ export class CreatePropertyComponent implements OnInit {
   combinationValue: boolean = false;
   constrainable: boolean = false;
 
+  custom: Property;
   properties: Property[] = [];
+  selected: Property;
+
   loading: boolean = true;
   definitions: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
-  current: Property;
-
   constructor(
+    public i18n: MainI18nService,
     private account: AccountService,
     private main: MainService,
     private msg: NzMessageService,
@@ -138,7 +140,23 @@ export class CreatePropertyComponent implements OnInit {
       defaultValue: this.fb.control(new DefaultValue()),
     });
 
-    this.current = this.data;
+    this.custom = this.createCustomProperty();
+    this.selected = this.custom;
+  }
+
+  private createCustomProperty(): Property {
+    const org = this.option.type.organization || 'org';
+    const model = this.option.type.model || 'model';
+    const version = this.option.type.version || 0;
+    const type = new PropertyType(`urn:${org}:property:unnamed:00000000:${org}:${model}:${version}`);
+    const description = new Map<string, string>();
+    description.set(this.i18n.getCurrentLang(), this.i18n.translate.instant('自定义属性'));
+    const format = DataFormat.BOOL;
+    const access = Access.of(true, true, true);
+    const constraintValue = null;
+    const unit = null;
+
+    return new Property(this.option.iid, type, description, format, access, constraintValue, unit)
   }
 
   ngOnInit(): void {
@@ -147,7 +165,7 @@ export class CreatePropertyComponent implements OnInit {
 
   private loadProperties(): void {
     this.loading = true;
-    this.main.getPropertyDefinitions(this.account.ns.namespace)
+    this.main.getPropertyDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.definitions = new Map(data.map(item => [item.type.name, item]));
@@ -156,7 +174,7 @@ export class CreatePropertyComponent implements OnInit {
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
               return new Property(
-                this.data.iid,
+                this.option.iid,
                 x.type,
                 x.description,
                 x.format,
@@ -166,43 +184,48 @@ export class CreatePropertyComponent implements OnInit {
               );
             });
 
-          this.loading = false;
+          this.initFormData();
 
-          this.initFormData(this.data);
+          this.loading = false;
         },
         error: error => {
-          this.msg.warning(error);
+          console.log(error);
+          this.initFormData();
+          this.loading = false;
         }
       })
   }
 
-  initFormData(property: Property): void {
+  initFormData(): void {
     this.loading = true;
 
-    this.form.controls.iid.setValue(property.iid);
-    this.form.controls.ns.setValue(property.type.ns);
-    this.form.controls.code.setValue(property.type.name);
-    this.form.controls.description.setValue(property.description);
-    this.form.controls.format.setValue(property.format);
-    this.form.controls.access.setValue(property.access);
-    this.form.controls.constraint.setValue(this.getConstrainType(property));
-    this.constrainable = this.toConstrainable(property.format);
+    const description: Map<string, string> = new Map<string, string>();
+    description.set(this.i18n.getCurrentLang(), this.selected.description.get(this.i18n.getCurrentLang()) || '');
+
+    this.form.controls.iid.setValue(this.selected.iid);
+    this.form.controls.ns.setValue(this.selected.type.ns);
+    this.form.controls.code.setValue(this.selected.type.name);
+    this.form.controls.description.setValue(description);
+    this.form.controls.format.setValue(this.selected.format);
+    this.form.controls.access.setValue(this.selected.access);
+    this.form.controls.constraint.setValue(this.getConstrainType(this.selected));
+    this.constrainable = this.toConstrainable(this.selected.format);
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
         break;
 
       case ConstraintType.RANGE:
-        const min = property.valueRange()?.minValue?.rawValue() || 0;
-        const max = property.valueRange()?.maxValue?.rawValue() || 0;
-        const step = property.valueRange()?.stepValue?.rawValue() || 0;
+        const min = this.selected.valueRange()?.minValue?.rawValue() || 0;
+        const max = this.selected.valueRange()?.maxValue?.rawValue() || 0;
+        const step = this.selected.valueRange()?.stepValue?.rawValue() || 0;
         this.form.controls.range.setValue({min: min, max: max, step: step});
         break;
 
       case ConstraintType.LIST:
         this.form.controls.list.setValue([]);
 
-        const list = property.valueList();
+        const list = this.selected.valueList();
         if (list) {
           // 转换数据格式
           const array: ValueItem[] = list.values.map(value => ValueItem.of(value));
@@ -212,19 +235,19 @@ export class CreatePropertyComponent implements OnInit {
         break;
     }
 
-    this.combinationValue = property.format === DataFormat.COMBINATION;
+    this.combinationValue = this.selected.format === DataFormat.COMBINATION;
     if (this.combinationValue) {
       console.log('init combinationValue');
-      this.form.controls.members.setValue(property.members);
+      this.form.controls.members.setValue(this.selected.members);
       console.log('init combinationValue ok');
     }
 
-    if (property.formatNumber()) {
-      this.form.controls.unit.setValue(property.unit || '');
+    if (this.selected.formatNumber()) {
+      this.form.controls.unit.setValue(this.selected.unit || '');
     }
 
-    if (property.value.defaultValue) {
-      this.form.controls.defaultValue.defaultValue.value = property.value.defaultValue.rawValue();
+    if (this.selected.value.defaultValue) {
+      this.form.controls.defaultValue.defaultValue.value = this.selected.value.defaultValue.rawValue();
       this.form.controls.defaultValue.defaultValue.valid = true;
     }
 
@@ -236,24 +259,23 @@ export class CreatePropertyComponent implements OnInit {
   }
 
   ok(): void {
-    this.data.iid = this.form.controls.iid.value;
-    this.data.type.ns = this.form.controls.ns.value;
-    this.data.type.value = this.current.type.value;
-    this.data.type.name = this.form.controls.code.value;
-    this.data.description = this.form.controls.description.value;
-    this.data.access.isReadable = this.form.controls.access.defaultValue.isReadable;
-    this.data.access.isWritable = this.form.controls.access.defaultValue.isWritable;
-    this.data.access.isNotifiable = this.form.controls.access.defaultValue.isNotifiable;
-    this.data.format = this.form.controls.format.value;
+    this.selected.iid = this.form.controls.iid.value;
+    this.selected.type.ns = this.form.controls.ns.value;
+    this.selected.type.name = this.form.controls.code.value;
+    this.selected.description = this.form.controls.description.value;
+    this.selected.access.isReadable = this.form.controls.access.defaultValue.isReadable;
+    this.selected.access.isWritable = this.form.controls.access.defaultValue.isWritable;
+    this.selected.access.isNotifiable = this.form.controls.access.defaultValue.isNotifiable;
+    this.selected.format = this.form.controls.format.value;
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
-        this.data.constraintValue = null;
+        this.selected.constraintValue = null;
         break;
 
       case ConstraintType.RANGE:
         const range = [this.form.controls.range.defaultValue.min, this.form.controls.range.defaultValue.max, this.form.controls.range.defaultValue.step];
-        this.data.constraintValue = new ValueRange(this.data.format, range);
+        this.selected.constraintValue = new ValueRange(this.selected.format, range);
         break;
 
       case ConstraintType.LIST:
@@ -263,30 +285,28 @@ export class CreatePropertyComponent implements OnInit {
           const description = new Map<string, string>();
           description.set('zh-CN', item.descriptionZH || 'null');
           description.set('en-US', item.descriptionEN || 'null');
-          const value = new ValueDefinition(this.data.format, item.value || 0, description);
+          const value = new ValueDefinition(this.selected.format, item.value || 0, description);
           list.values.push(value);
         }
 
-        this.data.constraintValue = list;
+        this.selected.constraintValue = list;
         break;
     }
 
-    this.data.unit = this.form.controls.unit.value;
+    this.selected.unit = this.form.controls.unit.value;
 
-    if (this.form.controls.defaultValue.valid) {
-      this.data.setDefaultValue(this.form.controls.defaultValue.value);
-    } else {
-      this.data.setDefaultValue(null);
-    }
+    // if (this.form.controls.defaultValue.valid) {
+    //   this.selected.setDefaultValue(this.form.controls.defaultValue.value);
+    // } else {
+    //   this.selected.setDefaultValue(null);
+    // }
 
-    this.#modal.destroy(this.data);
+    this.#modal.destroy(this.selected);
   }
 
   protected onClickProperty(p: Property) {
-    this.loading = true;
-    this.current = p;
-    this.initFormData(p);
-    this.loading = false;
+    this.selected = p;
+    this.initFormData();
   }
 
   protected onIIDChanged(): void {

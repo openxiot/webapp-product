@@ -28,7 +28,6 @@ import {
   DataFormat, ServiceType,
 } from '@openxiot/xiot-core-spec-ts';
 import {DeviceInstanceNamespaceComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/namespace/device.instance.namespace.component';
-import {DeviceInstanceDescriptionComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/description/device.instance.description.component';
 import {DeviceInstanceNameComponent} from '../../../../../pages/content/product/detail/instance/detail/service/detail/property/name/device.instance.name.component';
 import {NzContentComponent, NzLayoutComponent, NzSiderComponent} from 'ng-zorro-antd/layout';
 import {NzMenuDirective, NzMenuDividerDirective, NzMenuItemComponent} from 'ng-zorro-antd/menu';
@@ -100,7 +99,6 @@ export class CreateServiceComponent implements OnInit {
   custom: Service;
   services: Service[] = [];
   selected: Service;
-  candidateDescription: Map<string, string> = new Map();
 
   definitions: ServiceDefinition[] = [];
 
@@ -143,7 +141,7 @@ export class CreateServiceComponent implements OnInit {
     const type = new ServiceType(`urn:${org}:service:unnamed:00000000:${org}:${model}:${version}`);
     const description = new Map<string, string>();
     description.set(this.i18n.getCurrentLang(), this.i18n.translate.instant('自定义服务'));
-    return new Service(this.option.siid, type, description, [], [], []);
+    return new Service(this.option.iid, type, description, [], [], []);
   }
 
   ngOnInit(): void {
@@ -162,7 +160,7 @@ export class CreateServiceComponent implements OnInit {
           this.services = this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
-              return new Service(this.option.siid, x.type, x.description, [], [], []);
+              return new Service(this.option.iid, x.type, x.description, [], [], []);
             });
 
           this.loadingServices = false;
@@ -296,10 +294,72 @@ export class CreateServiceComponent implements OnInit {
 
   private initFormData() {
     this.loadingServices = true;
+
+    const description: Map<string, string> = new Map<string, string>();
+    description.set(this.i18n.getCurrentLang(), this.selected.description.get(this.i18n.getCurrentLang()) || '');
+
     this.form.controls.iid.setValue(this.selected.iid);
     this.form.controls.ns.setValue(this.selected.type.ns);
     this.form.controls.code.setValue(this.selected.type.name);
-    this.form.controls.description.setValue(this.selected.description);
+    this.form.controls.description.setValue(description);
+
+    const def = this.definitions.find(x => x.type.name === this.selected.type.name);
+    if (def) {
+      // requiredProperties
+      const requiredProperties: Property[] = def.requiredProperties.map(x => this.toProperty(x));
+      for (let i = 0; i < requiredProperties.length; i++) {
+        requiredProperties[i].iid = i + 1;
+      }
+
+      this.form.controls.requiredProperties.setValue(requiredProperties);
+      this.form.controls.requiredProperties.disable();
+
+      // optionalProperties
+      const optionalProperties: Property[] = def.optionalProperties.map(x => this.toProperty(x));
+      for (let i = 0; i < optionalProperties.length; i++) {
+        optionalProperties[i].iid = i + 1;
+      }
+
+      this.form.controls.optionalProperties.setValue(optionalProperties);
+      this.form.controls.optionalProperties.enable();
+
+      // requiredActions
+      const requiredActions: Action[] = def.requiredActions.map(x => this.toAction(x));
+      for (let i = 0; i < requiredActions.length; i++) {
+        requiredActions[i].iid = i + 1;
+      }
+
+      this.form.controls.requiredActions.setValue(requiredActions);
+      this.form.controls.requiredActions.disable();
+
+      // optionalActions
+      const optionalActions: Action[] = def.optionalActions.map(x => this.toAction(x));
+      for (let i = 0; i < optionalActions.length; i++) {
+        optionalActions[i].iid = i + 1;
+      }
+
+      this.form.controls.optionalActions.setValue(optionalActions);
+      this.form.controls.optionalActions.enable();
+
+      // requiredEvents
+      const requiredEvents: Event[] = def.requiredEvents.map(x => this.toEvent(x));
+      for (let i = 0; i < requiredEvents.length; i++) {
+        requiredEvents[i].iid = i + 1;
+      }
+
+      this.form.controls.requiredEvents.setValue(requiredEvents);
+      this.form.controls.requiredEvents.disable();
+
+      // optionalEvents
+      const optionalEvents: Event[] = def.optionalEvents.map(x => this.toEvent(x));
+      for (let i = 0; i < optionalEvents.length; i++) {
+        optionalEvents[i].iid = i + 1;
+      }
+
+      this.form.controls.optionalEvents.setValue(optionalEvents);
+      this.form.controls.optionalEvents.enable();
+    }
+
     this.loadingServices = false;
   }
 
@@ -384,75 +444,8 @@ export class CreateServiceComponent implements OnInit {
   }
 
   protected onClickService(s: Service) {
-    this.loadingServices = true;
     this.selected = s;
-
-    const description: Map<string, string> = new Map<string, string>();
-    description.set(this.i18n.getCurrentLang(), s.description.get(this.i18n.getCurrentLang()) || '');
-
-    this.form.controls.iid.setValue(s.iid);
-    this.form.controls.ns.setValue(s.type.ns);
-    this.form.controls.code.setValue(s.type.name);
-    this.form.controls.description.setValue(description);
-
-    const def = this.definitions.find(x => x.type.name === s.type.name);
-    if (def) {
-      // requiredProperties
-      const requiredProperties: Property[] = def.requiredProperties.map(x => this.toProperty(x));
-      for (let i = 0; i < requiredProperties.length; i++) {
-        requiredProperties[i].iid = i + 1;
-      }
-
-      this.form.controls.requiredProperties.setValue(requiredProperties);
-      this.form.controls.requiredProperties.disable();
-
-      // optionalProperties
-      const optionalProperties: Property[] = def.optionalProperties.map(x => this.toProperty(x));
-      for (let i = 0; i < optionalProperties.length; i++) {
-        optionalProperties[i].iid = i + 1;
-      }
-
-      this.form.controls.optionalProperties.setValue(optionalProperties);
-      this.form.controls.optionalProperties.enable();
-
-      // requiredActions
-      const requiredActions: Action[] = def.requiredActions.map(x => this.toAction(x));
-      for (let i = 0; i < requiredActions.length; i++) {
-        requiredActions[i].iid = i + 1;
-      }
-
-      this.form.controls.requiredActions.setValue(requiredActions);
-      this.form.controls.requiredActions.disable();
-
-      // optionalActions
-      const optionalActions: Action[] = def.optionalActions.map(x => this.toAction(x));
-      for (let i = 0; i < optionalActions.length; i++) {
-        optionalActions[i].iid = i + 1;
-      }
-
-      this.form.controls.optionalActions.setValue(optionalActions);
-      this.form.controls.optionalActions.enable();
-
-      // requiredEvents
-      const requiredEvents: Event[] = def.requiredEvents.map(x => this.toEvent(x));
-      for (let i = 0; i < requiredEvents.length; i++) {
-        requiredEvents[i].iid = i + 1;
-      }
-
-      this.form.controls.requiredEvents.setValue(requiredEvents);
-      this.form.controls.requiredEvents.disable();
-
-      // optionalEvents
-      const optionalEvents: Event[] = def.optionalEvents.map(x => this.toEvent(x));
-      for (let i = 0; i < optionalEvents.length; i++) {
-        optionalEvents[i].iid = i + 1;
-      }
-
-      this.form.controls.optionalEvents.setValue(optionalEvents);
-      this.form.controls.optionalEvents.enable();
-    }
-
-    this.loadingServices = false;
+    this.initFormData();
   }
 
   protected onIIDChanged(): void {

@@ -1,6 +1,5 @@
 import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
-import {Action, ActionType, Event, EventType, LifeCycle, Property, PropertyType, Service} from '@openxiot/xiot-core-spec-ts';
-import {NzButtonComponent} from 'ng-zorro-antd/button';
+import {Action, Event, LifeCycle, Property, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzCardModule} from 'ng-zorro-antd/card';
@@ -12,10 +11,11 @@ import {CreatePropertyComponent} from '../../../../../../../../common/dialog/ins
 import {CreateActionComponent} from '../../../../../../../../common/dialog/instance/create/action/create.action.component';
 import {CreateEventComponent} from '../../../../../../../../common/dialog/instance/create/event/create.event.component';
 import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
-import {DataFormat} from '@openxiot/xiot-core-spec-ts';
-import {Access} from '@openxiot/xiot-core-spec-ts';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../../../../service/i18n.service';
+import {PropertyOption} from '../../../../../../../../common/dialog/instance/create/property/PropertyOption';
+import {ActionOption} from '../../../../../../../../common/dialog/instance/create/action/ActionOption';
+import {EventOption} from '../../../../../../../../common/dialog/instance/create/event/EventOption';
 
 @Component({
   selector: 'instance-service-card',
@@ -23,7 +23,6 @@ import {MainI18nService} from '../../../../../../../../service/i18n.service';
   styleUrls: ['./instance.service.card.component.less'],
   standalone: true,
   imports: [
-    NzButtonComponent,
     NzTagComponent,
     NzMenuModule,
     NzCardModule,
@@ -74,42 +73,19 @@ export class InstanceServiceCardComponent {
   }
 
   onAddProperty() {
-    let iid: number = 1024;
-
-    if (this.service) {
-      for (let item of this.service.properties.values()) {
-        if (item.iid > iid) {
-          iid = item.iid;
-        }
-      }
-
-      iid ++;
-    }
-
-    const org = this.service?.type.organization || 'org';
-    const model = this.service?.type.model || 'model';
-    const version = this.service?.type.version || 0;
-    const type = new PropertyType(`urn:${org}:property:unnamed:00000000:${org}:${model}:${version}`);
-    const description = new Map<string, string>();
-    description.set('zh-CN', '自定义属性');
-    const format = DataFormat.BOOL;
-    const access = Access.of(true, true, true);
-    const constraintValue = null;
-    const unit = null;
-
-    const modal = this.modal.create<CreatePropertyComponent, Property, Property>({
-      nzTitle: '添加属性',
+    const modal = this.modal.create<CreatePropertyComponent, PropertyOption, Property>({
+      nzTitle: this.i18n.translate.instant('添加属性'),
       nzWidth: 1000,
       nzContent: CreatePropertyComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new Property(iid, type, description, format, access, constraintValue, unit),
+      nzData: new PropertyOption(this.service.type, this.getNewPropertyIID()),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()
@@ -125,38 +101,19 @@ export class InstanceServiceCardComponent {
   }
 
   onAddAction() {
-    let iid: number = 1024;
-
-    if (this.service) {
-      for (let item of this.service.actions.values()) {
-        if (item.iid > iid) {
-          iid = item.iid;
-        }
-      }
-
-      iid ++;
-    }
-
-    const org = this.service?.type.organization || 'org';
-    const model = this.service?.type.model || 'model';
-    const version = this.service?.type.version || 0;
-    const type = new ActionType(`urn:${org}:action:unnamed:00000000:${org}:${model}:${version}`);
-    const description = new Map<string, string>();
-    description.set('zh-CN', '自定义方法');
-
-    const modal = this.modal.create<CreateActionComponent, Action, Action>({
-      nzTitle: '添加方法',
+    const modal = this.modal.create<CreateActionComponent, ActionOption, Action>({
+      nzTitle: this.i18n.translate.instant('添加方法'),
       nzWidth: 1000,
       nzContent: CreateActionComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new Action(iid, type, description, [], []),
+      nzData: new ActionOption(this.service.type, this.getNewActionIID()),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()
@@ -172,38 +129,19 @@ export class InstanceServiceCardComponent {
   }
 
   onAddEvent() {
-    let iid: number = 1024;
-
-    if (this.service) {
-      for (let item of this.service.actions.values()) {
-        if (item.iid > iid) {
-          iid = item.iid;
-        }
-      }
-
-      iid ++;
-    }
-
-    const org = this.service?.type.organization || 'org';
-    const model = this.service?.type.model || 'model';
-    const version = this.service?.type.version || 0;
-    const type = new EventType(`urn:${org}:event:unnamed:00000000:${org}:${model}:${version}`);
-    const description = new Map<string, string>();
-    description.set('zh-CN', '自定义事件');
-
-    const modal = this.modal.create<CreateEventComponent, Event, Event>({
-      nzTitle: '添加事件',
+    const modal = this.modal.create<CreateEventComponent, EventOption, Event>({
+      nzTitle: this.i18n.translate.instant('添加事件'),
       nzWidth: 1000,
       nzContent: CreateEventComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new Event(iid, type, description, []),
+      nzData: new EventOption(this.service.type, this.getNewEventIID()),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()
@@ -231,5 +169,53 @@ export class InstanceServiceCardComponent {
   private addEvent(event: Event) {
     this.service?.events.set(event.iid, event);
     this.changed.emit(this.service);
+  }
+
+  private getNewPropertyIID() {
+    let iid: number = 1;
+
+    if (this.service) {
+      for (let item of this.service.properties.values()) {
+        if (item.iid > iid) {
+          iid = item.iid;
+        }
+      }
+
+      iid ++;
+    }
+
+    return iid;
+  }
+
+  private getNewActionIID() {
+    let iid: number = 1;
+
+    if (this.service) {
+      for (let item of this.service.actions.values()) {
+        if (item.iid > iid) {
+          iid = item.iid;
+        }
+      }
+
+      iid ++;
+    }
+
+    return iid;
+  }
+
+  private getNewEventIID() {
+    let iid: number = 1;
+
+    if (this.service) {
+      for (let item of this.service.actions.values()) {
+        if (item.iid > iid) {
+          iid = item.iid;
+        }
+      }
+
+      iid ++;
+    }
+
+    return iid;
   }
 }
