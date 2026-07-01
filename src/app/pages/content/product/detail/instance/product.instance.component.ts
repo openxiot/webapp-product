@@ -141,6 +141,8 @@ export class ProductInstanceComponent implements OnChanges {
       return false;
     }
 
+    console.log('instance.lifecycle: ', this.instance.lifecycle);
+
     return this.instance.lifecycle === LifeCycle.DEVELOPMENT;
   }
 
@@ -266,7 +268,7 @@ export class ProductInstanceComponent implements OnChanges {
         this.service.setProductInstanceLifecycle(type, lifecycle)
           .subscribe({
             next: () => {
-              console.log('setProductInstanceLifecycle ok');
+              console.log('setProductInstanceLifecycle ok: ', lifecycle);
               this.loadingInstance = false;
 
               instance.lifecycle = lifecycle;

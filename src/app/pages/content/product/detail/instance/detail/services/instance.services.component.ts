@@ -56,18 +56,18 @@ export class InstanceServicesComponent {
 
   onAddService() {
     const modal = this.modal.create<CreateServiceComponent, ServiceOption, Service>({
-      nzTitle: '添加功能',
+      nzTitle: this.i18n.translate.instant('添加服务'),
       nzWidth: 1000,
       nzContent: CreateServiceComponent,
       nzViewContainerRef: this.viewContainerRef,
       nzData: new ServiceOption(this.type, this.getNewServiceIId()),
       nzFooter: [
         {
-          label: '取消',
+          label: this.i18n.translate.instant('取消'),
           onClick: component => component!.cancel()
         },
         {
-          label: '确认',
+          label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
           onClick: component => component!.ok()

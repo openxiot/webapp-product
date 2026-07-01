@@ -47,7 +47,8 @@ export class DescriptionComponent implements ControlValueAccessor {
 
   @Input() multiple = false;
   @Input() updatable = true;
-  @Input() prefix = false;
+  @Input() prefix = false; // 用在ValueList中，需要缩进 + 前缀
+  @Input() candidate: Map<string, string> = new Map<string, string>();
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   isDisabled = false;
@@ -156,7 +157,7 @@ export class DescriptionComponent implements ControlValueAccessor {
           this.langList.push({
             lang: langItem.lang,
             label: langItem.label,
-            value: ''
+            value: this.candidate.get(langItem.lang) || ''
           });
         }
       });

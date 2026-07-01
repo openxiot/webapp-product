@@ -14,7 +14,6 @@ import {DeviceInstanceIdComponent} from '../../../../../pages/content/product/de
 import {
   Access,
   LifeCycle,
-  ObjectWithLifecycle,
   Service,
   ServiceDefinition,
   Property,
@@ -41,10 +40,10 @@ import {CreateServicePropertiesComponent} from './properties/create.service.prop
 import {CreateServiceActionsComponent} from './actions/create.service.actions.component';
 import {CreateServiceEventsComponent} from './events/create.service.events.component';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
-import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../service/i18n.service';
 import {ServiceOption} from './ServiceOption';
+import {DescriptionComponent} from '../../../../form/item/common/description/description.component';
 
 @Component({
   selector: 'create-service',
@@ -59,7 +58,6 @@ import {ServiceOption} from './ServiceOption';
     NzRowDirective,
     DeviceInstanceIdComponent,
     DeviceInstanceNamespaceComponent,
-    DeviceInstanceDescriptionComponent,
     DeviceInstanceNameComponent,
     NzSpaceModule,
     NzContentComponent,
@@ -74,6 +72,7 @@ import {ServiceOption} from './ServiceOption';
     CreateServiceActionsComponent,
     CreateServiceEventsComponent,
     TranslatePipe,
+    DescriptionComponent,
   ],
   providers: [],
 })
@@ -101,6 +100,7 @@ export class CreateServiceComponent implements OnInit {
   custom: Service;
   services: Service[] = [];
   selected: Service;
+  candidateDescription: Map<string, string> = new Map();
 
   definitions: ServiceDefinition[] = [];
 
@@ -115,7 +115,6 @@ export class CreateServiceComponent implements OnInit {
 
   constructor(
     public i18n: MainI18nService,
-    // private account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
     private fb: NonNullableFormBuilder
@@ -143,7 +142,7 @@ export class CreateServiceComponent implements OnInit {
     const version = this.option.type.version || 0;
     const type = new ServiceType(`urn:${org}:service:unnamed:00000000:${org}:${model}:${version}`);
     const description = new Map<string, string>();
-    description.set('zh-CN', '自定义功能');
+    description.set(this.i18n.getCurrentLang(), this.i18n.translate.instant('自定义服务'));
     return new Service(this.option.siid, type, description, [], [], []);
   }
 
@@ -320,7 +319,7 @@ export class CreateServiceComponent implements OnInit {
       console.log('not found: ', type.toString());
 
       const description = new Map<string, string>();
-      description.set('zh-CN', '没有找到: ' + type.name);
+      description.set(this.i18n.getCurrentLang(), 'not found: ' + type.name);
 
       return new Property(
         0,
@@ -348,7 +347,7 @@ export class CreateServiceComponent implements OnInit {
       console.log('not found: ', type.toString());
 
       const description = new Map<string, string>();
-      description.set('zh-CN', '没有找到: ' + type.name);
+      description.set(this.i18n.getCurrentLang(), 'not found: ' + type.name);
 
       return new Action(
         0,
@@ -373,7 +372,7 @@ export class CreateServiceComponent implements OnInit {
       console.log('not found: ', type.toString());
 
       const description = new Map<string, string>();
-      description.set('zh-CN', '没有找到: ' +  + type.name);
+      description.set(this.i18n.getCurrentLang(), 'not found: ' + type.name);
 
       return new Event(
         0,
@@ -388,10 +387,13 @@ export class CreateServiceComponent implements OnInit {
     this.loadingServices = true;
     this.selected = s;
 
+    const description: Map<string, string> = new Map<string, string>();
+    description.set(this.i18n.getCurrentLang(), s.description.get(this.i18n.getCurrentLang()) || '');
+
     this.form.controls.iid.setValue(s.iid);
     this.form.controls.ns.setValue(s.type.ns);
     this.form.controls.code.setValue(s.type.name);
-    this.form.controls.description.setValue(s.description);
+    this.form.controls.description.setValue(description);
 
     const def = this.definitions.find(x => x.type.name === s.type.name);
     if (def) {
