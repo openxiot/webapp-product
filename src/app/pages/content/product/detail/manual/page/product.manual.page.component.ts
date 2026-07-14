@@ -22,7 +22,7 @@ import {AccountService} from '../../../../../../service/account.service';
   selector: 'product-manual-page',
   standalone: true,
   templateUrl: './product.manual.page.component.html',
-  styleUrls: ['./product.manual.page.component.less'],
+  styleUrl: './product.manual.page.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

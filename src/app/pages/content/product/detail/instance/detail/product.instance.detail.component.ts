@@ -14,7 +14,7 @@ import {InstanceServiceComponent} from './service/instance.service.component';
 @Component({
   selector: 'product-instance-detail',
   templateUrl: './product.instance.detail.component.html',
-  styleUrls: ['./product.instance.detail.component.less'],
+  styleUrl: './product.instance.detail.component.less',
   standalone: true,
   imports: [
     NzMenuModule,

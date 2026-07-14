@@ -38,7 +38,7 @@ import {Location} from '@angular/common';
   selector: 'spec-event-create',
   standalone: true,
   templateUrl: './spec.event.create.component.html',
-  styleUrls: ['./spec.event.create.component.less'],
+  styleUrl: './spec.event.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

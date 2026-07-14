@@ -15,7 +15,7 @@ import {MainI18nService} from '../../../../../../service/i18n.service';
 @Component({
   selector: 'service-definition-properties',
   templateUrl: './service.definition.properties.component.html',
-  styleUrls: ['./service.definition.properties.component.less'],
+  styleUrl: './service.definition.properties.component.less',
   standalone: true,
   imports: [
     NzButtonModule,

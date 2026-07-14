@@ -10,7 +10,7 @@ import {Property} from '@openxiot/xiot-core-spec-ts';
 @Component({
   selector: 'create-service-properties',
   templateUrl: './create.service.properties.component.html',
-  styleUrls: ['./create.service.properties.component.less'],
+  styleUrl: './create.service.properties.component.less',
   standalone: true,
   imports: [
     FormsModule,

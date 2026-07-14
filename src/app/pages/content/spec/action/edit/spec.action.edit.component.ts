@@ -38,7 +38,7 @@ import {Location} from '@angular/common';
   selector: 'spec-action-edit',
   standalone: true,
   templateUrl: './spec.action.edit.component.html',
-  styleUrls: ['./spec.action.edit.component.less'],
+  styleUrl: './spec.action.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

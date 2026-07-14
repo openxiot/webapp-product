@@ -27,7 +27,7 @@ import {NzIconModule} from 'ng-zorro-antd/icon';
   selector: 'product-supply-material',
   standalone: true,
   templateUrl: './product.supply.material.component.html',
-  styleUrls: ['./product.supply.material.component.less'],
+  styleUrl: './product.supply.material.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

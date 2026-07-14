@@ -51,7 +51,7 @@ import {
 @Component({
   selector: 'template-action-detail',
   templateUrl: './template.action.detail.component.html',
-  styleUrls: ['./template.action.detail.component.less'],
+  styleUrl: './template.action.detail.component.less',
   standalone: true,
   imports: [
     FormsModule,

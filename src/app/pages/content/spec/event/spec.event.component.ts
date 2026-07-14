@@ -30,7 +30,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
   selector: 'spec-event',
   standalone: true,
   templateUrl: './spec.event.component.html',
-  styleUrls: ['./spec.event.component.less'],
+  styleUrl: './spec.event.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

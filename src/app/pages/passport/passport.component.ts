@@ -6,14 +6,14 @@ import {MainService} from "../../service/main.service";
 import {NzListModule} from "ng-zorro-antd/list";
 import {Router} from "@angular/router";
 import {AccountService} from "../../service/account.service";
-import {NzDropDownDirective, NzDropdownMenuComponent} from "ng-zorro-antd/dropdown";
+import {NzDropdownDirective, NzDropdownMenuComponent} from "ng-zorro-antd/dropdown";
 import {NzIconDirective} from "ng-zorro-antd/icon";
 import {NzMenuModule} from "ng-zorro-antd/menu";
 import {MainI18nService} from "../../service/i18n.service";
 import {NzCardModule} from "ng-zorro-antd/card";
 import {NzColDirective, NzRowDirective} from "ng-zorro-antd/grid";
 import {NzDividerModule} from "ng-zorro-antd/divider";
-import {NzToolTipModule} from "ng-zorro-antd/tooltip";
+import {NzTooltipModule} from "ng-zorro-antd/tooltip";
 import {NzButtonModule} from "ng-zorro-antd/button";
 import {TranslatePipe} from "@ngx-translate/core";
 import {Title} from "@angular/platform-browser";
@@ -33,7 +33,7 @@ import {Oauth2Configuration} from '@openxiot/xiot-core-spec-ts';
     NzHeaderComponent,
     NzContentComponent,
     NzListModule,
-    NzDropDownDirective,
+    NzDropdownDirective,
     NzIconDirective,
     NzDropdownMenuComponent,
     NzMenuModule,
@@ -41,12 +41,12 @@ import {Oauth2Configuration} from '@openxiot/xiot-core-spec-ts';
     NzRowDirective,
     NzColDirective,
     NzDividerModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzButtonModule,
     NzCheckboxModule,
     NzSpaceModule
   ],
-  styleUrls: ['./passport.component.less']
+  styleUrl: './passport.component.less'
 })
 export class PassportComponent implements OnInit {
 

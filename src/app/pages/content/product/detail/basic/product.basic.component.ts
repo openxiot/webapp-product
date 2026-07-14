@@ -57,7 +57,7 @@ import {SpecModelComponent} from '../../../../../common/form/item/common/model/s
   selector: 'product-basic',
   standalone: true,
   templateUrl: './product.basic.component.html',
-  styleUrls: ['./product.basic.component.less'],
+  styleUrl: './product.basic.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

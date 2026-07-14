@@ -7,14 +7,12 @@
 
             <!-- 值输入 -->
             <div class="value-input">
-              <nz-input-number-group [nzAddOnBefore]="'值' | translate">
-                <nz-input-number
-                  formControlName="value"
-                  [nzMin]="0"
-                  [nzStep]="1"
-                  [nzPrecision]="0">
-                </nz-input-number>
-              </nz-input-number-group>
+              <nz-input-number [nzAddonBefore]="'值' | translate"
+                formControlName="value"
+                [nzMin]="0"
+                [nzStep]="1"
+                [nzPrecision]="0">
+              </nz-input-number>
             </div>
 
             <!-- 描述输入 -->

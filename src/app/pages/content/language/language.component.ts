@@ -19,7 +19,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
   selector: 'main-language',
   standalone: true,
   templateUrl: './language.component.html',
-  styleUrls: ['./language.component.less'],
+  styleUrl: './language.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

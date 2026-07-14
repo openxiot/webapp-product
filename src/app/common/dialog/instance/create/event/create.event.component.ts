@@ -36,7 +36,7 @@ import {DescriptionComponent} from '../../../../form/item/common/description/des
 
 @Component({
   selector: 'create-event',
-  styleUrls: ['./create.event.component.less'],
+  styleUrl: './create.event.component.less',
   templateUrl: './create.event.component.html',
   standalone: true,
   imports: [

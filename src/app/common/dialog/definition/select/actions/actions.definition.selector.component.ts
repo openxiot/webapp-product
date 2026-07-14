@@ -19,7 +19,7 @@ import {ActionsOption} from './ActionsOption';
 
 @Component({
   selector: 'actions-definition-selector',
-  styleUrls: ['./actions.definition.selector.component.less'],
+  styleUrl: './actions.definition.selector.component.less',
   templateUrl: './actions.definition.selector.component.html',
   standalone: true,
   imports: [

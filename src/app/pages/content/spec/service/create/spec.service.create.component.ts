@@ -42,7 +42,7 @@ import {Location} from '@angular/common';
   selector: 'spec-service-create',
   standalone: true,
   templateUrl: './spec.service.create.component.html',
-  styleUrls: ['./spec.service.create.component.less'],
+  styleUrl: './spec.service.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

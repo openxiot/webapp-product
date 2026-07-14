@@ -22,7 +22,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-panel',
   standalone: true,
   templateUrl: './product.panel.component.html',
-  styleUrls: ['./product.panel.component.less'],
+  styleUrl: './product.panel.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

@@ -49,7 +49,7 @@ import {Location} from '@angular/common';
   selector: 'spec-property-view',
   standalone: true,
   templateUrl: './spec.property.view.component.html',
-  styleUrls: ['./spec.property.view.component.less'],
+  styleUrl: './spec.property.view.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

@@ -42,7 +42,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'device-instance-service-action',
   templateUrl: './device.instance.service.action.component.html',
-  styleUrls: ['./device.instance.service.action.component.less'],
+  styleUrl: './device.instance.service.action.component.less',
   standalone: true,
   imports: [
     FormsModule,

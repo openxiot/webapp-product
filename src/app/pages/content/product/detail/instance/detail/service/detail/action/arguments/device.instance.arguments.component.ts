@@ -2,10 +2,10 @@ import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewCo
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {Argument, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
@@ -18,18 +18,17 @@ import {MainI18nService} from '../../../../../../../../../../service/i18n.servic
 @Component({
   selector: 'device-instance-arguments',
   templateUrl: './device.instance.arguments.component.html',
-  styleUrls: ['./device.instance.arguments.component.less'],
+  styleUrl: './device.instance.arguments.component.less',
   standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     NzInputNumberComponent,
-    NzInputNumberGroupComponent,
     NzSpaceModule,
     NzRowDirective,
     NzColDirective,

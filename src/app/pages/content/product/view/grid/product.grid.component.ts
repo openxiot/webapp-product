@@ -18,7 +18,7 @@ import {Organization} from '../../../../../typedef/define/developer/Organization
   selector: 'product-grid',
   standalone: true,
   templateUrl: './product.grid.component.html',
-  styleUrls: ['./product.grid.component.less'],
+  styleUrl: './product.grid.component.less',
   imports: [
     RouterLink,
     NzRowDirective,

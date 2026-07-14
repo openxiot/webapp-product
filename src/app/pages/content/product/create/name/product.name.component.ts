@@ -8,7 +8,7 @@ import {MainI18nService} from '../../../../../service/i18n.service';
   selector: 'product-name',
   standalone: true,
   templateUrl: './product.name.component.html',
-  styleUrls: ['./product.name.component.less'],
+  styleUrl: './product.name.component.less',
   imports: [
     FormsModule,
     NzInputDirective,

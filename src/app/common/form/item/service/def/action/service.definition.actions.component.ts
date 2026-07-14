@@ -15,7 +15,7 @@ import {MainI18nService} from '../../../../../../service/i18n.service';
 @Component({
   selector: 'service-definition-actions',
   templateUrl: './service.definition.actions.component.html',
-  styleUrls: ['./service.definition.actions.component.less'],
+  styleUrl: './service.definition.actions.component.less',
   standalone: true,
   imports: [
     NzButtonModule,

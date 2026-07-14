@@ -12,7 +12,7 @@ import {MainService} from '../../../../../service/main.service';
   selector: 'product-visibility',
   standalone: true,
   templateUrl: './product.visibility.component.html',
-  styleUrls: ['./product.visibility.component.less'],
+  styleUrl: './product.visibility.component.less',
   imports: [
     FormsModule,
     NzCardModule,

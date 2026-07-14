@@ -22,7 +22,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-wizard',
   standalone: true,
   templateUrl: './product.wizard.component.html',
-  styleUrls: ['./product.wizard.component.less'],
+  styleUrl: './product.wizard.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

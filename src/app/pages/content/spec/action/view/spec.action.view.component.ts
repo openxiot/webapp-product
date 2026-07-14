@@ -31,7 +31,7 @@ import {Location} from '@angular/common';
   selector: 'spec-action-view',
   standalone: true,
   templateUrl: './spec.action.view.component.html',
-  styleUrls: ['./spec.action.view.component.less'],
+  styleUrl: './spec.action.view.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

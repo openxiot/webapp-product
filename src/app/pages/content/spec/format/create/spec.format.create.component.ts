@@ -32,7 +32,7 @@ import {Location} from '@angular/common';
   selector: 'spec-format-create',
   standalone: true,
   templateUrl: './spec.format.create.component.html',
-  styleUrls: ['./spec.format.create.component.less'],
+  styleUrl: './spec.format.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

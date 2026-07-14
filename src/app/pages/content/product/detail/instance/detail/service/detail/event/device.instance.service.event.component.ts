@@ -42,7 +42,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'device-instance-service-event',
   templateUrl: './device.instance.service.event.component.html',
-  styleUrls: ['./device.instance.service.event.component.less'],
+  styleUrl: './device.instance.service.event.component.less',
   standalone: true,
   imports: [
     FormsModule,

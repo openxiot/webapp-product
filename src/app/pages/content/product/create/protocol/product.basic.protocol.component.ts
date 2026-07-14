@@ -9,7 +9,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
   selector: 'product-basic-protocol',
   standalone: true,
   templateUrl: './product.basic.protocol.component.html',
-  styleUrls: ['./product.basic.protocol.component.less'],
+  styleUrl: './product.basic.protocol.component.less',
   imports: [
     FormsModule,
     NzCascaderComponent,

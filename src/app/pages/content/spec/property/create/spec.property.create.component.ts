@@ -49,7 +49,7 @@ import {Location} from '@angular/common';
   selector: 'spec-property-create',
   standalone: true,
   templateUrl: './spec.property.create.component.html',
-  styleUrls: ['./spec.property.create.component.less'],
+  styleUrl: './spec.property.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

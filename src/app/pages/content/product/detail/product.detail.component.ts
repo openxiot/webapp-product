@@ -31,7 +31,7 @@ import {MainI18nService} from '../../../../service/i18n.service';
   selector: 'product-detail',
   standalone: true,
   templateUrl: './product.detail.component.html',
-  styleUrls: ['./product.detail.component.less'],
+  styleUrl: './product.detail.component.less',
   imports: [
     ReactiveFormsModule,
     NzPageHeaderModule,

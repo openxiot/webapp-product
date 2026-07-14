@@ -14,7 +14,7 @@ import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'action-definition-select',
-  styleUrls: ['./action.definition.select.component.less'],
+  styleUrl: './action.definition.select.component.less',
   templateUrl: './action.definition.select.component.html',
   standalone: true,
   imports: [

@@ -21,7 +21,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
   selector: 'product-template',
   standalone: true,
   templateUrl: './product.template.component.html',
-  styleUrls: ['./product.template.component.less'],
+  styleUrl: './product.template.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,

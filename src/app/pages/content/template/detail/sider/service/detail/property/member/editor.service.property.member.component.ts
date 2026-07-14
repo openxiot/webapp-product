@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {Member} from './Member';
@@ -10,12 +10,12 @@ import {Member} from './Member';
 @Component({
   selector: 'editor-service-property-member',
   templateUrl: './editor.service.property.member.component.html',
-  styleUrls: ['./editor.service.property.member.component.less'],
+  styleUrl: './editor.service.property.member.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule
   ],

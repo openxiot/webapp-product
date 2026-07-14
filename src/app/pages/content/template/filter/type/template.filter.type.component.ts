@@ -8,7 +8,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'template-filter-type',
   standalone: true,
   templateUrl: './template.filter.type.component.html',
-  styleUrls: ['./template.filter.type.component.less'],
+  styleUrl: './template.filter.type.component.less',
   imports: [
     NzCardModule,
     NzTagComponent,

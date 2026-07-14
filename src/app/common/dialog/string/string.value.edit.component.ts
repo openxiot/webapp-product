@@ -7,7 +7,7 @@ import {StringValue} from './StringValue';
 @Component({
   selector: 'string-value-edit',
   templateUrl: './string.value.edit.component.html',
-  styleUrls: ['./string.value.edit.component.less'],
+  styleUrl: './string.value.edit.component.less',
   standalone: true,
   imports: [
     FormsModule,

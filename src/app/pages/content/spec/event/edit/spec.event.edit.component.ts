@@ -38,7 +38,7 @@ import {Location} from '@angular/common';
   selector: 'spec-event-edit',
   standalone: true,
   templateUrl: './spec.event.edit.component.html',
-  styleUrls: ['./spec.event.edit.component.less'],
+  styleUrl: './spec.event.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

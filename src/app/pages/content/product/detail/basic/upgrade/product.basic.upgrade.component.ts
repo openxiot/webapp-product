@@ -11,7 +11,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-basic-upgrade',
   standalone: true,
   templateUrl: './product.basic.upgrade.component.html',
-  styleUrls: ['./product.basic.upgrade.component.less'],
+  styleUrl: './product.basic.upgrade.component.less',
   imports: [
     FormsModule,
     NzSpaceModule,

@@ -25,7 +25,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
   selector: 'spec-device',
   standalone: true,
   templateUrl: './spec.device.component.html',
-  styleUrls: ['./spec.device.component.less'],
+  styleUrl: './spec.device.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

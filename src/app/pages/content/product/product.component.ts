@@ -25,7 +25,7 @@ import {Organization} from '../../../typedef/define/developer/Organization';
   selector: 'main-product',
   standalone: true,
   templateUrl: './product.component.html',
-  styleUrls: ['./product.component.less'],
+  styleUrl: './product.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

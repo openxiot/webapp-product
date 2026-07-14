@@ -16,7 +16,7 @@ import {Organization} from '../../../typedef/define/developer/Organization';
 @Component({
   selector: 'organization-selector',
   templateUrl: './organization.selector.component.html',
-  styleUrls: ['./organization.selector.component.less'],
+  styleUrl: './organization.selector.component.less',
   imports: [
     FormsModule,
     NzInputModule,

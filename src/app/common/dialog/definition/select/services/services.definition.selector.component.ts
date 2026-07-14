@@ -19,7 +19,7 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'services-definition-selector',
-  styleUrls: ['./services.definition.selector.component.less'],
+  styleUrl: './services.definition.selector.component.less',
   templateUrl: './services.definition.selector.component.html',
   standalone: true,
   imports: [

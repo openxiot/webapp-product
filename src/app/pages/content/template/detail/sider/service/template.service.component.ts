@@ -26,7 +26,7 @@ import {TemplateEventDetailComponent} from './detail/event/template.event.detail
 @Component({
   selector: 'template-service',
   templateUrl: './template.service.component.html',
-  styleUrls: ['./template.service.component.less'],
+  styleUrl: './template.service.component.less',
   standalone: true,
   imports: [
     NzTabsModule,

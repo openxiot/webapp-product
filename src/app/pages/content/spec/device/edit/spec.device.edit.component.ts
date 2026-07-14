@@ -28,7 +28,7 @@ import {Location} from '@angular/common';
   selector: 'spec-device-edit',
   standalone: true,
   templateUrl: './spec.device.edit.component.html',
-  styleUrls: ['./spec.device.edit.component.less'],
+  styleUrl: './spec.device.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

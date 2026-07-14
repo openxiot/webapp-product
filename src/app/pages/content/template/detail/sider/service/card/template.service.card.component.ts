@@ -35,7 +35,7 @@ import {AccountService} from '../../../../../../../service/account.service';
 @Component({
   selector: 'template-service-card',
   templateUrl: './template.service.card.component.html',
-  styleUrls: ['./template.service.card.component.less'],
+  styleUrl: './template.service.card.component.less',
   standalone: true,
   imports: [
     NzTagComponent,

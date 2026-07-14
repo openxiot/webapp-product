@@ -8,7 +8,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     TranslatePipe
   ],
   templateUrl: './error.component.html',
-  styleUrls: ['./error.component.less']
+  styleUrl: './error.component.less'
 })
 export class ErrorComponent  {
 }

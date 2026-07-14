@@ -11,7 +11,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'app-language-change',
   templateUrl: './language.change.component.html',
-  styleUrls: ['./language.change.component.less'],
+  styleUrl: './language.change.component.less',
   imports: [
     FormsModule,
     NzInputModule,

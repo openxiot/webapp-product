@@ -31,7 +31,7 @@ import {NamespaceOption} from '../../../common/dialog/namespace/NamespaceOption'
   selector: 'main-spec',
   standalone: true,
   templateUrl: './spec.component.html',
-  styleUrls: ['./spec.component.less'],
+  styleUrl: './spec.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

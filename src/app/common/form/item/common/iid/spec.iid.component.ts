@@ -8,7 +8,7 @@ export const IID_MAX = 65535;
 @Component({
   selector: 'spec-iid',
   templateUrl: './spec.iid.component.html',
-  styleUrls: ['./spec.iid.component.less'],
+  styleUrl: './spec.iid.component.less',
   standalone: true,
   imports: [
     NzInputNumberModule,

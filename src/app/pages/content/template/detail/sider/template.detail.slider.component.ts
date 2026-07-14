@@ -12,7 +12,7 @@ import {NzCardModule} from 'ng-zorro-antd/card';
 @Component({
   selector: 'template-detail-slider',
   templateUrl: './template.detail.slider.component.html',
-  styleUrls: ['./template.detail.slider.component.less'],
+  styleUrl: './template.detail.slider.component.less',
   standalone: true,
   imports: [
     NzMenuModule,

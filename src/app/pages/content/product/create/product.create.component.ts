@@ -33,7 +33,7 @@ import {AccountService} from '../../../../service/account.service';
   selector: 'product-create',
   standalone: true,
   templateUrl: './product.create.component.html',
-  styleUrls: ['./product.create.component.less'],
+  styleUrl: './product.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

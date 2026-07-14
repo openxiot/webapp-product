@@ -23,7 +23,7 @@ import {Organization} from '../../../../../typedef/define/developer/Organization
   selector: 'product-list',
   standalone: true,
   templateUrl: './product.list.component.html',
-  styleUrls: ['./product.list.component.less'],
+  styleUrl: './product.list.component.less',
   imports: [
     FormsModule,
     RouterLink,

@@ -29,7 +29,7 @@ import {Location} from '@angular/common';
   selector: 'spec-format-add',
   standalone: true,
   templateUrl: './spec.format.add.component.html',
-  styleUrls: ['./spec.format.add.component.less'],
+  styleUrl: './spec.format.add.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

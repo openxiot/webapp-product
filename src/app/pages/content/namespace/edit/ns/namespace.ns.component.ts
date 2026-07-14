@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
@@ -12,12 +12,12 @@ import {NzRadioComponent, NzRadioGroupComponent} from 'ng-zorro-antd/radio';
 @Component({
   selector: 'namespace-ns',
   templateUrl: './namespace.ns.component.html',
-  styleUrls: ['./namespace.ns.component.less'],
+  styleUrl: './namespace.ns.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     FormsModule,

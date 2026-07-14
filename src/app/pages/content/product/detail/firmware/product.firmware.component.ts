@@ -41,7 +41,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-firmware',
   standalone: true,
   templateUrl: './product.firmware.component.html',
-  styleUrls: ['./product.firmware.component.less'],
+  styleUrl: './product.firmware.component.less',
   imports: [
     FormsModule,
     NzRowDirective,

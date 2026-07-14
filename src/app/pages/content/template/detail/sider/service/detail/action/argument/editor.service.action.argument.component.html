@@ -11,13 +11,9 @@
 
   <div nz-col [nzSpan]="16">
     <nz-space nzDirection="horizontal">
-      <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'最少' | translate" [nzAddOnAfter]="'次' | translate">
-        <nz-input-number [(ngModel)]="value.argument.minRepeat" (ngModelChange)="onChanged()"></nz-input-number>
-      </nz-input-number-group>
+      <nz-input-number *nzSpaceItem [nzAddonBefore]="'最少' | translate" [nzAddonAfter]="'次' | translate" [(ngModel)]="value.argument.minRepeat" (ngModelChange)="onChanged()"></nz-input-number>
 
-      <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'最多' | translate" [nzAddOnAfter]="'次' | translate">
-        <nz-input-number [(ngModel)]="value.argument.maxRepeat" (ngModelChange)="onChanged()"></nz-input-number>
-      </nz-input-number-group>
+      <nz-input-number *nzSpaceItem [nzAddonBefore]="'最多' | translate" [nzAddonAfter]="'次' | translate" [(ngModel)]="value.argument.maxRepeat" (ngModelChange)="onChanged()"></nz-input-number>
     </nz-space>
   </div>
 </div>

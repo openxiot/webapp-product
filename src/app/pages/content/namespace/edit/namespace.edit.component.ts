@@ -27,7 +27,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'namespace-edit',
   standalone: true,
   templateUrl: './namespace.edit.component.html',
-  styleUrls: ['./namespace.edit.component.less'],
+  styleUrl: './namespace.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

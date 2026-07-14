@@ -13,7 +13,7 @@ import {FormatsOption} from './FormatsOption';
 @Component({
   selector: 'app-formats-selector',
   templateUrl: './formats.selector.component.html',
-  styleUrls: ['./formats.selector.component.less'],
+  styleUrl: './formats.selector.component.less',
   imports: [
     FormsModule,
     NzInputModule,

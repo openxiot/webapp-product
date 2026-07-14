@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -16,12 +16,12 @@ import {MainI18nService} from '../../../../../../service/i18n.service';
 @Component({
   selector: 'property-definition-members',
   templateUrl: './property.definition.members.component.html',
-  styleUrls: ['./property.definition.members.component.less'],
+  styleUrl: './property.definition.members.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     NzColDirective,

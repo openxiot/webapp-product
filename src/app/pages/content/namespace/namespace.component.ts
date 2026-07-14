@@ -26,7 +26,7 @@ import {MainI18nService} from '../../../service/i18n.service';
   selector: 'main-namespace',
   standalone: true,
   templateUrl: './namespace.component.html',
-  styleUrls: ['./namespace.component.less'],
+  styleUrl: './namespace.component.less',
   imports: [
     FormsModule,
     RouterLink,

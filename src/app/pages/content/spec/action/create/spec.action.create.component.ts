@@ -38,7 +38,7 @@ import {Location} from '@angular/common';
   selector: 'spec-action-create',
   standalone: true,
   templateUrl: './spec.action.create.component.html',
-  styleUrls: ['./spec.action.create.component.less'],
+  styleUrl: './spec.action.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

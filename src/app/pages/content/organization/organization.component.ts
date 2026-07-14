@@ -9,13 +9,12 @@ import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
-import {NzTableModule, NzTableQueryParams} from 'ng-zorro-antd/table';
+import {NzTableModule} from 'ng-zorro-antd/table';
 import {AccountService} from '../../../service/account.service';
 import {NzButtonComponent} from 'ng-zorro-antd/button';
 import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {Router, RouterLink} from '@angular/router';
 import {Organization} from '../../../typedef/define/developer/Organization';
-import {DatePipe} from '@angular/common';
 import {TranslatePipe} from '@ngx-translate/core';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzIconDirective} from 'ng-zorro-antd/icon';
@@ -24,7 +23,7 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
   selector: 'main-organization',
   standalone: true,
   templateUrl: './organization.component.html',
-  styleUrls: ['./organization.component.less'],
+  styleUrl: './organization.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,
@@ -38,7 +37,6 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
     NzButtonComponent,
     NzWaveDirective,
     RouterLink,
-    DatePipe,
     TranslatePipe,
     NzColDirective,
     NzIconDirective,
@@ -50,8 +48,6 @@ export class OrganizationComponent implements OnInit {
   loading: boolean = true;
   total: number = 0;
   organizations: Organization[] = [];
-  pageSize = 100;
-  pageIndex = 1;
 
   constructor(
     public account: AccountService,

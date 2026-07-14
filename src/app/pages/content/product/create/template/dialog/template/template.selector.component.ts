@@ -13,7 +13,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'template-selector',
   templateUrl: './template.selector.component.html',
-  styleUrls: ['./template.selector.component.less'],
+  styleUrl: './template.selector.component.less',
   imports: [
     FormsModule,
     NzInputModule,

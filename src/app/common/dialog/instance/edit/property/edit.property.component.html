@@ -75,17 +75,11 @@
           <nz-form-control [nzSpan]="16">
             <div formGroupName="range">
               <nz-space nzDirection="horizontal">
-                <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'最小' | translate" style="width: 100%">
-                  <nz-input-number formControlName="min" (ngModelChange)="onChanged()"></nz-input-number>
-                </nz-input-number-group>
+                <nz-input-number *nzSpaceItem [nzAddonBefore]="'最小' | translate" style="width: 100%" formControlName="min" (ngModelChange)="onChanged()"></nz-input-number>
 
-                <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'最大' | translate" style="width: 100%">
-                  <nz-input-number formControlName="max" (ngModelChange)="onChanged()"></nz-input-number>
-                </nz-input-number-group>
+                <nz-input-number *nzSpaceItem [nzAddonBefore]="'最大' | translate" style="width: 100%" formControlName="max" (ngModelChange)="onChanged()"></nz-input-number>
 
-                <nz-input-number-group *nzSpaceItem [nzAddOnBefore]="'步长' | translate" style="width: 100%">
-                  <nz-input-number formControlName="step" (ngModelChange)="onChanged()"></nz-input-number>
-                </nz-input-number-group>
+                <nz-input-number *nzSpaceItem [nzAddonBefore]="'步长' | translate" style="width: 100%" formControlName="step" (ngModelChange)="onChanged()"></nz-input-number>
               </nz-space>
             </div>
           </nz-form-control>
@@ -102,9 +96,7 @@
                     <nz-form-item>
                       <div nz-row [nzGutter]="[8, 8]">
                         <div nz-col [nzSpan]="6">
-                          <nz-input-number-group [nzAddOnBefore]="'值' | translate">
-                            <nz-input-number id="value{{i}}" formControlName="value" />
-                          </nz-input-number-group>
+                          <nz-input-number [nzAddonBefore]="'值' | translate" id="value{{i}}" formControlName="value" />
                         </div>
 
                         <div nz-col [nzSpan]="13">

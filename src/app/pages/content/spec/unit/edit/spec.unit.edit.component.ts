@@ -27,7 +27,7 @@ import {Location} from '@angular/common';
   selector: 'spec-unit-edit',
   standalone: true,
   templateUrl: './spec.unit.edit.component.html',
-  styleUrls: ['./spec.unit.edit.component.less'],
+  styleUrl: './spec.unit.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

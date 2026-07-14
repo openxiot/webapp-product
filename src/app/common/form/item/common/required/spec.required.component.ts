@@ -9,7 +9,7 @@ import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 @Component({
   selector: 'spec-required',
   templateUrl: './spec.required.component.html',
-  styleUrls: ['./spec.required.component.less'],
+  styleUrl: './spec.required.component.less',
   standalone: true,
   imports: [
     NzSwitchModule,

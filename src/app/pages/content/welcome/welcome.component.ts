@@ -17,7 +17,7 @@ import {Statistic} from '../../../typedef/define/statistic/Statistic';
   selector: 'main-welcome',
   standalone: true,
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.less'],
+  styleUrl: './welcome.component.less',
   imports: [
     RouterLink,
     TranslatePipe,

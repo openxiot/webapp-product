@@ -42,7 +42,7 @@ import {Location} from '@angular/common';
   selector: 'spec-service-edit',
   standalone: true,
   templateUrl: './spec.service.edit.component.html',
-  styleUrls: ['./spec.service.edit.component.less'],
+  styleUrl: './spec.service.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

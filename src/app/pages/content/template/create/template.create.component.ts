@@ -26,7 +26,7 @@ import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcr
   selector: 'template-create',
   standalone: true,
   templateUrl: './template.create.component.html',
-  styleUrls: ['./template.create.component.less'],
+  styleUrl: './template.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

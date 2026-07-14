@@ -3,7 +3,7 @@
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
     <nz-page-header-footer>
-      <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small">
+      <nz-tabs [(nzSelectedIndex)]="tabIndex" nzSize="small">
         <nz-tab [nzTitle]="'基本信息' | translate"></nz-tab>
         <nz-tab [nzTitle]="'功能' | translate"></nz-tab>
 <!--        <nz-tab [nzTitle]="'配网引导' | translate"></nz-tab>-->
@@ -12,7 +12,7 @@
 <!--          <nz-tab [nzTitle]="'固件' | translate"></nz-tab>-->
 <!--        }-->
 <!--        <nz-tab [nzTitle]="'说明书' | translate"></nz-tab>-->
-      </nz-tabset>
+      </nz-tabs>
     </nz-page-header-footer>
   </nz-page-header>
 

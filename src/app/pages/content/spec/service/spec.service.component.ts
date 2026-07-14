@@ -34,7 +34,7 @@ import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
   selector: 'spec-service',
   standalone: true,
   templateUrl: './spec.service.component.html',
-  styleUrls: ['./spec.service.component.less'],
+  styleUrl: './spec.service.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

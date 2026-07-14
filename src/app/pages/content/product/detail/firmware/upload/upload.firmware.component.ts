@@ -20,7 +20,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'upload-firmware',
-  styleUrls: ['./upload.firmware.component.less'],
+  styleUrl: './upload.firmware.component.less',
   templateUrl: './upload.firmware.component.html',
   standalone: true,
   imports: [

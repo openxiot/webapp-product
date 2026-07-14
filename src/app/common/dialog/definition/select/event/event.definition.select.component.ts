@@ -14,7 +14,7 @@ import {MainI18nService} from '../../../../../service/i18n.service';
 
 @Component({
   selector: 'event-definition-select',
-  styleUrls: ['./event.definition.select.component.less'],
+  styleUrl: './event.definition.select.component.less',
   templateUrl: './event.definition.select.component.html',
   standalone: true,
   imports: [

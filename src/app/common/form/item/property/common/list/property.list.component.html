@@ -6,14 +6,12 @@
 
           <!-- 第一行：值 + 删除按钮 占满一行 -->
           <div class="value-row">
-            <nz-input-number-group [nzAddOnBefore]="'值' | translate" class="full-width">
-              <nz-input-number
-                formControlName="value"
-                [nzMin]="0"
-                [nzStep]="1"
-                [nzPrecision]="0"
-              />
-            </nz-input-number-group>
+            <nz-input-number [nzAddonBefore]="'值' | translate" class="full-width"
+              formControlName="value"
+              [nzMin]="0"
+              [nzStep]="1"
+              [nzPrecision]="0"
+            />
 
             <!-- 删除按钮 -->
             <button

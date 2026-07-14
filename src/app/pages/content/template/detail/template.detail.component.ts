@@ -36,7 +36,7 @@ import {StringValue} from '../../../../common/dialog/string/StringValue';
 @Component({
   selector: 'template-detail',
   templateUrl: './template.detail.component.html',
-  styleUrls: ['./template.detail.component.less'],
+  styleUrl: './template.detail.component.less',
   standalone: true,
   imports: [
     FormsModule,

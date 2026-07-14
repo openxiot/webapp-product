@@ -19,7 +19,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'template-ns',
   standalone: true,
   templateUrl: './template.ns.component.html',
-  styleUrls: ['./template.ns.component.less'],
+  styleUrl: './template.ns.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

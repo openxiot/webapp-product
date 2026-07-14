@@ -19,7 +19,7 @@ import {PropertiesOption} from './PropertiesOption';
 
 @Component({
   selector: 'properties-definition-selector',
-  styleUrls: ['./properties.definition.selector.component.less'],
+  styleUrl: './properties.definition.selector.component.less',
   templateUrl: './properties.definition.selector.component.html',
   standalone: true,
   imports: [

@@ -28,7 +28,7 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
   selector: 'spec-action',
   standalone: true,
   templateUrl: './spec.action.component.html',
-  styleUrls: ['./spec.action.component.less'],
+  styleUrl: './spec.action.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

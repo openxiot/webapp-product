@@ -49,7 +49,7 @@ import {DescriptionComponent} from '../../../../form/item/common/description/des
 
 @Component({
   selector: 'create-property',
-  styleUrls: ['./create.property.component.less'],
+  styleUrl: './create.property.component.less',
   templateUrl: './create.property.component.html',
   standalone: true,
   imports: [

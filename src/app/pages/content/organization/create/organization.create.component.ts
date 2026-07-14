@@ -23,7 +23,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'organization-create',
   standalone: true,
   templateUrl: './organization.create.component.html',
-  styleUrls: ['./organization.create.component.less'],
+  styleUrl: './organization.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

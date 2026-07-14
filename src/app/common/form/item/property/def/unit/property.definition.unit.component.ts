@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {NzSelectModule} from 'ng-zorro-antd/select';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -11,11 +11,11 @@ import {MainI18nService} from '../../../../../../service/i18n.service';
 @Component({
   selector: 'property-definition-unit',
   templateUrl: './property.definition.unit.component.html',
-  styleUrls: ['./property.definition.unit.component.less'],
+  styleUrl: './property.definition.unit.component.less',
   standalone: true,
   imports: [
     NzSelectModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     TranslatePipe,

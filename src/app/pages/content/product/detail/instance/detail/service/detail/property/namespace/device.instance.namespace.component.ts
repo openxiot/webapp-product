@@ -2,19 +2,19 @@ import {Component} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 
 @Component({
   selector: 'device-instance-namespace',
   templateUrl: './device.instance.namespace.component.html',
-  styleUrls: ['./device.instance.namespace.component.less'],
+  styleUrl: './device.instance.namespace.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule
   ],

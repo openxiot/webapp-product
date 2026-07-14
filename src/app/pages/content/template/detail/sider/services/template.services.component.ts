@@ -30,7 +30,7 @@ import {DeviceTemplateHelper} from '../../../../../../typedef/template/DeviceTem
 @Component({
   selector: 'template-services',
   templateUrl: './template.services.component.html',
-  styleUrls: ['./template.services.component.less'],
+  styleUrl: './template.services.component.less',
   standalone: true,
   imports: [
     TranslatePipe,

@@ -26,7 +26,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'namespace-create',
   standalone: true,
   templateUrl: './namespace.create.component.html',
-  styleUrls: ['./namespace.create.component.less'],
+  styleUrl: './namespace.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

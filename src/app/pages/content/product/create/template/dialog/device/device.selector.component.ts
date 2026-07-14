@@ -5,9 +5,8 @@ import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {DeviceDefinition, NamespaceDefinition, Urn} from '@openxiot/xiot-core-spec-ts';
+import {DeviceDefinition} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzSpinComponent} from 'ng-zorro-antd/spin';
 import {AccountService} from '../../../../../../../service/account.service';
 import {MainI18nService} from '../../../../../../../service/i18n.service';
 import {MainService} from '../../../../../../../service/main.service';
@@ -16,7 +15,7 @@ import {DevicesOption} from './DevicesOption';
 @Component({
   selector: 'device-selector',
   templateUrl: './device.selector.component.html',
-  styleUrls: ['./device.selector.component.less'],
+  styleUrl: './device.selector.component.less',
   imports: [
     FormsModule,
     NzInputModule,
@@ -24,7 +23,6 @@ import {DevicesOption} from './DevicesOption';
     NzColDirective,
     NzCardModule,
     NzIconModule,
-    NzSpinComponent,
   ],
   providers: [],
   standalone: true

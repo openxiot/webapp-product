@@ -9,14 +9,14 @@ import {
 } from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {ValueItem} from './ValueItem';
-import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {Subject, takeUntil} from 'rxjs';
 import {NzListModule} from 'ng-zorro-antd/list';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
@@ -25,12 +25,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'device-instance-service-property-list',
   templateUrl: './device.instance.service.property.list.component.html',
-  styleUrls: ['./device.instance.service.property.list.component.less'],
+  styleUrl: './device.instance.service.property.list.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     NzListModule,
@@ -40,7 +40,6 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzSpaceModule,
     NzTagModule,
     NzInputNumberComponent,
-    NzInputNumberGroupComponent,
     NzRowDirective,
     NzColDirective,
     TranslatePipe,

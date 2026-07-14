@@ -28,7 +28,7 @@ import {Location} from '@angular/common';
   selector: 'spec-device-create',
   standalone: true,
   templateUrl: './spec.device.create.component.html',
-  styleUrls: ['./spec.device.create.component.less'],
+  styleUrl: './spec.device.create.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

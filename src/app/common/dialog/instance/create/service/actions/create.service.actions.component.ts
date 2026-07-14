@@ -10,7 +10,7 @@ import {Action} from '@openxiot/xiot-core-spec-ts';
 @Component({
   selector: 'create-service-actions',
   templateUrl: './create.service.actions.component.html',
-  styleUrls: ['./create.service.actions.component.less'],
+  styleUrl: './create.service.actions.component.less',
   standalone: true,
   imports: [
     FormsModule,

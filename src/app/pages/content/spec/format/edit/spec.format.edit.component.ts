@@ -32,7 +32,7 @@ import {Location} from '@angular/common';
   selector: 'spec-format-edit',
   standalone: true,
   templateUrl: './spec.format.edit.component.html',
-  styleUrls: ['./spec.format.edit.component.less'],
+  styleUrl: './spec.format.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

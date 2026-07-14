@@ -16,7 +16,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'create-firmware',
-  styleUrls: ['./create.firmware.component.less'],
+  styleUrl: './create.firmware.component.less',
   templateUrl: './create.firmware.component.html',
   standalone: true,
   imports: [

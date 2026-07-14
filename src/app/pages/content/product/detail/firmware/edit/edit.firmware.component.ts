@@ -18,7 +18,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'edit-firmware',
-  styleUrls: ['./edit.firmware.component.less'],
+  styleUrl: './edit.firmware.component.less',
   templateUrl: './edit.firmware.component.html',
   standalone: true,
   imports: [

@@ -24,7 +24,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-panel-list',
   standalone: true,
   templateUrl: './product.panel.list.component.html',
-  styleUrls: ['./product.panel.list.component.less'],
+  styleUrl: './product.panel.list.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,

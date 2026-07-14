@@ -12,7 +12,7 @@ import {AccountService} from '../../../../../service/account.service';
   selector: 'template-list',
   standalone: true,
   templateUrl: './template.list.component.html',
-  styleUrls: ['./template.list.component.less'],
+  styleUrl: './template.list.component.less',
   imports: [
     NzTableModule,
     RouterLink,

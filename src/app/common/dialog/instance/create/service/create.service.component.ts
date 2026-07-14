@@ -46,7 +46,7 @@ import {DescriptionComponent} from '../../../../form/item/common/description/des
 
 @Component({
   selector: 'create-service',
-  styleUrls: ['./create.service.component.less'],
+  styleUrl: './create.service.component.less',
   templateUrl: './create.service.component.html',
   standalone: true,
   imports: [

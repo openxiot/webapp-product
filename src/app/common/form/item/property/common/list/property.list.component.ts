@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
@@ -41,12 +41,12 @@ export type PropertyItemFormGroup = FormGroup<{
 @Component({
   selector: 'property-list',
   templateUrl: './property.list.component.html',
-  styleUrls: ['./property.list.component.less'],
+  styleUrl: './property.list.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     NzListModule,

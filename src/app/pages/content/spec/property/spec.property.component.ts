@@ -30,7 +30,7 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
   selector: 'spec-property',
   standalone: true,
   templateUrl: './spec.property.component.html',
-  styleUrls: ['./spec.property.component.less'],
+  styleUrl: './spec.property.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

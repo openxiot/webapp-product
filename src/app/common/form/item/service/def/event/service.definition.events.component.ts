@@ -15,7 +15,7 @@ import {MainI18nService} from '../../../../../../service/i18n.service';
 @Component({
   selector: 'service-definition-events',
   templateUrl: './service.definition.events.component.html',
-  styleUrls: ['./service.definition.events.component.less'],
+  styleUrl: './service.definition.events.component.less',
   standalone: true,
   imports: [
     NzButtonModule,

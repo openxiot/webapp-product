@@ -9,7 +9,7 @@ import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 @Component({
   selector: 'spec-addable',
   templateUrl: './spec.addable.component.html',
-  styleUrls: ['./spec.addable.component.less'],
+  styleUrl: './spec.addable.component.less',
   standalone: true,
   imports: [
     NzSwitchModule,

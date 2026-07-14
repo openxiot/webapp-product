@@ -14,7 +14,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'select-argument',
-  styleUrls: ['./select.argument.component.less'],
+  styleUrl: './select.argument.component.less',
   templateUrl: './select.argument.component.html',
   standalone: true,
   imports: [

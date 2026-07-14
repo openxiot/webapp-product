@@ -16,7 +16,7 @@ import {NamespaceOption} from './NamespaceOption';
 @Component({
   selector: 'namespace-selector',
   templateUrl: './namespace.selector.component.html',
-  styleUrls: ['./namespace.selector.component.less'],
+  styleUrl: './namespace.selector.component.less',
   imports: [
     FormsModule,
     NzInputModule,

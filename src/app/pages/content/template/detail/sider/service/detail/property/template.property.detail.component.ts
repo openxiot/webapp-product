@@ -65,7 +65,7 @@ import {
 @Component({
   selector: 'template-property-detail',
   templateUrl: './template.property.detail.component.html',
-  styleUrls: ['./template.property.detail.component.less'],
+  styleUrl: './template.property.detail.component.less',
   standalone: true,
   imports: [
     FormsModule,

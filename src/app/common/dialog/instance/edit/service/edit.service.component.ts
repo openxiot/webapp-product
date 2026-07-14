@@ -17,7 +17,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'edit-service',
   templateUrl: './edit.service.component.html',
-  styleUrls: ['./edit.service.component.less'],
+  styleUrl: './edit.service.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,

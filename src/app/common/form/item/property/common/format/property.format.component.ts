@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormBuilder, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {FormatDefinition} from '@openxiot/xiot-core-spec-ts';
@@ -13,12 +13,12 @@ import {MainI18nService} from '../../../../../../service/i18n.service';
 @Component({
   selector: 'property-format',
   templateUrl: './property.format.component.html',
-  styleUrls: ['./property.format.component.less'],
+  styleUrl: './property.format.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     FormsModule,

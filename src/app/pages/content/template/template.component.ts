@@ -28,7 +28,7 @@ import {NamespaceOption} from '../../../common/dialog/namespace/NamespaceOption'
   selector: 'main-template',
   standalone: true,
   templateUrl: './template.component.html',
-  styleUrls: ['./template.component.less'],
+  styleUrl: './template.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

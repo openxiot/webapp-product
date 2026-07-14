@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
@@ -11,12 +11,12 @@ import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 @Component({
   selector: 'device-instance-id',
   templateUrl: './device.instance.id.component.html',
-  styleUrls: ['./device.instance.id.component.less'],
+  styleUrl: './device.instance.id.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     FormsModule,

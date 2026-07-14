@@ -17,7 +17,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'main-account',
   standalone: true,
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.less'],
+  styleUrl: './account.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

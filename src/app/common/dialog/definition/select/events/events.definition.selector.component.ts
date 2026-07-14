@@ -19,7 +19,7 @@ import {EventsOption} from './EventsOption';
 
 @Component({
   selector: 'events-definition-selector',
-  styleUrls: ['./events.definition.selector.component.less'],
+  styleUrl: './events.definition.selector.component.less',
   templateUrl: './events.definition.selector.component.html',
   standalone: true,
   imports: [

@@ -2,7 +2,7 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {Access} from "@openxiot/xiot-core-spec-ts";
@@ -13,12 +13,12 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'property-access',
   templateUrl: './property.access.component.html',
-  styleUrls: ['./property.access.component.less'],
+  styleUrl: './property.access.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     FormsModule,

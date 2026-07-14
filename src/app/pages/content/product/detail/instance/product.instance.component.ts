@@ -43,7 +43,7 @@ import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 @Component({
   selector: 'product-instance',
   templateUrl: './product.instance.component.html',
-  styleUrls: ['./product.instance.component.less'],
+  styleUrl: './product.instance.component.less',
   standalone: true,
   imports: [
     FormsModule,

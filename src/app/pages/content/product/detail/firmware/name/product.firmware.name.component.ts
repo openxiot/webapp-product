@@ -5,7 +5,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   selector: 'product-firmware-name',
   standalone: true,
   templateUrl: './product.firmware.name.component.html',
-  styleUrls: ['./product.firmware.name.component.less'],
+  styleUrl: './product.firmware.name.component.less',
   imports: [
   ],
   providers: [

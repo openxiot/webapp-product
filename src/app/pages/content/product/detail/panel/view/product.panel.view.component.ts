@@ -20,7 +20,7 @@ import {ControlPageComponent} from '../../../../../../components/control-page/co
   selector: 'product-panel-view',
   standalone: true,
   templateUrl: './product.panel.view.component.html',
-  styleUrls: ['./product.panel.view.component.less'],
+  styleUrl: './product.panel.view.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,

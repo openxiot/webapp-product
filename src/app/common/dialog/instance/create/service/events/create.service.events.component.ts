@@ -10,7 +10,7 @@ import {Event} from '@openxiot/xiot-core-spec-ts';
 @Component({
   selector: 'create-service-events',
   templateUrl: './create.service.events.component.html',
-  styleUrls: ['./create.service.events.component.less'],
+  styleUrl: './create.service.events.component.less',
   standalone: true,
   imports: [
     FormsModule,

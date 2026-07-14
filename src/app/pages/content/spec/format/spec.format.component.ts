@@ -24,7 +24,7 @@ import {FormatsOption} from '../../../../common/dialog/definition/select/formats
   selector: 'spec-format',
   standalone: true,
   templateUrl: './spec.format.component.html',
-  styleUrls: ['./spec.format.component.less'],
+  styleUrl: './spec.format.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

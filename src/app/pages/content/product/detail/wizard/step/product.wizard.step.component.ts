@@ -22,7 +22,7 @@ import {AccountService} from '../../../../../../service/account.service';
   selector: 'product-wizard-step',
   standalone: true,
   templateUrl: './product.wizard.step.component.html',
-  styleUrls: ['./product.wizard.step.component.less'],
+  styleUrl: './product.wizard.step.component.less',
   imports: [
     FormsModule,
     NzPageHeaderModule,

@@ -36,7 +36,7 @@ import {DescriptionComponent} from '../../../../form/item/common/description/des
 
 @Component({
   selector: 'create-action',
-  styleUrls: ['./create.action.component.less'],
+  styleUrl: './create.action.component.less',
   templateUrl: './create.action.component.html',
   standalone: true,
   imports: [

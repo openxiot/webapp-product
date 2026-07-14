@@ -8,7 +8,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-firmware-type',
   standalone: true,
   templateUrl: './product.firmware.type.component.html',
-  styleUrls: ['./product.firmware.type.component.less'],
+  styleUrl: './product.firmware.type.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,

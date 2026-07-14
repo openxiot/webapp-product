@@ -2,25 +2,25 @@ import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
-import {NzToolTipModule} from 'ng-zorro-antd/tooltip';
+import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
 import {LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {RangeValue} from './RangeValue';
-import {NzInputNumberComponent, NzInputNumberGroupComponent} from 'ng-zorro-antd/input-number';
+import {NzInputNumberComponent} from 'ng-zorro-antd/input-number';
 import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'device-instance-service-property-range',
   templateUrl: './device.instance.service.property.range.component.html',
-  styleUrls: ['./device.instance.service.property.range.component.less'],
+  styleUrl: './device.instance.service.property.range.component.less',
   standalone: true,
   imports: [
     NzButtonModule,
     NzInputModule,
-    NzToolTipModule,
+    NzTooltipModule,
     NzIconModule,
     NzTagModule,
     FormsModule,
@@ -29,7 +29,6 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzSpaceModule,
     NzTagModule,
     NzInputNumberComponent,
-    NzInputNumberGroupComponent,
     TranslatePipe,
   ],
   providers: [

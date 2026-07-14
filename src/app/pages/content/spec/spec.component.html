@@ -3,7 +3,7 @@
 
   @if (account.ns) {
     <nz-page-header-footer>
-      <nz-tabset [(nzSelectedIndex)]="tabIndex" nzSize="small" (nzSelectChange)="onTabChanged()">
+      <nz-tabs [(nzSelectedIndex)]="tabIndex" nzSize="small" (nzSelectChange)="onTabChanged()">
         <nz-tab [nzTitle]="'设备' | translate"></nz-tab>
         <nz-tab [nzTitle]="'服务' | translate"></nz-tab>
         <nz-tab [nzTitle]="'属性' | translate"></nz-tab>
@@ -11,7 +11,7 @@
         <nz-tab [nzTitle]="'事件' | translate"></nz-tab>
         <nz-tab [nzTitle]="'格式' | translate"></nz-tab>
         <nz-tab [nzTitle]="'单位' | translate"></nz-tab>
-      </nz-tabset>
+      </nz-tabs>
     </nz-page-header-footer>
   }
 </nz-page-header>

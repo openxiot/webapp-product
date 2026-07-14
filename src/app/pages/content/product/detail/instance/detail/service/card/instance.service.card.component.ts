@@ -20,7 +20,7 @@ import {EventOption} from '../../../../../../../../common/dialog/instance/create
 @Component({
   selector: 'instance-service-card',
   templateUrl: './instance.service.card.component.html',
-  styleUrls: ['./instance.service.card.component.less'],
+  styleUrl: './instance.service.card.component.less',
   standalone: true,
   imports: [
     NzTagComponent,

@@ -30,7 +30,7 @@ import {SpecRequiredComponent} from '../../../../../../../../common/form/item/co
 @Component({
   selector: 'template-service-detail',
   templateUrl: './template.service.detail.component.html',
-  styleUrls: ['./template.service.detail.component.less'],
+  styleUrl: './template.service.detail.component.less',
   standalone: true,
   imports: [
     FormsModule,

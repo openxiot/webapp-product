@@ -49,7 +49,7 @@ import {Location} from '@angular/common';
   selector: 'spec-property-edit',
   standalone: true,
   templateUrl: './spec.property.edit.component.html',
-  styleUrls: ['./spec.property.edit.component.less'],
+  styleUrl: './spec.property.edit.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

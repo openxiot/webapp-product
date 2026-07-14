@@ -5,7 +5,7 @@ import {JsonPipe} from "@angular/common";
 @Component({
   selector: 'product-instance-view-json',
   templateUrl: './product.instance.view.json.component.html',
-  styleUrls: ['./product.instance.view.json.component.less'],
+  styleUrl: './product.instance.view.json.component.less',
   imports: [
     JsonPipe,
   ],

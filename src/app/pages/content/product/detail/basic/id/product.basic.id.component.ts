@@ -5,7 +5,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   selector: 'product-basic-id',
   standalone: true,
   templateUrl: './product.basic.id.component.html',
-  styleUrls: ['./product.basic.id.component.less'],
+  styleUrl: './product.basic.id.component.less',
   imports: [
   ],
   providers: [

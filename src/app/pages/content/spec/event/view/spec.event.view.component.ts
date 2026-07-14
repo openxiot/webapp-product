@@ -31,7 +31,7 @@ import {Location} from '@angular/common';
   selector: 'spec-event-view',
   standalone: true,
   templateUrl: './spec.event.view.component.html',
-  styleUrls: ['./spec.event.view.component.less'],
+  styleUrl: './spec.event.view.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

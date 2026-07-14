@@ -15,7 +15,7 @@ import {AccountService} from '../../../../../service/account.service';
   selector: 'product-icon',
   standalone: true,
   templateUrl: './product.icon.component.html',
-  styleUrls: ['./product.icon.component.less'],
+  styleUrl: './product.icon.component.less',
   imports: [
     FormsModule,
     NzIconModule,

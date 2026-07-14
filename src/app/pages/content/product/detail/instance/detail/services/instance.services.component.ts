@@ -16,7 +16,7 @@ import {ServiceOption} from '../../../../../../../common/dialog/instance/create/
 @Component({
   selector: 'instance-services',
   templateUrl: './instance.services.component.html',
-  styleUrls: ['./instance.services.component.less'],
+  styleUrl: './instance.services.component.less',
   standalone: true,
   imports: [
     NzTagComponent,

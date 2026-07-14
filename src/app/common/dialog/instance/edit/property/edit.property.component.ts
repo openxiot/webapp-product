@@ -24,7 +24,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'edit-property',
   templateUrl: './edit.property.component.html',
-  styleUrls: ['./edit.property.component.less'],
+  styleUrl: './edit.property.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,

@@ -13,7 +13,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'product-alias',
   standalone: true,
   templateUrl: './product.alias.component.html',
-  styleUrls: ['./product.alias.component.less'],
+  styleUrl: './product.alias.component.less',
   imports: [
     FormsModule,
     NzInputDirective,

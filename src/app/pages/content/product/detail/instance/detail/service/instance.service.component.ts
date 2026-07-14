@@ -18,7 +18,7 @@ import {NzSelectModule} from 'ng-zorro-antd/select';
 @Component({
   selector: 'instance-service',
   templateUrl: './instance.service.component.html',
-  styleUrls: ['./instance.service.component.less'],
+  styleUrl: './instance.service.component.less',
   standalone: true,
   imports: [
     NzTabsModule,

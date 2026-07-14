@@ -13,7 +13,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'select-member',
-  styleUrls: ['./select.member.component.less'],
+  styleUrl: './select.member.component.less',
   templateUrl: './select.member.component.html',
   standalone: true,
   imports: [

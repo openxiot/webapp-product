@@ -42,7 +42,7 @@ import {Location} from '@angular/common';
   selector: 'spec-service-view',
   standalone: true,
   templateUrl: './spec.service.view.component.html',
-  styleUrls: ['./spec.service.view.component.less'],
+  styleUrl: './spec.service.view.component.less',
   imports: [
     NzPageHeaderModule,
     NzBreadCrumbModule,

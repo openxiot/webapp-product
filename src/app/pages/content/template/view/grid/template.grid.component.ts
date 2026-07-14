@@ -11,7 +11,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   selector: 'template-grid',
   standalone: true,
   templateUrl: './template.grid.component.html',
-  styleUrls: ['./template.grid.component.less'],
+  styleUrl: './template.grid.component.less',
   imports: [
     NzRowDirective,
     NzColDirective,

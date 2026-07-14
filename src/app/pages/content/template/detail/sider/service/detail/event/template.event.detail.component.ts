@@ -51,7 +51,7 @@ import {
 @Component({
   selector: 'template-event-detail',
   templateUrl: './template.event.detail.component.html',
-  styleUrls: ['./template.event.detail.component.less'],
+  styleUrl: './template.event.detail.component.less',
   standalone: true,
   imports: [
     FormsModule,

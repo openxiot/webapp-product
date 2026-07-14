@@ -23,7 +23,7 @@ import {AccountService} from '../../../../../../../service/account.service';
   selector: 'product-firmware-url',
   standalone: true,
   templateUrl: './product.firmware.url.component.html',
-  styleUrls: ['./product.firmware.url.component.less'],
+  styleUrl: './product.firmware.url.component.less',
   imports: [
     FormsModule,
     NzIconModule,
