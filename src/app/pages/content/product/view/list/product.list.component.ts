@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {NzTableFilterFn, NzTableModule, NzTableQueryParams, NzTableSortFn} from 'ng-zorro-antd/table';
 import {RouterLink} from '@angular/router';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
@@ -17,6 +17,7 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {MainService} from '../../../../../service/main.service';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
+import {Organization} from '../../../../../typedef/define/developer/Organization';
 
 @Component({
   selector: 'product-list',
@@ -41,7 +42,10 @@ import {TranslatePipe} from '@ngx-translate/core';
     TranslatePipe
   ],
 })
-export class ProductListComponent implements OnInit, OnDestroy {
+export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
+
+  @Input()
+  organization: Organization = new Organization();
 
   // private subscription: any;
 
@@ -142,12 +146,18 @@ export class ProductListComponent implements OnInit, OnDestroy {
     // this.subscription.unsubscribe();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['organization']) {
+      this.loadProductsFromServer(0, 1000);
+    }
+  }
+
   loadProductsFromServer(
     pageIndex: number,
     pageSize: number,
   ) {
     this.loading = true;
-    this.service.getAllProducts(this.account.organization).subscribe({
+    this.service.getAllProducts(this.organization).subscribe({
       next: data => {
         console.log('products: ', data.length);
         this.products = data;

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {NzColDirective, NzRowDirective} from 'ng-zorro-antd/grid';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {RouterLink} from '@angular/router';
@@ -12,6 +12,7 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../service/i18n.service';
+import {Organization} from '../../../../../typedef/define/developer/Organization';
 
 @Component({
   selector: 'product-grid',
@@ -30,12 +31,16 @@ import {MainI18nService} from '../../../../../service/i18n.service';
     TranslatePipe,
   ],
 })
-export class ProductGridComponent implements OnInit, OnDestroy {
+export class ProductGridComponent implements OnInit, OnDestroy, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  organization: Organization = new Organization();
+
   loading: boolean = true;
   products: ProductBasic[] = [];
+
 
   constructor(
     private account: AccountService,
@@ -52,9 +57,15 @@ export class ProductGridComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['organization']) {
+      this.loadProductsFromServer();
+    }
+  }
+
   loadProductsFromServer() {
     this.loading = true;
-    this.service.getAllProducts(this.account.organization).subscribe({
+    this.service.getAllProducts(this.organization).subscribe({
       next: data => {
         console.log('products: ', data.length);
         this.products = data;

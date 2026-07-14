@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -15,6 +15,11 @@ import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 import {RouterLink} from '@angular/router';
 import {TranslatePipe} from '@ngx-translate/core';
 import {AccountService} from '../../../service/account.service';
+import {NzIconDirective} from 'ng-zorro-antd/icon';
+import {NzModalService} from 'ng-zorro-antd/modal';
+import {OrganizationOption} from '../../../common/dialog/organization/OrganizationOption';
+import {OrganizationSelectorComponent} from '../../../common/dialog/organization/organization.selector.component';
+import {Organization} from '../../../typedef/define/developer/Organization';
 
 @Component({
   selector: 'main-product',
@@ -36,9 +41,13 @@ import {AccountService} from '../../../service/account.service';
     NzWaveDirective,
     RouterLink,
     TranslatePipe,
+    NzIconDirective,
   ],
+  providers: [
+    NzModalService
+  ]
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
 
   viewOptions: NzSegmentedOptions = [
     {value: 'Card', icon: 'appstore'},
@@ -46,12 +55,22 @@ export class ProductComponent {
   ];
   viewMode: number = 0;
 
+  current: Organization = new Organization();
+
   constructor(
+    private modal: NzModalService,
+    private viewContainerRef: ViewContainerRef,
     protected account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
   ) {
     this.loadProductViewMode();
+  }
+
+  ngOnInit() {
+    if (this.account.organization) {
+      this.current = this.account.organization;
+    }
   }
 
   protected onViewModeChanged($event: any) {
@@ -67,5 +86,25 @@ export class ProductComponent {
 
   private saveProductViewMode() {
     localStorage.setItem('productViewMode', this.viewMode.toString());
+  }
+
+  protected changeOrganization() {
+    const modal = this.modal.create<OrganizationSelectorComponent, OrganizationOption, Organization>({
+      nzTitle: '',
+      nzWidth: 800,
+      nzContent: OrganizationSelectorComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: new OrganizationOption(this.current),
+      nzFooter: null,
+      nzClosable: false,
+      nzMaskClosable: true,
+      nzKeyboard: true
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        this.current = result;
+      }
+    });
   }
 }

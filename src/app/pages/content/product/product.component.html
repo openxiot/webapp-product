@@ -15,7 +15,16 @@
 </nz-page-header>
 
 <ng-template #pageTitle>
-  {{ '所有产品' | translate }}
+<!--  {{ '所有产品' | translate }}-->
+
+  <div class="selector" (click)="changeOrganization()">
+    @if (current.id.length > 0) {
+      {{ current.name }}
+    } @else {
+      {{ '请选择一个组织' | translate }}
+    }
+    <span nz-icon nzType="caret-down" nzTheme="outline"></span>
+  </div>
 </ng-template>
 
 <div style="padding: 20px 20px">
@@ -31,10 +40,10 @@
     <div nz-col [nzSpan]="24">
       @switch (viewMode) {
         @case (0) {
-          <product-grid></product-grid>
+          <product-grid [organization]="current"></product-grid>
         }
         @case (1) {
-          <product-list></product-list>
+          <product-list [organization]="current"></product-list>
         }
       }
     </div>

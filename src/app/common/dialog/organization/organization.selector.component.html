@@ -1,0 +1,28 @@
+<nz-spin [nzSpinning]="loading">
+
+  <nz-row [nzGutter]="[8, 8]">
+    @for (org of organizations; track org.id) {
+      <nz-col [nzSpan]="6" (click)="onSelected(org)">
+        <nz-card nzHoverable>
+          <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>
+        </nz-card>
+      </nz-col>
+
+      <ng-template #title>
+        <span>
+          <span>{{ org.id }}</span>
+
+          @if (org.id === option.current.id) {
+            <span style="float: right">
+              <span nz-icon nzType="check" nzTheme="outline"></span>
+            </span>
+          }
+        </span>
+      </ng-template>
+
+      <ng-template #desc>
+        {{ org.name }}
+      </ng-template>
+    }
+  </nz-row>
+</nz-spin>

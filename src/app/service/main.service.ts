@@ -128,6 +128,12 @@ export class MainService {
       .pipe(map(response => OrganizationCodec.decodeArray(response.data)));
   }
 
+  getAllOrganizations(): Observable<Organization[]> {
+    return this.http
+      .get<OxResponse>(`${this.account}/organization/all`)
+      .pipe(map(response => OrganizationCodec.decodeArray(response.data)));
+  }
+
   /**------------------------------------------------------------------------------------------------
    * 产品规范
    *------------------------------------------------------------------------------------------------*/
