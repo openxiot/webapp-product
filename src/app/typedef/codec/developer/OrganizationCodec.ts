@@ -1,4 +1,4 @@
-import {Organization, OrganizationMember} from '../../define/developer/Organization';
+import {Organization, OrganizationMember, Person} from '../../define/developer/Organization';
 
 export class OrganizationMemberCodec {
 
@@ -48,9 +48,11 @@ export class OrganizationCodec {
     let o: any = {
       code: organization.id,
       name: organization.name,
-      creator: organization.creator,
-      createAt: organization.createAt,
-      creatorName: organization.creatorName,
+      creator: {
+        id: organization.creator.id,
+        name: organization.creator.name,
+        timestamp: organization.creator.timestamp
+      },
       members: OrganizationMemberCodec.encodeArray(organization.members),
       personal: organization.personal
     };
@@ -66,9 +68,11 @@ export class OrganizationCodec {
     let organization = new Organization();
     organization.id = o.code;
     organization.name = o.name;
-    organization.creator = o.creator;
-    organization.creatorName = o.creatorName;
-    organization.createAt = new Date(o.createAt?.replace(/\[UTC]$/, ""));
+    if (o.creator) {
+      organization.creator.id = o.creator.id;
+      organization.creator.name = o.creator.name;
+      organization.creator.timestamp = new Date(o.creator.timestamp?.replace(/\[UTC]$/, ""));
+    }
     organization.members = OrganizationMemberCodec.decodeArray(o.members);
     organization.personal = o.personal;
     return organization;

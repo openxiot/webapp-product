@@ -5,12 +5,16 @@ export class OrganizationMember {
   update: Date = new Date();
 }
 
+export class Person {
+  id: string = '';
+  name: string = '';
+  timestamp: Date = new Date();
+}
+
 export class Organization {
   id: string = '';
   name: string = '';
-  creator: string = '';
-  creatorName: string = '';
-  createAt: Date = new Date();
+  creator: Person = new Person();
   members: OrganizationMember[] = [];
   personal: boolean = false;
   _role: string = 'member';
