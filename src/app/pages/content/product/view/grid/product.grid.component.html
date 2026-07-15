@@ -1,79 +1,77 @@
-<nz-spin [nzSpinning]="loading">
-  <div nz-row [nzGutter]="[8, 8]">
-    @for (p of products; track p.id) {
+<div nz-row [nzGutter]="[8, 8]">
+  @for (p of products; track p.id) {
 
-      <!-- [nzXs]="24" // 超小屏幕：每行1个 -->
-        <!-- [nzSm]="12" // 小屏幕：每行2个 -->
-        <!-- [nzMd]="8"  // 中屏幕：每行3个 -->
-        <!-- [nzLg]="6"  // 大屏幕：每行4个 -->
-        <!-- [nzXl]="4"  // 超大屏幕：每行6个 -->
-        <!-- [nzXXl]="3" // 超大大屏幕：每行8个 -->
+    <!-- [nzXs]="24" // 超小屏幕：每行1个 -->
+      <!-- [nzSm]="12" // 小屏幕：每行2个 -->
+      <!-- [nzMd]="8"  // 中屏幕：每行3个 -->
+      <!-- [nzLg]="6"  // 大屏幕：每行4个 -->
+      <!-- [nzXl]="4"  // 超大屏幕：每行6个 -->
+      <!-- [nzXXl]="3" // 超大大屏幕：每行8个 -->
 
-      <div nz-col
-           [nzXs]="24"
-           [nzSm]="12"
-           [nzMd]="8"
-           [nzLg]="6"
-           [nzXl]="4"
-           [nzXXl]="3"
+    <div nz-col
+         [nzXs]="24"
+         [nzSm]="12"
+         [nzMd]="8"
+         [nzLg]="6"
+         [nzXl]="4"
+         [nzXXl]="3"
+    >
+      <nz-card
+        nzSize="small"
+        nzBorderless
+        nzHoverable
+        [nzCover]="coverTemplate"
+        routerLink="/main/product/detail/{{p.id}}"
       >
-        <nz-card
-          nzSize="small"
-          nzBorderless
-          nzHoverable
-          [nzCover]="coverTemplate"
-          routerLink="/main/product/detail/{{p.id}}"
-        >
-          <nz-card-meta nzTitle="{{ p.name.value.get(i18n.getCurrentLang()) }}"></nz-card-meta>
-          <nz-divider></nz-divider>
-          <nz-descriptions nzSize="small">
-            <nz-descriptions-item nzTitle="{{'产品ID' | translate }}" nzSpan="3">
-              {{ p.id }}
-            </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="{{'型号' | translate }}" nzSpan="3">
-              {{ p.model }}
-            </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="{{'设备类型' | translate }}" nzSpan="3">
-              {{ p.template.name }}
-            </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="{{'连接方式' | translate}}" nzSpan="3">
-              {{ p.protocol }}
-            </nz-descriptions-item>
-            <nz-descriptions-item nzTitle="{{'固件升级' | translate}}" nzSpan="3">
-              @for (item of p.upgrade; track item) {
-                @switch (item) {
-                  @case ('Direct') {
-                    {{ '直接升级' | translate }}
-                  }
-                  @case ('Gateway') {
-                    {{ '网关协助' | translate }}
-                  }
-                  @case ('Ble') {
-                    {{ '蓝牙协助' | translate }}
-                  }
+        <nz-card-meta nzTitle="{{ p.name.value.get(i18n.getCurrentLang()) }}"></nz-card-meta>
+        <nz-divider></nz-divider>
+        <nz-descriptions nzSize="small">
+          <nz-descriptions-item nzTitle="{{'产品ID' | translate }}" nzSpan="3">
+            {{ p.id }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="{{'型号' | translate }}" nzSpan="3">
+            {{ p.model }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="{{'设备类型' | translate }}" nzSpan="3">
+            {{ p.template.name }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="{{'连接方式' | translate}}" nzSpan="3">
+            {{ p.protocol }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="{{'固件升级' | translate}}" nzSpan="3">
+            @for (item of p.upgrade; track item) {
+              @switch (item) {
+                @case ('Direct') {
+                  {{ '直接升级' | translate }}
+                }
+                @case ('Gateway') {
+                  {{ '网关协助' | translate }}
+                }
+                @case ('Ble') {
+                  {{ '蓝牙协助' | translate }}
                 }
               }
-            </nz-descriptions-item>
-            <nz-descriptions-item [nzTitle]="'状态' | translate" nzSpan="3">
-              @switch (p.lifecycle) {
-                @case (LifeCycle.DEVELOPMENT) {
-                  <span style="color: red">{{ '开发中' | translate }}</span>
-                }
-                @case (LifeCycle.PREVIEW) {
-                  <span style="color: blue">{{ '上线中' | translate }}</span>
-                }
-                @case (LifeCycle.RELEASED) {
-                  <span style="color: green">{{ '已上线' | translate }}</span>
-                }
+            }
+          </nz-descriptions-item>
+          <nz-descriptions-item [nzTitle]="'状态' | translate" nzSpan="3">
+            @switch (p.lifecycle) {
+              @case (LifeCycle.DEVELOPMENT) {
+                <span style="color: red">{{ '开发中' | translate }}</span>
               }
-            </nz-descriptions-item>
-          </nz-descriptions>
-        </nz-card>
+              @case (LifeCycle.PREVIEW) {
+                <span style="color: blue">{{ '上线中' | translate }}</span>
+              }
+              @case (LifeCycle.RELEASED) {
+                <span style="color: green">{{ '已上线' | translate }}</span>
+              }
+            }
+          </nz-descriptions-item>
+        </nz-descriptions>
+      </nz-card>
 
-        <ng-template #coverTemplate>
-          <img [src]="p.icon" alt="{{ p.name.value.get(i18n.getCurrentLang()) }}" class="cover-image">
-        </ng-template>
-      </div>
-    }
-  </div>
-</nz-spin>
+      <ng-template #coverTemplate>
+        <img [src]="p.icon" alt="{{ p.name.value.get(i18n.getCurrentLang()) }}" class="cover-image">
+      </ng-template>
+    </div>
+  }
+</div>

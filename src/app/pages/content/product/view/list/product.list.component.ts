@@ -6,7 +6,7 @@ import {LifeCycle, ProductBasic} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzImageModule} from 'ng-zorro-antd/image';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {NzDropdownMenuComponent, NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzButtonModule} from 'ng-zorro-antd/button';
@@ -39,13 +39,17 @@ import {Organization} from '../../../../../typedef/define/developer/Organization
     NzRowDirective,
     NzCardModule,
     NzCheckboxModule,
-    TranslatePipe
+    TranslatePipe,
+    NzDropdownMenuComponent
   ],
 })
 export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
 
+  // @Input()
+  // organization: Organization = new Organization();
+
   @Input()
-  organization: Organization = new Organization();
+  products: ProductBasic[] = [];
 
   // private subscription: any;
 
@@ -59,7 +63,7 @@ export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
 
   loading: boolean = false;
   total: number = 0;
-  products: ProductBasic[] = [];
+  // products: ProductBasic[] = [];
   pageSize = 100;
   pageIndex = 1;
   pageSizeOptions = [10, 50, 100, 200, 500];
@@ -131,7 +135,7 @@ export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    this.loadProductsFromServer(0, 1000);
+    // this.loadProductsFromServer(0, 1000);
     // this.loadProductsFromServer(this.pageIndex, this.pageSize);
     // 无需加载，因为onQueryParamsChange会被触发。
 
@@ -148,33 +152,33 @@ export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['organization']) {
-      this.loadProductsFromServer(0, 1000);
+      // this.loadProductsFromServer(0, 1000);
     }
   }
 
-  loadProductsFromServer(
-    pageIndex: number,
-    pageSize: number,
-  ) {
-    if (this.organization.id.length > 0) {
-      this.loading = true;
-      this.service.getAllProducts(this.organization).subscribe({
-        next: data => {
-          console.log('products: ', data.length);
-          this.products = data;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-        }
-      })
-    }
-  }
+  // loadProductsFromServer(
+  //   pageIndex: number,
+  //   pageSize: number,
+  // ) {
+  //   if (this.organization.id.length > 0) {
+  //     this.loading = true;
+  //     this.service.getAllProducts(this.organization).subscribe({
+  //       next: data => {
+  //         console.log('products: ', data.length);
+  //         this.products = data;
+  //         this.loading = false;
+  //       },
+  //       error: error => {
+  //         this.msg.warning(error);
+  //       }
+  //     })
+  //   }
+  // }
 
   onQueryParamsChange(params: NzTableQueryParams): void {
     console.log(params);
     const { pageSize, pageIndex } = params;
-    this.loadProductsFromServer(pageIndex, pageSize);
+    // this.loadProductsFromServer(pageIndex, pageSize);
   }
 
   resetName(): void {

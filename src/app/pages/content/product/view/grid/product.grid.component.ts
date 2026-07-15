@@ -12,7 +12,6 @@ import {NzDividerModule} from 'ng-zorro-antd/divider';
 import {AccountService} from '../../../../../service/account.service';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../service/i18n.service';
-import {Organization} from '../../../../../typedef/define/developer/Organization';
 
 @Component({
   selector: 'product-grid',
@@ -36,11 +35,7 @@ export class ProductGridComponent implements OnInit, OnDestroy, OnChanges {
   protected readonly LifeCycle = LifeCycle;
 
   @Input()
-  organization: Organization = new Organization();
-
-  loading: boolean = false;
   products: ProductBasic[] = [];
-
 
   constructor(
     private account: AccountService,
@@ -51,31 +46,35 @@ export class ProductGridComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    this.loadProductsFromServer();
+    // this.loadProductsFromServer();
   }
 
   ngOnDestroy() {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['organization']) {
-      this.loadProductsFromServer();
+    console.log('ngOnChanges');
+
+    if (changes['products']) {
+      console.log('products: ', this.products.length);
+      // console.log('ngOnChanges: ', changes['organization']);
+      // this.loadProductsFromServer();
     }
   }
 
-  loadProductsFromServer() {
-    if (this.organization.id.length > 0) {
-      this.loading = true;
-      this.service.getAllProducts(this.organization).subscribe({
-        next: data => {
-          console.log('products: ', data.length);
-          this.products = data;
-          this.loading = false;
-        },
-        error: error => {
-          this.msg.warning(error);
-        }
-      })
-    }
-  }
+  // loadProductsFromServer() {
+  //   if (this.organization.id.length > 0) {
+  //     this.loading = true;
+  //     this.service.getAllProducts(this.organization).subscribe({
+  //       next: data => {
+  //         console.log('products: ', data.length);
+  //         this.products = data;
+  //         this.loading = false;
+  //       },
+  //       error: error => {
+  //         this.msg.warning(error);
+  //       }
+  //     })
+  //   }
+  // }
 }

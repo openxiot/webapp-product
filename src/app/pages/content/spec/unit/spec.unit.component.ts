@@ -51,6 +51,9 @@ export class SpecUnitComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  namespace: string = '';
+
   loading: boolean = true;
   units: UnitDefinition[] = [];
 

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -49,9 +49,12 @@ import {NzButtonModule} from 'ng-zorro-antd/button';
     NzModalService
   ],
 })
-export class SpecActionComponent implements OnInit {
+export class SpecActionComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
+
+  @Input()
+  namespace: string = '';
 
   loading: boolean = true;
   actions: ActionDefinition[] = [];
@@ -77,6 +80,8 @@ export class SpecActionComponent implements OnInit {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('ngOnChanges');
+
     if (changes['namespace']) {
       this.loadDataFromServer();
     }

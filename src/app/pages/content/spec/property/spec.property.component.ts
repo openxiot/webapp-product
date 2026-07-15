@@ -55,6 +55,9 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  namespace: string = '';
+
   loading: boolean = true;
   properties: PropertyDefinition[] = [];
   propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();

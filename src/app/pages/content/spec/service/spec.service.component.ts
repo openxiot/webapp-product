@@ -60,6 +60,9 @@ export class SpecServiceComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  namespace: string = '';
+
   loading: boolean = true;
   services: ServiceDefinition[] = [];
 

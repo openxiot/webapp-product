@@ -1,51 +1,56 @@
-<nz-page-header [nzTitle]="pageTitle" [nzGhost]="false" class="fixed-header">
-  <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
+<nz-spin [nzSpinning]="loading">
 
-  <nz-page-header-tags>
-    <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode" (ngModelChange)="onViewModeChanged($event)"></nz-segmented>
-  </nz-page-header-tags>
+  <nz-page-header [nzTitle]="pageTitle" [nzGhost]="false" class="fixed-header">
+    <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
-  <nz-page-header-extra>
-    @if (account.login) {
-      <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">{{ '创建' | translate }}</button>
-    } @else {
-      <button nz-button nzType="primary" nzDanger [routerLink]="['/passport']">{{ '创建' | translate }}</button>
-    }
-  </nz-page-header-extra>
-</nz-page-header>
+    <nz-page-header-tags>
+      <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"
+                    (ngModelChange)="onViewModeChanged($event)"></nz-segmented>
+    </nz-page-header-tags>
 
-<ng-template #pageTitle>
-<!--  {{ '所有产品' | translate }}-->
-
-  <div class="selector" (click)="changeOrganization()">
-    @if (current.id.length > 0) {
-      {{ current.name }}
-    } @else {
-      {{ '请选择一个组织' | translate }}
-    }
-    <span nz-icon nzType="caret-down" nzTheme="outline"></span>
-  </div>
-</ng-template>
-
-<div style="padding: 20px 20px">
-  <div nz-row [nzGutter]="[8, 8]">
-    <!--      <div nz-col [nzSpan]="24">-->
-    <!--        <product-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></product-filter-type>-->
-    <!--      </div>-->
-
-    <!--      <div nz-col [nzSpan]="24">-->
-    <!--        <product-filter-vendor [vendors]="vendors" (vendorSelected)="onVendorsSelected($event)"></product-filter-vendor>-->
-    <!--      </div>-->
-
-    <div nz-col [nzSpan]="24">
-      @switch (viewMode) {
-        @case (0) {
-          <product-grid [organization]="current"></product-grid>
-        }
-        @case (1) {
-          <product-list [organization]="current"></product-list>
-        }
+    <nz-page-header-extra>
+      @if (account.login) {
+        <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">{{ '创建' | translate }}
+        </button>
+      } @else {
+        <button nz-button nzType="primary" nzDanger [routerLink]="['/passport']">{{ '创建' | translate }}</button>
       }
+    </nz-page-header-extra>
+  </nz-page-header>
+
+  <ng-template #pageTitle>
+    <!--  {{ '所有产品' | translate }}-->
+
+    <div class="selector" (click)="changeOrganization()">
+      @if (current.id.length > 0) {
+        {{ current.name }}
+      } @else {
+        {{ '请选择一个组织' | translate }}
+      }
+      <span nz-icon nzType="caret-down" nzTheme="outline"></span>
+    </div>
+  </ng-template>
+
+  <div style="padding: 20px 20px">
+    <div nz-row [nzGutter]="[8, 8]">
+      <!--      <div nz-col [nzSpan]="24">-->
+      <!--        <product-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></product-filter-type>-->
+      <!--      </div>-->
+
+      <!--      <div nz-col [nzSpan]="24">-->
+      <!--        <product-filter-vendor [vendors]="vendors" (vendorSelected)="onVendorsSelected($event)"></product-filter-vendor>-->
+      <!--      </div>-->
+
+      <div nz-col [nzSpan]="24">
+        @switch (viewMode) {
+          @case (0) {
+            <product-grid [products]="products"></product-grid>
+          }
+          @case (1) {
+            <product-list [products]="products"></product-list>
+          }
+        }
+      </div>
     </div>
   </div>
-</div>
+</nz-spin>

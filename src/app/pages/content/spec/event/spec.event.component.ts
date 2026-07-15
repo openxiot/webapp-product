@@ -56,6 +56,9 @@ export class SpecEventComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  namespace: string = '';
+
   loading: boolean = true;
   events: EventDefinition[] = [];
 

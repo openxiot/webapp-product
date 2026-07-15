@@ -51,6 +51,9 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  namespace: string = '';
+
   loading: boolean = true;
   devices: DeviceDefinition[] = [];
 
@@ -72,6 +75,8 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('ngOnChanges');
+
     if (changes['namespace']) {
       this.loadDataFromServer();
     }

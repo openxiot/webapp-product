@@ -20,6 +20,7 @@ import {NzModalService} from 'ng-zorro-antd/modal';
 import {OrganizationOption} from '../../../common/dialog/organization/OrganizationOption';
 import {OrganizationSelectorComponent} from '../../../common/dialog/organization/organization.selector.component';
 import {Organization} from '../../../typedef/define/developer/Organization';
+import {ProductBasic} from '@openxiot/xiot-core-spec-ts';
 
 @Component({
   selector: 'main-product',
@@ -56,6 +57,8 @@ export class ProductComponent implements OnInit {
   viewMode: number = 0;
 
   current: Organization = new Organization();
+  products: ProductBasic[] = [];
+  loading: boolean = false;
 
   constructor(
     private modal: NzModalService,
@@ -104,7 +107,24 @@ export class ProductComponent implements OnInit {
     modal.afterClose.subscribe(result => {
       if (result) {
         this.current = result;
+        this.loadProducts();
       }
     });
+  }
+
+  protected loadProducts() {
+    if (this.current.id.length > 0) {
+      this.loading = true;
+      this.service.getAllProducts(this.current).subscribe({
+        next: data => {
+          console.log('products: ', data.length);
+          this.products = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+    }
   }
 }

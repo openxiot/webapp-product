@@ -47,6 +47,9 @@ export class SpecFormatComponent implements OnInit, OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
+  @Input()
+  namespace: string = '';
+
   loading: boolean = true;
   formats: FormatDefinition[] = [];
 
