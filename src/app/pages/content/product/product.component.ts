@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -66,6 +66,7 @@ export class ProductComponent implements OnInit {
     protected account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
+    private cdr: ChangeDetectorRef,
   ) {
     this.loadProductViewMode();
   }
@@ -73,6 +74,7 @@ export class ProductComponent implements OnInit {
   ngOnInit() {
     if (this.account.organization) {
       this.current = this.account.organization;
+      this.loadProducts();
     }
   }
 
@@ -120,6 +122,7 @@ export class ProductComponent implements OnInit {
           console.log('products: ', data.length);
           this.products = data;
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: error => {
           this.msg.warning(error);
