@@ -57,7 +57,7 @@ export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
   manualChecked: boolean = true;
   visibilityChecked: boolean = false;
 
-  loading: boolean = true;
+  loading: boolean = false;
   total: number = 0;
   products: ProductBasic[] = [];
   pageSize = 100;
@@ -156,17 +156,19 @@ export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
     pageIndex: number,
     pageSize: number,
   ) {
-    this.loading = true;
-    this.service.getAllProducts(this.organization).subscribe({
-      next: data => {
-        console.log('products: ', data.length);
-        this.products = data;
-        this.loading = false;
-      },
-      error: error => {
-        this.msg.warning(error);
-      }
-    })
+    if (this.organization.id.length > 0) {
+      this.loading = true;
+      this.service.getAllProducts(this.organization).subscribe({
+        next: data => {
+          console.log('products: ', data.length);
+          this.products = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+    }
   }
 
   onQueryParamsChange(params: NzTableQueryParams): void {

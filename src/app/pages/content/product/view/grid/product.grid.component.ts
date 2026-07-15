@@ -38,7 +38,7 @@ export class ProductGridComponent implements OnInit, OnDestroy, OnChanges {
   @Input()
   organization: Organization = new Organization();
 
-  loading: boolean = true;
+  loading: boolean = false;
   products: ProductBasic[] = [];
 
 
@@ -64,16 +64,18 @@ export class ProductGridComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   loadProductsFromServer() {
-    this.loading = true;
-    this.service.getAllProducts(this.organization).subscribe({
-      next: data => {
-        console.log('products: ', data.length);
-        this.products = data;
-        this.loading = false;
-      },
-      error: error => {
-        this.msg.warning(error);
-      }
-    })
+    if (this.organization.id.length > 0) {
+      this.loading = true;
+      this.service.getAllProducts(this.organization).subscribe({
+        next: data => {
+          console.log('products: ', data.length);
+          this.products = data;
+          this.loading = false;
+        },
+        error: error => {
+          this.msg.warning(error);
+        }
+      })
+    }
   }
 }
