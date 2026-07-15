@@ -312,7 +312,7 @@ export class ProductInstanceComponent implements OnChanges {
     this.service.getTemplate(type).subscribe({
       next: data => {
         console.log('getTemplate ok');
-        this.instance = ProductInstanceHelper.fromTemplate(this.product.organization, this.product.model, data);
+        this.instance = ProductInstanceHelper.fromTemplate(this.i18n.getCurrentLang(), this.product.organization, this.product.model, data);
         this.isChanged = true;
         this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.instance.type))
         this.firstInstance = true;
@@ -332,7 +332,7 @@ export class ProductInstanceComponent implements OnChanges {
       next: data => {
         console.log('getDeviceDefinition ok');
 
-        this.instance = ProductInstanceHelper.fromDefinition(this.product.organization, this.product.model, data);
+        this.instance = ProductInstanceHelper.fromDefinition(this.i18n.getCurrentLang(), this.product.organization, this.product.model, data);
         this.isChanged = true;
         this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.instance.type))
         this.firstInstance = true;

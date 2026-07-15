@@ -70,8 +70,8 @@
 </nz-spin>
 
 <ng-template #modelErrorTip>
-  @if (form.get('model')?.errors?.['required']) {
-    <span>{{ '请输入型号' | translate }}</span>
+  @if (form.get('model')?.errors?.['required'] || form.get('model')?.errors?.['minlength']) {
+    <span>{{ '型号长度至少1个字符' | translate }}</span>
   }
   @if (form.get('model')?.errors?.['pattern']) {
     <span>{{ '型号必须以小写字母开头，可包含小写字母、数字、中划线' | translate }}</span>

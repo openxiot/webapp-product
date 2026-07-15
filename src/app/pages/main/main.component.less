@@ -22,11 +22,10 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 可选：添加阴影提升层次感 */
 }
 
-/* 滚动内容区域 */
+/* 内容区域，内容少时撑满剩余空间（footer 贴底），内容多时按自然高度伸展，footer 随之滚动 */
 .scrollable-content {
-  flex: 1;
-  overflow-y: auto; /* 内容超出时显示滚动条 */
-  max-height: calc(100vh - 64px - 70px); /* 最大高度 = 视口高度 - header 高度 */
+  flex: 1 0 auto;
+  overflow: visible;
 }
 
 .logo {

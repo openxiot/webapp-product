@@ -7,7 +7,6 @@ import pkg from '../../../../package.json';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {RouterLink, RouterOutlet} from '@angular/router';
 import {NzButtonModule} from 'ng-zorro-antd/button';
-import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
 import {NzAvatarModule} from 'ng-zorro-antd/avatar';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzBadgeModule} from 'ng-zorro-antd/badge';
@@ -33,7 +32,6 @@ import {environment} from '../../../environments/environment';
     NzSpinModule,
     NzBreadCrumbModule,
     NzButtonModule,
-    NzDropDownModule,
     NzAvatarModule,
     NzSpaceModule,
     NzBadgeModule,

@@ -87,6 +87,7 @@ export class ProductCreateComponent implements OnInit {
       alias: this.fb.control<LocalizedName[]>([], [Validators.required]),
       model: this.fb.control('', [
         Validators.required,
+        Validators.minLength(1),
         Validators.pattern(/^[a-z][a-z0-9-]*$/)
       ]),
       template: this.fb.control<Urn>(Urn.create('', UrnType.DEVICE, '', '0000'), [Validators.required]),
