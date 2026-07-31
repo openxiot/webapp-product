@@ -14,7 +14,7 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {NzDropdownModule} from 'ng-zorro-antd/dropdown';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../../service/i18n.service';
 import {NzButtonModule} from 'ng-zorro-antd/button';
@@ -39,7 +39,7 @@ import {DeviceTemplateHelper} from '../../../../../../typedef/template/DeviceTem
     NzCardModule,
     NzSpaceModule,
     NzIconModule,
-    NzDropDownModule,
+    NzDropdownModule,
     NzButtonModule,
     NzSpinModule,
   ],

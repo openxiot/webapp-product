@@ -6,7 +6,7 @@ import {LifeCycle, ProductBasic} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
 import {NzImageModule} from 'ng-zorro-antd/image';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {NzDropdownMenuComponent, NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {NzDropdownMenuComponent, NzDropdownModule} from 'ng-zorro-antd/dropdown';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzButtonModule} from 'ng-zorro-antd/button';
@@ -34,7 +34,7 @@ import {Organization} from '../../../../../typedef/define/developer/Organization
     NzIconModule,
     NzImageModule,
     NzTagModule,
-    NzDropDownModule,
+    NzDropdownModule,
     NzColDirective,
     NzRowDirective,
     NzCardModule,

@@ -17,21 +17,21 @@
 
             <!-- 描述输入 -->
             <div class="description-input">
-              <nz-input-group [nzAddOnBefore]="'中' | translate">
+              <nz-input-wrapper [nzAddonBefore]="'中' | translate">
                 <input
                   nz-input
                   formControlName="descriptionZH"
                   [placeholder]="'中文描述' | translate">
-              </nz-input-group>
+              </nz-input-wrapper>
             </div>
 
             <div class="description-input">
-              <nz-input-group [nzAddOnBefore]="'英' | translate">
+              <nz-input-wrapper [nzAddonBefore]="'英' | translate">
                 <input
                   nz-input
                   formControlName="descriptionEN"
                   [placeholder]="'英文描述' | translate">
-              </nz-input-group>
+              </nz-input-wrapper>
             </div>
 
             <!-- 删除按钮 -->

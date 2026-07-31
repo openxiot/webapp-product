@@ -4,14 +4,14 @@
     <nz-col [nzSpan]="24">
       <nz-row [nzGutter]="[8, 8]">
         <nz-col [nzSpan]="6">
-          <nz-input-group [nzAddOnBefore]="arg.type.name">
+          <nz-input-wrapper [nzAddonBefore]="arg.type.name">
             <input
               type="text"
               nz-input
               [ngModel]="getDescription(arg)"
               [disabled]="true"
             />
-          </nz-input-group>
+          </nz-input-wrapper>
         </nz-col>
 
         <nz-col [nzSpan]="15">

@@ -7,7 +7,7 @@ import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzModalService} from 'ng-zorro-antd/modal';
 import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzDropDownModule} from 'ng-zorro-antd/dropdown';
+import {NzDropdownModule} from 'ng-zorro-antd/dropdown';
 import {CreateServiceComponent} from '../../../../../../../common/dialog/instance/create/service/create.service.component';
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../../../service/i18n.service';
@@ -24,7 +24,7 @@ import {ServiceOption} from '../../../../../../../common/dialog/instance/create/
     NzCardModule,
     NzSpaceModule,
     NzIconModule,
-    NzDropDownModule,
+    NzDropdownModule,
     TranslatePipe,
   ],
   providers: [

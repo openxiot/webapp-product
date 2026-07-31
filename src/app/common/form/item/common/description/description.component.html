@@ -4,14 +4,14 @@
       @for (item of langList; track item.lang; let i = $index) {
         <nz-col [nzSpan]="24">
           <div style="display: flex; gap: 8px; align-items: center;">
-            <nz-input-group nzAddOnBefore="{{ item.label | translate }}" style="flex: 1;">
+            <nz-input-wrapper nzAddonBefore="{{ item.label | translate }}" style="flex: 1;">
               <input
                 type="text"
                 nz-input
                 [(ngModel)]="item.value"
                 (ngModelChange)="emitChange()"
               />
-            </nz-input-group>
+            </nz-input-wrapper>
 
             <button type="button" nz-button nzType="text" nzDanger (click)="removeLang(i)"
                     [disabled]="item.lang === 'en-US'">
@@ -29,13 +29,13 @@
     </nz-row>
   } @else {
     @if (prefix) {
-      <nz-input-group [nzAddOnBefore]=" '描述' | translate " style="flex: 1;">
+      <nz-input-wrapper [nzAddonBefore]=" '描述' | translate " style="flex: 1;">
         <input
           type="text"
           nz-input
           [(ngModel)]="CurrentLangValue"
         />
-      </nz-input-group>
+      </nz-input-wrapper>
     } @else {
       <input
         type="text"
@@ -46,14 +46,14 @@
   }
 } @else {
   @if (prefix) {
-    <nz-input-group [nzAddOnBefore]=" '描述' | translate " style="flex: 1;">
+    <nz-input-wrapper [nzAddonBefore]=" '描述' | translate " style="flex: 1;">
       <input
         type="text"
         nz-input
         [ngModel]="CurrentLangValue"
         [disabled]="true"
       />
-    </nz-input-group>
+    </nz-input-wrapper>
   } @else {
     <input
       type="text"
