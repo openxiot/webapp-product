@@ -90,47 +90,47 @@ export class MainService {
   createOrganization(organizationId: string, name: string): Observable<void> {
     console.log(`addOrganization: ${organizationId}/${name}`);
     return this.http
-      .post(`${this.account}/organization/one/${organizationId}`, {name})
+      .post(`${this.account}/developer/organization/one/${organizationId}`, {name})
       .pipe(map(() => undefined));
   }
 
   removeOrganization(organizationId: string): Observable<void> {
     console.log(`removeOrganization: ${organizationId}`);
     return this.http
-      .delete(`${this.account}/organization/one/${organizationId}`)
+      .delete(`${this.account}/developer/organization/one/${organizationId}`)
       .pipe(map(() => undefined));
   }
 
   updateOrganizationName(organizationId: string, name: string): Observable<void> {
     console.log(`updateOrganizationName: ${organizationId} => ${name}`);
     return this.http
-      .put(`${this.account}/organization/one/${organizationId}`, {name: name})
+      .put(`${this.account}/developer/organization/one/${organizationId}`, {name: name})
       .pipe(map(() => undefined));
   }
 
   addOrganizationMember(organizationId: string, member: OrganizationMember) {
     console.log(`addOrganizationMember: ${organizationId} => ${member}`);
     return this.http
-      .post(`${this.account}/organization/member/${organizationId}`, OrganizationMemberCodec.encode(member))
+      .post(`${this.account}/developer/organization/member/${organizationId}`, OrganizationMemberCodec.encode(member))
       .pipe(map(() => undefined));
   }
 
   getOrganization(organizationId: string): Observable<Organization> {
     console.log(`getOrganization: ${organizationId}`);
     return this.http
-      .get<OxResponse>(`${this.account}/organization/one/${organizationId}`)
+      .get<OxResponse>(`${this.account}/developer/organization/one/${organizationId}`)
       .pipe(map(response => OrganizationCodec.decode(response.data)));
   }
 
   getOrganizations(): Observable<Organization[]> {
     return this.http
-      .get<OxResponse>(`${this.account}/organization/many`)
+      .get<OxResponse>(`${this.account}/developer/organization/many`)
       .pipe(map(response => OrganizationCodec.decodeArray(response.data)));
   }
 
   getAllOrganizations(): Observable<Organization[]> {
     return this.http
-      .get<OxResponse>(`${this.account}/organization/all`)
+      .get<OxResponse>(`${this.account}/developer/organization/all`)
       .pipe(map(response => OrganizationCodec.decodeArray(response.data)));
   }
 
