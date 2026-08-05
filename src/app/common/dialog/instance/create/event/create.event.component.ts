@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {
   FormControl,
@@ -79,13 +79,13 @@ export class CreateEventComponent implements OnInit {
   }>;
 
   custom: Event;
-  events: Event[] = [];
+  events = signal<Event[]>([]);
   selected: Event;
 
-  loading: boolean = false;
+  loading = signal(false);
   definitions: EventDefinition[] = [];
 
-  loadingProperties: boolean = true;
+  loadingProperties = signal(true);
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
@@ -122,17 +122,17 @@ export class CreateEventComponent implements OnInit {
   }
 
   private loadEvents(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.main.getEventDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.definitions = data;
 
-          this.events = this.definitions
+          this.events.set(this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
               return new Event(this.option.iid, x.type, x.description, []);
-            });
+            }));
 
           this.initFormData();
         },
@@ -141,28 +141,28 @@ export class CreateEventComponent implements OnInit {
 
           this.initFormData();
 
-          this.loading = false;
+          this.loading.set(false);
         }
       })
   }
 
   private loadProperties(): void {
-    this.loadingProperties = true;
+    this.loadingProperties.set(true);
     this.main.getPropertyDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
-          this.loadingProperties = false;
+          this.loadingProperties.set(false);
         },
         error: error => {
           console.log(error);
-          this.loadingProperties = false;
+          this.loadingProperties.set(false);
         }
       })
   }
 
   initFormData(): void {
-    this.loading = true;
+    this.loading.set(true);
 
     const description: Map<string, string> = new Map<string, string>();
     description.set(this.i18n.getCurrentLang(), this.selected.description.get(this.i18n.getCurrentLang()) || '');
@@ -172,7 +172,7 @@ export class CreateEventComponent implements OnInit {
     this.form.controls.code.setValue(this.selected.type.name);
     this.form.controls.description.setValue(description);
 
-    this.loading = false;
+    this.loading.set(false);
   }
 
   cancel(): void {
@@ -196,7 +196,7 @@ export class CreateEventComponent implements OnInit {
   protected onIIDChanged(): void {
     console.log('onIIDChanged');
 
-    if (! this.loading) {
+    if (! this.loading()) {
       this.selected.iid = this.form.controls.iid.value;
     }
   }
@@ -204,7 +204,7 @@ export class CreateEventComponent implements OnInit {
   protected onCodeChanged(): void {
     console.log('onCodeChanged');
 
-    if (! this.loading) {
+    if (! this.loading()) {
       this.selected.type.name = this.form.controls.code.value;
     }
   }
@@ -212,7 +212,7 @@ export class CreateEventComponent implements OnInit {
   protected onDescriptionChanged(): void {
     console.log('onDescriptionChanged');
 
-    if (! this.loading) {
+    if (! this.loading()) {
       this.selected.description = this.form.controls.description.value;
     }
   }

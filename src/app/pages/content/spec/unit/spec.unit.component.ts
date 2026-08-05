@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, signal, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -54,8 +54,8 @@ export class SpecUnitComponent implements OnInit, OnChanges {
   @Input()
   namespace: string = '';
 
-  loading: boolean = true;
-  units: UnitDefinition[] = [];
+  loading = signal(true);
+  units = signal<UnitDefinition[]>([]);
 
   codeSortFn: NzTableSortFn<UnitDefinition> = (a: UnitDefinition, b: UnitDefinition): number => a.type.name.localeCompare(b.type.name);
 
@@ -80,12 +80,12 @@ export class SpecUnitComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getUnitDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getUnitDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.units = data;
-          this.loading = false;
+          this.units.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -121,12 +121,12 @@ export class SpecUnitComponent implements OnInit, OnChanges {
   }
 
   protected doDelete(unit: UnitDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deleteUnitDefinition(unit.type)
       .subscribe({
         next: data => {
-          this.units = this.units.filter(x => x.type.name !== unit.type.name);
-          this.loading = false;
+          this.units.set(this.units().filter(x => x.type.name !== unit.type.name));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -55,7 +55,7 @@ import {Location} from '@angular/common';
 })
 export class SpecFormatEditComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = signal(false);
 
   form: FormGroup<{
     code: FormControl<string>,
@@ -93,7 +93,7 @@ export class SpecFormatEditComponent implements OnInit {
   private load(type: string) {
     console.log('reload');
 
-    this.loading = true;
+    this.loading.set(true);
 
     this.service.getFormatDefinition(type)
       .subscribe({
@@ -101,11 +101,11 @@ export class SpecFormatEditComponent implements OnInit {
           this.form.controls.code.setValue(namespace.type.name);
           this.form.controls.description.setValue(namespace.description);
           this.form.controls.lifecycle.setValue(namespace.lifecycle);
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
@@ -115,21 +115,21 @@ export class SpecFormatEditComponent implements OnInit {
     const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: FormatType = FormatType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
+    const type: FormatType = FormatType.create(this.account.ns().namespace, UrnType.FORMAT, code, '0000');
     const def: FormatDefinition = new FormatDefinition(type, description);
     def.lifecycle = lifecycle;
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.updateFormatDefinition(def)
       .subscribe({
         next: () => {
           console.log('updateFormatDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

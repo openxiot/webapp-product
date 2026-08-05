@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 import { ToolbarComponent } from './toolbar.component';
 
@@ -8,7 +9,8 @@ describe('ToolbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToolbarComponent]
+      imports: [ToolbarComponent],
+      providers: [provideZonelessChangeDetection()]
     })
     .compileComponents();
 

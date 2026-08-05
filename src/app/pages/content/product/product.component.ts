@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewContainerRef, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -56,9 +56,9 @@ export class ProductComponent implements OnInit {
   ];
   viewMode: number = 0;
 
-  current: Organization = new Organization();
-  products: ProductBasic[] = [];
-  loading: boolean = false;
+  current = signal<Organization>(new Organization());
+  products = signal<ProductBasic[]>([]);
+  loading = signal(false);
 
   constructor(
     private modal: NzModalService,
@@ -66,14 +66,13 @@ export class ProductComponent implements OnInit {
     protected account: AccountService,
     private service: MainService,
     private msg: NzMessageService,
-    private cdr: ChangeDetectorRef,
   ) {
     this.loadProductViewMode();
   }
 
   ngOnInit() {
-    if (this.account.organization) {
-      this.current = this.account.organization;
+    if (this.account.organization()?.id) {
+      this.current.set(this.account.organization());
       this.loadProducts();
     }
   }
@@ -99,7 +98,7 @@ export class ProductComponent implements OnInit {
       nzWidth: 800,
       nzContent: OrganizationSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new OrganizationOption(this.current),
+      nzData: new OrganizationOption(this.current()),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
@@ -108,21 +107,20 @@ export class ProductComponent implements OnInit {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.current = result;
+        this.current.set(result);
         this.loadProducts();
       }
     });
   }
 
   protected loadProducts() {
-    if (this.current.id.length > 0) {
-      this.loading = true;
-      this.service.getAllProducts(this.current).subscribe({
+    if (this.current().id.length > 0) {
+      this.loading.set(true);
+      this.service.getAllProducts(this.current()).subscribe({
         next: data => {
           console.log('products: ', data.length);
-          this.products = data;
-          this.loading = false;
-          this.cdr.detectChanges();
+          this.products.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, signal} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {ProductBasic, LifeCycle, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {NzSelectModule} from 'ng-zorro-antd/select';
@@ -27,7 +27,7 @@ export class ProductVisibilityComponent implements OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  loading: boolean = false;
+  loading = signal(false);
   changed: boolean = false;
 
   constructor(

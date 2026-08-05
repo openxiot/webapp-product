@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, signal} from '@angular/core';
 import {NzTableFilterFn, NzTableModule, NzTableQueryParams, NzTableSortFn} from 'ng-zorro-antd/table';
 import {RouterLink} from '@angular/router';
 import {NzDividerModule} from 'ng-zorro-antd/divider';
@@ -61,7 +61,7 @@ export class ProductListComponent implements OnInit, OnDestroy, OnChanges {
   manualChecked: boolean = true;
   visibilityChecked: boolean = false;
 
-  loading: boolean = false;
+  loading = signal(false);
   total: number = 0;
   // products: ProductBasic[] = [];
   pageSize = 100;

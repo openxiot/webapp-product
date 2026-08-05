@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="200px" nzTheme="light" class="sider">
       <ul nz-menu nzMode="inline" nzTheme="light">
@@ -8,7 +8,7 @@
 
         <li nz-menu-divider></li>
 
-        @for (s of properties; track s.type.name) {
+        @for (s of properties(); track s.type.name) {
           <li nz-menu-item (click)="onClickProperty(s)">
             <span class="property-title">{{ s.description.get(i18n.getCurrentLang()) }}</span>
           </li>
@@ -84,7 +84,7 @@
             </nz-form-control>
           </nz-form-item>
 
-          @if (constrainable) {
+          @if (constrainable()) {
             <nz-form-item nz-flex>
               <nz-form-label [style.width.px]="120" nzRequired>{{ '取值约束' | translate }}</nz-form-label>
               <nz-form-control>

@@ -2,7 +2,7 @@
   @if (account.isEditable()) {
     <nz-col [nzSpan]="24">
       <div style="float: right">
-        <button nz-button nzType="primary" (click)="addFormats()" [disabled]="! addable">{{ '添加格式' | translate }}</button>
+        <button nz-button nzType="primary" (click)="addFormats()" [disabled]="! addable()">{{ '添加格式' | translate }}</button>
       </div>
     </nz-col>
   }
@@ -12,9 +12,9 @@
       #table
       nzShowSizeChanger
       nzSize="small"
-      [nzData]="formats"
+      [nzData]="formats()"
       [nzFrontPagination]="false"
-      [nzLoading]="loading"
+      [nzLoading]="loading()"
     >
       <thead>
       <tr>

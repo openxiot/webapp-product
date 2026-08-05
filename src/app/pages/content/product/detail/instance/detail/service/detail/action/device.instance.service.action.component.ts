@@ -5,7 +5,8 @@ import {
   OnChanges,
   Output,
   SimpleChanges,
-  ViewContainerRef
+  ViewContainerRef,
+  signal
 } from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
@@ -72,7 +73,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class DeviceInstanceServiceActionComponent implements OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
-  private loading: boolean = false;
+  private loading = signal(false);
 
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Input() service!: Service;
@@ -113,7 +114,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   }
 
   private reload() {
-    this.loading = true;
+    this.loading.set(true);
 
     this.form.controls.iid.setValue(this.action.iid);
     this.form.controls.ns.setValue(this.action.type.ns);
@@ -122,7 +123,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
     this.form.controls.argumentsIn.setValue(this.action.getArgumentsIn());
     this.form.controls.argumentsOut.setValue(this.action.getArgumentsOut());
 
-    this.loading = false;
+    this.loading.set(false);
   }
 
   onRemoved() {
@@ -163,7 +164,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   protected onIIDChanged(): void {
     console.log('onIIDChanged');
 
-    if (! this.loading) {
+    if (! this.loading()) {
       if (this.action.iid !== this.form.controls.iid.value) {
         this.action.iid = this.form.controls.iid.value;
         this.changed.emit(this.action);
@@ -174,7 +175,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   protected onCodeChanged(): void {
     console.log('onCodeChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (this.action.type.name !== this.form.controls.code.value) {
         this.action.type.name = this.form.controls.code.value;
         this.changed.emit(this.action);
@@ -185,7 +186,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   protected onDescriptionChanged(): void {
     console.log('onDescriptionChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       const value: Map<string, string> = this.form.controls.description.value;
       if (! areMapsEqual(this.action.description, value)) {
         this.action.description = value;
@@ -197,7 +198,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   protected onArgumentsInChanged(): void {
     console.log('onArgumentsInChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       this.action.in.clear();
 
       for (let arg of this.form.controls.argumentsIn.value) {
@@ -211,7 +212,7 @@ export class DeviceInstanceServiceActionComponent implements OnChanges {
   protected onArgumentsOutChanged(): void {
     console.log('onArgumentsOutChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       this.action.out.clear();
 
       for (let arg of this.form.controls.argumentsOut.value) {

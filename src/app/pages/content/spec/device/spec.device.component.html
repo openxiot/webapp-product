@@ -13,9 +13,9 @@
       #table
       nzShowSizeChanger
       nzSize="small"
-      [nzData]="devices"
+      [nzData]="devices()"
       [nzFrontPagination]="false"
-      [nzLoading]="loading"
+      [nzLoading]="loading()"
       [nzHideOnSinglePage]="true"
     >
       <thead>

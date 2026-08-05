@@ -1,7 +1,7 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
 
   <nz-row [nzGutter]="[8, 8]">
-    @for (org of organizations; track org.id) {
+    @for (org of organizations(); track org.id) {
       <nz-col [nzSpan]="6" (click)="onSelected(org)">
         <nz-card nzHoverable>
           <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>

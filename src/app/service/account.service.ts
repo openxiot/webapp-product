@@ -1,4 +1,4 @@
-import {Injectable} from "@angular/core";
+import {Injectable, signal} from "@angular/core";
 import {OnOrganizationChanged} from "../typedef/define/listener/OnOrganizationChanged";
 import {Developer} from '../typedef/define/developer/Developer';
 import {DeveloperCodec} from '../typedef/codec/developer/DeveloperCodec';
@@ -12,12 +12,12 @@ export class AccountService {
 
   private listeners: Map<string, OnOrganizationChanged> = new Map();
 
-  public loading: boolean = false;
+  public loading = signal(false);
   public organizations: Organization[] = [];
-  public login: boolean = false;
-  public developer: Developer = new Developer();
-  public organization!: Organization;
-  public ns!: NamespaceDefinition;
+  public login = signal(false);
+  public developer = signal<Developer>(new Developer());
+  public organization = signal<Organization>(new Organization());
+  public ns = signal<NamespaceDefinition>(new NamespaceDefinition('', new Map()));
 
   constructor(
     private main: MainService,
@@ -30,18 +30,18 @@ export class AccountService {
 
     const a = localStorage.getItem("developer") || null;
     if (a !== null) {
-      this.developer = DeveloperCodec.decode(JSON.parse(a));
-      this.login = true;
+      this.developer.set(DeveloperCodec.decode(JSON.parse(a)));
+      this.login.set(true);
     }
 
-    console.info('AccountService Constructed: ', this.developer);
-    console.info('developer.avatar: ' + this.developer.avatar);
+    console.info('AccountService Constructed: ', this.developer());
+    console.info('developer.avatar: ' + this.developer().avatar);
   }
 
   isEditable(): boolean {
-    if (this.ns) {
-      if (this.organization) {
-        return this.ns.organization === this.organization.id
+    if (this.ns()) {
+      if (this.organization()) {
+        return this.ns().organization === this.organization().id
       }
     }
 
@@ -49,8 +49,8 @@ export class AccountService {
   }
 
   isCurrentOrganization(organization: Organization): boolean {
-    if (this.organization) {
-      return this.organization.id === organization.id;
+    if (this.organization()) {
+      return this.organization().id === organization.id;
     }
 
     return false;
@@ -64,16 +64,16 @@ export class AccountService {
     if (this.isOrganizationChanged(organization)) {
       localStorage.setItem("organizationId", organization.id);
 
-      this.organization = organization;
+      this.organization.set(organization);
       for (let listener of this.listeners.values()) {
-        listener.onOrganizationChanged(this.organization.id);
+        listener.onOrganizationChanged(this.organization().id);
       }
     }
   }
 
   private isOrganizationChanged(organization: Organization): boolean {
-      if (this.organization) {
-        return this.organization.id !== organization.id;
+      if (this.organization()) {
+        return this.organization().id !== organization.id;
       } else {
         return true;
       }
@@ -82,24 +82,24 @@ export class AccountService {
   setDeveloper(developer: Developer) {
     console.log("setDeveloper: ", developer);
     localStorage.setItem("developer", DeveloperCodec.encode(developer));
-    this.developer = developer;
-    this.login = true;
+    this.developer.set(developer);
+    this.login.set(true);
   }
 
   clear() {
     console.log("clear");
     localStorage.clear();
-    this.login = false;
+    this.login.set(false);
   }
 
   public loadOrganizations() {
-    if (this.login) {
+    if (this.login()) {
       this.main.getOrganizations()
         .subscribe({
           next: data => {
             this.organizations = data;
             this.selectCurrentOrganization();
-            this.loading = false;
+            this.loading.set(false);
           },
           error: error => {
             this.msg.warning(error);

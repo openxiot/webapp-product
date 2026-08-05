@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, signal, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -59,11 +59,11 @@ export class TemplateComponent implements OnInit {
   ];
   viewMode: number = 0;
 
-  loading: boolean = false;
-  templates: TemplateSummary[] = [];
-  templatesOriginal: TemplateSummary[] = [];
+  loading = signal(false);
+  templates = signal<TemplateSummary[]>([]);
+  templatesOriginal = signal<TemplateSummary[]>([]);
 
-  types: Type[] = [];
+  types = signal<Type[]>([]);
   typesSelected: Set<string> = new Set<string>();
 
   constructor(
@@ -77,20 +77,20 @@ export class TemplateComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.account.ns) {
+    if (this.account.ns()?.namespace) {
       this.loadTemplates();
     }
   }
 
   loadTemplates() {
-    this.loading = true;
-    this.service.getTemplates(this.account.ns.namespace).subscribe({
+    this.loading.set(true);
+    this.service.getTemplates(this.account.ns().namespace).subscribe({
       next: data => {
-        this.templatesOriginal = data;
-        this.templates = data;
-        this.types = this.getTypes();
-        this.typesSelected = new Set(this.types.map(x => x.code));
-        this.loading = false;
+        this.templatesOriginal.set(data);
+        this.templates.set(data);
+        this.types.set(this.getTypes());
+        this.typesSelected = new Set(this.types().map(x => x.code));
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);
@@ -101,7 +101,7 @@ export class TemplateComponent implements OnInit {
   getTypes(): Type[] {
     let map: Map<string, Urn> = new Map<string, Urn>();
 
-    for (const x of this.templates) {
+    for (const x of this.templates()) {
       map.set(x.type.name, x.type);
     }
 
@@ -114,8 +114,8 @@ export class TemplateComponent implements OnInit {
   }
 
   updateProducts() {
-    this.templates = this.templatesOriginal
-      .filter(x => this.typesSelected.has(x.type.name))
+    this.templates.set(this.templatesOriginal()
+      .filter(x => this.typesSelected.has(x.type.name)))
   }
 
   protected changeNamespace(): void {
@@ -124,7 +124,7 @@ export class TemplateComponent implements OnInit {
       nzWidth: 800,
       nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new NamespaceOption(this.account.ns?.namespace || ''),
+      nzData: new NamespaceOption(this.account.ns()?.namespace || ''),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
@@ -133,18 +133,18 @@ export class TemplateComponent implements OnInit {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.account.ns = result;
+        this.account.ns.set(result);
         this.loadTemplates();
       }
     });
   }
 
   protected onRemove(type: string) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.removeTemplate(type).subscribe({
       next: data => {
         this.loadTemplates()
-        this.loading = false;
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);

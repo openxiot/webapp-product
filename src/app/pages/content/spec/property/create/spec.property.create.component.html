@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
   </nz-page-header>
@@ -8,7 +8,7 @@
   </ng-template>
 
   <ng-template #subTitle>
-    {{ account.ns.namespace }}
+    {{ account.ns().namespace }}
   </ng-template>
 
   <div style="padding: 20px 20px">
@@ -45,7 +45,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="format">{{ '格式' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <property-format formControlName="format" [updatable]="true" [formats]="formats" (changed)="onFormatChanged()"></property-format>
+            <property-format formControlName="format" [updatable]="true" [formats]="formats()" (changed)="onFormatChanged()"></property-format>
           </nz-form-control>
         </nz-form-item>
 
@@ -81,7 +81,7 @@
           <nz-form-item>
             <nz-form-label [nzSpan]="4" nzRequired>{{ '成员列表' | translate }}</nz-form-label>
             <nz-form-control [nzSpan]="10">
-              <property-definition-members formControlName="members" [properties]="properties"></property-definition-members>
+              <property-definition-members formControlName="members" [properties]="properties()"></property-definition-members>
             </nz-form-control>
           </nz-form-item>
         }
@@ -89,7 +89,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="unit">{{ '单位' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <property-definition-unit formControlName="unit" [updatable]="true" [units]="units"></property-definition-unit>
+            <property-definition-unit formControlName="unit" [updatable]="true" [units]="units()"></property-definition-unit>
           </nz-form-control>
         </nz-form-item>
 

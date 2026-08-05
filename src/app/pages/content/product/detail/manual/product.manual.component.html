@@ -1,10 +1,10 @@
 <nz-row [nzGutter]="[8, 8]">
   <nz-col [nzSpan]="24">
     <toolbar>
-      @switch (manual.lifecycle) {
+      @switch (manual().lifecycle) {
         @case (LifeCycle.DEVELOPMENT) {
           <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
-          @if (changed) {
+          @if (changed()) {
             <div style="color: red">{{ '已修改，请保存！' | translate }}</div>
           }
         }
@@ -20,7 +20,7 @@
 
       <!-- 在 flex 容器中，margin-left: auto 会让元素 “自动填满左侧剩余空间”-->
       <div style="margin-left: auto;">
-        @if (changed) {
+        @if (changed()) {
           <nz-space>
             <div *nzSpaceItem>
               <button nz-button nzType="primary" nzDanger (click)="onCancel()">{{ '取消' | translate }}</button>
@@ -31,9 +31,9 @@
             </div>
           </nz-space>
         } @else {
-          @switch (manual.lifecycle) {
+          @switch (manual().lifecycle) {
             @case (LifeCycle.DEVELOPMENT) {
-              @if (manual.pages.length > 0) {
+              @if (manual().pages.length > 0) {
                 <button nz-button nzType="primary" (click)="onPreview()">{{ '上线' | translate }}</button>
               }
             }
@@ -48,7 +48,7 @@
 
   <nz-col [nzSpan]="24">
     <div nz-row [nzGutter]="[8, 8]">
-      @for (page of manual.pages; track page.index) {
+      @for (page of manual().pages; track page.index) {
         <div
           nz-col
           [nzXs]="24"
@@ -61,14 +61,14 @@
           <product-manual-page
             [page]="page"
             [productId]="product.id"
-            [lifecycle]="manual.lifecycle"
+            [lifecycle]="manual().lifecycle"
             (removed)="onRemoved($event)"
             (changed)="onChanged($event)"
           ></product-manual-page>
         </div>
       }
 
-      @switch (manual.lifecycle) {
+      @switch (manual().lifecycle) {
         @case (LifeCycle.DEVELOPMENT) {
           <div
             nz-col

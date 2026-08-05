@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loadingProperties || loadingActions || loadingEvents">
+<nz-spin [nzSpinning]="loadingProperties() || loadingActions() || loadingEvents()">
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
   </nz-page-header>
@@ -8,7 +8,7 @@
   </ng-template>
 
   <ng-template #subTitle>
-    {{ account.ns.namespace }}
+    {{ account.ns().namespace }}
   </ng-template>
 
   <div style="padding: 20px 20px">
@@ -40,7 +40,7 @@
           <nz-form-control [nzSpan]="10">
             <service-definition-properties
               formControlName="requiredProperties"
-              [properties]="properties"
+              [properties]="properties()"
               (changed)="onChanged()"
             ></service-definition-properties>
           </nz-form-control>
@@ -51,7 +51,7 @@
           <nz-form-control [nzSpan]="10">
             <service-definition-properties
               formControlName="optionalProperties"
-              [properties]="properties"
+              [properties]="properties()"
               (changed)="onChanged()"
             ></service-definition-properties>
           </nz-form-control>
@@ -62,7 +62,7 @@
           <nz-form-control [nzSpan]="10">
             <service-definition-actions
               formControlName="requiredActions"
-              [actions]="actions"
+              [actions]="actions()"
               (changed)="onChanged()"
             ></service-definition-actions>
           </nz-form-control>
@@ -73,7 +73,7 @@
           <nz-form-control [nzSpan]="10">
             <service-definition-actions
               formControlName="optionalActions"
-              [actions]="actions"
+              [actions]="actions()"
               (changed)="onChanged()"
             ></service-definition-actions>
           </nz-form-control>
@@ -84,7 +84,7 @@
           <nz-form-control [nzSpan]="10">
             <service-definition-events
               formControlName="requiredEvents"
-              [events]="events"
+              [events]="events()"
               (changed)="onChanged()"
             ></service-definition-events>
           </nz-form-control>
@@ -95,7 +95,7 @@
           <nz-form-control [nzSpan]="10">
             <service-definition-events
               formControlName="optionalEvents"
-              [events]="events"
+              [events]="events()"
               (changed)="onChanged()"
             ></service-definition-events>
           </nz-form-control>

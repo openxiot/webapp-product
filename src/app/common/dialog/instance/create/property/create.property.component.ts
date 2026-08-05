@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {
   FormControl,
@@ -108,13 +108,13 @@ export class CreatePropertyComponent implements OnInit {
     defaultValue: FormControl<DefaultValue>
   }>;
   combinationValue: boolean = false;
-  constrainable: boolean = false;
+  constrainable = signal(false);
 
   custom: Property;
-  properties: Property[] = [];
+  properties = signal<Property[]>([]);
   selected: Property;
 
-  loading: boolean = true;
+  loading = signal(true);
   definitions: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
   constructor(
@@ -164,13 +164,13 @@ export class CreatePropertyComponent implements OnInit {
   }
 
   private loadProperties(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.main.getPropertyDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.definitions = new Map(data.map(item => [item.type.name, item]));
 
-          this.properties = data
+          this.properties.set(data
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
               return new Property(
@@ -182,22 +182,22 @@ export class CreatePropertyComponent implements OnInit {
                 x.constraintValue,
                 x.unit
               );
-            });
+            }));
 
           this.initFormData();
 
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           console.log(error);
           this.initFormData();
-          this.loading = false;
+          this.loading.set(false);
         }
       })
   }
 
   initFormData(): void {
-    this.loading = true;
+    this.loading.set(true);
 
     const description: Map<string, string> = new Map<string, string>();
     description.set(this.i18n.getCurrentLang(), this.selected.description.get(this.i18n.getCurrentLang()) || '');
@@ -209,7 +209,7 @@ export class CreatePropertyComponent implements OnInit {
     this.form.controls.format.setValue(this.selected.format);
     this.form.controls.access.setValue(this.selected.access);
     this.form.controls.constraint.setValue(this.getConstrainType(this.selected));
-    this.constrainable = this.toConstrainable(this.selected.format);
+    this.constrainable.set(this.toConstrainable(this.selected.format));
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
@@ -251,7 +251,7 @@ export class CreatePropertyComponent implements OnInit {
       this.form.controls.defaultValue.defaultValue.valid = true;
     }
 
-    this.loading = false;
+    this.loading.set(false);
   }
 
   cancel(): void {
@@ -328,9 +328,9 @@ export class CreatePropertyComponent implements OnInit {
   protected onFormatChanged(): void {
     console.log('onFormatChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
-      this.constrainable = this.toConstrainable(this.form.controls.format.value);
+      this.constrainable.set(this.toConstrainable(this.form.controls.format.value));
     }
   }
 

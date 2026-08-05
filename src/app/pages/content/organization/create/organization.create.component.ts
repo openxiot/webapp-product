@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -43,7 +43,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class OrganizationCreateComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = signal(false);
 
   form: FormGroup<{
     code: FormControl<string>,
@@ -77,18 +77,18 @@ export class OrganizationCreateComponent implements OnInit {
     const code = this.form.value.code || 'null';
     const name = this.form.value.name || 'null';
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createOrganization(code, name)
       .subscribe({
         next: () => {
           console.log('createOrganization ok');
-          this.loading = false;
+          this.loading.set(false);
           this.account.loadOrganizations();
           this.router.navigate(['/main']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

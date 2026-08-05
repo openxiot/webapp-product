@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, signal, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -60,7 +60,7 @@ import {NamespaceOption} from '../../../common/dialog/namespace/NamespaceOption'
 export class SpecComponent implements OnInit {
 
   tabIndex: number = 0;
-  loading: boolean = false;
+  loading = signal(false);
 
   constructor(
     private modal: NzModalService,
@@ -87,7 +87,7 @@ export class SpecComponent implements OnInit {
       nzWidth: 800,
       nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new NamespaceOption(this.account.ns?.namespace || ''),
+      nzData: new NamespaceOption(this.account.ns()?.namespace || ''),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,
@@ -96,7 +96,7 @@ export class SpecComponent implements OnInit {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.account.ns = result;
+        this.account.ns.set(result);
       }
     });
   }

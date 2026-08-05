@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NzI18nService} from "ng-zorro-antd/i18n";
@@ -18,7 +18,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class CallbackComponent implements OnInit {
 
-  loading: boolean = true;
+  loading = signal(true);
 
   constructor(
     private router: Router,
@@ -66,7 +66,7 @@ export class CallbackComponent implements OnInit {
     if (developer.token !== null) {
       this.router.navigate(['/main'])
         .then(() => {
-          this.loading = false;
+          this.loading.set(false);
         });
     } else {
       this.msg.info('登录失败, token is null');

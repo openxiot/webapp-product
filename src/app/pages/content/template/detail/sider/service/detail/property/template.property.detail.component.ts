@@ -174,7 +174,7 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
 
   private loadUnits(): void {
     this.loadingUnits = true;
-    this.main.getUnitDefinitions(this.account.ns.namespace)
+    this.main.getUnitDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.units = data;
@@ -188,7 +188,7 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
 
   private loadFormats(): void {
     this.loadingFormats = true;
-    this.main.getFormatDefinitions(this.account.ns.namespace)
+    this.main.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.formats = data;

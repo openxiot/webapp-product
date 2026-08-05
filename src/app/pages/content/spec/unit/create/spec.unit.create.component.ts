@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -55,7 +55,7 @@ import {Location} from '@angular/common';
 })
 export class SpecUnitCreateComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = signal(false);
 
   form: FormGroup<{
     code: FormControl<string>,
@@ -91,21 +91,21 @@ export class SpecUnitCreateComponent implements OnInit {
     const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: UnitType = UnitType.create(this.account.ns.namespace, UrnType.UNIT, code, '0000');
+    const type: UnitType = UnitType.create(this.account.ns().namespace, UrnType.UNIT, code, '0000');
     const def: UnitDefinition = new UnitDefinition(type, description);
     def.lifecycle = lifecycle;
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createUnitDefinition(def)
       .subscribe({
         next: () => {
           console.log('createUnitDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

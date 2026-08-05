@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -63,8 +63,8 @@ import {Location} from '@angular/common';
 })
 export class SpecEventEditComponent implements OnInit {
 
-  loading: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loading = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
   eventType: string = '';
 
   form: FormGroup<{
@@ -104,12 +104,12 @@ export class SpecEventEditComponent implements OnInit {
   }
 
   private load(): void {
-    this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.loading = false;
+          this.properties.set(data);
+          this.loading.set(false);
           this.loadEventDefinition(this.eventType);
         },
         error: error => {
@@ -119,7 +119,7 @@ export class SpecEventEditComponent implements OnInit {
   }
 
   private loadEventDefinition(type: string) {
-    this.loading = true;
+    this.loading.set(true);
 
     this.service.getEventDefinition(type)
       .subscribe({
@@ -133,11 +133,11 @@ export class SpecEventEditComponent implements OnInit {
 
           this.form.controls.arguments.setValue(a.arguments);
 
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
@@ -150,22 +150,22 @@ export class SpecEventEditComponent implements OnInit {
     const args: ArgumentDefinition[] = this.form.value.arguments || [];
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: EventType = EventType.create(this.account.ns.namespace, UrnType.EVENT, code, uuid);
+    const type: EventType = EventType.create(this.account.ns().namespace, UrnType.EVENT, code, uuid);
     const def: EventDefinition = new EventDefinition(type, description, args);
     def.lifecycle = lifecycle;
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.updateEventDefinition(def)
       .subscribe({
         next: () => {
           console.log('updateEventDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {
           });
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

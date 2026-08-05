@@ -1,7 +1,7 @@
 <nz-page-header [nzTitle]="pageTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
-  @if (account.login) {
+  @if (account.login()) {
     <nz-page-header-extra>
       <button nz-button nzType="primary" nzDanger [routerLink]="['/main/namespace/create']">{{ '创建' | translate }}</button>
     </nz-page-header-extra>
@@ -15,9 +15,9 @@
 <div style="padding: 20px 20px">
   <nz-table
     nzShowSizeChanger
-    [nzData]="namespaces"
+    [nzData]="namespaces()"
     [nzFrontPagination]="false"
-    [nzLoading]="loading"
+    [nzLoading]="loading()"
   >
     <thead>
     <tr>
@@ -29,7 +29,7 @@
     </tr>
     </thead>
     <tbody>
-      @for (ns of namespaces; track ns.namespace) {
+      @for (ns of namespaces(); track ns.namespace) {
         <tr>
           <td>{{ ns.namespace }}</td>
           <td>{{ ns.description.get(i18n.getCurrentLang()) }}</td>
@@ -47,8 +47,8 @@
             }
           </td>
           <td>
-            @if (account.organization) {
-              @if (ns.organization === account.organization.id) {
+            @if (account.organization()?.id) {
+              @if (ns.organization === account.organization().id) {
                 <nz-tag nzColor="geekblue">{{ ns.organization }}</nz-tag>
               } @else {
                 <nz-tag>{{ ns.organization }}</nz-tag>
@@ -58,8 +58,8 @@
             }
           </td>
           <td>
-            @if (account.organization) {
-              @if (ns.organization === account.organization.id) {
+            @if (account.organization()?.id) {
+              @if (ns.organization === account.organization().id) {
                 <a [routerLink]="['/main/namespace/edit', ns.namespace]">{{ '修改' | translate }}</a>
                 <nz-divider nzType="vertical"></nz-divider>
                 <a (click)="onDelete(ns)">{{ '删除' | translate }}</a>

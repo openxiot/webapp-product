@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -82,16 +82,16 @@ export class SpecPropertyViewComponent implements OnInit {
 
   protected readonly ConstraintType = ConstraintType;
 
-  loading: boolean = false;
+  loading = signal(false);
   propertyType: string = '';
-  properties: PropertyDefinition[] = [];
-  propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
+  properties = signal<PropertyDefinition[]>([]);
+  propertyMap = signal<Map<string, PropertyDefinition>>(new Map<string, PropertyDefinition>());
 
-  loadingFormats: boolean = false;
-  formats: FormatDefinition[] = [];
+  loadingFormats = signal(false);
+  formats = signal<FormatDefinition[]>([]);
 
-  loadingUnits: boolean = false;
-  units: UnitDefinition[] = [];
+  loadingUnits = signal(false);
+  units = signal<UnitDefinition[]>([]);
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -107,8 +107,8 @@ export class SpecPropertyViewComponent implements OnInit {
     lifecycle: FormControl<LifeCycle>,
   }>;
 
-  combinationValue: boolean = false;
-  constrainable: boolean = false;
+  combinationValue = signal(false);
+  constrainable = signal(false);
 
   constructor(
     protected location: Location,
@@ -148,12 +148,12 @@ export class SpecPropertyViewComponent implements OnInit {
   }
 
   private loadUnits(): void {
-    this.loadingUnits = true;
-    this.service.getUnitDefinitions(this.account.ns.namespace)
+    this.loadingUnits.set(true);
+    this.service.getUnitDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.units = data;
-          this.loadingUnits = false;
+          this.units.set(data);
+          this.loadingUnits.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -162,13 +162,13 @@ export class SpecPropertyViewComponent implements OnInit {
   }
 
   private loadPropertyDefinitions(): void {
-    this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.propertyMap = new Map(data.map(item => [item.type.name, item]));
-          this.loading = false;
+          this.properties.set(data);
+          this.propertyMap.set(new Map(data.map(item => [item.type.name, item])));
+          this.loading.set(false);
           this.load(this.propertyType);
         },
         error: error => {
@@ -178,12 +178,12 @@ export class SpecPropertyViewComponent implements OnInit {
   }
 
   private loadFormats(): void {
-    this.loadingFormats = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.loadingFormats.set(true);
+    this.service.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.formats = data;
-          this.loadingFormats = false;
+          this.formats.set(data);
+          this.loadingFormats.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -192,7 +192,7 @@ export class SpecPropertyViewComponent implements OnInit {
   }
 
   private load(type: string) {
-    this.loading = true;
+    this.loading.set(true);
 
     this.service.getPropertyDefinition(type)
       .subscribe({
@@ -207,7 +207,7 @@ export class SpecPropertyViewComponent implements OnInit {
           this.form.controls.format.setValue(p.format);
           this.form.controls.access.setValue(p.access);
           this.form.controls.constraint.setValue(this.getConstrainType(p));
-          this.constrainable = this.toConstrainable(p.format);
+          this.constrainable.set(this.toConstrainable(p.format));
 
           switch (this.form.controls.constraint.value) {
             case ConstraintType.NONE:
@@ -233,13 +233,13 @@ export class SpecPropertyViewComponent implements OnInit {
               break;
           }
 
-          this.combinationValue = p.format === DataFormat.COMBINATION;
-          if (this.combinationValue) {
+          this.combinationValue.set(p.format === DataFormat.COMBINATION);
+          if (this.combinationValue()) {
             console.log('init combinationValue');
 
             let members: PropertyDefinition[] = [];
             for (let member of p.members) {
-              const x = this.propertyMap.get(member.name);
+              const x = this.propertyMap().get(member.name);
               if (x) {
                 members.push(x);
               }
@@ -254,11 +254,11 @@ export class SpecPropertyViewComponent implements OnInit {
           }
 
           // ValueList渲染完成，需要时间，如果loading已经是true，则onConstraintListChanged会传到到最上层。
-          setTimeout(() => { this.loading = false;}, 100);
+          setTimeout(() => { this.loading.set(false);}, 100);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
@@ -278,7 +278,7 @@ export class SpecPropertyViewComponent implements OnInit {
   }
 
   protected onFormatChanged() {
-    this.constrainable = this.toConstrainable(this.form.controls.format.value);
+    this.constrainable.set(this.toConstrainable(this.form.controls.format.value));
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
@@ -296,7 +296,7 @@ export class SpecPropertyViewComponent implements OnInit {
         break;
     }
 
-    this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
+    this.combinationValue.set(this.form.controls.format.value === DataFormat.COMBINATION);
     // if (this.combinationValue) {
     //   console.log('init combinationValue');
     //   this.form.controls.members.setValue(this.property.members);

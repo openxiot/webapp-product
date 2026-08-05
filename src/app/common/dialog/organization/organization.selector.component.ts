@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -34,8 +34,8 @@ export class OrganizationSelectorComponent implements OnInit {
   readonly #modal = inject(NzModalRef);
   readonly option: OrganizationOption = inject(NZ_MODAL_DATA);
 
-  loading: boolean = false;
-  organizations: Organization[] = [];
+  loading = signal(false);
+  organizations = signal<Organization[]>([]);
 
   constructor(
     private account: AccountService,
@@ -50,12 +50,12 @@ export class OrganizationSelectorComponent implements OnInit {
   }
 
   private loadOrganizations() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getAllOrganizations()
       .subscribe({
         next: data => {
-          this.organizations = data;
-          this.loading = false;
+          this.organizations.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

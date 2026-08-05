@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewContainerRef} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewContainerRef} from '@angular/core';
 import {DeviceTemplate, LifeCycle, ServiceTemplate} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -68,20 +68,20 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
 
   protected readonly LifeCycle = LifeCycle;
 
-  changed: boolean = false;
+  changed = signal(false);
 
   /** 当前用户是否有生命周期编辑权限（已登录 + 组织匹配） */
-  canEditLifecycle: boolean = false;
+  canEditLifecycle = signal(false);
 
   /** 是否有完整编辑权限（组织匹配 + 模板处于开发状态） */
-  editable: boolean = false;
+  editable = signal(false);
 
   // 版本
   version: boolean = false;
 
-  loading: boolean = true;
+  loading = signal(true);
   type: string = '';
-  template: DeviceTemplate | undefined = undefined;
+  template = signal<DeviceTemplate | undefined>(undefined);
 
   constructor(
     private modal: NzModalService,
@@ -113,10 +113,10 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
    * 有组织的前提是已登录
    */
   private isOrgMatch(): boolean {
-    if (!this.account.login || !this.account.organization || !this.template) {
+    if (!this.account.login() || !this.account.organization()?.id || !this.template()) {
       return false;
     }
-    return this.template.type.organization === this.account.organization.id;
+    return this.template()!.type.organization === this.account.organization().id;
   }
 
   /**
@@ -131,19 +131,19 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
    */
   private computeEditable(): boolean {
     if (!this.isOrgMatch()) return false;
-    return this.template!.lifecycle === LifeCycle.DEVELOPMENT;
+    return this.template()!.lifecycle === LifeCycle.DEVELOPMENT;
   }
 
   private load(type: string): void {
-    this.loading = true;
-    this.template = undefined;
+    this.loading.set(true);
+    this.template.set(undefined);
     this.service.getTemplate(type).subscribe({
       next: data => {
-        this.template = data;
-        this.canEditLifecycle = this.computeCanEditLifecycle();
-        this.editable = this.computeEditable();
-        this.changed = false;
-        this.loading = false;
+        this.template.set(data);
+        this.canEditLifecycle.set(this.computeCanEditLifecycle());
+        this.editable.set(this.computeEditable());
+        this.changed.set(false);
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);
@@ -155,7 +155,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
 
   // onReload() {
   //   this.load(this.type);
-  //   this.changed = false;
+  //   this.changed.set(false);
   // }
 
   // onRemove(service: Service) {
@@ -163,13 +163,13 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   // }
 
   protected editTitle() {
-    if (!this.editable) return;
+    if (!this.editable()) return;
 
     const modal = this.modal.create<StringValueEditComponent, StringValue, string>({
       nzTitle: this.i18n.translate.instant('修改模板描述'),
       nzContent: StringValueEditComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new StringValue(this.template?.description?.get(this.i18n.getCurrentLang()) || ''),
+      nzData: new StringValue(this.template()?.description?.get(this.i18n.getCurrentLang()) || ''),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -187,8 +187,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.template?.description.set(this.i18n.getCurrentLang(), result);
-        this.changed = true;
+        this.template()?.description.set(this.i18n.getCurrentLang(), result);
+        this.changed.set(true);
       }
     });
   }
@@ -198,37 +198,37 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   }
 
   protected onSave() {
-    if (this.template) {
-      this.loading = true;
-      this.service.updateTemplate(this.template)
+    if (this.template()) {
+      this.loading.set(true);
+      this.service.updateTemplate(this.template()!)
         .subscribe({
           next: () => {
             console.log('updateTemplate ok');
-            this.loading = false;
-            this.changed = false;
+            this.loading.set(false);
+            this.changed.set(false);
           },
           error: error => {
             this.msg.warning(error);
-            this.loading = false;
+            this.loading.set(false);
           }
         });
     }
   }
 
   protected onChanged() {
-    this.changed = true;
+    this.changed.set(true);
     this.cdr.detectChanges();
   }
 
   protected onRemoved(s: ServiceTemplate) {
-    this.template?.services.delete(s.iid);
-    this.changed = true;
+    this.template()?.services.delete(s.iid);
+    this.changed.set(true);
     this.cdr.detectChanges();
   }
 
   /** 生命周期变更时重新计算 editable 状态 */
   protected onLifecycleChanged() {
-    this.editable = this.computeEditable();
+    this.editable.set(this.computeEditable());
     this.onChanged();
   }
 }

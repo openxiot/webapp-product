@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef, signal} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -99,7 +99,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
 
   protected readonly ConstraintType = ConstraintType;
   protected readonly LifeCycle = LifeCycle;
-  private loading: boolean = false;
+  private loading = signal(false);
 
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Input() service!: Service;
@@ -167,7 +167,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   private reload() {
     console.log('reload');
 
-    this.loading = true;
+    this.loading.set(true);
 
     this.form.controls.iid.setValue(this.property.iid);
     this.form.controls.ns.setValue(this.property.type.ns);
@@ -219,7 +219,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
     }
 
     // ValueList渲染完成，需要时间，如果loading已经是true，则onConstraintListChanged会传到到最上层。
-    setTimeout(() => { this.loading = false;}, 100);
+    setTimeout(() => { this.loading.set(false);}, 100);
   }
 
   private toConstrainable(format: string): boolean {
@@ -283,7 +283,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onIIDChanged(): void {
     console.log('onIIDChanged');
 
-    if (! this.loading) {
+    if (! this.loading()) {
       if (this.property.iid !== this.form.controls.iid.value) {
         this.property.iid = this.form.controls.iid.value;
         this.changed.emit(this.property);
@@ -294,7 +294,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onCodeChanged(): void {
     console.log('onCodeChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (this.property.type.name !== this.form.controls.code.value) {
         this.property.type.name = this.form.controls.code.value;
         this.changed.emit(this.property);
@@ -305,7 +305,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onDescriptionChanged(): void {
     console.log('onDescriptionChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       const value: Map<string, string> = this.form.controls.description.value;
       if (! areMapsEqual(this.property.description, value)) {
         this.property.description = value;
@@ -317,7 +317,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onAccessChanged(): void {
     console.log('onAccessChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (
         this.property.access.isReadable !== this.form.controls.access.value.isReadable ||
         this.property.access.isWritable !== this.form.controls.access.value.isWritable ||
@@ -334,7 +334,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onFormatChanged(): void {
     console.log('onFormatChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (this.property.format !== this.form.controls.format.value) {
         this.property.format = this.form.controls.format.value;
         this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
@@ -347,7 +347,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onConstraintTypeChanged(): void {
     console.log('onConstraintTypeChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       this.property.constraintValue = null;
       this.changed.emit(this.property);
     }
@@ -356,7 +356,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onConstraintRangeChanged(): void {
     console.log('onConstraintRangeChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       const range = [this.form.controls.range.value.min, this.form.controls.range.value.max, this.form.controls.range.value.step];
       this.property.constraintValue = new ValueRange(this.property.format, range);
       this.changed.emit(this.property);
@@ -366,7 +366,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onConstraintListChanged(): void {
     console.log('onConstraintListChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       const list = new ValueList();
 
       for (let item of this.form.controls.list.value) {
@@ -386,7 +386,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onMembersChanged(): void {
     console.log('onMembersChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (this.combinationValue) {
         if (!this.arraysEqualEvery(this.property.members, this.form.controls.members.value)) {
           this.property.members = this.form.controls.members.value;
@@ -399,7 +399,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onUnitChanged(): void {
     console.log('onUnitChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (this.property.unit !== this.form.controls.unit.value) {
         this.property.unit = this.form.controls.unit.value;
         this.changed.emit(this.property);
@@ -410,7 +410,7 @@ export class DeviceInstanceServicePropertyComponent implements OnChanges {
   protected onDefaultValueChanged(): void {
     console.log('onDefaultValueChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
 
       if (this.form.controls.defaultValue.value.valid) {
         this.property.setDefaultValue(this.form.controls.defaultValue.value.value);

@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
 
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="pageTitle" [nzSubtitle]="pageSubTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
@@ -6,27 +6,27 @@
     <nz-page-header-content>
       <nz-descriptions [nzColumn]="3">
         <nz-descriptions-item [nzTitle]="'型号' | translate" [nzSpan]="1">
-          @if (template) {
-            {{ template.type.model }}
+          @if (template(); as t) {
+            {{ t.type.model }}
           }
         </nz-descriptions-item>
 
         <nz-descriptions-item [nzTitle]="'版本' | translate" [nzSpan]="1">
-          @if (template) {
-            {{ template.type.version }}
+          @if (template(); as t) {
+            {{ t.type.version }}
           }
         </nz-descriptions-item>
 
         <nz-descriptions-item [nzTitle]="'状态' | translate" [nzSpan]="1">
-          @if (template) {
-            @if (canEditLifecycle) {
-              <nz-radio-group nzSize="small" [(ngModel)]="template.lifecycle" nzButtonStyle="solid" (ngModelChange)="onLifecycleChanged()">
+          @if (template(); as t) {
+            @if (canEditLifecycle()) {
+              <nz-radio-group nzSize="small" [(ngModel)]="t.lifecycle" nzButtonStyle="solid" (ngModelChange)="onLifecycleChanged()">
                 <label nz-radio-button [nzValue]="LifeCycle.DEVELOPMENT">{{ '开发中' | translate }}</label>
                 <label nz-radio-button [nzValue]="LifeCycle.PREVIEW">{{ '预览' | translate }}</label>
                 <label nz-radio-button [nzValue]="LifeCycle.RELEASED">{{ '上线' | translate }}</label>
               </nz-radio-group>
             } @else {
-              @switch (template.lifecycle) {
+              @switch (t.lifecycle) {
                 @case (LifeCycle.DEVELOPMENT) {
                   <nz-tag nzColor="red">{{ '开发中' | translate }}</nz-tag>
                 }
@@ -44,7 +44,7 @@
     </nz-page-header-content>
 
     <nz-page-header-extra>
-      @if (changed) {
+      @if (changed()) {
         <nz-space>
           <div *nzSpaceItem>
             <button nz-button nzType="primary" nzDanger (click)="onReload()">{{ '取消' | translate }}</button>
@@ -59,13 +59,13 @@
   </nz-page-header>
 
   <ng-template #pageTitle>
-    @if (template) {
-      {{ template.description.get(i18n.getCurrentLang()) }}
+    @if (template(); as t) {
+      {{ t.description.get(i18n.getCurrentLang()) }}
     }
   </ng-template>
 
   <ng-template #pageSubTitle>
-    @if (editable) {
+    @if (editable()) {
       <a (click)="editTitle()">
         <span nz-icon nzType="edit" nzTheme="outline"></span>
       </a>
@@ -73,10 +73,10 @@
   </ng-template>
 
   <div style="padding: 20px 20px">
-    @if (template) {
+    @if (template(); as t) {
       <template-detail-slider
-        [editable]="editable"
-        [template]="template"
+        [editable]="editable()"
+        [template]="t"
         (changed)="onChanged()"
         (removed)="onRemoved($event)"
       ></template-detail-slider>

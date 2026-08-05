@@ -1,6 +1,6 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
   <nz-row [nzGutter]="[8, 8]">
-    @for (s of services; track s.type.name) {
+    @for (s of services(); track s.type.name) {
 
       <nz-col [nzSpan]="4" (click)="select(s)">
         <nz-card nzHoverable nzSize="small">

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -35,8 +35,8 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class TemplateNsComponent implements OnInit {
 
-  loading: boolean = true;
-  namespaces: NamespaceDefinition[] = [];
+  loading = signal(true);
+  namespaces = signal<NamespaceDefinition[]>([]);
 
   constructor(
     private router: Router,
@@ -52,11 +52,11 @@ export class TemplateNsComponent implements OnInit {
   }
 
   private loadNamespaces() {
-    this.service.getAllNamespaces(this.account.organization)
+    this.service.getAllNamespaces(this.account.organization())
       .subscribe({
         next: data => {
-          this.namespaces = data;
-          this.loading = false;
+          this.namespaces.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -65,7 +65,7 @@ export class TemplateNsComponent implements OnInit {
   }
 
   protected select(ns: NamespaceDefinition) {
-    this.account.ns = ns;
+    this.account.ns.set(ns);
     this.router.navigate(['/main/template']).then(() => {});
   }
 }

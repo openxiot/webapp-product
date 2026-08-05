@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -69,19 +69,19 @@ import {Location} from '@angular/common';
 })
 export class SpecServiceViewComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = signal(false);
   serviceType: string = '';
 
-  loadingProperties: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loadingProperties = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
   propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
-  loadingActions: boolean = false;
-  actions: ActionDefinition[] = [];
+  loadingActions = signal(false);
+  actions = signal<ActionDefinition[]>([]);
   actionMap: Map<string, ActionDefinition> = new Map<string, ActionDefinition>();
 
-  loadingEvents: boolean = false;
-  events: EventDefinition[] = [];
+  loadingEvents = signal(false);
+  events = signal<EventDefinition[]>([]);
   eventMap: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   form: FormGroup<{
@@ -131,7 +131,7 @@ export class SpecServiceViewComponent implements OnInit {
   }
 
   private loadService() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getServiceDefinition(this.serviceType)
       .subscribe({
         next: a => {
@@ -148,7 +148,7 @@ export class SpecServiceViewComponent implements OnInit {
           this.form.controls.optionalActions.setValue(this.getActions(a.optionalActions));
           this.form.controls.optionalEvents.setValue(this.getEvents(a.optionalEvents));
 
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -190,13 +190,13 @@ export class SpecServiceViewComponent implements OnInit {
   }
 
   private loadProperties(): void {
-    this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loadingProperties.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
+          this.properties.set(data);
           this.propertyMap = new Map(data.map(item => [item.type.name, item]));
-          this.loadingProperties = false;
+          this.loadingProperties.set(false);
           this.loadActions();
         },
         error: error => {
@@ -206,13 +206,13 @@ export class SpecServiceViewComponent implements OnInit {
   }
 
   private loadActions(): void {
-    this.loadingActions = true;
-    this.service.getActionDefinitions(this.account.ns.namespace)
+    this.loadingActions.set(true);
+    this.service.getActionDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.actions = data;
+          this.actions.set(data);
           this.actionMap = new Map(data.map(item => [item.type.name, item]));
-          this.loadingActions = false;
+          this.loadingActions.set(false);
           this.loadEvents();
         },
         error: error => {
@@ -222,13 +222,13 @@ export class SpecServiceViewComponent implements OnInit {
   }
 
   private loadEvents(): void {
-    this.loadingEvents = true;
-    this.service.getEventDefinitions(this.account.ns.namespace)
+    this.loadingEvents.set(true);
+    this.service.getEventDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.events = data;
+          this.events.set(data);
           this.eventMap = new Map(data.map(item => [item.type.name, item]));
-          this.loadingEvents = false;
+          this.loadingEvents.set(false);
           this.loadService();
         },
         error: error => {

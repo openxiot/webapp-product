@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading || loadingProperties || loadingActions || loadingEvents">
+<nz-spin [nzSpinning]="loading() || loadingProperties() || loadingActions() || loadingEvents()">
   @if (device) {
     <nz-card nzSize="small" class="group" [nzBodyStyle]="{ padding: 0}" nzBorderless>
       <div class="group-bar">

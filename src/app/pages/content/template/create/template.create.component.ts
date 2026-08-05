@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -48,8 +48,8 @@ import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcr
 })
 export class TemplateCreateComponent implements OnInit {
 
-  loading: boolean = false;
-  devices: DeviceDefinition[] = [];
+  loading = signal(false);
+  devices = signal<DeviceDefinition[]>([]);
 
   form: FormGroup<{
     device: FormControl<string>,
@@ -81,14 +81,14 @@ export class TemplateCreateComponent implements OnInit {
   }
 
   private loadDeviceDefinitions(): void {
-    if (this.account.ns) {
-      this.loading = true;
-      this.service.getDeviceDefinitions(this.account.ns.namespace)
+    if (this.account.ns()?.namespace) {
+      this.loading.set(true);
+      this.service.getDeviceDefinitions(this.account.ns().namespace)
         .subscribe({
           next: data => {
             console.log('getDeviceDefinitions: ', data.length);
-            this.devices = data;
-            this.loading = false;
+            this.devices.set(data);
+            this.loading.set(false);
           },
           error: error => {
             this.msg.warning(error);
@@ -102,25 +102,25 @@ export class TemplateCreateComponent implements OnInit {
     const model = this.form.value.model || '';
     const description = this.form.value.description || new Map<string, string>();
 
-    const found = this.devices.find(x => x.type.name === device);
+    const found = this.devices().find(x => x.type.name === device);
     if (found) {
-      const type = DeviceType.parse(found.type.toString() + ":" + this.account.organization.id + ":" + model + ":1");
+      const type = DeviceType.parse(found.type.toString() + ":" + this.account.organization().id + ":" + model + ":1");
       console.log("type: " + type.toString());
 
       const template: DeviceTemplate = new DeviceTemplate(type, description, []);
       template.lifecycle = LifeCycle.DEVELOPMENT;
 
-      this.loading = true;
+      this.loading.set(true);
       this.service.createTemplate(template)
         .subscribe({
           next: () => {
             console.log('createTemplate ok');
-            this.loading = false;
+            this.loading.set(false);
             this.router.navigate(['/main/template']).then(() => {});
           },
           error: error => {
             this.msg.warning(error);
-            this.loading = false;
+            this.loading.set(false);
           }
         });
     }

@@ -125,7 +125,7 @@ export class SpecServiceCreateComponent implements OnInit {
 
   private loadProperties(): void {
     this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.properties = data;
@@ -139,7 +139,7 @@ export class SpecServiceCreateComponent implements OnInit {
 
   private loadActions(): void {
     this.loadingActions = true;
-    this.service.getActionDefinitions(this.account.ns.namespace)
+    this.service.getActionDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.actions = data;
@@ -153,7 +153,7 @@ export class SpecServiceCreateComponent implements OnInit {
 
   private loadEvents(): void {
     this.loadingEvents = true;
-    this.service.getEventDefinitions(this.account.ns.namespace)
+    this.service.getEventDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.events = data;
@@ -179,7 +179,7 @@ export class SpecServiceCreateComponent implements OnInit {
     const requiredEvents = this.form.controls.requiredEvents.value.map(x => x.type);
     const optionalEvents = this.form.controls.optionalEvents.value.map(x => x.type);
 
-    const type: ServiceType = ServiceType.create(this.account.ns.namespace, UrnType.SERVICE, code, uuid);
+    const type: ServiceType = ServiceType.create(this.account.ns().namespace, UrnType.SERVICE, code, uuid);
     const def: ServiceDefinition = new ServiceDefinition(type, description,
       requiredProperties, optionalProperties,
       requiredActions, optionalActions,

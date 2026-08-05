@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -48,7 +48,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class NamespaceCreateComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = signal(false);
 
   form: FormGroup<{
     name: FormControl<string>,
@@ -87,20 +87,20 @@ export class NamespaceCreateComponent implements OnInit {
     description.set('zh-CN', this.form.value.description?.get('zh-CN') || 'null');
 
     const def: NamespaceDefinition = new NamespaceDefinition(name, description);
-    def.organization = this.account.organization.id;
+    def.organization = this.account.organization().id;
     def.visibility = visibility;
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createNamespace(def)
       .subscribe({
         next: () => {
           console.log('createNamespace ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/namespace']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

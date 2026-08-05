@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -43,8 +43,8 @@ export class PropertiesDefinitionSelectorComponent implements OnInit {
   readonly #modal = inject(NzModalRef);
   readonly option: PropertiesOption = inject(NZ_MODAL_DATA);
 
-  loading: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loading = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
   selected: Set<string> = new Set<string>();
   disabled: boolean = true;
 
@@ -58,19 +58,19 @@ export class PropertiesDefinitionSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.option.properties.length > 0) {
-      this.properties = this.option.properties
-        .filter(x => ! this.option.exclusion.has(x.type.name));
+      this.properties.set(this.option.properties
+        .filter(x => ! this.option.exclusion.has(x.type.name)));
     } else {
       this.loadDefinitions();
     }
   }
 
   private loadDefinitions(): void {
-    this.loading = true;
-    this.main.getPropertyDefinitions(this.account.ns.namespace).subscribe({
+    this.loading.set(true);
+    this.main.getPropertyDefinitions(this.account.ns().namespace).subscribe({
         next: data => {
-          this.properties = data.filter(x => ! this.option.exclusion.has(x.type.name));
-          this.loading = false;
+          this.properties.set(data.filter(x => ! this.option.exclusion.has(x.type.name)));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -83,7 +83,7 @@ export class PropertiesDefinitionSelectorComponent implements OnInit {
   }
 
   ok(): void {
-    const list = this.properties.filter(x => this.selected.has(x.type.name));
+    const list = this.properties().filter(x => this.selected.has(x.type.name));
     this.#modal.destroy(list);
   }
 

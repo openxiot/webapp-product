@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -49,9 +49,9 @@ import {Location} from '@angular/common';
 })
 export class SpecFormatAddComponent implements OnInit {
 
-  loading: boolean = false;
-  formats: FormatDefinition[] = [];
-  formatExist: Set<string> = new Set();
+  loading = signal(false);
+  formats = signal<FormatDefinition[]>([]);
+  formatExist = signal<Set<string>>(new Set());
 
   constructor(
     protected location: Location,
@@ -69,22 +69,22 @@ export class SpecFormatAddComponent implements OnInit {
   }
 
   private initDefaultFormats() {
-    this.formats.push(this.createFormat('string', 'string', '字符串'));
-    this.formats.push(this.createFormat('bool', 'bool', '布尔'));
-    this.formats.push(this.createFormat('uint8', 'unsinged 8 bits integer', '无符号8位整型'));
-    this.formats.push(this.createFormat('uint16', 'unsinged 16 bits integer', '无符号16位整型'));
-    this.formats.push(this.createFormat('uint32', 'unsinged 32 bits integer', '无符号32位整型'));
-    this.formats.push(this.createFormat('int8', 'singed 8 bits integer', '有符号8位整型'));
-    this.formats.push(this.createFormat('int16', 'singed 16 bits integer', '有符号16位整型'));
-    this.formats.push(this.createFormat('int32', 'singed 32 bits integer', '有符号32位整型'));
-    this.formats.push(this.createFormat('int64', 'singed 64 bits integer', '有符号64位整型'));
-    this.formats.push(this.createFormat('float', 'float', '浮点数'));
-    this.formats.push(this.createFormat('hex', 'hex', '16进制字符串'));
-    this.formats.push(this.createFormat('combination', 'combination', '组合'));
+    this.formats.update(f => [...f, this.createFormat('string', 'string', '字符串')]);
+    this.formats.update(f => [...f, this.createFormat('bool', 'bool', '布尔')]);
+    this.formats.update(f => [...f, this.createFormat('uint8', 'unsinged 8 bits integer', '无符号8位整型')]);
+    this.formats.update(f => [...f, this.createFormat('uint16', 'unsinged 16 bits integer', '无符号16位整型')]);
+    this.formats.update(f => [...f, this.createFormat('uint32', 'unsinged 32 bits integer', '无符号32位整型')]);
+    this.formats.update(f => [...f, this.createFormat('int8', 'singed 8 bits integer', '有符号8位整型')]);
+    this.formats.update(f => [...f, this.createFormat('int16', 'singed 16 bits integer', '有符号16位整型')]);
+    this.formats.update(f => [...f, this.createFormat('int32', 'singed 32 bits integer', '有符号32位整型')]);
+    this.formats.update(f => [...f, this.createFormat('int64', 'singed 64 bits integer', '有符号64位整型')]);
+    this.formats.update(f => [...f, this.createFormat('float', 'float', '浮点数')]);
+    this.formats.update(f => [...f, this.createFormat('hex', 'hex', '16进制字符串')]);
+    this.formats.update(f => [...f, this.createFormat('combination', 'combination', '组合')]);
   }
 
   private createFormat(code: string, descriptionENUS: string, descriptionZHCN: string): FormatDefinition {
-    const type = FormatType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
+    const type = FormatType.create(this.account.ns().namespace, UrnType.FORMAT, code, '0000');
     const descriptions = new Map<string, string>();
     descriptions.set(Spec.EN_US, descriptionENUS);
     descriptions.set(Spec.ZH_CN, descriptionZHCN);
@@ -94,12 +94,12 @@ export class SpecFormatAddComponent implements OnInit {
   }
 
   private loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.formatExist = new Set(data.map(x => x.type.name))
-          this.loading = false;
+          this.formatExist.set(new Set(data.map(x => x.type.name)))
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -108,17 +108,17 @@ export class SpecFormatAddComponent implements OnInit {
   }
 
   protected select(def: FormatDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.createFormatDefinition(def)
       .subscribe({
         next: () => {
           console.log('createFormatDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

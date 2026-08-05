@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -52,7 +52,7 @@ import {Location} from '@angular/common';
 })
 export class SpecDeviceCreateComponent implements OnInit {
 
-  loading: boolean = false;
+  loading = signal(false);
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -95,21 +95,21 @@ export class SpecDeviceCreateComponent implements OnInit {
     const description = this.form.value.description || new Map<string, string>();
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: DeviceType = DeviceType.create(this.account.ns.namespace, UrnType.DEVICE, code, uuid);
+    const type: DeviceType = DeviceType.create(this.account.ns().namespace, UrnType.DEVICE, code, uuid);
     const device: DeviceDefinition = new DeviceDefinition(type, description);
     device.lifecycle = lifecycle;
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createDeviceDefinition(device)
       .subscribe({
         next: () => {
           console.log('createDeviceDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

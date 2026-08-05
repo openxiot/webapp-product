@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, signal, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -50,11 +50,11 @@ export class SpecFormatComponent implements OnInit, OnChanges {
   @Input()
   namespace: string = '';
 
-  loading: boolean = true;
-  formats: FormatDefinition[] = [];
+  loading = signal(true);
+  formats = signal<FormatDefinition[]>([]);
 
   // 可添加的格式
-  addable: boolean = true;
+  addable = signal(true);
 
   codeSortFn: NzTableSortFn<FormatDefinition> = (a: FormatDefinition, b: FormatDefinition): number => a.type.name.localeCompare(b.type.name);
 
@@ -79,13 +79,13 @@ export class SpecFormatComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.formats = data;
-          this.addable = this.formats.length < 12;
-          this.loading = false;
+          this.formats.set(data);
+          this.addable.set(this.formats().length < 12);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -121,13 +121,13 @@ export class SpecFormatComponent implements OnInit, OnChanges {
   }
 
   protected doDelete(format: FormatDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deleteFormatDefinition(format.type)
       .subscribe({
         next: data => {
-          this.formats = this.formats.filter(x => x.type.name !== format.type.name);
-          this.loading = false;
-          this.addable = this.formats.length < 12;
+          this.formats.set(this.formats().filter(x => x.type.name !== format.type.name));
+          this.loading.set(false);
+          this.addable.set(this.formats().length < 12);
         },
         error: error => {
           this.msg.warning(error);
@@ -141,7 +141,7 @@ export class SpecFormatComponent implements OnInit, OnChanges {
       nzWidth: 800,
       nzContent: FormatsSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new FormatsOption(new Set(this.formats.map(x => x.type.name))),
+      nzData: new FormatsOption(new Set(this.formats().map(x => x.type.name))),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -170,17 +170,17 @@ export class SpecFormatComponent implements OnInit, OnChanges {
   }
 
   protected addFormatDefinitions(defs: FormatDefinition[]) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.createFormatDefinitions(defs)
       .subscribe({
         next: () => {
           console.log('createFormatDefinitions ok');
-          this.loading = false;
+          this.loading.set(false);
           this.loadDataFromServer();
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

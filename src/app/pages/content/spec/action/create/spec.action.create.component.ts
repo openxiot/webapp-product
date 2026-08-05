@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -63,8 +63,8 @@ import {Location} from '@angular/common';
 })
 export class SpecActionCreateComponent implements OnInit {
 
-  loading: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loading = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -102,12 +102,12 @@ export class SpecActionCreateComponent implements OnInit {
   }
 
   private loadProperties(): void {
-    this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.loading = false;
+          this.properties.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -124,22 +124,22 @@ export class SpecActionCreateComponent implements OnInit {
     const argumentsOut: ArgumentDefinition[] = this.form.value.argumentsOut || [];
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
 
-    const type: ActionType = ActionType.create(this.account.ns.namespace, UrnType.ACTION, code, uuid);
+    const type: ActionType = ActionType.create(this.account.ns().namespace, UrnType.ACTION, code, uuid);
     const def: ActionDefinition = new ActionDefinition(type, description, argumentsIn, argumentsOut);
     def.lifecycle = lifecycle;
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createActionDefinition(def)
       .subscribe({
         next: () => {
           console.log('createActionDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {
           });
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

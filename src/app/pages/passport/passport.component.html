@@ -27,9 +27,9 @@
             <nz-divider></nz-divider>
 
             <div class="login-btn-container">
-              @if (config) {
-                <button nz-button nzType="primary" class="login-button" (click)="open(config)">
-                  @switch (config.platformId) {
+              @if (config(); as c) {
+                <button nz-button nzType="primary" class="login-button" (click)="open(c)">
+                  @switch (c.platformId) {
                     @case ('dingtalk') {
                       <i nz-icon nzType="dingding" nzTheme="outline"></i>
                     }
@@ -43,7 +43,7 @@
                       <i nz-icon nzType="google" nzTheme="outline"></i>
                     }
                   }
-                  {{ config.platformName }} {{ '登录' | translate }}
+                  {{ c.platformName }} {{ '登录' | translate }}
                 </button>
               }
             </div>
@@ -51,8 +51,8 @@
             <nz-divider style="font-size: 12px; color: gray" nzText="{{ '或使用以下方式登录' | translate}}"></nz-divider>
 
             <div class="login-btn-others">
-              @for (item of list; track item.platformId) {
-                @if (item.platformId !== config?.platformId) {
+              @for (item of list(); track item.platformId) {
+                @if (item.platformId !== config()?.platformId) {
                   <button nzTooltipTitle="{{ item.platformName | translate }}" nz-tooltip nz-button nzSize="large" nzShape="circle" (click)="open(item)">
                     @switch (item.platformId) {
                       @case ('wechat') {

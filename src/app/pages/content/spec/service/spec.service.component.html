@@ -13,9 +13,9 @@
       #table
       nzShowSizeChanger
       nzSize="small"
-      [nzData]="services"
+      [nzData]="services()"
       [nzFrontPagination]="false"
-      [nzLoading]="loading"
+      [nzLoading]="loading()"
     >
       <thead>
       <tr>

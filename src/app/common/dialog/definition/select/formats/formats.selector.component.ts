@@ -295,7 +295,7 @@ export class FormatsSelectorComponent {
   }
 
   private createFormat(code: string, descriptions: Map<string, string>): FormatDefinition {
-    const type = FormatType.create(this.account.ns.namespace, UrnType.FORMAT, code, '0000');
+    const type = FormatType.create(this.account.ns().namespace, UrnType.FORMAT, code, '0000');
     const def = new FormatDefinition(type, descriptions);
     def.lifecycle = LifeCycle.RELEASED;
     return def;

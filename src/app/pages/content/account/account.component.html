@@ -9,8 +9,8 @@
 <div style="padding: 20px 20px">
   <nz-card style="width:300px;" [nzCover]="coverTemplate" [nzHoverable]="true">
     <nz-card-meta
-      [nzTitle]="account.developer.name"
-      [nzDescription]="account.developer.email"
+      [nzTitle]="account.developer().name"
+      [nzDescription]="account.developer().email"
       [nzAvatar]="avatarTemplate"
     ></nz-card-meta>
   </nz-card>
@@ -18,6 +18,6 @@
     <nz-avatar nzSrc="github.svg"></nz-avatar>
   </ng-template>
   <ng-template #coverTemplate>
-    <img alt="cover" src="{{ account.developer.avatar}}"/>
+    <img alt="cover" src="{{ account.developer().avatar}}"/>
   </ng-template>
 </div>

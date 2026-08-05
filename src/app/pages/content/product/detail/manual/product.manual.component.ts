@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -48,9 +48,9 @@ export class ProductManualComponent implements OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  loading: boolean = false;
-  manual: ProductManual = new ProductManual();
-  changed: boolean = false;
+  loading = signal(false);
+  manual = signal<ProductManual>(new ProductManual());
+  changed = signal(false);
   index = 0;
 
   constructor(
@@ -66,14 +66,14 @@ export class ProductManualComponent implements OnChanges {
   }
 
   private loadManual(productId: string) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getProductManual(productId).subscribe({
       next: data => {
-        this.manual = data;
-        this.manual.pages.sort((a, b) => a.index - b.index);
-        this.index = this.manual.pages.length - 1;
-        this.loading = false;
-        this.changed = false;
+        this.manual.set(data);
+        this.manual().pages.sort((a, b) => a.index - b.index);
+        this.index = this.manual().pages.length - 1;
+        this.loading.set(false);
+        this.changed.set(false);
       },
       error: error => {
         this.msg.warning(error);
@@ -83,30 +83,30 @@ export class ProductManualComponent implements OnChanges {
 
   protected add() {
     this.index++;
-    this.manual.pages.push(new ProductManualPage(this.index));
-    this.changed = true;
+    this.manual().pages.push(new ProductManualPage(this.index));
+    this.changed.set(true);
   }
 
   protected onRemoved(step: ProductManualPage) {
     console.log('onRemoved: ', step.index);
 
-    const removeIndex = this.manual.pages.indexOf(step);
+    const removeIndex = this.manual().pages.indexOf(step);
     if (removeIndex > -1) {
-      this.manual.pages.splice(removeIndex, 1);
+      this.manual().pages.splice(removeIndex, 1);
 
       this.index = 0;
-      for (let x of this.manual.pages) {
+      for (let x of this.manual().pages) {
         this.index++;
         x.index = this.index;
       }
 
-      this.changed = true;
+      this.changed.set(true);
     }
   }
 
   protected onChanged(step: ProductManualPage) {
     console.log('onChanged: ', step.index);
-    this.changed = true;
+    this.changed.set(true);
   }
 
   protected onCancel() {
@@ -114,50 +114,50 @@ export class ProductManualComponent implements OnChanges {
   }
 
   protected onSave() {
-    this.loading = true;
-    this.service.updateProductManual(this.product.id, this.manual)
+    this.loading.set(true);
+    this.service.updateProductManual(this.product.id, this.manual())
       .subscribe({
         next: () => {
           console.log('updateProductManual ok');
-          this.loading = false;
-          this.changed = false;
+          this.loading.set(false);
+          this.changed.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
           this.loadManual(this.product.id);
         }
       });
   }
 
   protected onPreview() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductManualLifecycle(this.product.id, LifeCycle.PREVIEW)
       .subscribe({
         next: () => {
           console.log('setProductManualLifecycle ok');
-          this.manual.lifecycle = LifeCycle.PREVIEW;
-          this.loading = false;
+          this.manual().lifecycle = LifeCycle.PREVIEW;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
 
   protected cancelPreview() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductManualLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
       .subscribe({
         next: () => {
           console.log('setProductManualLifecycle ok');
-          this.manual.lifecycle = LifeCycle.DEVELOPMENT;
-          this.loading = false;
+          this.manual().lifecycle = LifeCycle.DEVELOPMENT;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

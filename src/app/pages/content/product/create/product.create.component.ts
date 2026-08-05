@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -61,7 +61,7 @@ import {AccountService} from '../../../../service/account.service';
 export class ProductCreateComponent implements OnInit {
 
   product: ProductBasic = new ProductBasic("", '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
-  loading: boolean = false;
+  loading = signal(false);
 
   form: FormGroup<{
     name: FormControl<LocalizedName>,
@@ -101,7 +101,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   protected submitForm() {
-    this.product.organization = this.account.organization.id;
+    this.product.organization = this.account.organization().id;
     this.product.name = this.form.controls.name.value;
     this.product.alias = this.form.controls.alias.value;
     this.product.model = this.form.controls.model.value;
@@ -113,17 +113,17 @@ export class ProductCreateComponent implements OnInit {
     console.log('product: ', this.product);
     console.log('product => ', ProductBasicCodec.encode(this.product));
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createProduct(this.product)
       .subscribe({
         next: () => {
           console.log('updateProduct ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/product']).then(() => {});
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -56,8 +56,8 @@ import {Location} from '@angular/common';
 })
 export class SpecActionViewComponent implements OnInit {
 
-  loading: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loading = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
   actionType: string = '';
 
   form: FormGroup<{
@@ -98,12 +98,12 @@ export class SpecActionViewComponent implements OnInit {
   }
 
   private load(): void {
-    this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.loading = false;
+          this.properties.set(data);
+          this.loading.set(false);
           this.loadActionDefinition(this.actionType);
         },
         error: error => {
@@ -113,7 +113,7 @@ export class SpecActionViewComponent implements OnInit {
   }
 
   private loadActionDefinition(type: string) {
-    this.loading = true;
+    this.loading.set(true);
 
     this.service.getActionDefinition(type)
       .subscribe({
@@ -128,11 +128,11 @@ export class SpecActionViewComponent implements OnInit {
           this.form.controls.argumentsIn.setValue(a.in);
           this.form.controls.argumentsIn.setValue(a.out);
 
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

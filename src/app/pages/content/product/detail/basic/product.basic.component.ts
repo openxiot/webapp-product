@@ -7,7 +7,8 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewContainerRef
+  ViewContainerRef,
+  signal
 } from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
@@ -95,7 +96,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
   @Output() onSaved = new EventEmitter<void>();
 
-  loading: boolean = false;
+  loading = signal(false);
   values: string[] | null = null;
 
   private destroy$ = new Subject<void>();
@@ -111,9 +112,9 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     upgrade: FormControl<UpgradeType>
   }>;
 
-  editable: boolean = false;
-  manageable: boolean = false;
-  changed: boolean = false;
+  editable = signal(false);
+  manageable = signal(false);
+  changed = signal(false);
 
   constructor(
     public i18n: MainI18nService,
@@ -146,7 +147,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     this.form.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe(values => {
-        this.changed = this.checkChanged(values);
+        this.changed.set(this.checkChanged(values));
       });
   }
 
@@ -155,11 +156,11 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
    * 有组织的前提是已登录
    */
   private isOrgMatch(): boolean {
-    if (!this.account.login || !this.account.organization || !this.product) {
+    if (!this.account.login() || !this.account.organization()?.id || !this.product) {
       return false;
     }
-    console.log("this.account.organization.id: " + this.account.organization.id);
-    return this.product.organization === this.account.organization.id;
+    console.log("this.account.organization().id: " + this.account.organization().id);
+    return this.product.organization === this.account.organization().id;
   }
 
   /**
@@ -222,18 +223,18 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     this.product.protocol = ProtocolFromArray(this.form.controls.protocol.value);
     this.product.upgrade = this.form.controls.upgrade.value.toArray();
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.updateProduct(this.product)
       .subscribe({
         next: () => {
           console.log('updateProduct ok');
-          this.loading = false;
-          this.changed = false;
+          this.loading.set(false);
+          this.changed.set(false);
           this.onSaved.emit();
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
           this.reset();
         }
       });
@@ -267,17 +268,17 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private doRemove() {
-    this.loading = true;
-    this.service.deleteProduct(this.account.organization.id, this.product.id)
+    this.loading.set(true);
+    this.service.deleteProduct(this.account.organization().id, this.product.id)
       .subscribe({
         next: () => {
           console.log('deleteProduct ok');
-          this.loading = false;
+          this.loading.set(false);
           this.location.back();
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
@@ -299,18 +300,18 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private doChangeLifecycle(lifecycle: LifeCycle) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductLifecycle(this.product.id, lifecycle)
       .subscribe({
         next: () => {
           console.log('setProductLifecycle ok');
           this.product.lifecycle = lifecycle;
-          this.editable = this.computeEditable();
-          this.loading = false;
+          this.editable.set(this.computeEditable());
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
           this.reset();
         }
       });
@@ -326,9 +327,9 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
     this.form.controls.protocol.setValue(ProtocolToArray(this.product.protocol));
     this.form.controls.upgrade.setValue(UpgradeType.of(this.product.upgrade));
 
-    this.manageable = this.computeManageable();
-    this.editable = this.computeEditable();
-    this.changed = false;
+    this.manageable.set(this.computeManageable());
+    this.editable.set(this.computeEditable());
+    this.changed.set(false);
   }
 
   protected readonly LifeCycle = LifeCycle;

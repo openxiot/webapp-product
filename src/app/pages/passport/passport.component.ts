@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {NzContentComponent, NzHeaderComponent, NzLayoutComponent} from "ng-zorro-antd/layout";
 import {NzMessageService} from "ng-zorro-antd/message";
@@ -50,9 +50,9 @@ import {Oauth2Configuration} from '@openxiot/xiot-core-spec-ts';
 })
 export class PassportComponent implements OnInit {
 
-  loading: boolean = true;
-  list: Oauth2Configuration[] = []
-  config: Oauth2Configuration | undefined = undefined;
+  loading = signal(true);
+  list = signal<Oauth2Configuration[]>([]);
+  config = signal<Oauth2Configuration | undefined>(undefined);
   redirectUrl: string = '';
 
   constructor(
@@ -106,24 +106,24 @@ export class PassportComponent implements OnInit {
   }
 
   private loadOauth2Configurations(): void {
-    this.loading = true;
+    this.loading.set(true);
 
     this.service.getDeveloperPlatforms().subscribe({
       next: data => {
-        this.list = data;
-        this.config = data.find(x => x.platformId === 'github');
-        this.loading = false;
+        this.list.set(data);
+        this.config.set(data.find(x => x.platformId === 'github'));
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);
-        this.loading = false;
+        this.loading.set(false);
       }
     });
   }
 
   private getAuthorizeURL(platformId: string): string | null {
-    for (let i = 0; i < this.list.length; ++i) {
-      const x = this.list[i];
+    for (let i = 0; i < this.list().length; ++i) {
+      const x = this.list()[i];
       if (x.platformId === platformId) {
         return this.getOAuthURL(x);
       }

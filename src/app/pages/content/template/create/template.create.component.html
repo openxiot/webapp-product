@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="pageTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
   </nz-page-header>
@@ -13,7 +13,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired nzFor="device">{{ '设备类型' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <device-type formControlName="device" [devices]="devices"></device-type>
+            <device-type formControlName="device" [devices]="devices()"></device-type>
           </nz-form-control>
         </nz-form-item>
 

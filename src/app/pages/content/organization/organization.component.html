@@ -1,7 +1,7 @@
 <nz-page-header [nzTitle]="pageTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
-  @if (account.login) {
+  @if (account.login()) {
     <nz-page-header-extra>
       <button nz-button nzType="primary" nzDanger [routerLink]="['/main/organization/create']">{{ '创建' | translate }}</button>
     </nz-page-header-extra>
@@ -45,7 +45,7 @@
 <!--  </nz-table>-->
 
   <nz-row [nzGutter]="[8, 8]">
-    @for (org of organizations; track org) {
+    @for (org of organizations(); track org) {
       <nz-col [nzSpan]="4" (click)="setCurrentOrganization(org)">
         <nz-card nzHoverable>
           <nz-card-meta [nzTitle]="title" [nzDescription]="desc"></nz-card-meta>

@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
 
   <div style="padding: 20px 20px">
     <nz-row [nzGutter]="[8, 8]">
@@ -10,7 +10,7 @@
         >
           <nz-statistic
             [nzTitle]="'产品' | translate"
-            [nzValue]="(statistic.products  | number)!"
+            [nzValue]="(statistic().products  | number)!"
           ></nz-statistic>
         </nz-card>
       </nz-col>
@@ -22,7 +22,7 @@
         >
           <nz-statistic
             [nzTitle]="'模板' | translate"
-            [nzValue]="(statistic.templates | number)!"
+            [nzValue]="(statistic().templates | number)!"
           ></nz-statistic>
         </nz-card>
       </nz-col>
@@ -34,12 +34,12 @@
         >
           <nz-statistic
             [nzTitle]="'名字空间' | translate"
-            [nzValue]="(statistic.specifications | number)!"
+            [nzValue]="(statistic().specifications | number)!"
           ></nz-statistic>
         </nz-card>
       </nz-col>
 
-      @if (account.login) {
+      @if (account.login()) {
         <nz-col [nzSpan]="6">
           <nz-card
             [nzHoverable]="true"
@@ -47,7 +47,7 @@
           >
             <nz-statistic
               [nzTitle]="'组织' | translate"
-              [nzValue]="(statistic.organizations | number)!"
+              [nzValue]="(statistic().organizations | number)!"
             ></nz-statistic>
           </nz-card>
         </nz-col>
@@ -58,7 +58,7 @@
           >
             <nz-statistic
               [nzTitle]="'组织' | translate"
-              [nzValue]="(statistic.organizations | number)!"
+              [nzValue]="(statistic().organizations | number)!"
             ></nz-statistic>
           </nz-card>
         </nz-col>

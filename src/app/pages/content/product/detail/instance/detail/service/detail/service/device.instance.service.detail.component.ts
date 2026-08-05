@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef, signal} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -61,7 +61,7 @@ import {TranslatePipe} from '@ngx-translate/core';
 export class DeviceInstanceServiceDetailComponent implements OnInit {
 
   protected readonly LifeCycle = LifeCycle;
-  private loading: boolean = false;
+  private loading = signal(false);
 
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Input() service!: Service;
@@ -91,14 +91,14 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loading = true;
+    this.loading.set(true);
 
     this.form.controls.iid.setValue(this.service.iid);
     this.form.controls.ns.setValue(this.service.type.ns);
     this.form.controls.code.setValue(this.service.type.name);
     this.form.controls.description.setValue(this.service.description);
 
-    this.loading = false;
+    this.loading.set(false);
   }
 
   onRemoved() {
@@ -141,7 +141,7 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
   protected onIIDChanged(): void {
     console.log('onIIDChanged');
 
-    if (! this.loading) {
+    if (! this.loading()) {
       if (this.service.iid !== this.form.controls.iid.value) {
         this.service.iid = this.form.controls.iid.value;
         this.changed.emit(this.service);
@@ -152,7 +152,7 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
   protected onCodeChanged(): void {
     console.log('onCodeChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       if (this.service.type.name !== this.form.controls.code.value) {
         this.service.type.name = this.form.controls.code.value;
         this.changed.emit(this.service);
@@ -163,7 +163,7 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
   protected onDescriptionChanged(): void {
     console.log('onDescriptionChanged');
 
-    if (!this.loading) {
+    if (!this.loading()) {
       const value: Map<string, string> = this.form.controls.description.value;
       if (! areMapsEqual(this.service.description, value)) {
         this.service.description = value;

@@ -119,7 +119,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
 
   private loadNamespaces() {
     this.loadingNamespaces = true;
-    this.service.getAllNamespaces(this.account.organization)
+    this.service.getAllNamespaces(this.account.organization())
       .subscribe({
         next: data => {
           this.namespaces = new Map(data.map(item => [item.namespace, item]));

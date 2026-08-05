@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -34,7 +34,7 @@ export class NamespaceSelectorComponent implements OnInit {
   readonly #modal = inject(NzModalRef);
   readonly option: NamespaceOption = inject(NZ_MODAL_DATA);
 
-  loading: boolean = false;
+  loading = signal(false);
 
   constructor(
     private account: AccountService,
@@ -51,12 +51,12 @@ export class NamespaceSelectorComponent implements OnInit {
   }
 
   private loadNamespaces() {
-    this.loading = true;
-    this.service.getAllNamespaces(this.account.organization)
+    this.loading.set(true);
+    this.service.getAllNamespaces(this.account.organization())
       .subscribe({
         next: data => {
           this.option.namespaces = data;
-          this.loading = false;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

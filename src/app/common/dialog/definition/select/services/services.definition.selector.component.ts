@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ServicesOption} from './ServicesOption';
@@ -43,8 +43,8 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
   readonly #modal = inject(NzModalRef);
   readonly option: ServicesOption = inject(NZ_MODAL_DATA);
 
-  loading: boolean = false;
-  services: ServiceDefinition[] = [];
+  loading = signal(false);
+  services = signal<ServiceDefinition[]>([]);
   selected: Set<string> = new Set<string>();
   disabled: boolean = true;
 
@@ -58,19 +58,19 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.option.services.length > 0) {
-      this.services = this.option.services
-        .filter(x => ! this.option.exclusion.has(x.type.name));
+      this.services.set(this.option.services
+        .filter(x => ! this.option.exclusion.has(x.type.name)));
     } else {
       this.loadDefinitions();
     }
   }
 
   private loadDefinitions(): void {
-    this.loading = true;
-    this.main.getServiceDefinitions(this.account.ns.namespace).subscribe({
+    this.loading.set(true);
+    this.main.getServiceDefinitions(this.account.ns().namespace).subscribe({
         next: data => {
-          this.services = data.filter(x => ! this.option.exclusion.has(x.type.name));
-          this.loading = false;
+          this.services.set(data.filter(x => ! this.option.exclusion.has(x.type.name)));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -83,7 +83,7 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
   }
 
   ok(): void {
-    const list = this.services.filter(x => this.selected.has(x.type.name));
+    const list = this.services().filter(x => this.selected.has(x.type.name));
     this.#modal.destroy(list);
   }
 

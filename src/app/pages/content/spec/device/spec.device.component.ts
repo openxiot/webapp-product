@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, signal, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -54,8 +54,8 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
   @Input()
   namespace: string = '';
 
-  loading: boolean = true;
-  devices: DeviceDefinition[] = [];
+  loading = signal(true);
+  devices = signal<DeviceDefinition[]>([]);
 
   uuidSortFn: NzTableSortFn<DeviceDefinition> = (a: DeviceDefinition, b: DeviceDefinition): number => a.type.value - b.type.value;
   codeSortFn: NzTableSortFn<DeviceDefinition> = (a: DeviceDefinition, b: DeviceDefinition): number => a.type.name.localeCompare(b.type.name);
@@ -83,13 +83,13 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    if (this.account.ns) {
-      this.loading = true;
-      this.service.getDeviceDefinitions(this.account.ns.namespace)
+    if (this.account.ns()?.namespace) {
+      this.loading.set(true);
+      this.service.getDeviceDefinitions(this.account.ns().namespace)
         .subscribe({
           next: data => {
-            this.devices = data;
-            this.loading = false;
+            this.devices.set(data);
+            this.loading.set(false);
           },
           error: error => {
             this.msg.warning(error);
@@ -126,12 +126,12 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
   }
 
   protected doDelete(device: DeviceDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deleteDeviceDefinition(device.type)
       .subscribe({
         next: data => {
-          this.devices = this.devices.filter(x => x.type.name !== device.type.name);
-          this.loading = false;
+          this.devices.set(this.devices().filter(x => x.type.name !== device.type.name));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

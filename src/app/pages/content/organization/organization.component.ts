@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -45,9 +45,9 @@ import {NzIconDirective} from 'ng-zorro-antd/icon';
 })
 export class OrganizationComponent implements OnInit {
 
-  loading: boolean = true;
+  loading = signal(true);
   total: number = 0;
-  organizations: Organization[] = [];
+  organizations = signal<Organization[]>([]);
 
   constructor(
     public account: AccountService,
@@ -62,13 +62,13 @@ export class OrganizationComponent implements OnInit {
   }
 
   loadDataFromServer(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getOrganizations()
       .subscribe({
         next: data => {
-          this.organizations = data;
-          this.loading = false;
-          this.total = this.organizations.length;
+          this.organizations.set(data);
+          this.loading.set(false);
+          this.total = this.organizations().length;
         },
         error: error => {
           this.msg.warning(error);

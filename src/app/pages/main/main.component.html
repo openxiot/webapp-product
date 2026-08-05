@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="account.loading">
+<nz-spin [nzSpinning]="account.loading()">
   <nz-layout class="main-layout">
     <nz-header class="fixed-header">
       <div class="logo">
@@ -51,7 +51,7 @@
         </li>
 
         <li nz-menu-item nzMatchRouter routerLink="/passport" style="float: right">
-          @if (account.login) {
+          @if (account.login()) {
             <span nz-icon nzType="logout" nzTheme="outline"></span>
             <span>{{ '退出' | translate }}</span>
           } @else {
@@ -60,11 +60,11 @@
           }
         </li>
 
-        @if (account.login) {
+        @if (account.login()) {
           <li nz-menu-item nzMatchRouter routerLink="/main/account" style="float: right" >
             <nz-space>
               <div *nzSpaceItem>
-                @switch (account.developer.platform) {
+                @switch (account.developer().platform) {
                   @case ('wechat') {
                     <span nz-icon nzType="wechat" nzTheme="outline"></span>
                   }
@@ -83,16 +83,16 @@
                 }
               </div>
               <div *nzSpaceItem>
-                {{ account.developer.name}}
+                {{ account.developer().name}}
               </div>
             </nz-space>
           </li>
         }
 
-        @if (account.login) {
-          @if (account.organization) {
+        @if (account.login()) {
+          @if (account.organization()?.id) {
             <li nz-menu-item nzMatchRouter routerLink="/main/organization" style="float: right">
-              {{ account.organization.name }} ({{ account.organization.id }})
+              {{ account.organization().name }} ({{ account.organization().id }})
             </li>
           } @else {
             <li nz-menu-item nzMatchRouter routerLink="/main/organization/create" style="float: right">

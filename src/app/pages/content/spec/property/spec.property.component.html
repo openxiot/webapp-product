@@ -13,9 +13,9 @@
       #table
       nzShowSizeChanger
       nzSize="small"
-      [nzData]="properties"
+      [nzData]="properties()"
       [nzFrontPagination]="false"
-      [nzLoading]="loading || loadingFormats || loadingUnits"
+      [nzLoading]="loading() || loadingFormats() || loadingUnits()"
     >
       <thead>
       <tr>

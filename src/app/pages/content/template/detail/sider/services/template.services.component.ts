@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, signal, ViewContainerRef} from '@angular/core';
 import {
   ActionDefinition,
   DeviceTemplate,
@@ -55,16 +55,16 @@ export class TemplateServicesComponent implements OnInit {
   @Output() selected = new EventEmitter<ServiceTemplate>();
   @Output() changed = new EventEmitter<void>();
 
-  loading: boolean = false;
+  loading = signal(false);
   services: ServiceDefinition[] = [];
 
-  loadingProperties: boolean = true;
+  loadingProperties = signal(true);
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
-  loadingActions: boolean = true;
+  loadingActions = signal(true);
   actions: Map<string, ActionDefinition> = new Map<string, ActionDefinition>();
 
-  loadingEvents: boolean = true;
+  loadingEvents = signal(true);
   events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
@@ -82,47 +82,47 @@ export class TemplateServicesComponent implements OnInit {
   }
 
   private loadDefinitions(): void {
-    this.loading = true;
-    this.main.getServiceDefinitions(this.account.ns.namespace).subscribe({
+    this.loading.set(true);
+    this.main.getServiceDefinitions(this.account.ns().namespace).subscribe({
       next: data => {
         this.services = data;
-        this.loading = false;
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);
       }
     });
 
-    this.loadingProperties = true;
-    this.main.getPropertyDefinitions(this.account.ns.namespace)
+    this.loadingProperties.set(true);
+    this.main.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
-          this.loadingProperties = false;
+          this.loadingProperties.set(false);
         },
         error: error => {
           this.msg.warning(error);
         }
       });
 
-    this.loadingActions = true;
-    this.main.getActionDefinitions(this.account.ns.namespace)
+    this.loadingActions.set(true);
+    this.main.getActionDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.actions = new Map(data.map(item => [item.type.name, item]));
-          this.loadingActions = false;
+          this.loadingActions.set(false);
         },
         error: error => {
           this.msg.warning(error);
         }
       });
 
-    this.loadingEvents = true;
-    this.main.getEventDefinitions(this.account.ns.namespace)
+    this.loadingEvents.set(true);
+    this.main.getEventDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.events = new Map(data.map(item => [item.type.name, item]));
-          this.loadingEvents = false;
+          this.loadingEvents.set(false);
         },
         error: error => {
           this.msg.warning(error);

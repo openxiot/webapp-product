@@ -1,4 +1,4 @@
-import {Component, ViewChild, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, ViewChild, Input, OnChanges, SimpleChanges, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -47,11 +47,11 @@ export class ProductPanelComponent implements OnChanges {
 
   @ViewChild('productPanel') productPanel!: ProductPanelListComponent;
 
-  loadingInstances: boolean = false;
+  loadingInstances = signal(false);
   instances: ProductInstance[] = [];
   currentVersion: string = '1';
 
-  loading: boolean = false;
+  loading = signal(false);
 
   constructor(
     private route: ActivatedRoute,
@@ -68,12 +68,12 @@ export class ProductPanelComponent implements OnChanges {
   }
 
   private loadInstances(productId: string) {
-    this.loadingInstances = true;
+    this.loadingInstances.set(true);
     this.service.getProductInstances(productId).subscribe({
       next: data => {
         this.instances = data;
         this.instances.sort((a, b) => (b.type?.version || 0) - (a.type?.version || 0))
-        this.loadingInstances = false;
+        this.loadingInstances.set(false);
 
         if (this.instances.length > 0) {
           this.currentVersion = this.instances[0].type?.version.toString() || '0';
@@ -86,17 +86,17 @@ export class ProductPanelComponent implements OnChanges {
   }
 
   protected create() {
-    this.loading = true;
+    this.loading.set(true);
 
     this.service.createDeviceUI(this.product.id, this.instances[0].type?.toString() || '')
       .then(device => {
         console.log('createDeviceUI: ', device);
         this.productPanel.refresh();
-        this.loading = false;
+        this.loading.set(false);
       })
       .catch(error => {
         this.msg.warning(error);
-        this.loading = false;
+        this.loading.set(false);
       })
   }
 }

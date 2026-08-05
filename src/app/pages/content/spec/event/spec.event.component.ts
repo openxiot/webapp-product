@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, signal, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -59,11 +59,11 @@ export class SpecEventComponent implements OnInit, OnChanges {
   @Input()
   namespace: string = '';
 
-  loading: boolean = true;
-  events: EventDefinition[] = [];
+  loading = signal(true);
+  events = signal<EventDefinition[]>([]);
 
-  loadingProperties: boolean = true;
-  properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
+  loadingProperties = signal(true);
+  properties = signal<Map<string, PropertyDefinition>>(new Map<string, PropertyDefinition>());
 
   uuidSortFn: NzTableSortFn<EventDefinition> = (a: EventDefinition, b: EventDefinition): number => a.type.value - b.type.value;
   codeSortFn: NzTableSortFn<EventDefinition> = (a: EventDefinition, b: EventDefinition): number => a.type.name.localeCompare(b.type.name);
@@ -89,24 +89,24 @@ export class SpecEventComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getEventDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getEventDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.events = data;
-          this.loading = false;
+          this.events.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
         }
       })
 
-    this.loadingProperties = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loadingProperties.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = new Map(data.map(item => [item.type.name, item]));
-          this.loadingProperties = false;
+          this.properties.set(new Map(data.map(item => [item.type.name, item])));
+          this.loadingProperties.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -115,7 +115,7 @@ export class SpecEventComponent implements OnInit, OnChanges {
   }
 
   getPropertyDescription(type: PropertyType): string {
-    const x = this.properties.get(type.name);
+    const x = this.properties().get(type.name);
     if (x) {
       return x.description.get('zh-CN') || type.name;
     } else {
@@ -151,12 +151,12 @@ export class SpecEventComponent implements OnInit, OnChanges {
   }
 
   protected doDelete(def: EventDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deleteEventDefinition(def.type)
       .subscribe({
         next: data => {
-          this.events = this.events.filter(x => x.type.name !== def.type.name);
-          this.loading = false;
+          this.events.set(this.events().filter(x => x.type.name !== def.type.name));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

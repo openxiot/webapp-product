@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewContainerRef} from '@angular/core';
+import {Component, OnInit, ViewContainerRef, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -52,8 +52,8 @@ export class NamespaceComponent implements OnInit {
 
   protected readonly Visibility = Visibility;
 
-  loading: boolean = true;
-  namespaces: NamespaceDefinition[] = [];
+  loading = signal(true);
+  namespaces = signal<NamespaceDefinition[]>([]);
   pageSize = 100;
   pageIndex = 1;
 
@@ -75,15 +75,16 @@ export class NamespaceComponent implements OnInit {
     pageIndex: number,
     pageSize: number,
   ): void {
-    this.loading = true;
-    this.service.getAllNamespaces(this.account.organization)
+    this.loading.set(true);
+    this.service.getAllNamespaces(this.account.organization())
       .subscribe({
         next: data => {
-          this.namespaces = data;
-          this.loading = false;
+          this.namespaces.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }
@@ -116,16 +117,16 @@ export class NamespaceComponent implements OnInit {
   }
 
   protected doDelete(ns: NamespaceDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deleteNamespace(ns.namespace)
       .subscribe({
         next: data => {
-          this.namespaces = this.namespaces.filter(x => x.namespace !== ns.namespace);
-          this.loading = false;
+          this.namespaces.set(this.namespaces().filter(x => x.namespace !== ns.namespace));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       })
   }

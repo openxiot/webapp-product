@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
 
   <nz-page-header [nzTitle]="pageTitle" [nzGhost]="false" class="fixed-header">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
@@ -9,7 +9,7 @@
     </nz-page-header-tags>
 
     <nz-page-header-extra>
-      @if (account.login) {
+      @if (account.login()) {
         <button nz-button nzType="primary" nzDanger [routerLink]="['/main/product/create']">{{ '创建' | translate }}
         </button>
       } @else {
@@ -22,8 +22,8 @@
     <!--  {{ '所有产品' | translate }}-->
 
     <div class="selector" (click)="changeOrganization()">
-      @if (current.id.length > 0) {
-        {{ current.name }}
+      @if (current().id.length > 0) {
+        {{ current().name }}
       } @else {
         {{ '请选择一个组织' | translate }}
       }
@@ -44,10 +44,10 @@
       <div nz-col [nzSpan]="24">
         @switch (viewMode) {
           @case (0) {
-            <product-grid [products]="products"></product-grid>
+            <product-grid [products]="products()"></product-grid>
           }
           @case (1) {
-            <product-list [products]="products"></product-list>
+            <product-list [products]="products()"></product-list>
           }
         }
       </div>

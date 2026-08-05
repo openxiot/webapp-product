@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, signal, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -58,15 +58,15 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   @Input()
   namespace: string = '';
 
-  loading: boolean = true;
-  properties: PropertyDefinition[] = [];
-  propertyMap: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
+  loading = signal(true);
+  properties = signal<PropertyDefinition[]>([]);
+  propertyMap = signal<Map<string, PropertyDefinition>>(new Map<string, PropertyDefinition>());
 
-  loadingFormats: boolean = true;
-  formats: Map<string, FormatDefinition> = new Map<string, FormatDefinition>();
+  loadingFormats = signal(true);
+  formats = signal<Map<string, FormatDefinition>>(new Map<string, FormatDefinition>());
 
-  loadingUnits: boolean = true;
-  units: Map<string, UnitDefinition> = new Map<string, UnitDefinition>();
+  loadingUnits = signal(true);
+  units = signal<Map<string, UnitDefinition>>(new Map<string, UnitDefinition>());
 
   uuidSortFn: NzTableSortFn<PropertyDefinition> = (a: PropertyDefinition, b: PropertyDefinition): number => a.type.value - b.type.value;
   codeSortFn: NzTableSortFn<PropertyDefinition> = (a: PropertyDefinition, b: PropertyDefinition): number => a.type.name.localeCompare(b.type.name);
@@ -92,37 +92,37 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.propertyMap = new Map(data.map(item => [item.type.name, item]));
-          this.loading = false;
+          this.properties.set(data);
+          this.propertyMap.set(new Map(data.map(item => [item.type.name, item])));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
         }
       })
 
-    this.loadingFormats = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.loadingFormats.set(true);
+    this.service.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.formats = new Map(data.map(item => [item.type.name, item]));
-          this.loadingFormats = false;
+          this.formats.set(new Map(data.map(item => [item.type.name, item])));
+          this.loadingFormats.set(false);
         },
         error: error => {
           this.msg.warning(error);
         }
       })
 
-    this.loadingUnits = true;
-    this.service.getUnitDefinitions(this.account.ns.namespace)
+    this.loadingUnits.set(true);
+    this.service.getUnitDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.units = new Map(data.map(item => [item.type.name, item]));
-          this.loadingUnits = false;
+          this.units.set(new Map(data.map(item => [item.type.name, item])));
+          this.loadingUnits.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -131,7 +131,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   }
 
   getFormatDescription(format: string) : string {
-    const x = this.formats.get(format);
+    const x = this.formats().get(format);
     if (x) {
       return x.description.get(this.i18n.getCurrentLang()) || format;
     }
@@ -141,7 +141,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
 
   getUnitDescription(unit: string | null) : string {
     if (unit) {
-      const x = this.units.get(unit);
+      const x = this.units().get(unit);
       if (x) {
         return x.description.get(this.i18n.getCurrentLang()) || unit;
       }
@@ -153,7 +153,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   }
 
   getPropertyDescription(type: PropertyType): string {
-    const x = this.propertyMap.get(type.name);
+    const x = this.propertyMap().get(type.name);
     if (x) {
       return x.description.get(this.i18n.getCurrentLang()) || type.name;
     } else {
@@ -189,12 +189,12 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
   }
 
   protected doDelete(def: PropertyDefinition) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deletePropertyDefinition(def.type)
       .subscribe({
         next: data => {
-          this.properties = this.properties.filter(x => x.type.name !== def.type.name);
-          this.loading = false;
+          this.properties.set(this.properties().filter(x => x.type.name !== def.type.name));
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);

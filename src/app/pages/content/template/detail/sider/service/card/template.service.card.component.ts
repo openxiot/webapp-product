@@ -86,7 +86,7 @@ export class TemplateServiceCardComponent implements OnInit {
 
   private loadDefinitions(): void {
     this.loadingProperties = true;
-    this.main.getPropertyDefinitions(this.account.ns.namespace)
+    this.main.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.properties = data;
@@ -98,7 +98,7 @@ export class TemplateServiceCardComponent implements OnInit {
       });
 
     this.loadingActions = true;
-    this.main.getActionDefinitions(this.account.ns.namespace)
+    this.main.getActionDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.actions = data;
@@ -110,7 +110,7 @@ export class TemplateServiceCardComponent implements OnInit {
       });
 
     this.loadingEvents = true;
-    this.main.getEventDefinitions(this.account.ns.namespace)
+    this.main.getEventDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
           this.events = data;

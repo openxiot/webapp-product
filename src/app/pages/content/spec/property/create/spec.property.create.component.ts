@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -82,14 +82,14 @@ export class SpecPropertyCreateComponent implements OnInit {
 
   protected readonly ConstraintType = ConstraintType;
 
-  loading: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loading = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
 
-  loadingFormats: boolean = false;
-  formats: FormatDefinition[] = [];
+  loadingFormats = signal(false);
+  formats = signal<FormatDefinition[]>([]);
 
-  loadingUnits: boolean = false;
-  units: UnitDefinition[] = [];
+  loadingUnits = signal(false);
+  units = signal<UnitDefinition[]>([]);
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -142,12 +142,12 @@ export class SpecPropertyCreateComponent implements OnInit {
   }
 
   private loadUnits(): void {
-    this.loadingUnits = true;
-    this.service.getUnitDefinitions(this.account.ns.namespace)
+    this.loadingUnits.set(true);
+    this.service.getUnitDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.units = data;
-          this.loadingUnits = false;
+          this.units.set(data);
+          this.loadingUnits.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -156,12 +156,12 @@ export class SpecPropertyCreateComponent implements OnInit {
   }
 
   private loadFormats(): void {
-    this.loadingFormats = true;
-    this.service.getFormatDefinitions(this.account.ns.namespace)
+    this.loadingFormats.set(true);
+    this.service.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.formats = data;
-          this.loadingFormats = false;
+          this.formats.set(data);
+          this.loadingFormats.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -170,12 +170,12 @@ export class SpecPropertyCreateComponent implements OnInit {
   }
 
   private loadPropertyDefinitions(): void {
-    this.loading = true;
-    this.service.getPropertyDefinitions(this.account.ns.namespace)
+    this.loading.set(true);
+    this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.loading = false;
+          this.properties.set(data);
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
@@ -222,7 +222,7 @@ export class SpecPropertyCreateComponent implements OnInit {
     const lifecycle = this.form.value.lifecycle || LifeCycle.DEVELOPMENT;
     const unit = this.form.value.unit;
 
-    const type: PropertyType = PropertyType.create(this.account.ns.namespace, UrnType.PROPERTY, code, uuid);
+    const type: PropertyType = PropertyType.create(this.account.ns().namespace, UrnType.PROPERTY, code, uuid);
     const def: PropertyDefinition = new PropertyDefinition(type, description);
     def.format = DataFormatFromString(this.form.value.format || '');
     def.access = this.form.value.access || new Access();
@@ -254,18 +254,18 @@ export class SpecPropertyCreateComponent implements OnInit {
       def.members = this.form.controls.members.value.map(x => x.type);
     }
 
-    this.loading = true;
+    this.loading.set(true);
     this.service.createPropertyDefinition(def)
       .subscribe({
         next: () => {
           console.log('createPropertyDefinition ok');
-          this.loading = false;
+          this.loading.set(false);
           this.router.navigate(['/main/spec']).then(() => {
           });
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

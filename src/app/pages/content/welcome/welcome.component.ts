@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {AccountService} from '../../../service/account.service';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -33,8 +33,8 @@ import {Statistic} from '../../../typedef/define/statistic/Statistic';
 })
 export class WelcomeComponent implements OnInit {
 
-  loading: boolean = false;
-  statistic: Statistic = new Statistic();
+  loading = signal(false);
+  statistic = signal<Statistic>(new Statistic());
 
   constructor(
     public account: AccountService,
@@ -50,15 +50,17 @@ export class WelcomeComponent implements OnInit {
   }
 
   private load() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getStatistic().subscribe({
       next: data => {
-        this.statistic = data;
-        this.loading = false;
+        this.statistic.set(data);
+        this.loading.set(false);
+        console.log("getStatistic ok!");
       },
       error: error => {
         this.msg.warning(error);
-        this.loading = false;
+        this.loading.set(false);
+        console.log("getStatistic ok!");
       }
     });
   }

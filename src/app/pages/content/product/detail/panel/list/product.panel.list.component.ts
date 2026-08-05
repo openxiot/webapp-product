@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -51,8 +51,8 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
 
   @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('xiot-spec', UrnType.DEVICE, 'switch', '00000000'), '');
 
-  loading: boolean = false;
-  panels: ProductPanel[] = [];
+  loading = signal(false);
+  panels = signal<ProductPanel[]>([]);
 
   constructor(
     private router: Router,
@@ -73,11 +73,11 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
   }
 
   private loadPanels(productId: string) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getProductPanels(productId).subscribe({
       next: data => {
-        this.panels = data;
-        this.loading = false;
+        this.panels.set(data);
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);
@@ -95,65 +95,65 @@ export class ProductPanelListComponent implements OnInit, OnChanges {
   }
 
   protected onPreview(p: ProductPanel) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductPanelLifecycle(this.product.id, p.category, p.version.code, LifeCycle.PREVIEW)
       .subscribe({
         next: () => {
           console.log('setProductPanelLifecycle ok');
-          this.loading = false;
+          this.loading.set(false);
           this.loadPanels(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
 
   protected onCancelPreview(p: ProductPanel) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductPanelLifecycle(this.product.id, p.category, p.version.code, LifeCycle.DEVELOPMENT)
       .subscribe({
         next: () => {
           console.log('setProductPanelLifecycle ok');
-          this.loading = false;
+          this.loading.set(false);
           this.loadPanels(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
 
   protected onDevelopment(p: ProductPanel) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductPanelLifecycle(this.product.id, p.category, p.version.code, LifeCycle.DEVELOPMENT)
       .subscribe({
         next: () => {
           console.log('setProductPanelLifecycle ok');
-          this.loading = false;
+          this.loading.set(false);
           this.loadPanels(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
 
   protected onDelete(p: ProductPanel) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.deleteProductPanel(this.product.id, p.category, p.version.code)
       .subscribe({
         next: () => {
           console.log('deleteProductPanel ok');
-          this.loading = false;
+          this.loading.set(false);
           this.loadPanels(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

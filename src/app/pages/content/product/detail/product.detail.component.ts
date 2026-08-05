@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -60,9 +60,9 @@ export class ProductDetailComponent implements OnInit {
 
   tabIndex: number = 0;
 
-  loading: boolean = true;
+  loading = signal(true);
   productId: number = 0;
-  product: ProductBasic = new ProductBasic('', '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
+  product = signal<ProductBasic>(new ProductBasic('', '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), ''));
   instances: ObjectWithLifecycle<DeviceInstance>[] = [];
 
   constructor(
@@ -83,11 +83,11 @@ export class ProductDetailComponent implements OnInit {
   }
 
   private load(productId: number): void {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getProduct(productId).subscribe({
       next: data => {
-        this.product = data;
-        this.loading = false;
+        this.product.set(data);
+        this.loading.set(false);
       },
       error: error => {
         this.msg.warning(error);

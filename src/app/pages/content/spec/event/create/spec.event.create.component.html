@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
   </nz-page-header>
@@ -8,7 +8,7 @@
   </ng-template>
 
   <ng-template #subTitle>
-    {{ account.ns.namespace }}
+    {{ account.ns().namespace }}
   </ng-template>
 
   <div style="padding: 20px 20px">
@@ -38,7 +38,7 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '参数' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-          <definition-arguments formControlName="arguments" [properties]="properties"></definition-arguments>
+          <definition-arguments formControlName="arguments" [properties]="properties()"></definition-arguments>
           </nz-form-control>
         </nz-form-item>
 

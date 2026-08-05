@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -48,9 +48,9 @@ export class ProductWizardComponent implements OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  loading: boolean = false;
-  wizard: ProductWizard = new ProductWizard();
-  changed: boolean = false;
+  loading = signal(false);
+  wizard = signal<ProductWizard>(new ProductWizard());
+  changed = signal(false);
   index = 0;
 
   constructor(
@@ -66,14 +66,14 @@ export class ProductWizardComponent implements OnChanges {
   }
 
   private loadWizard(productId: string) {
-    this.loading = true;
+    this.loading.set(true);
     this.service.getProductWizard(productId).subscribe({
       next: data => {
-        this.wizard = data;
-        this.wizard.steps.sort((a, b) => a.index - b.index);
-        this.index = this.wizard.steps.length - 1;
-        this.loading = false;
-        this.changed = false;
+        this.wizard.set(data);
+        this.wizard().steps.sort((a, b) => a.index - b.index);
+        this.index = this.wizard().steps.length - 1;
+        this.loading.set(false);
+        this.changed.set(false);
       },
       error: error => {
         this.msg.warning(error);
@@ -83,30 +83,30 @@ export class ProductWizardComponent implements OnChanges {
 
   protected add() {
     this.index++;
-    this.wizard.steps.push(new ProductWizardStep(this.index));
-    this.changed = true;
+    this.wizard().steps.push(new ProductWizardStep(this.index));
+    this.changed.set(true);
   }
 
   protected onRemoved(step: ProductWizardStep) {
     console.log('onRemoved: ', step.index);
 
-    const removeIndex = this.wizard.steps.indexOf(step);
+    const removeIndex = this.wizard().steps.indexOf(step);
     if (removeIndex > -1) {
-      this.wizard.steps.splice(removeIndex, 1);
+      this.wizard().steps.splice(removeIndex, 1);
 
       this.index = 0;
-      for (let x of this.wizard.steps) {
+      for (let x of this.wizard().steps) {
         this.index++;
         x.index = this.index;
       }
 
-      this.changed = true;
+      this.changed.set(true);
     }
   }
 
   protected onChanged(step: ProductWizardStep) {
     console.log('onChanged: ', step.index);
-    this.changed = true;
+    this.changed.set(true);
   }
 
   protected onCancel() {
@@ -114,50 +114,50 @@ export class ProductWizardComponent implements OnChanges {
   }
 
   protected onSave() {
-    this.loading = true;
-    this.service.updateProductWizard(this.product.id, this.wizard)
+    this.loading.set(true);
+    this.service.updateProductWizard(this.product.id, this.wizard())
       .subscribe({
         next: () => {
           console.log('updateProductWizard ok');
-          this.loading = false;
-          this.changed = false;
+          this.loading.set(false);
+          this.changed.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
           this.loadWizard(this.product.id);
         }
       });
   }
 
   protected onPreview() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductWizardLifecycle(this.product.id, LifeCycle.PREVIEW)
       .subscribe({
         next: () => {
           console.log('setProductWizardLifecycle ok');
-          this.wizard.lifecycle = LifeCycle.PREVIEW;
-          this.loading = false;
+          this.wizard().lifecycle = LifeCycle.PREVIEW;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }
 
   protected cancelPreview() {
-    this.loading = true;
+    this.loading.set(true);
     this.service.setProductWizardLifecycle(this.product.id, LifeCycle.DEVELOPMENT)
       .subscribe({
         next: () => {
           console.log('setProductWizardLifecycle ok');
-          this.wizard.lifecycle = LifeCycle.DEVELOPMENT;
-          this.loading = false;
+          this.wizard().lifecycle = LifeCycle.DEVELOPMENT;
+          this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
-          this.loading = false;
+          this.loading.set(false);
         }
       });
   }

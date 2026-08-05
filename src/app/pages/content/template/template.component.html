@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loading">
+<nz-spin [nzSpinning]="loading()">
   <nz-page-header [nzTitle]="pageTitle" [nzSubtitle]="subTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
@@ -7,7 +7,7 @@
     </nz-page-header-tags>
 
     <nz-page-header-extra>
-      @if (account.login) {
+      @if (account.login()) {
         @if (account.isEditable()) {
           <button nz-button nzType="primary" nzDanger [routerLink]="['/main/template/create']">{{ '创建' | translate }}</button>
         }
@@ -17,8 +17,8 @@
 
   <ng-template #pageTitle>
     <div class="selector" (click)="changeNamespace()">
-      @if (account.ns) {
-        {{ account.ns.namespace }}
+      @if (account.ns()?.namespace) {
+        {{ account.ns().namespace }}
       } @else {
         {{ '请选择一个名字空间' | translate }}
       }
@@ -27,27 +27,27 @@
   </ng-template>
 
   <ng-template #subTitle>
-    @if (account.ns) {
-      {{ account.ns.description.get(i18n.getCurrentLang()) }}
+    @if (account.ns()?.namespace) {
+      {{ account.ns().description.get(i18n.getCurrentLang()) }}
     }
   </ng-template>
 
   <div style="padding: 20px 20px">
-    @if (account.ns) {
+    @if (account.ns()?.namespace) {
       <div nz-row [nzGutter]="[8, 8]">
-        @if (templatesOriginal.length > 0) {
+        @if (templatesOriginal().length > 0) {
           <div nz-col [nzSpan]="24">
-            <template-filter-type [types]="types" (typeSelected)="onTypesSelected($event)"></template-filter-type>
+            <template-filter-type [types]="types()" (typeSelected)="onTypesSelected($event)"></template-filter-type>
           </div>
         }
 
         <div nz-col [nzSpan]="24">
           @switch (viewMode) {
             @case (0) {
-              <template-grid [templates]="templates"></template-grid>
+              <template-grid [templates]="templates()"></template-grid>
             }
             @case (1) {
-              <template-list [templates]="templates" (removed)="onRemove($event)"></template-list>
+              <template-list [templates]="templates()" (removed)="onRemove($event)"></template-list>
             }
           }
         </div>
