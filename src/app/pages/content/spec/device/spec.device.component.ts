@@ -83,7 +83,7 @@ export class SpecDeviceComponent implements OnInit, OnChanges {
   }
 
   loadDataFromServer(): void {
-    if (this.account.ns()?.namespace) {
+    if (this.account.ns().namespace) {
       this.loading.set(true);
       this.service.getDeviceDefinitions(this.account.ns().namespace)
         .subscribe({

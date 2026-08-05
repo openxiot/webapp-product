@@ -68,8 +68,8 @@ export class MainService {
   /**------------------------------------------------------------------------------------------------
    * 动态判断：如果有开发组，就访问开发组可见数据；如果没有，就只访问公开的信息
    *------------------------------------------------------------------------------------------------*/
-  getAllNamespaces(organization: Organization | undefined): Observable<NamespaceDefinition[]> {
-    if (!organization) {
+  getAllNamespaces(organization: Organization): Observable<NamespaceDefinition[]> {
+    if (organization.id.length === 0) {
       return this.getPublicNamespaces();
     } else {
       return this.getVisibleNamespaces(organization.id);

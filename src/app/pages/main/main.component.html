@@ -90,7 +90,7 @@
         }
 
         @if (account.login()) {
-          @if (account.organization()?.id) {
+          @if (account.organization().id) {
             <li nz-menu-item nzMatchRouter routerLink="/main/organization" style="float: right">
               {{ account.organization().name }} ({{ account.organization().id }})
             </li>

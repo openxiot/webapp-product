@@ -17,7 +17,7 @@
 
   <ng-template #pageTitle>
     <div class="selector" (click)="changeNamespace()">
-      @if (account.ns()?.namespace) {
+      @if (account.ns().namespace) {
         {{ account.ns().namespace }}
       } @else {
         {{ '请选择一个名字空间' | translate }}
@@ -27,13 +27,13 @@
   </ng-template>
 
   <ng-template #subTitle>
-    @if (account.ns()?.namespace) {
+    @if (account.ns().namespace) {
       {{ account.ns().description.get(i18n.getCurrentLang()) }}
     }
   </ng-template>
 
   <div style="padding: 20px 20px">
-    @if (account.ns()?.namespace) {
+    @if (account.ns().namespace) {
       <div nz-row [nzGutter]="[8, 8]">
         @if (templatesOriginal().length > 0) {
           <div nz-col [nzSpan]="24">

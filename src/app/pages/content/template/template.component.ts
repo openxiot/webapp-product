@@ -77,7 +77,7 @@ export class TemplateComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.account.ns()?.namespace) {
+    if (this.account.ns().namespace) {
       this.loadTemplates();
     }
   }
@@ -124,7 +124,7 @@ export class TemplateComponent implements OnInit {
       nzWidth: 800,
       nzContent: NamespaceSelectorComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new NamespaceOption(this.account.ns()?.namespace || ''),
+      nzData: new NamespaceOption(this.account.ns().namespace || ''),
       nzFooter: null,
       nzClosable: false,
       nzMaskClosable: true,

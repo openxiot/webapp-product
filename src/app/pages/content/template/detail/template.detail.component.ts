@@ -113,7 +113,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
    * 有组织的前提是已登录
    */
   private isOrgMatch(): boolean {
-    if (!this.account.login() || !this.account.organization()?.id || !this.template()) {
+    if (!this.account.login() || !this.account.organization().id || !this.template()) {
       return false;
     }
     return this.template()!.type.organization === this.account.organization().id;

@@ -156,7 +156,7 @@ export class ProductBasicComponent implements OnInit, OnDestroy, OnChanges {
    * 有组织的前提是已登录
    */
   private isOrgMatch(): boolean {
-    if (!this.account.login() || !this.account.organization()?.id || !this.product) {
+    if (!this.account.login() || !this.account.organization().id || !this.product) {
       return false;
     }
     console.log("this.account.organization().id: " + this.account.organization().id);

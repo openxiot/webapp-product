@@ -114,7 +114,7 @@ export class ProductInstanceComponent implements OnChanges {
    * 有组织的前提是已登录
    */
   private isOrgMatch(): boolean {
-    if (!this.account.login() || !this.account.organization()?.id || !this.instance) {
+    if (!this.account.login() || !this.account.organization().id || !this.instance) {
       return false;
     }
     return this.instance.type.organization === this.account.organization().id;

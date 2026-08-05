@@ -1,7 +1,7 @@
 <nz-page-header [nzTitle]="pageTitle" [nzSubtitle]="subTitle" [nzGhost]="false">
   <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
-  @if (account.ns()?.namespace) {
+  @if (account.ns().namespace) {
     <nz-page-header-footer>
       <nz-tabs [(nzSelectedIndex)]="tabIndex" nzSize="small" (nzSelectChange)="onTabChanged()">
         <nz-tab [nzTitle]="'设备' | translate"></nz-tab>
@@ -18,7 +18,7 @@
 
 <ng-template #pageTitle>
   <div class="selector" (click)="changeNamespace()">
-    @if (account.ns()?.namespace) {
+    @if (account.ns().namespace) {
       {{ account.ns().namespace }}
     } @else {
       {{ '请选择一个名字空间' | translate }}
@@ -28,13 +28,13 @@
 </ng-template>
 
 <ng-template #subTitle>
-  @if (account.ns()?.namespace) {
+  @if (account.ns().namespace) {
     {{ account.ns().description.get(i18n.getCurrentLang()) }}
   }
 </ng-template>
 
 <div style="padding: 20px 20px">
-  @if (account.ns()?.namespace) {
+  @if (account.ns().namespace) {
     @switch (tabIndex) {
       @case (0) {
         <spec-device [namespace]="account.ns().namespace"></spec-device>

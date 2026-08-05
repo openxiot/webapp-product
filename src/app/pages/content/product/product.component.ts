@@ -71,7 +71,7 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.account.organization()?.id) {
+    if (this.account.organization().id) {
       this.current.set(this.account.organization());
       this.loadProducts();
     }

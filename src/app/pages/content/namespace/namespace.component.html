@@ -47,7 +47,7 @@
             }
           </td>
           <td>
-            @if (account.organization()?.id) {
+            @if (account.organization().id) {
               @if (ns.organization === account.organization().id) {
                 <nz-tag nzColor="geekblue">{{ ns.organization }}</nz-tag>
               } @else {
@@ -58,7 +58,7 @@
             }
           </td>
           <td>
-            @if (account.organization()?.id) {
+            @if (account.organization().id) {
               @if (ns.organization === account.organization().id) {
                 <a [routerLink]="['/main/namespace/edit', ns.namespace]">{{ '修改' | translate }}</a>
                 <nz-divider nzType="vertical"></nz-divider>
