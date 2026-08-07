@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy} from '@angular/core';
+import {Component, Input, OnDestroy, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
 import {NzMessageService} from 'ng-zorro-antd/message';
@@ -37,7 +37,7 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
   @Input() productId: string = '';
   @Input() updatable: boolean = false;
 
-  private _value!: string;
+  private _value = signal<string>('');
 
   disabled = false;
 
@@ -55,12 +55,12 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
   }
 
   get value(): string {
-    return this._value;
+    return this._value();
   }
 
   set value(val: string) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -68,8 +68,8 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -89,7 +89,7 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
   // 上传图片
   //------------------------------------------------------------
 
-  loading = false;
+  loading = signal(false);
   iconUrl?: string;
   supportFileType: string = 'image/jpeg';
   uploaded: boolean = false;
@@ -109,7 +109,7 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
     console.log('customUpload: ', item);
 
     // 开始上传时显示加载状态
-    this.loading = true;
+    this.loading.set(true);
 
     // 构建完整的上传流程 observable
     const uploadFlow$ = this.service.getFileUploadUrl(this.account.organization().id, "product", "icon", item.file.name).pipe(
@@ -122,7 +122,7 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
     // 订阅并保存订阅实例
     this.uploadSubscription = uploadFlow$.subscribe({
       complete: () => {
-        this.loading = false; // 上传完成（成功/失败）后关闭加载
+        this.loading.set(false); // 上传完成（成功/失败）后关闭加载
       }
     });
 
@@ -219,16 +219,16 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
     console.log('handleChange: ', change);
     switch (change.type) {
       case 'start':
-        this.loading = true;
+        this.loading.set(true);
         break;
 
       case 'success':
         this.uploaded = true;
-        this.loading = false;
+        this.loading.set(false);
         break;
 
       case 'error':
-        this.loading = false;
+        this.loading.set(false);
         this.msg.error('上传失败，请重试');
         break;
     }
@@ -240,13 +240,13 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
 
     // 1. 可选：调用后端接口删除服务器上的文件
     if (this.iconUrl) {
-      this.loading = true;
+      this.loading.set(true);
 
       this.service.removeUrl(this.iconUrl)
         .subscribe({
           next: () => {
             console.log('removeUrl ok: ' + this.iconUrl);
-            this.loading = false;
+            this.loading.set(false);
 
             this.value = '';
             this.iconUrl = undefined;
@@ -255,7 +255,7 @@ export class ProductIconComponent implements ControlValueAccessor, OnDestroy {
           error: error => {
             console.log('removeUrl: ', error);
             this.msg.warning(error);
-            this.loading = false;
+            this.loading.set(false);
           }
         });
     } else {

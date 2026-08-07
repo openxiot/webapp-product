@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -64,7 +64,7 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
     this.removed.emit(this.page);
   }
 
-  loading = false;
+  loading = signal(false);
   supportFileType: string = 'image/jpeg';
   uploaded: boolean = false;
   private uploadSubscription?: Subscription;
@@ -83,7 +83,7 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
     console.log('customUpload: ', item);
 
     // 开始上传时显示加载状态
-    this.loading = true;
+    this.loading.set(true);
 
     // 构建完整的上传流程 observable
     const uploadFlow$ = this.service.getFileUploadUrl(this.account.organization().id, "product", "manual", item.file.name).pipe(
@@ -96,7 +96,7 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
     // 订阅并保存订阅实例
     this.uploadSubscription = uploadFlow$.subscribe({
       complete: () => {
-        this.loading = false; // 上传完成（成功/失败）后关闭加载
+        this.loading.set(false); // 上传完成（成功/失败）后关闭加载
       }
     });
 
@@ -190,17 +190,17 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
     console.log('handleChange: ', change);
     switch (change.type) {
       case 'start':
-        this.loading = true;
+        this.loading.set(true);
         break;
 
       case 'success':
         this.uploaded = true;
-        this.loading = false;
+        this.loading.set(false);
         this.changed.emit(this.page);
         break;
 
       case 'error':
-        this.loading = false;
+        this.loading.set(false);
         this.msg.error('上传失败，请重试');
         this.changed.emit(this.page);
         break;

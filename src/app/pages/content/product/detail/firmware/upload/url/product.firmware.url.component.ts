@@ -1,4 +1,4 @@
-import {Component, Injector, Input, OnDestroy} from '@angular/core';
+import {Component, Injector, Input, OnDestroy, signal} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -47,7 +47,7 @@ import {AccountService} from '../../../../../../../service/account.service';
 })
 export class ProductFirmwareUrlComponent implements ControlValueAccessor, Validator, OnDestroy {
 
-  private _value: FirmwareUrl = new FirmwareUrl();
+  private _value = signal<FirmwareUrl>(new FirmwareUrl());
   error?: string;
 
   disabled = false;
@@ -81,12 +81,12 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
   }
 
   get value(): FirmwareUrl {
-    return this._value;
+    return this._value();
   }
 
   set value(val: FirmwareUrl) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -94,8 +94,8 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -138,7 +138,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
 
   @Input() productId: number = 0;
 
-  loading = false;
+  loading = signal(false);
   uploaded: boolean = false;
   private uploadSubscription?: Subscription;
 
@@ -156,7 +156,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
     console.log('customUpload: ', item);
 
     // 开始上传时显示加载状态
-    this.loading = true;
+    this.loading.set(true);
 
     // 构建完整的上传流程 observable
     const uploadFlow$ = this.service.getFileUploadUrl(this.account.organization().id, "product", "firmware", item.file.name).pipe(
@@ -169,7 +169,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
     // 订阅并保存订阅实例
     this.uploadSubscription = uploadFlow$.subscribe({
       complete: () => {
-        this.loading = false; // 上传完成（成功/失败）后关闭加载
+        this.loading.set(false); // 上传完成（成功/失败）后关闭加载
       }
     });
 
@@ -251,8 +251,8 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
   protected beforeUpload = (file: NzUploadFile): boolean => {
     console.log('beforeUpload: ', file);
 
-    this._value.fileName = file.name;
-    this._value.fileSize = file.size || 0;
+    this._value().fileName = file.name;
+    this._value().fileSize = file.size || 0;
 
     const sizeValid = (file.size! / 1024 / 1024) < 1024;
     if (!sizeValid) {
@@ -270,16 +270,16 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
     console.log('handleChange: ', change);
     switch (change.type) {
       case 'start':
-        this.loading = true;
+        this.loading.set(true);
         break;
 
       case 'success':
         this.uploaded = true;
-        this.loading = false;
+        this.loading.set(false);
         break;
 
       case 'error':
-        this.loading = false;
+        this.loading.set(false);
 
         // 文件上传失败时触发错误
         this.value = new FirmwareUrl()

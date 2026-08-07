@@ -1,5 +1,5 @@
 @if (updatable) {
-  <nz-spin [nzSpinning]="loadingNamespaces || loadingDevices || loadingTemplates">
+  <nz-spin [nzSpinning]="loadingNamespaces() || loadingDevices() || loadingTemplates()">
     <nz-row [nzGutter]="[8, 8]">
       <nz-col [nzSpan]="8">
         <nz-card [nzHoverable]="true" (click)="onClickNamespace()">

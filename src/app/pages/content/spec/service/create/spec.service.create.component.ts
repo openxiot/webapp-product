@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {BreadcrumbTranslateDirective} from '../../../../../common/component/breadcrumb/breadcrumb-translate.directive';
@@ -69,14 +69,14 @@ import {Location} from '@angular/common';
 })
 export class SpecServiceCreateComponent implements OnInit {
 
-  loadingProperties: boolean = false;
-  properties: PropertyDefinition[] = [];
+  loadingProperties = signal(false);
+  properties = signal<PropertyDefinition[]>([]);
 
-  loadingActions: boolean = false;
-  actions: ActionDefinition[] = [];
+  loadingActions = signal(false);
+  actions = signal<ActionDefinition[]>([]);
 
-  loadingEvents: boolean = false;
-  events: EventDefinition[] = [];
+  loadingEvents = signal(false);
+  events = signal<EventDefinition[]>([]);
 
   form: FormGroup<{
     uuid: FormControl<number>,
@@ -124,43 +124,46 @@ export class SpecServiceCreateComponent implements OnInit {
   }
 
   private loadProperties(): void {
-    this.loadingProperties = true;
+    this.loadingProperties.set(true);
     this.service.getPropertyDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.properties = data;
-          this.loadingProperties = false;
+          this.properties.set(data);
+          this.loadingProperties.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingProperties.set(false);
         }
       })
   }
 
   private loadActions(): void {
-    this.loadingActions = true;
+    this.loadingActions.set(true);
     this.service.getActionDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.actions = data;
-          this.loadingActions = false;
+          this.actions.set(data);
+          this.loadingActions.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingActions.set(false);
         }
       })
   }
 
   private loadEvents(): void {
-    this.loadingEvents = true;
+    this.loadingEvents.set(true);
     this.service.getEventDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.events = data;
-          this.loadingEvents = false;
+          this.events.set(data);
+          this.loadingEvents.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingEvents.set(false);
         }
       })
   }
@@ -186,18 +189,18 @@ export class SpecServiceCreateComponent implements OnInit {
       requiredEvents, optionalEvents);
     def.lifecycle = lifecycle;
 
-    this.loadingActions = true;
+    this.loadingActions.set(true);
     this.service.createServiceDefinition(def)
       .subscribe({
         next: () => {
           console.log('createServiceDefinition ok');
-          this.loadingActions = false;
+          this.loadingActions.set(false);
           this.router.navigate(['/main/spec']).then(() => {
           });
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingActions = false;
+          this.loadingActions.set(false);
         }
       });
   }

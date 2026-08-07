@@ -5,7 +5,8 @@ import {
   OnChanges,
   Output,
   SimpleChanges,
-  ViewContainerRef
+  ViewContainerRef,
+  signal
 } from '@angular/core';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
@@ -75,23 +76,23 @@ export class ProductInstanceComponent implements OnChanges {
   protected readonly LifeCycle = LifeCycle;
 
   /** 是否有完整编辑权限（组织匹配 + 产品实例开发状态） */
-  editable: boolean = false;
+  editable = signal(false);
 
   version: boolean = false;
   language: string = 'zh-CN';
 
-  loadingInstances: boolean = false;
-  instances: ProductInstance[] = [];
+  loadingInstances = signal(false);
+  instances = signal<ProductInstance[]>([]);
 
-  loadingInstance: boolean = false;
-  instance: DeviceInstance | undefined = undefined;
+  loadingInstance = signal(false);
+  instance = signal<DeviceInstance | undefined>(undefined);
 
-  currentVersion: string = '1';
-  isChanged: boolean = false;
-  firstInstance: boolean = false;
+  currentVersion = signal('1');
+  isChanged = signal(false);
+  firstInstance = signal(false);
 
-  loadingTemplate: boolean = false;
-  loadingDeviceDefinition: boolean = false;
+  loadingTemplate = signal(false);
+  loadingDeviceDefinition = signal(false);
 
   constructor(
     private modal: NzModalService,
@@ -114,10 +115,10 @@ export class ProductInstanceComponent implements OnChanges {
    * 有组织的前提是已登录
    */
   private isOrgMatch(): boolean {
-    if (!this.account.login() || !this.account.organization().id || !this.instance) {
+    if (!this.account.login() || !this.account.organization().id || !this.instance()) {
       return false;
     }
-    return this.instance.type.organization === this.account.organization().id;
+    return this.instance()!.type.organization === this.account.organization().id;
   }
 
   /**
@@ -136,51 +137,52 @@ export class ProductInstanceComponent implements OnChanges {
       return false;
     }
 
-    if (!this.instance) {
+    if (!this.instance()) {
       console.log('instance is null');
       return false;
     }
 
-    console.log('instance.lifecycle: ', this.instance.lifecycle);
+    console.log('instance.lifecycle: ', this.instance()!.lifecycle);
 
-    return this.instance.lifecycle === LifeCycle.DEVELOPMENT;
+    return this.instance()!.lifecycle === LifeCycle.DEVELOPMENT;
   }
 
   private loadInstances(productId: string) {
-    this.loadingInstances = true;
-    this.instance = undefined;
+    this.loadingInstances.set(true);
+    this.instance.set(undefined);
     this.service.getProductInstances(productId).subscribe({
       next: data => {
-        this.instances = data;
-        this.instances.sort((a, b) => (b.type?.version || 0) - (a.type?.version || 0))
-        this.loadingInstances = false;
+        this.instances.set([...data].sort((a, b) => (b.type?.version || 0) - (a.type?.version || 0)));
+        this.loadingInstances.set(false);
 
-        if (this.instances.length > 0) {
-          this.currentVersion = this.instances[0].type?.version.toString() || '0';
-          this.loadInstance(this.instances[0].type?.toString() || '');
+        if (this.instances().length > 0) {
+          this.currentVersion.set(this.instances()[0].type?.version.toString() || '0');
+          this.loadInstance(this.instances()[0].type?.toString() || '');
         }
       },
       error: error => {
         this.msg.warning(error);
+        this.loadingInstances.set(false);
       }
     });
   }
 
   private loadInstance(type: string) {
     if (type.length > 0) {
-      this.loadingInstance = true;
+      this.loadingInstance.set(true);
       this.service.getProductInstance(type).subscribe({
         next: data => {
-          this.instance = data;
-          this.editable = this.computeEditable();
-          this.loadingInstance = false;
+          this.instance.set(data);
+          this.editable.set(this.computeEditable());
+          this.loadingInstance.set(false);
 
-          console.log('this.instance.services.size: ' + this.instance.services.size);
+          console.log('this.instance.services.size: ' + this.instance()!.services.size);
 
-          console.log('editable: ' + this.editable);
+          console.log('editable: ' + this.editable());
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingInstance.set(false);
         }
       });
     } else {
@@ -189,58 +191,59 @@ export class ProductInstanceComponent implements OnChanges {
   }
 
   protected get currentInstance(): ProductInstance | undefined {
-    return this.instances.find(instance => instance.type?.version.toString() === this.currentVersion);
+    return this.instances().find(instance => instance.type?.version.toString() === this.currentVersion());
   }
 
   protected onCurrentVersionChanged($event: any) {
-    const found = this.instances.find(x => x.type?.version.toString() === this.currentVersion);
+    this.currentVersion.set(String($event));
+    const found = this.instances().find(x => x.type?.version.toString() === String($event));
     if (found) {
       this.loadInstance(found.type?.toString() || '');
     }
   }
 
   protected get lastVersion(): boolean {
-    if (this.instances.length === 0) {
+    if (this.instances().length === 0) {
       return false;
     }
 
-    return this.instances[0].type?.version.toString() === this.currentVersion;
+    return this.instances()[0].type?.version.toString() === this.currentVersion();
   }
 
   protected onCancel() {
-    this.isChanged = false;
+    this.isChanged.set(false);
     this.loadInstances(this.product.id);
   }
 
   protected onSave() {
-    if (this.instance) {
-      if (this.firstInstance) {
-        this.loadingInstance = true;
-        this.service.createProductInstance(this.instance).subscribe({
+    if (this.instance()) {
+      if (this.firstInstance()) {
+        this.loadingInstance.set(true);
+        this.service.createProductInstance(this.instance()!).subscribe({
           next: () => {
             console.log('createProductInstance ok');
-            this.loadingInstance = false;
-            this.isChanged = false;
+            this.loadingInstance.set(false);
+            this.isChanged.set(false);
             this.msg.info("创建产品功能：完成！")
           },
           error: error => {
             this.msg.warning(error);
-            this.loadingInstance = false;
+            this.loadingInstance.set(false);
             this.msg.info("创建产品功能：失败!", error)
           }
         });
       } else {
-        this.loadingInstance = true;
-        this.service.updateProductInstance(this.instance).subscribe({
+        this.loadingInstance.set(true);
+        this.service.updateProductInstance(this.instance()!).subscribe({
           next: () => {
             console.log('updateProductInstance ok');
-            this.loadingInstance = false;
-            this.isChanged = false;
+            this.loadingInstance.set(false);
+            this.isChanged.set(false);
             this.msg.info("更新产品功能：完成！")
           },
           error: error => {
             this.msg.warning(error);
-            this.loadingInstance = false;
+            this.loadingInstance.set(false);
             this.msg.info("更新产品功能：失败!", error)
           }
         });
@@ -264,24 +267,26 @@ export class ProductInstanceComponent implements OnChanges {
     if (instance) {
       const type = instance.type?.toString() || '';
       if (type.length > 0) {
-        this.loadingInstance = true;
+        this.loadingInstance.set(true);
         this.service.setProductInstanceLifecycle(type, lifecycle)
           .subscribe({
             next: () => {
               console.log('setProductInstanceLifecycle ok: ', lifecycle);
-              this.loadingInstance = false;
+              this.loadingInstance.set(false);
 
               instance.lifecycle = lifecycle;
 
-              if (this.instance) {
-                this.instance.lifecycle = lifecycle;
+              if (this.instance()) {
+                this.instance()!.lifecycle = lifecycle;
               }
 
-              this.editable = this.computeEditable();
+              this.editable.set(this.computeEditable());
+              // 原地修改实例后替换数组引用，让模板中 currentInstance?.lifecycle 的 switch 在 Zoneless 下重新渲染
+              this.instances.update(list => [...list]);
             },
             error: error => {
               this.msg.warning(error);
-              this.loadingInstance = false;
+              this.loadingInstance.set(false);
               this.loadInstances(this.product.id);
             }
           });
@@ -308,40 +313,40 @@ export class ProductInstanceComponent implements OnChanges {
   }
 
   private loadTemplate(type: string) {
-    this.loadingTemplate = true;
+    this.loadingTemplate.set(true);
     this.service.getTemplate(type).subscribe({
       next: data => {
         console.log('getTemplate ok');
-        this.instance = ProductInstanceHelper.fromTemplate(this.i18n.getCurrentLang(), this.product.organization, this.product.model, data);
-        this.isChanged = true;
-        this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.instance.type))
-        this.firstInstance = true;
+        this.instance.set(ProductInstanceHelper.fromTemplate(this.i18n.getCurrentLang(), this.product.organization, this.product.model, data));
+        this.isChanged.set(true);
+        this.instances.update(list => [...list, new ProductInstance(LifeCycle.DEVELOPMENT, this.instance()!.type)]);
+        this.firstInstance.set(true);
 
-        this.loadingTemplate = false;
+        this.loadingTemplate.set(false);
       },
       error: error => {
         this.msg.warning(error);
-        this.loadingTemplate = false;
+        this.loadingTemplate.set(false);
       }
     });
   }
 
   private loadDevice(type: string) {
-    this.loadingDeviceDefinition = true;
+    this.loadingDeviceDefinition.set(true);
     this.service.getDeviceDefinition(type).subscribe({
       next: data => {
         console.log('getDeviceDefinition ok');
 
-        this.instance = ProductInstanceHelper.fromDefinition(this.i18n.getCurrentLang(), this.product.organization, this.product.model, data);
-        this.isChanged = true;
-        this.instances.push(new ProductInstance(LifeCycle.DEVELOPMENT, this.instance.type))
-        this.firstInstance = true;
+        this.instance.set(ProductInstanceHelper.fromDefinition(this.i18n.getCurrentLang(), this.product.organization, this.product.model, data));
+        this.isChanged.set(true);
+        this.instances.update(list => [...list, new ProductInstance(LifeCycle.DEVELOPMENT, this.instance()!.type)]);
+        this.firstInstance.set(true);
 
-        this.loadingDeviceDefinition = false;
+        this.loadingDeviceDefinition.set(false);
       },
       error: error => {
         this.msg.warning(error);
-        this.loadingDeviceDefinition = false;
+        this.loadingDeviceDefinition.set(false);
       }
     });
   }
@@ -349,19 +354,20 @@ export class ProductInstanceComponent implements OnChanges {
   protected onChanged(device: DeviceInstance) {
     console.log('onChanged!');
 
-    if (!this.loadingInstance) {
-      this.isChanged = true;
+    if (!this.loadingInstance()) {
+      this.isChanged.set(true);
     }
   }
 
   protected onViewJson() {
-    if (this.instance) {
+    if (this.instance()) {
+      const instance = this.instance()!;
       const modal = this.modal.create<ProductInstanceViewJsonComponent, any, any>({
         nzWidth: 1024,
         nzTitle: this.i18n.translate.instant('产品功能'),
         nzContent: ProductInstanceViewJsonComponent,
         nzViewContainerRef: this.viewContainerRef,
-        nzData: DeviceInstanceCodec.encode(this.instance),
+        nzData: DeviceInstanceCodec.encode(instance),
         nzFooter: [
           {
             label: this.i18n.translate.instant('下载'),
@@ -377,7 +383,7 @@ export class ProductInstanceComponent implements OnChanges {
 
       modal.afterClose.subscribe(result => {
         if (result) {
-          this.onDownload(result, this.instance!.type!.version || 0);
+          this.onDownload(result, instance.type!.version || 0);
         }
       });
     }

@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, ViewContainerRef, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -73,15 +73,15 @@ export class ProductFirmwareComponent implements OnChanges {
 
   protected readonly LifeCycle = LifeCycle;
 
-  loadingFirmwares: boolean = false;
-  firmwares: ProductFirmware[] = [];
-  currentFirmware: string = '';
+  loadingFirmwares = signal(false);
+  firmwares = signal<ProductFirmware[]>([]);
+  currentFirmware = signal('');
 
-  loadingFirmwareInstances: boolean = false;
-  firmwareInstances: ProductFirmwareInstance[] = [];
+  loadingFirmwareInstances = signal(false);
+  firmwareInstances = signal<ProductFirmwareInstance[]>([]);
 
-  loadingProductInstances: boolean = false;
-  productInstances: ProductInstance[] = [];
+  loadingProductInstances = signal(false);
+  productInstances = signal<ProductInstance[]>([]);
 
   constructor(
     private modal: NzModalService,
@@ -101,63 +101,67 @@ export class ProductFirmwareComponent implements OnChanges {
   }
 
   private loadFirmwares(productId: string) {
-    this.loadingFirmwares = true;
+    this.loadingFirmwares.set(true);
     this.service.getProductFirmwares(productId).subscribe({
       next: data => {
-        this.firmwares = data;
-        if (this.firmwares.length > 0) {
-          this.currentFirmware = this.firmwares[0].name;
+        this.firmwares.set(data);
+        if (this.firmwares().length > 0) {
+          this.currentFirmware.set(this.firmwares()[0].name);
         }
 
-        this.loadingFirmwares = false;
+        this.loadingFirmwares.set(false);
 
-        this.loadFirmwareInstances(productId, this.currentFirmware);
+        this.loadFirmwareInstances(productId, this.currentFirmware());
       },
       error: error => {
         this.msg.warning(error);
+        this.loadingFirmwares.set(false);
       }
     });
   }
 
   private loadFirmwareInstances(productId: string, name: string) {
-    this.loadingFirmwareInstances = true;
+    this.loadingFirmwareInstances.set(true);
     this.service.getProductFirmwareInstances(productId, name).subscribe({
       next: data => {
-        this.firmwareInstances = data;
-        this.loadingFirmwareInstances = false;
+        this.firmwareInstances.set(data);
+        this.loadingFirmwareInstances.set(false);
       },
       error: error => {
         this.msg.warning(error);
+        this.loadingFirmwareInstances.set(false);
       }
     });
   }
 
   private loadProductInstances(productId: string) {
-    this.loadingProductInstances = true;
+    this.loadingProductInstances.set(true);
     this.service.getProductInstances(productId).subscribe({
       next: data => {
-        this.productInstances = data;
-        this.loadingProductInstances = false;
+        this.productInstances.set(data);
+        this.loadingProductInstances.set(false);
       },
       error: error => {
         this.msg.warning(error);
+        this.loadingProductInstances.set(false);
       }
     });
   }
 
   protected onCurrentFirmwareChanged($event: any) {
-    this.loadFirmwareInstances(this.product.id, this.currentFirmware);
+    this.currentFirmware.set($event);
+    this.loadFirmwareInstances(this.product.id, $event);
   }
 
   protected onUpload() {
-    const firmware = this.firmwares.find(x => x.name === this.currentFirmware);
+    const firmware = this.firmwares().find(x => x.name === this.currentFirmware());
     if (firmware) {
       const modal = this.modal.create<UploadFirmwareComponent, UploadFirmware, ProductFirmwareInstance>({
         nzTitle: '上传固件',
         nzWidth: 600,
         nzContent: UploadFirmwareComponent,
         nzViewContainerRef: this.viewContainerRef,
-        nzData: new UploadFirmware(this.product.id, this.productInstances, firmware, this.firmwareInstances),
+        nzData: new UploadFirmware(this.product.id, this.productInstances(), firmware, this.firmwareInstances()),
         nzFooter: [
           {
             label: '取消',
@@ -180,23 +184,23 @@ export class ProductFirmwareComponent implements OnChanges {
   }
 
   private save(firmware: ProductFirmware, instance: ProductFirmwareInstance) {
-    this.loadingFirmwareInstances = true;
+    this.loadingFirmwareInstances.set(true);
     this.service.createProductFirmwareInstance(this.product.id, firmware.name, instance)
       .subscribe({
         next: () => {
           console.log('createProductFirmwareInstance ok');
-          this.loadingFirmwareInstances = false;
-          this.loadFirmwareInstances(this.product.id, this.currentFirmware);
+          this.loadingFirmwareInstances.set(false);
+          this.loadFirmwareInstances(this.product.id, this.currentFirmware());
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwareInstances = false;
+          this.loadingFirmwareInstances.set(false);
         }
       });
   }
 
   protected onEdit() {
-    const firmware = this.firmwares.find(x => x.name === this.currentFirmware);
+    const firmware = this.firmwares().find(x => x.name === this.currentFirmware());
     if (firmware) {
       const modal = this.modal.create<EditFirmwareComponent, ProductFirmware, EditFirmwareResult>({
         nzTitle: '编辑固件',
@@ -227,7 +231,7 @@ export class ProductFirmwareComponent implements OnChanges {
         if (result) {
           switch (result.operator) {
             case 'delete':
-              if (this.firmwareInstances.length > 0) {
+              if (this.firmwareInstances().length > 0) {
                 this.msg.warning('固件文件个数不为0，不能删除');
               } else {
                 this.delete(result.firmware);
@@ -274,49 +278,49 @@ export class ProductFirmwareComponent implements OnChanges {
   }
 
   private create(firmware: ProductFirmware) {
-    this.loadingFirmwares = true;
+    this.loadingFirmwares.set(true);
     this.service.createProductFirmware(this.product.id, firmware)
       .subscribe({
         next: () => {
           console.log('createProductFirmware ok');
-          this.loadingFirmwares = false;
+          this.loadingFirmwares.set(false);
           this.loadFirmwares(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwares = false;
+          this.loadingFirmwares.set(false);
         }
       });
   }
 
   private delete(firmware: ProductFirmware) {
-    this.loadingFirmwares = true;
+    this.loadingFirmwares.set(true);
     this.service.deleteProductFirmware(this.product.id, firmware.name)
       .subscribe({
         next: () => {
           console.log('deleteProductFirmware ok');
-          this.loadingFirmwares = false;
+          this.loadingFirmwares.set(false);
           this.loadFirmwares(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwares = false;
+          this.loadingFirmwares.set(false);
         }
       });
   }
 
   private update(firmware: ProductFirmware) {
-    this.loadingFirmwares = true;
+    this.loadingFirmwares.set(true);
     this.service.updateProductFirmware(this.product.id, firmware)
       .subscribe({
         next: () => {
           console.log('updateProductFirmware ok');
-          this.loadingFirmwares = false;
+          this.loadingFirmwares.set(false);
           this.loadFirmwares(this.product.id);
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwares = false;
+          this.loadingFirmwares.set(false);
         }
       });
   }
@@ -326,33 +330,33 @@ export class ProductFirmwareComponent implements OnChanges {
   }
 
   protected onPreview(instance: ProductFirmwareInstance) {
-    this.loadingFirmwareInstances = true;
-    this.service.setProductFirmwareInstanceLifecycle(this.product.id, this.currentFirmware, instance.version.code, LifeCycle.PREVIEW)
+    this.loadingFirmwareInstances.set(true);
+    this.service.setProductFirmwareInstanceLifecycle(this.product.id, this.currentFirmware(), instance.version.code, LifeCycle.PREVIEW)
       .subscribe({
         next: () => {
           console.log('setProductFirmwareInstanceLifecycle ok');
-          this.loadingFirmwareInstances = false;
-          this.loadFirmwareInstances(this.product.id, this.currentFirmware);
+          this.loadingFirmwareInstances.set(false);
+          this.loadFirmwareInstances(this.product.id, this.currentFirmware());
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwareInstances = false;
+          this.loadingFirmwareInstances.set(false);
         }
       });
   }
 
   protected cancelPreview(instance: ProductFirmwareInstance) {
-    this.loadingFirmwareInstances = true;
-    this.service.setProductFirmwareInstanceLifecycle(this.product.id, this.currentFirmware, instance.version.code, LifeCycle.DEVELOPMENT)
+    this.loadingFirmwareInstances.set(true);
+    this.service.setProductFirmwareInstanceLifecycle(this.product.id, this.currentFirmware(), instance.version.code, LifeCycle.DEVELOPMENT)
       .subscribe({
         next: () => {
           console.log('setProductFirmwareInstanceLifecycle ok');
-          this.loadingFirmwareInstances = false;
-          this.loadFirmwareInstances(this.product.id, this.currentFirmware);
+          this.loadingFirmwareInstances.set(false);
+          this.loadFirmwareInstances(this.product.id, this.currentFirmware());
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwareInstances = false;
+          this.loadingFirmwareInstances.set(false);
         }
       });
   }
@@ -385,17 +389,17 @@ export class ProductFirmwareComponent implements OnChanges {
   }
 
   protected deleteFirmwareInstance(instance: ProductFirmwareInstance) {
-    this.loadingFirmwareInstances = true;
-    this.service.deleteProductFirmwareInstance(this.product.id, this.currentFirmware, instance.version.code)
+    this.loadingFirmwareInstances.set(true);
+    this.service.deleteProductFirmwareInstance(this.product.id, this.currentFirmware(), instance.version.code)
       .subscribe({
         next: () => {
           console.log('deleteProductFirmwareInstance ok');
-          this.loadingFirmwareInstances = false;
-          this.loadFirmwareInstances(this.product.id, this.currentFirmware);
+          this.loadingFirmwareInstances.set(false);
+          this.loadFirmwareInstances(this.product.id, this.currentFirmware());
         },
         error: error => {
           this.msg.warning(error);
-          this.loadingFirmwareInstances = false;
+          this.loadingFirmwareInstances.set(false);
         }
       });
   }

@@ -22,10 +22,10 @@
           [nzMultiple]="false"
           (nzChange)="handleChange($event)"
           [nzShowUploadList]="false"
-          [nzDisabled]="loading"
+          [nzDisabled]="loading()"
         >
           @if (step.image.length === 0) {
-            <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></span>
+            <span class="upload-icon" nz-icon [nzType]="loading() ? 'loading' : 'plus'"></span>
             <div class="ant-upload-text">{{ '上传' | translate }}</div>
           } @else {
             <div class="preview-wrapper">

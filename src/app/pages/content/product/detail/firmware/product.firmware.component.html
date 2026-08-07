@@ -1,10 +1,10 @@
 <nz-row [nzGutter]="[8, 8]">
   <nz-col [nzSpan]="24">
-    <nz-spin [nzSpinning]="loadingFirmwares || loadingProductInstances">
+    <nz-spin [nzSpinning]="loadingFirmwares() || loadingProductInstances()">
       <toolbar>
-        @if (firmwares.length > 0) {
-          <nz-select [(ngModel)]="currentFirmware" style="width: 140px" (ngModelChange)="onCurrentFirmwareChanged($event)">
-            @for (firmware of firmwares; track firmware.name) {
+        @if (firmwares().length > 0) {
+          <nz-select [ngModel]="currentFirmware()" style="width: 140px" (ngModelChange)="onCurrentFirmwareChanged($event)">
+            @for (firmware of firmwares(); track firmware.name) {
               <nz-option [nzValue]="firmware.name" [nzLabel]="firmware.description"></nz-option>
             }
           </nz-select>
@@ -12,7 +12,7 @@
           <a (click)="onEdit()">{{ '编辑' | translate }}</a>
         }
 
-        @if (firmwares.length > 0) {
+        @if (firmwares().length > 0) {
           <a (click)="onCreate()">{{ '创建' | translate }}</a>
 
           <div style="margin-left: auto;">
@@ -27,14 +27,14 @@
     </nz-spin>
   </nz-col>
 
-  @if (firmwares.length > 0) {
+  @if (firmwares().length > 0) {
     <nz-col [nzSpan]="24">
       <nz-table
         nzShowSizeChanger
         nzSize="small"
         nzBordered
-        [nzData]="firmwareInstances"
-        [nzLoading]="loadingFirmwareInstances"
+        [nzData]="firmwareInstances()"
+        [nzLoading]="loadingFirmwareInstances()"
         [nzFrontPagination]="false"
       >
         <thead>
@@ -75,7 +75,7 @@
         </tr>
         </thead>
         <tbody>
-          @for (item of firmwareInstances; track item.version.code) {
+          @for (item of firmwareInstances(); track item.version.code) {
             <tr>
               <td>{{ item.version.name }}</td>
               <td>{{ item.version.code }}</td>

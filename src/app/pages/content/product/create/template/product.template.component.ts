@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {DeviceDefinition, NamespaceDefinition, TemplateSummary, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 import {MainI18nService} from '../../../../../service/i18n.service';
@@ -104,12 +104,12 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   //--------------------------------------------------------------------------------
   // 加载名字空间
   //--------------------------------------------------------------------------------
-  loadingNamespaces: boolean = false;
-  loadingDevices: boolean = false;
-  loadingTemplates: boolean = false;
-  namespaces: Map<string, NamespaceDefinition> = new Map<string, NamespaceDefinition>();
-  devices: Map<string, DeviceDefinition> = new Map<string, DeviceDefinition>();
-  templates: Map<string, TemplateSummary> = new Map<string, TemplateSummary>();
+  loadingNamespaces = signal(false);
+  loadingDevices = signal(false);
+  loadingTemplates = signal(false);
+  namespaces = signal<Map<string, NamespaceDefinition>>(new Map<string, NamespaceDefinition>());
+  devices = signal<Map<string, DeviceDefinition>>(new Map<string, DeviceDefinition>());
+  templates = signal<Map<string, TemplateSummary>>(new Map<string, TemplateSummary>());
 
   ngOnInit(): void {
     this.loadNamespaces();
@@ -118,15 +118,16 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   private loadNamespaces() {
-    this.loadingNamespaces = true;
+    this.loadingNamespaces.set(true);
     this.service.getAllNamespaces(this.account.organization())
       .subscribe({
         next: data => {
-          this.namespaces = new Map(data.map(item => [item.namespace, item]));
-          this.loadingNamespaces = false;
+          this.namespaces.set(new Map(data.map(item => [item.namespace, item])));
+          this.loadingNamespaces.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingNamespaces.set(false);
         }
       })
   }
@@ -134,15 +135,16 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   private loadDevices() {
     if (this._value) {
       if (this._value.ns.length > 0) {
-        this.loadingDevices = true;
+        this.loadingDevices.set(true);
         this.service.getDeviceDefinitions(this._value.ns)
           .subscribe({
             next: data => {
-              this.devices = new Map(data.map(item => [item.type.name, item]));
-              this.loadingDevices = false;
+              this.devices.set(new Map(data.map(item => [item.type.name, item])));
+              this.loadingDevices.set(false);
             },
             error: error => {
               console.log(error);
+              this.loadingDevices.set(false);
             }
           })
       }
@@ -152,15 +154,16 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   private loadTemplates() {
     if (this._value) {
       if (this._value.ns.length > 0) {
-        this.loadingTemplates = true;
+        this.loadingTemplates.set(true);
         this.service.getTemplates(this._value.ns)
           .subscribe({
             next: data => {
-              this.templates = new Map(data.map(item => [item.type.toString(), item]));
-              this.loadingTemplates = false;
+              this.templates.set(new Map(data.map(item => [item.type.toString(), item])));
+              this.loadingTemplates.set(false);
             },
             error: error => {
               console.log(error);
+              this.loadingTemplates.set(false);
             }
           })
       }
@@ -168,7 +171,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentNamespaceTitle(): string {
-    const def = this.namespaces.get(this._value.ns);
+    const def = this.namespaces().get(this._value.ns);
     if (def) {
       return def.namespace || '?';
     }
@@ -177,7 +180,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentNamespaceDescription(): string {
-    const def = this.namespaces.get(this._value.ns);
+    const def = this.namespaces().get(this._value.ns);
     if (def) {
       return def.description.get(this.i18n.getCurrentLang()) || def.namespace || '?';
     }
@@ -186,7 +189,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentDeviceTypeTitle(): string {
-    const def = this.devices.get(this._value.name);
+    const def = this.devices().get(this._value.name);
     if (def) {
       return def.type.name;
     }
@@ -195,7 +198,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentDeviceTypeDescription(): string {
-    const def = this.devices.get(this._value.name);
+    const def = this.devices().get(this._value.name);
     if (def) {
       return def.description.get(this.i18n.getCurrentLang()) || def.type.name;
     }
@@ -204,7 +207,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentTemplateTitle(): string {
-    const template = this.templates.get(this._value.toString());
+    const template = this.templates().get(this._value.toString());
     if (template) {
       return template.type.name;
     }
@@ -213,7 +216,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentTemplateDescription(): string {
-    const template = this.templates.get(this._value.toString());
+    const template = this.templates().get(this._value.toString());
     if (template) {
       return template.description.get(this.i18n.getCurrentLang()) || template.type.name;
     }
@@ -228,7 +231,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
         nzWidth: 800,
         nzContent: NamespaceSelectorComponent,
         nzViewContainerRef: this.viewContainerRef,
-        nzData: new NamespaceOption(this._value.ns || '', Array.from(this.namespaces.values())),
+        nzData: new NamespaceOption(this._value.ns || '', Array.from(this.namespaces().values())),
         nzFooter: null,
         nzClosable: false,
         nzMaskClosable: true,
@@ -253,7 +256,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
           nzWidth: 1024,
           nzContent: DeviceSelectorComponent,
           nzViewContainerRef: this.viewContainerRef,
-          nzData: new DevicesOption(Array.from(this.devices.values()), this._value.name),
+          nzData: new DevicesOption(Array.from(this.devices().values()), this._value.name),
           nzFooter: null,
           nzClosable: false,
           nzMaskClosable: true,
@@ -274,7 +277,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
     if (this.updatable) {
       if (this._value.name.length > 0) {
 
-        const templates = Array.from(this.templates.values()).filter(item => item.type.name === this._value.name);
+        const templates = Array.from(this.templates().values()).filter(item => item.type.name === this._value.name);
         const deviceType = Urn.create(this.value.ns, UrnType.DEVICE, this.value.name, this.value.shortUUID());
 
         const modal = this.modal.create<TemplateSelectorComponent, TemplatesOption, Urn>({

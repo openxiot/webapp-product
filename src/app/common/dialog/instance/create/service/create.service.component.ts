@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {
   FormControl,
@@ -78,7 +78,7 @@ import {DescriptionComponent} from '../../../../form/item/common/description/des
 export class CreateServiceComponent implements OnInit {
 
   protected readonly LifeCycle = LifeCycle;
-  protected loadingServices: boolean = false;
+  protected loadingServices = signal(false);
 
   readonly #modal: NzModalRef<Service, Service> = inject(NzModalRef);
   readonly option: ServiceOption = inject(NZ_MODAL_DATA);
@@ -97,18 +97,18 @@ export class CreateServiceComponent implements OnInit {
   }>;
 
   custom: Service;
-  services: Service[] = [];
+  services = signal<Service[]>([]);
   selected: Service;
 
   definitions: ServiceDefinition[] = [];
 
-  loadingProperties: boolean = true;
+  loadingProperties = signal(true);
   properties: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
-  loadingActions: boolean = true;
+  loadingActions = signal(true);
   actions: Map<string, ActionDefinition> = new Map<string, ActionDefinition>();
 
-  loadingEvents: boolean = true;
+  loadingEvents = signal(true);
   events: Map<string, EventDefinition> = new Map<string, EventDefinition>();
 
   constructor(
@@ -152,66 +152,70 @@ export class CreateServiceComponent implements OnInit {
   }
 
   private loadServices(): void {
-    this.loadingServices = true;
+    this.loadingServices.set(true);
     this.service.getServiceDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.definitions = data;
-          this.services = this.definitions
+          this.services.set(this.definitions
             .filter(x => x.lifecycle === LifeCycle.RELEASED)
             .map(x => {
               return new Service(this.option.iid, x.type, x.description, [], [], []);
-            });
+            }));
 
-          this.loadingServices = false;
+          this.loadingServices.set(false);
 
           this.initFormData();
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingServices.set(false);
         }
       })
   }
 
   private loadProperties(): void {
-    this.loadingProperties = true;
+    this.loadingProperties.set(true);
     this.service.getPropertyDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.properties = new Map(data.map(item => [item.type.name, item]));
-          this.loadingProperties = false;
+          this.loadingProperties.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingProperties.set(false);
         }
       })
   }
 
   private loadActions(): void {
-    this.loadingActions = true;
+    this.loadingActions.set(true);
     this.service.getActionDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.actions = new Map(data.map(item => [item.type.name, item]));
-          this.loadingActions = false;
+          this.loadingActions.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingActions.set(false);
         }
       })
   }
 
   private loadEvents(): void {
-    this.loadingEvents = true;
+    this.loadingEvents.set(true);
     this.service.getEventDefinitions(this.option.type.ns)
       .subscribe({
         next: data => {
           this.events = new Map(data.map(item => [item.type.name, item]));
-          this.loadingEvents = false;
+          this.loadingEvents.set(false);
           this.initFormData();
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingEvents.set(false);
         }
       })
   }
@@ -293,7 +297,7 @@ export class CreateServiceComponent implements OnInit {
   }
 
   private initFormData() {
-    this.loadingServices = true;
+    this.loadingServices.set(true);
 
     const description: Map<string, string> = new Map<string, string>();
     description.set(this.i18n.getCurrentLang(), this.selected.description.get(this.i18n.getCurrentLang()) || '');
@@ -360,7 +364,7 @@ export class CreateServiceComponent implements OnInit {
       this.form.controls.optionalEvents.enable();
     }
 
-    this.loadingServices = false;
+    this.loadingServices.set(false);
   }
 
   private toProperty(type: PropertyType): Property {

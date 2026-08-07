@@ -1,4 +1,4 @@
-<nz-spin [nzSpinning]="loadingProperties || loadingActions || loadingEvents">
+<nz-spin [nzSpinning]="loadingProperties() || loadingActions() || loadingEvents()">
   <nz-page-header (nzBack)="location.back()" nzBackIcon [nzTitle]="title" [nzSubtitle]="subTitle" [nzGhost]="false">
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
   </nz-page-header>
@@ -38,42 +38,42 @@
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '必选属性' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-properties formControlName="requiredProperties" [properties]="properties"></service-definition-properties>
+            <service-definition-properties formControlName="requiredProperties" [properties]="properties()"></service-definition-properties>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '可选属性' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-properties formControlName="optionalProperties" [properties]="properties"></service-definition-properties>
+            <service-definition-properties formControlName="optionalProperties" [properties]="properties()"></service-definition-properties>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '必选方法' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-actions formControlName="requiredActions" [actions]="actions"></service-definition-actions>
+            <service-definition-actions formControlName="requiredActions" [actions]="actions()"></service-definition-actions>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '可选方法' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-actions formControlName="optionalActions" [actions]="actions"></service-definition-actions>
+            <service-definition-actions formControlName="optionalActions" [actions]="actions()"></service-definition-actions>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '必选事件' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-events formControlName="requiredEvents" [events]="events"></service-definition-events>
+            <service-definition-events formControlName="requiredEvents" [events]="events()"></service-definition-events>
           </nz-form-control>
         </nz-form-item>
 
         <nz-form-item>
           <nz-form-label [nzSpan]="4" nzRequired>{{ '可选事件' | translate }}</nz-form-label>
           <nz-form-control [nzSpan]="10">
-            <service-definition-events formControlName="optionalEvents" [events]="events"></service-definition-events>
+            <service-definition-events formControlName="optionalEvents" [events]="events()"></service-definition-events>
           </nz-form-control>
         </nz-form-item>
 

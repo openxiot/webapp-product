@@ -1,10 +1,10 @@
 <nz-row [nzGutter]="[8, 8]" xmlns="">
   <nz-col [nzSpan]="24">
-    <nz-spin [nzSpinning]="loadingInstances">
+    <nz-spin [nzSpinning]="loadingInstances()">
       <toolbar>
-        @if (instances.length > 0) {
-          <nz-select [(ngModel)]="currentVersion" style="width: 140px" (ngModelChange)="onCurrentVersionChanged($event)">
-            @for (instance of instances; track instance.type) {
+        @if (instances().length > 0) {
+          <nz-select [ngModel]="currentVersion()" style="width: 140px" (ngModelChange)="onCurrentVersionChanged($event)">
+            @for (instance of instances(); track instance.type) {
               <nz-option nzValue="{{ instance.type?.version || 0 }}" nzLabel="{{ '版本' | translate }}{{ instance.type?.version || 0 }}"></nz-option>
             }
           </nz-select>
@@ -28,7 +28,7 @@
           <div style="color: gray">
             @switch (currentInstance?.lifecycle) {
               @case (LifeCycle.DEVELOPMENT) {
-                @if (isChanged) {
+                @if (isChanged()) {
                   {{ '产品功能已修改，请保存！' | translate }}
                 } @else {
                   {{ '产品功能处于“开发中”，最终用户不可见，如需最终用户可见，需要上线。' | translate }}
@@ -44,7 +44,7 @@
           </div>
 
           <div style="margin-left: auto;">
-            @if (isChanged) {
+            @if (isChanged()) {
               <nz-space>
                 <div *nzSpaceItem>
                   <button nz-button nzType="primary" (click)="onCancel()">{{ '取消' | translate }}</button>
@@ -102,12 +102,12 @@
   </nz-col>
 
   <nz-col [nzSpan]="24">
-    <nz-spin [nzSpinning]="loadingInstance">
-      @if (instance) {
+    <nz-spin [nzSpinning]="loadingInstance()">
+      @if (instance()) {
         <product-instance-detail
           [version]="true"
-          [instance]="instance"
-          [editable]="editable"
+          [instance]="instance()"
+          [editable]="editable()"
           (changed)="onChanged($event)"
         ></product-instance-detail>
       }
