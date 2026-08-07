@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {UpgradeType} from './UpgradeType';
@@ -31,7 +31,7 @@ export class ProductBasicUpgradeComponent implements ControlValueAccessor {
 
   @Input() updatable: boolean = false;
 
-  private _value: UpgradeType = new UpgradeType();
+  private _value = signal<UpgradeType>(new UpgradeType());
 
   disabled = false;
 
@@ -42,12 +42,12 @@ export class ProductBasicUpgradeComponent implements ControlValueAccessor {
   }
 
   get value(): UpgradeType {
-    return this._value;
+    return this._value();
   }
 
   set value(val: UpgradeType) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -55,8 +55,8 @@ export class ProductBasicUpgradeComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 

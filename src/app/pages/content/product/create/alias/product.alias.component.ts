@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {LocalizedName} from '@openxiot/xiot-core-spec-ts';
@@ -38,7 +38,7 @@ export class ProductAliasComponent implements ControlValueAccessor {
   @Input() updatable: boolean = false;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  private _value: LocalizedName[] = [];
+  private _value = signal<LocalizedName[]>([]);
 
   disabled = false;
 
@@ -51,12 +51,12 @@ export class ProductAliasComponent implements ControlValueAccessor {
   }
 
   get value(): LocalizedName[] {
-    return this._value;
+    return this._value();
   }
 
   set value(val: LocalizedName[]) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -64,8 +64,8 @@ export class ProductAliasComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -86,7 +86,7 @@ export class ProductAliasComponent implements ControlValueAccessor {
    */
   protected onValueChanged(newValue: string, item: LocalizedName) {
     item.value.set(this.i18n.getCurrentLang(), newValue);
-    this.onChange(this._value);
+    this.onChange(this._value());
     this.onTouched();
   }
 
@@ -94,8 +94,8 @@ export class ProductAliasComponent implements ControlValueAccessor {
    * 删除某个别名
    */
   protected removeItem(item: LocalizedName) {
-    this._value = this._value.filter(i => i !== item);
-    this.onChange(this._value);
+    this._value.set(this._value().filter(i => i !== item));
+    this.onChange(this._value());
     this.onTouched();
   }
 
@@ -106,8 +106,8 @@ export class ProductAliasComponent implements ControlValueAccessor {
     const map = new Map<string, string>();
     map.set(this.i18n.getCurrentLang(), '');
     const newItem = new LocalizedName(map);
-    this._value = [...this._value, newItem];
-    this.onChange(this._value);
+    this._value.set([...this._value(), newItem]);
+    this.onChange(this._value());
     this.onTouched();
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzCascaderComponent, NzCascaderOption} from 'ng-zorro-antd/cascader';
 import {LifeCycle} from '@openxiot/xiot-core-spec-ts';
@@ -99,7 +99,7 @@ export class ProductBasicProtocolComponent implements ControlValueAccessor {
     }
   ];
 
-  private _values: string[] = [];
+  private _values = signal<string[]>([]);
 
   disabled = false;
 
@@ -110,12 +110,12 @@ export class ProductBasicProtocolComponent implements ControlValueAccessor {
   }
 
   get value(): string[] {
-    return this._values;
+    return this._values();
   }
 
   set value(val: string[]) {
-    if (val !== this._values) {
-      this._values = val;
+    if (val !== this._values()) {
+      this._values.set(val);
       this.onChange(val);
     }
 
@@ -123,8 +123,8 @@ export class ProductBasicProtocolComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._values) {
-      this._values = obj;
+    if (obj !== undefined && obj !== null && obj !== this._values()) {
+      this._values.set(obj);
     }
   }
 
@@ -141,7 +141,7 @@ export class ProductBasicProtocolComponent implements ControlValueAccessor {
   }
 
   get protocolCategory(): string {
-    switch (this._values[0]) {
+    switch (this._values()[0]) {
       case 'Directly':
         return '直连设备'
 
@@ -154,7 +154,7 @@ export class ProductBasicProtocolComponent implements ControlValueAccessor {
   }
 
   get protocolName(): string {
-    switch (this._values[1]) {
+    switch (this._values()[1]) {
       case 'wifi':
         return 'WiFi';
 

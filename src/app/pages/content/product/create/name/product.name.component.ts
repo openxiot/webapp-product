@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzInputDirective} from 'ng-zorro-antd/input';
 import {LocalizedName} from '@openxiot/xiot-core-spec-ts';
@@ -27,7 +27,7 @@ export class ProductNameComponent implements ControlValueAccessor {
   @Input() updatable: boolean = false;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  private _value!: LocalizedName;
+  private _value = signal<LocalizedName>(new LocalizedName());
 
   disabled = false;
 
@@ -40,12 +40,12 @@ export class ProductNameComponent implements ControlValueAccessor {
   }
 
   get value(): LocalizedName {
-    return this._value;
+    return this._value();
   }
 
   set value(val: LocalizedName) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -53,8 +53,8 @@ export class ProductNameComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -71,8 +71,8 @@ export class ProductNameComponent implements ControlValueAccessor {
   }
 
   protected onValueChanged(newValue: string) {
-    this._value.value.set(this.i18n.getCurrentLang(), newValue);
-    this.onChange(this._value);
+    this._value().value.set(this.i18n.getCurrentLang(), newValue);
+    this.onChange(this._value());
     this.onTouched();
     this.changed.emit();
   }

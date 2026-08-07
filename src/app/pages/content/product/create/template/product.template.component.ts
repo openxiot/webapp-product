@@ -46,7 +46,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   @Input() updatable: boolean = false;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  private _value!: Urn;
+  private _value = signal<Urn>(Urn.create('', UrnType.DEVICE, '', '0000'));
 
   disabled = false;
 
@@ -67,12 +67,12 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   get value(): Urn {
-    return this._value;
+    return this._value();
   }
 
   set value(val: Urn) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -80,8 +80,8 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
 
       this.loadNamespaces();
       this.loadDevices();
@@ -133,63 +133,59 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   private loadDevices() {
-    if (this._value) {
-      if (this._value.ns.length > 0) {
-        this.loadingDevices.set(true);
-        this.service.getDeviceDefinitions(this._value.ns)
-          .subscribe({
-            next: data => {
-              this.devices.set(new Map(data.map(item => [item.type.name, item])));
-              this.loadingDevices.set(false);
-            },
-            error: error => {
-              console.log(error);
-              this.loadingDevices.set(false);
-            }
-          })
-      }
+    if (this._value().ns.length > 0) {
+      this.loadingDevices.set(true);
+      this.service.getDeviceDefinitions(this._value().ns)
+        .subscribe({
+          next: data => {
+            this.devices.set(new Map(data.map(item => [item.type.name, item])));
+            this.loadingDevices.set(false);
+          },
+          error: error => {
+            console.log(error);
+            this.loadingDevices.set(false);
+          }
+        })
     }
   }
 
   private loadTemplates() {
-    if (this._value) {
-      if (this._value.ns.length > 0) {
-        this.loadingTemplates.set(true);
-        this.service.getTemplates(this._value.ns)
-          .subscribe({
-            next: data => {
-              this.templates.set(new Map(data.map(item => [item.type.toString(), item])));
-              this.loadingTemplates.set(false);
-            },
-            error: error => {
-              console.log(error);
-              this.loadingTemplates.set(false);
-            }
-          })
-      }
+    if (this._value().ns.length > 0) {
+      this.loadingTemplates.set(true);
+      this.service.getTemplates(this._value().ns)
+        .subscribe({
+          next: data => {
+            this.templates.set(new Map(data.map(item => [item.type.toString(), item])));
+            this.loadingTemplates.set(false);
+          },
+          error: error => {
+            console.log(error);
+            this.loadingTemplates.set(false);
+          }
+        })
     }
   }
 
   protected get CurrentNamespaceTitle(): string {
-    const def = this.namespaces().get(this._value.ns);
+    const def = this.namespaces().get(this._value().ns);
     if (def) {
       return def.namespace || '?';
     }
 
-    return this._value.ns || '?';
+    return this._value().ns || '?';
   }
 
   protected get CurrentNamespaceDescription(): string {
-    const def = this.namespaces().get(this._value.ns);
+    const def = this.namespaces().get(this._value().ns);
     if (def) {
       return def.description.get(this.i18n.getCurrentLang()) || def.namespace || '?';
     }
 
-    return this._value.ns || '?';
+    return this._value().ns || '?';
   }
 
   protected get CurrentDeviceTypeTitle(): string {
-    const def = this.devices().get(this._value.name);
+    const def = this.devices().get(this._value().name);
     if (def) {
       return def.type.name;
     }
@@ -198,7 +194,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentDeviceTypeDescription(): string {
-    const def = this.devices().get(this._value.name);
+    const def = this.devices().get(this._value().name);
     if (def) {
       return def.description.get(this.i18n.getCurrentLang()) || def.type.name;
     }
@@ -207,7 +203,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentTemplateTitle(): string {
-    const template = this.templates().get(this._value.toString());
+    const template = this.templates().get(this._value().toString());
     if (template) {
       return template.type.name;
     }
@@ -216,7 +212,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
   }
 
   protected get CurrentTemplateDescription(): string {
-    const template = this.templates().get(this._value.toString());
+    const template = this.templates().get(this._value().toString());
     if (template) {
       return template.description.get(this.i18n.getCurrentLang()) || template.type.name;
     }
@@ -231,7 +227,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
         nzWidth: 800,
         nzContent: NamespaceSelectorComponent,
         nzViewContainerRef: this.viewContainerRef,
-        nzData: new NamespaceOption(this._value.ns || '', Array.from(this.namespaces().values())),
+        nzData: new NamespaceOption(this._value().ns || '', Array.from(this.namespaces().values())),
         nzFooter: null,
         nzClosable: false,
         nzMaskClosable: true,
@@ -240,7 +236,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
 
       modal.afterClose.subscribe(result => {
         if (result) {
-          this._value.ns = result.namespace;
+          this._value().ns = result.namespace;
           this.loadDevices();
           this.loadTemplates();
         }
@@ -250,13 +246,13 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
 
   protected onClickDeviceType() {
     if (this.updatable) {
-      if (this._value.ns.length > 0) {
+      if (this._value().ns.length > 0) {
         const modal = this.modal.create<DeviceSelectorComponent, DevicesOption, Urn>({
           nzTitle: this.i18n.translate.instant('请选择设备类型'),
           nzWidth: 1024,
           nzContent: DeviceSelectorComponent,
           nzViewContainerRef: this.viewContainerRef,
-          nzData: new DevicesOption(Array.from(this.devices().values()), this._value.name),
+          nzData: new DevicesOption(Array.from(this.devices().values()), this._value().name),
           nzFooter: null,
           nzClosable: false,
           nzMaskClosable: true,
@@ -275,9 +271,9 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
 
   protected onClickTemplate() {
     if (this.updatable) {
-      if (this._value.name.length > 0) {
+      if (this._value().name.length > 0) {
 
-        const templates = Array.from(this.templates().values()).filter(item => item.type.name === this._value.name);
+        const templates = Array.from(this.templates().values()).filter(item => item.type.name === this._value().name);
         const deviceType = Urn.create(this.value.ns, UrnType.DEVICE, this.value.name, this.value.shortUUID());
 
         const modal = this.modal.create<TemplateSelectorComponent, TemplatesOption, Urn>({
@@ -285,7 +281,7 @@ export class ProductTemplateComponent implements OnInit, ControlValueAccessor {
           nzWidth: 1024,
           nzContent: TemplateSelectorComponent,
           nzViewContainerRef: this.viewContainerRef,
-          nzData: new TemplatesOption(templates, deviceType, this._value.model),
+          nzData: new TemplatesOption(templates, deviceType, this._value().model),
           nzFooter: null,
           nzClosable: false,
           nzMaskClosable: true,
