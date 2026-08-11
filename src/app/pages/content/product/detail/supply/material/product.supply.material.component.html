@@ -13,11 +13,11 @@
     [nzBeforeUpload]="beforeUpload"
     (nzChange)="handleChange($event)"
   >
-    @if (!avatarUrl) {
-      <span class="upload-icon" nz-icon [nzType]="loading ? 'loading' : 'plus'"></span>
+    @if (!avatarUrl()) {
+      <span class="upload-icon" nz-icon [nzType]="loading() ? 'loading' : 'plus'"></span>
       <div class="ant-upload-text">Upload</div>
     } @else {
-      <img [src]="avatarUrl" style="width: 100%" />
+      <img [src]="avatarUrl()" style="width: 100%" />
     }
   </nz-upload>
 

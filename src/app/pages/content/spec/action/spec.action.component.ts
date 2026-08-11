@@ -97,6 +97,7 @@ export class SpecActionComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
 
@@ -109,6 +110,7 @@ export class SpecActionComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingProperties.set(false);
         }
       })
   }
@@ -159,6 +161,7 @@ export class SpecActionComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzTagModule} from 'ng-zorro-antd/tag';
@@ -26,9 +26,9 @@ import {TranslatePipe} from '@ngx-translate/core';
 })
 export class ProductFirmwareTypeComponent implements ControlValueAccessor {
 
-  private _value: string = 'simple';
+  private _value = signal<string>('simple');
 
-  disabled = false;
+  disabled = signal(false);
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
@@ -37,12 +37,12 @@ export class ProductFirmwareTypeComponent implements ControlValueAccessor {
   }
 
   get value(): string {
-    return this._value;
+    return this._value();
   }
 
   set value(val: string) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -50,8 +50,8 @@ export class ProductFirmwareTypeComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -64,6 +64,6 @@ export class ProductFirmwareTypeComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean) {
-    this.disabled = isDisabled;
+    this.disabled.set(isDisabled);
   }
 }

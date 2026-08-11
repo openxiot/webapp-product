@@ -70,6 +70,7 @@ export class CallbackComponent implements OnInit {
         });
     } else {
       this.msg.info('登录失败, token is null');
+      this.loading.set(false);
     }
   }
 }

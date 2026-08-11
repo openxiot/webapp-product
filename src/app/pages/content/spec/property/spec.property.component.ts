@@ -102,6 +102,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
 
@@ -114,6 +115,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingFormats.set(false);
         }
       })
 
@@ -126,6 +128,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingUnits.set(false);
         }
       })
   }
@@ -198,6 +201,7 @@ export class SpecPropertyComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

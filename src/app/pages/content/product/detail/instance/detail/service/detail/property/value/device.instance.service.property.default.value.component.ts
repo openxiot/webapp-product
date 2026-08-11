@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -47,7 +47,7 @@ export class DeviceInstanceServicePropertyDefaultValueComponent implements Contr
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值
-  value: DefaultValue = new DefaultValue();
+  value = signal<DefaultValue>(new DefaultValue());
 
   // 禁用状态
   isDisabled = false;
@@ -61,7 +61,7 @@ export class DeviceInstanceServicePropertyDefaultValueComponent implements Contr
   }
 
   onValueChanged($event: any) {
-    this.onChange(new DefaultValue(this.value.valid, this.value.value));
+    this.onChange(new DefaultValue(this.value().valid, this.value().value));
     this.onTouched();
     this.changed.emit();
   }
@@ -80,8 +80,8 @@ export class DeviceInstanceServicePropertyDefaultValueComponent implements Contr
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this.value) {
-      this.value = obj;
+    if (obj !== undefined && obj !== null && obj !== this.value()) {
+      this.value.set(obj);
     }
   }
 

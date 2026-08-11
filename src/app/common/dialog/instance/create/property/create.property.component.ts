@@ -107,7 +107,7 @@ export class CreatePropertyComponent implements OnInit {
     unit: FormControl<string>,
     defaultValue: FormControl<DefaultValue>
   }>;
-  combinationValue: boolean = false;
+  combinationValue = signal(false);
   constrainable = signal(false);
 
   custom: Property;
@@ -235,8 +235,8 @@ export class CreatePropertyComponent implements OnInit {
         break;
     }
 
-    this.combinationValue = this.selected.format === DataFormat.COMBINATION;
-    if (this.combinationValue) {
+    this.combinationValue.set(this.selected.format === DataFormat.COMBINATION);
+    if (this.combinationValue()) {
       console.log('init combinationValue');
       this.form.controls.members.setValue(this.selected.members);
       console.log('init combinationValue ok');
@@ -329,7 +329,7 @@ export class CreatePropertyComponent implements OnInit {
     console.log('onFormatChanged');
 
     if (!this.loading()) {
-      this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
+      this.combinationValue.set(this.form.controls.format.value === DataFormat.COMBINATION);
       this.constrainable.set(this.toConstrainable(this.form.controls.format.value));
     }
   }

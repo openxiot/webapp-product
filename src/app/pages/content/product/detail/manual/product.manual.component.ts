@@ -136,7 +136,7 @@ export class ProductManualComponent implements OnChanges {
       .subscribe({
         next: () => {
           console.log('setProductManualLifecycle ok');
-          this.manual().lifecycle = LifeCycle.PREVIEW;
+          this.manual.update(m => Object.assign(new ProductManual(), m, {lifecycle: LifeCycle.PREVIEW}));
           this.loading.set(false);
         },
         error: error => {
@@ -152,7 +152,7 @@ export class ProductManualComponent implements OnChanges {
       .subscribe({
         next: () => {
           console.log('setProductManualLifecycle ok');
-          this.manual().lifecycle = LifeCycle.DEVELOPMENT;
+          this.manual.update(m => Object.assign(new ProductManual(), m, {lifecycle: LifeCycle.DEVELOPMENT}));
           this.loading.set(false);
         },
         error: error => {

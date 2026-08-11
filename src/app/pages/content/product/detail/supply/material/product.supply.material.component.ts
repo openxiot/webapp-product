@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, signal} from '@angular/core';
 import {NzPageHeaderModule} from 'ng-zorro-antd/page-header';
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
@@ -76,24 +76,24 @@ export class ProductSupplyMaterialComponent implements OnInit {
   handleChange(info: { file: NzUploadFile }): void {
     switch (info.file.status) {
       case 'uploading':
-        this.loading = true;
+        this.loading.set(true);
         break;
       case 'done':
         // Get this url from response in real world.
         this.getBase64(info.file!.originFileObj!, (img: string) => {
-          this.loading = false;
-          this.avatarUrl = img;
+          this.loading.set(false);
+          this.avatarUrl.set(img);
         });
         break;
       case 'error':
         this.msg.error('Network error');
-        this.loading = false;
+        this.loading.set(false);
         break;
     }
   }
 
-  loading = false;
-  avatarUrl?: string;
+  loading = signal(false);
+  avatarUrl = signal<string | undefined>(undefined);
 
   constructor(
     private route: ActivatedRoute,

@@ -144,7 +144,7 @@ export class SpecServiceEditComponent implements OnInit {
 
           this.form.controls.requiredProperties.setValue(this.getProperties(a.requiredProperties));
           this.form.controls.requiredActions.setValue(this.getActions(a.requiredActions));
-          this.form.controls.requiredEvents.setValue(this.getEvents(a.requiredActions));
+          this.form.controls.requiredEvents.setValue(this.getEvents(a.requiredEvents));
           this.form.controls.optionalProperties.setValue(this.getProperties(a.optionalProperties));
           this.form.controls.optionalActions.setValue(this.getActions(a.optionalActions));
           this.form.controls.optionalEvents.setValue(this.getEvents(a.optionalEvents));
@@ -153,6 +153,7 @@ export class SpecServiceEditComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       });
   }
@@ -202,6 +203,7 @@ export class SpecServiceEditComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingProperties.set(false);
         }
       })
   }
@@ -218,6 +220,7 @@ export class SpecServiceEditComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingActions.set(false);
         }
       })
   }
@@ -234,6 +237,7 @@ export class SpecServiceEditComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingEvents.set(false);
         }
       })
   }

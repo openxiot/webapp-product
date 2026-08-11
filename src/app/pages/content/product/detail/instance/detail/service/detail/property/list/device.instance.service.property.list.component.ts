@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output, signal} from '@angular/core';
 import {
   ControlValueAccessor,
   FormArray, FormBuilder, FormControl,
@@ -67,7 +67,7 @@ export class DeviceInstanceServicePropertyListComponent implements ControlValueA
   }>>;
 
   // 禁用状态
-  isDisabled = false;
+  isDisabled = signal(false);
 
   // 定义变化回调和触摸回调
   onChange: (value: ValueItem[]) => void = () => {};
@@ -140,7 +140,7 @@ export class DeviceInstanceServicePropertyListComponent implements ControlValueA
 
   // 添加新项
   addItem(value: number = 0, descriptionZH: string = '', descriptionEN: string = '', notify: boolean = true): void {
-    if (this.isDisabled) {
+    if (this.isDisabled()) {
       return;
     }
 
@@ -163,7 +163,7 @@ export class DeviceInstanceServicePropertyListComponent implements ControlValueA
 
   // 移除项
   removeItem(index: number): void {
-    if (this.isDisabled) return;
+    if (this.isDisabled()) return;
 
     this.listFormArray.removeAt(index);
     this.onTouched();
@@ -171,7 +171,7 @@ export class DeviceInstanceServicePropertyListComponent implements ControlValueA
 
   // 清空所有项
   clearAll(): void {
-    if (this.isDisabled) return;
+    if (this.isDisabled()) return;
 
     this.listFormArray.clear();
     this.onTouched();
@@ -220,7 +220,7 @@ export class DeviceInstanceServicePropertyListComponent implements ControlValueA
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+    this.isDisabled.set(isDisabled);
 
     if (isDisabled) {
       this.listFormArray.disable();

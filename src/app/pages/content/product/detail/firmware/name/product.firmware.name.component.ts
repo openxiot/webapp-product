@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 
 @Component({
@@ -17,9 +17,9 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
   ]
 })
 export class ProductFirmwareNameComponent implements ControlValueAccessor {
-  private _value!: string;
+  private _value = signal<string>('');
 
-  disabled = false;
+  disabled = signal(false);
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
@@ -28,12 +28,12 @@ export class ProductFirmwareNameComponent implements ControlValueAccessor {
   }
 
   get value(): string {
-    return this._value;
+    return this._value();
   }
 
   set value(val: string) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val);
     }
 
@@ -41,8 +41,8 @@ export class ProductFirmwareNameComponent implements ControlValueAccessor {
   }
 
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -55,6 +55,6 @@ export class ProductFirmwareNameComponent implements ControlValueAccessor {
   }
 
   setDisabledState(isDisabled: boolean) {
-    this.disabled = isDisabled;
+    this.disabled.set(isDisabled);
   }
 }

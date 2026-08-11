@@ -55,7 +55,7 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '数据格式' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <property-format formControlName="format" [updatable]="editable" [formats]="formats" (changed)="onFormatChanged()"></property-format>
+        <property-format formControlName="format" [updatable]="editable" [formats]="formats()" (changed)="onFormatChanged()"></property-format>
       </nz-form-control>
     </nz-form-item>
 

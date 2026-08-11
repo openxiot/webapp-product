@@ -108,6 +108,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       });
 
@@ -120,6 +121,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingProperties.set(false);
         }
       });
 
@@ -132,6 +134,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingActions.set(false);
         }
       });
 
@@ -144,6 +147,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loadingEvents.set(false);
         }
       });
   }
@@ -212,6 +216,7 @@ export class SpecServiceComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

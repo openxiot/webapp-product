@@ -136,7 +136,7 @@ export class ProductWizardComponent implements OnChanges {
       .subscribe({
         next: () => {
           console.log('setProductWizardLifecycle ok');
-          this.wizard().lifecycle = LifeCycle.PREVIEW;
+          this.wizard.update(m => Object.assign(new ProductWizard(), m, {lifecycle: LifeCycle.PREVIEW}));
           this.loading.set(false);
         },
         error: error => {
@@ -152,7 +152,7 @@ export class ProductWizardComponent implements OnChanges {
       .subscribe({
         next: () => {
           console.log('setProductWizardLifecycle ok');
-          this.wizard().lifecycle = LifeCycle.DEVELOPMENT;
+          this.wizard.update(m => Object.assign(new ProductWizard(), m, {lifecycle: LifeCycle.DEVELOPMENT}));
           this.loading.set(false);
         },
         error: error => {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -47,9 +47,33 @@ export class DeviceInstanceDescriptionComponent implements ControlValueAccessor 
   onChange: (value: Map<string, string>) => void = () => {};
   onTouched: () => void = () => {};
 
-  descriptionZhCN: string = '';
-  descriptionZhTW: string = '';
-  descriptionEnUS: string = '';
+  private _descriptionZhCN = signal('');
+  private _descriptionZhTW = signal('');
+  private _descriptionEnUS = signal('');
+
+  get descriptionZhCN(): string {
+    return this._descriptionZhCN();
+  }
+
+  set descriptionZhCN(value: string) {
+    this._descriptionZhCN.set(value);
+  }
+
+  get descriptionZhTW(): string {
+    return this._descriptionZhTW();
+  }
+
+  set descriptionZhTW(value: string) {
+    this._descriptionZhTW.set(value);
+  }
+
+  get descriptionEnUS(): string {
+    return this._descriptionEnUS();
+  }
+
+  set descriptionEnUS(value: string) {
+    this._descriptionEnUS.set(value);
+  }
 
   constructor(
   ) {
@@ -61,9 +85,9 @@ export class DeviceInstanceDescriptionComponent implements ControlValueAccessor 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: Map<string, string>): void {
     if (obj !== undefined && obj !== null) {
-      this.descriptionZhCN = obj.get('zh-CN') || '';
-      this.descriptionZhTW = obj.get('zh-TW') || '';
-      this.descriptionEnUS = obj.get('en-US') || '';
+      this._descriptionZhCN.set(obj.get('zh-CN') || '');
+      this._descriptionZhTW.set(obj.get('zh-TW') || '');
+      this._descriptionEnUS.set(obj.get('en-US') || '');
     }
   }
 

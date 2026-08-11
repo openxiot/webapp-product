@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, signal, SimpleChanges, ViewContainerRef} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -53,7 +53,7 @@ export class InstanceArgumentsComponent implements ControlValueAccessor, OnChang
   @Input() language!: string;
 
   // 组件内部维护的值
-  arguments: Argument[] = [];
+  arguments = signal<Argument[]>([]);
 
   // 禁用状态
   isDisabled = false;
@@ -77,8 +77,8 @@ export class InstanceArgumentsComponent implements ControlValueAccessor, OnChang
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this.arguments) {
-      this.arguments = obj;
+    if (obj !== undefined && obj !== null && obj !== this.arguments()) {
+      this.arguments.set(obj);
     }
   }
 
@@ -98,7 +98,7 @@ export class InstanceArgumentsComponent implements ControlValueAccessor, OnChang
   }
 
   onChanged() {
-    this.onChange(this.arguments);
+    this.onChange(this.arguments());
     this.changed.emit();
   }
 
@@ -114,12 +114,12 @@ export class InstanceArgumentsComponent implements ControlValueAccessor, OnChang
   }
 
   protected removeArgument(arg: Argument): void {
-    this.arguments = this.arguments.filter(x => x.piid !== arg.piid);
+    this.arguments.set(this.arguments().filter(x => x.piid !== arg.piid));
     this.onChanged();
   }
 
   protected addArgument(): void {
-    const exclusion = new Set(this.arguments.map(x => x.piid));
+    const exclusion = new Set(this.arguments().map(x => x.piid));
 
     const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
       nzTitle: this.i18n.translate.instant('选择属性作为参数'),
@@ -149,12 +149,13 @@ export class InstanceArgumentsComponent implements ControlValueAccessor, OnChang
   }
 
   private addArguments(result: Set<number>) {
+    const args = [...this.arguments()];
     for (let iid of result) {
-      this.arguments.push(new Argument(iid));
+      args.push(new Argument(iid));
     }
+    args.sort((a, b) => a.piid - b.piid);
 
-    this.arguments = this.arguments.sort((a, b) => a.piid - b.piid);
-
+    this.arguments.set(args);
     this.onChanged();
   }
 }

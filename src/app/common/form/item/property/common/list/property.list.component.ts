@@ -6,6 +6,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  signal,
   ViewContainerRef
 } from '@angular/core';
 import {
@@ -73,7 +74,7 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
   @Input() updatable = false;
   @Output() changed = new EventEmitter<void>();
 
-  isDisabled = false;
+  isDisabled = signal(false);
   private destroy$ = new Subject<void>();
 
   formArray: FormArray<PropertyItemFormGroup>;
@@ -108,7 +109,7 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
   }
 
   addItem(value = 0): void {
-    if (this.isDisabled) return;
+    if (this.isDisabled()) return;
 
     const fg = new FormGroup({
       value: new FormControl(value, {nonNullable: true}),
@@ -122,14 +123,14 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
   }
 
   removeItem(idx: number): void {
-    if (this.isDisabled) return;
+    if (this.isDisabled()) return;
     this.formArray.removeAt(idx);
     this.onTouched();
     this.refreshViewItems();
   }
 
   clearAll(): void {
-    if (this.isDisabled) return;
+    if (this.isDisabled()) return;
     this.formArray.clear();
     this.onTouched();
     this.refreshViewItems();
@@ -171,7 +172,7 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
   }
 
   setDisabledState(dis: boolean): void {
-    this.isDisabled = dis;
+    this.isDisabled.set(dis);
     dis ? this.formArray.disable() : this.formArray.enable();
   }
 

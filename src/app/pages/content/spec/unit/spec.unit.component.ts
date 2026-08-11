@@ -89,6 +89,7 @@ export class SpecUnitComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }
@@ -130,6 +131,7 @@ export class SpecUnitComponent implements OnInit, OnChanges {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

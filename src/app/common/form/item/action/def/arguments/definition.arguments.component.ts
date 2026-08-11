@@ -5,6 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
+  signal,
   SimpleChanges,
   ViewContainerRef
 } from '@angular/core';
@@ -59,7 +60,7 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值
-  arguments: ArgumentDefinition[] = [];
+  arguments = signal<ArgumentDefinition[]>([]);
 
   // 禁用状态
   isDisabled = false;
@@ -86,8 +87,8 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this.arguments) {
-      this.arguments = obj;
+    if (obj !== undefined && obj !== null && obj !== this.arguments()) {
+      this.arguments.set(obj);
     }
   }
 
@@ -107,7 +108,7 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   }
 
   onChanged() {
-    this.onChange(this.arguments);
+    this.onChange(this.arguments());
     this.changed.emit();
   }
 
@@ -121,12 +122,12 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   }
 
   protected removeArgument(arg: ArgumentDefinition): void {
-    this.arguments = this.arguments.filter(x => x.type.name !== arg.type.name);
+    this.arguments.set(this.arguments().filter(x => x.type.name !== arg.type.name));
     this.onChanged();
   }
 
   protected addArgument(): void {
-    const exclusion = new Set(this.arguments.map(x => x.type.name));
+    const exclusion = new Set(this.arguments().map(x => x.type.name));
 
     const modal = this.modal.create<PropertyDefinitionSelectComponent, PropertyDefinitionSelector, Set<PropertyDefinition>>({
       nzTitle: this.i18n.translate.instant('选择属性作为参数'),
@@ -156,12 +157,13 @@ export class DefinitionArgumentsComponent implements OnInit, ControlValueAccesso
   }
 
   private addArguments(result: Set<PropertyDefinition>) {
+    const args = [...this.arguments()];
     for (let p of result) {
-      this.arguments.push(new ArgumentDefinition(p.type));
+      args.push(new ArgumentDefinition(p.type));
     }
+    args.sort((a, b) => a.type.name.localeCompare(b.type.name));
 
-    this.arguments = this.arguments.sort((a, b) => a.type.name.localeCompare(b.type.name));
-
+    this.arguments.set(args);
     this.onChanged();
   }
 }

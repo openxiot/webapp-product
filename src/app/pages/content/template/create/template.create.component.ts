@@ -92,6 +92,7 @@ export class TemplateCreateComponent implements OnInit {
           },
           error: error => {
             this.msg.warning(error);
+            this.loading.set(false);
           }
         })
     }

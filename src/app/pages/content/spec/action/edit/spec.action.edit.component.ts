@@ -116,6 +116,7 @@ export class SpecActionEditComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

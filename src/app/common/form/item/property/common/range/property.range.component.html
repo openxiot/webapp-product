@@ -1,17 +1,17 @@
 @if (updatable) {
   <nz-space nzDirection="horizontal">
-    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最小' | translate" style="width: 100%" [(ngModel)]="_value.min" (ngModelChange)="onMinChange($event)"></nz-input-number>
+    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最小' | translate" style="width: 100%" [(ngModel)]="_value().min" (ngModelChange)="onMinChange($event)"></nz-input-number>
 
-    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最大' | translate" style="width: 100%" [(ngModel)]="_value.max" (ngModelChange)="onMaxChange($event)"></nz-input-number>
+    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最大' | translate" style="width: 100%" [(ngModel)]="_value().max" (ngModelChange)="onMaxChange($event)"></nz-input-number>
 
-    <nz-input-number *nzSpaceItem [nzAddonBefore]="'步长' | translate" style="width: 100%" [(ngModel)]="_value.step" (ngModelChange)="onStepChange($event)"></nz-input-number>
+    <nz-input-number *nzSpaceItem [nzAddonBefore]="'步长' | translate" style="width: 100%" [(ngModel)]="_value().step" (ngModelChange)="onStepChange($event)"></nz-input-number>
   </nz-space>
 } @else {
   <nz-space nzDirection="horizontal">
-    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最小' | translate" style="width: 100%" [ngModel]="_value.min" nzDisabled></nz-input-number>
+    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最小' | translate" style="width: 100%" [ngModel]="_value().min" nzDisabled></nz-input-number>
 
-    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最大' | translate" style="width: 100%" [ngModel]="_value.max" nzDisabled></nz-input-number>
+    <nz-input-number *nzSpaceItem [nzAddonBefore]="'最大' | translate" style="width: 100%" [ngModel]="_value().max" nzDisabled></nz-input-number>
 
-    <nz-input-number *nzSpaceItem [nzAddonBefore]="'步长' | translate" style="width: 100%" [ngModel]="_value.step" nzDisabled></nz-input-number>
+    <nz-input-number *nzSpaceItem [nzAddonBefore]="'步长' | translate" style="width: 100%" [ngModel]="_value().step" nzDisabled></nz-input-number>
   </nz-space>
 }

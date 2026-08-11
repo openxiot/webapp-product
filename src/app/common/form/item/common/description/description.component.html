@@ -1,7 +1,7 @@
 @if (updatable) {
   @if (multiple) {
     <nz-row [nzGutter]="[8, 8]">
-      @for (item of langList; track item.lang; let i = $index) {
+      @for (item of langList(); track item.lang; let i = $index) {
         <nz-col [nzSpan]="24">
           <div style="display: flex; gap: 8px; align-items: center;">
             <nz-input-wrapper nzAddonBefore="{{ item.label | translate }}" style="flex: 1;">

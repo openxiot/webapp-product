@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, OnChanges, Output, signal, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -33,8 +33,8 @@ export class CreateServiceActionsComponent implements ControlValueAccessor, OnCh
 
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-  actions: Action[] = [];
-  disabled = false;
+  actions = signal<Action[]>([]);
+  disabled = signal(false);
 
   // 定义变化回调和触摸回调
   onChange: (value: Action[]) => void = () => {};
@@ -52,8 +52,8 @@ export class CreateServiceActionsComponent implements ControlValueAccessor, OnCh
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this.actions) {
-      this.actions = obj;
+    if (obj !== undefined && obj !== null && obj !== this.actions()) {
+      this.actions.set(obj);
     }
   }
 
@@ -69,11 +69,11 @@ export class CreateServiceActionsComponent implements ControlValueAccessor, OnCh
 
   // 当表单控件的禁用状态变更时（如调用 control.disable()），Angular 会调用此方法
   setDisabledState?(isDisabled: boolean): void {
-    this.disabled = isDisabled;
+    this.disabled.set(isDisabled);
   }
 
   onChanged() {
-    this.onChange(this.actions);
+    this.onChange(this.actions());
     this.changed.emit();
   }
 

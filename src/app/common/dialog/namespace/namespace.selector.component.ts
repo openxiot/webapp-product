@@ -35,6 +35,7 @@ export class NamespaceSelectorComponent implements OnInit {
   readonly option: NamespaceOption = inject(NZ_MODAL_DATA);
 
   loading = signal(false);
+  namespaces = signal<NamespaceDefinition[]>(this.option.namespaces);
 
   constructor(
     private account: AccountService,
@@ -55,11 +56,12 @@ export class NamespaceSelectorComponent implements OnInit {
     this.service.getAllNamespaces(this.account.organization())
       .subscribe({
         next: data => {
-          this.option.namespaces = data;
+          this.namespaces.set(data);
           this.loading.set(false);
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

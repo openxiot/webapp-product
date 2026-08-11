@@ -50,7 +50,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
   private _value = signal<FirmwareUrl>(new FirmwareUrl());
   error?: string;
 
-  disabled = false;
+  disabled = signal(false);
 
   onChange: (value: FirmwareUrl) => void = () => {};
   onTouched: () => void = () => {};
@@ -108,7 +108,7 @@ export class ProductFirmwareUrlComponent implements ControlValueAccessor, Valida
   }
 
   setDisabledState(isDisabled: boolean) {
-    this.disabled = isDisabled;
+    this.disabled.set(isDisabled);
   }
 
   // 实现Validator接口的验证方法

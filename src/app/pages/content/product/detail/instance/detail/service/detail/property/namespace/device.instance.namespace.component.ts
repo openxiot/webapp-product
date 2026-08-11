@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, signal} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -29,7 +29,7 @@ import {NzTagModule} from 'ng-zorro-antd/tag';
 export class DeviceInstanceNamespaceComponent implements ControlValueAccessor {
 
   // 组件内部维护的值
-  private _value!: string;
+  private _value = signal<string>('');
 
   // 禁用状态
   isDisabled = false;
@@ -44,13 +44,13 @@ export class DeviceInstanceNamespaceComponent implements ControlValueAccessor {
 
   // 获取当前值
   get value(): string {
-    return this._value;
+    return this._value();
   }
 
   // 设置当前值，并通知外部变化
   set value(val: string) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val); // 重要：通知外部表单值已变化
     }
     this.onTouched(); // 标记为已触摸
@@ -60,8 +60,8 @@ export class DeviceInstanceNamespaceComponent implements ControlValueAccessor {
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 

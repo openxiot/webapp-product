@@ -147,6 +147,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
       },
       error: error => {
         this.msg.warning(error);
+        this.loading.set(false);
       }
     })
   }

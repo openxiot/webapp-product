@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -41,10 +41,10 @@ export class DeviceTypeComponent implements ControlValueAccessor {
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值
-  _value: string = '';
+  _value = signal<string>('');
 
   // 禁用状态
-  isDisabled = false;
+  isDisabled = signal(false);
 
   // 定义变化回调和触摸回调
   onChange: (value: string) => void = () => {};
@@ -57,13 +57,13 @@ export class DeviceTypeComponent implements ControlValueAccessor {
 
   // 获取当前值
   get value(): string {
-    return this._value;
+    return this._value();
   }
 
   // 设置当前值，并通知外部变化
   set value(val: string) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val); // 重要：通知外部表单值已变化
     }
     this.onTouched(); // 标记为已触摸
@@ -71,7 +71,7 @@ export class DeviceTypeComponent implements ControlValueAccessor {
 
   // 获取当前选中项的显示标签
   get selectedLabel(): string {
-    const selected = this.devices.find(item => item.type.name === this._value);
+    const selected = this.devices.find(item => item.type.name === this._value());
     return selected ? (selected.description.get(this.i18n.getCurrentLang()) || selected.type.name) : 'unknown';
   }
 
@@ -79,13 +79,13 @@ export class DeviceTypeComponent implements ControlValueAccessor {
   onSelectionChange(value: string): void {
     console.log('onSelectionChange: ', value);
 
-    if (this.isDisabled) {
+    if (this.isDisabled()) {
       return;
     }
 
     // 检查值是否真正发生变化
-    if (value !== this._value) {
-      this._value = value;
+    if (value !== this._value()) {
+      this._value.set(value);
 
       // 通知外部表单值已变化
       this.onChange(value);
@@ -101,7 +101,7 @@ export class DeviceTypeComponent implements ControlValueAccessor {
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(value: string): void {
-    this._value = value;
+    this._value.set(value);
   }
 
   // 注册变化回调：Angular 提供给你一个函数，当内部值变化时，你需要调用它来通知外部
@@ -116,6 +116,6 @@ export class DeviceTypeComponent implements ControlValueAccessor {
 
   // 当表单控件的禁用状态变更时（如调用 control.disable()），Angular 会调用此方法
   setDisabledState?(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+    this.isDisabled.set(isDisabled);
   }
 }

@@ -94,6 +94,7 @@ export class TemplateComponent implements OnInit {
       },
       error: error => {
         this.msg.warning(error);
+        this.loading.set(false);
       }
     })
   }
@@ -148,6 +149,7 @@ export class TemplateComponent implements OnInit {
       },
       error: error => {
         this.msg.warning(error);
+        this.loading.set(false);
       }
     })
   }

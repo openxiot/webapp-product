@@ -9,7 +9,7 @@
       [nzMultiple]="false"
       (nzChange)="handleChange($event)"
       [nzShowUploadList]="false"
-      [nzDisabled]="loading() || disabled"
+      [nzDisabled]="loading() || disabled()"
     >
       @if (!value.url) {
         <span class="upload-icon" nz-icon [nzType]="loading() ? 'loading' : 'upload'"></span>

@@ -81,6 +81,7 @@ export class ProductPanelComponent implements OnChanges {
       },
       error: error => {
         this.msg.warning(error);
+        this.loadingInstances.set(false);
       }
     });
   }

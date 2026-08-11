@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal, ViewContainerRef} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -50,7 +50,7 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
   @Input() language!: string;
 
   // 组件内部维护的值
-  private _value: number[] = [];
+  private _value = signal<number[]>([]);
 
   // 禁用状态
   isDisabled = false;
@@ -67,13 +67,13 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
 
   // 获取当前值
   get value(): number[] {
-    return this._value;
+    return this._value();
   }
 
   // 设置当前值，并通知外部变化
   set value(val: number[]) {
-    if (val !== this._value) {
-      this._value = val;
+    if (val !== this._value()) {
+      this._value.set(val);
       this.onChange(val); // 重要：通知外部表单值已变化
       this.changed.emit();
     }
@@ -84,8 +84,8 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
-    if (obj !== undefined && obj !== null && obj !== this._value) {
-      this._value = obj;
+    if (obj !== undefined && obj !== null && obj !== this._value()) {
+      this._value.set(obj);
     }
   }
 
@@ -126,7 +126,7 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this._value = [];
+        this._value.set([]);
 
         const sortedResult = Array.from(result).sort((a, b) => a - b);
         for (let iid of sortedResult) {
@@ -141,7 +141,7 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
 
   addMember(property: Property) {
     console.log('addMember: ', property.iid);
-    this._value.push(property.iid);
+    this._value.update(list => [...list, property.iid]);
     this.changed.emit();
   }
 
@@ -157,11 +157,15 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
 
   // 删除成员
   removeMember(iid: number): void {
-    const index = this._value.indexOf(iid);
+    const index = this._value().indexOf(iid);
     if (index > -1) {
-      this._value.splice(index, 1);
+      this._value.update(list => {
+        const next = [...list];
+        next.splice(index, 1);
+        return next;
+      });
       // 通知外部值已变化
-      this.onChange(this._value);
+      this.onChange(this._value());
       this.onTouched();
       this.changed.emit();
     }

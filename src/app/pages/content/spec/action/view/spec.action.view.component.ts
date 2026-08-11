@@ -108,6 +108,7 @@ export class SpecActionViewComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }
@@ -126,7 +127,7 @@ export class SpecActionViewComponent implements OnInit {
           this.form.controls.lifecycle.setValue(a.lifecycle);
 
           this.form.controls.argumentsIn.setValue(a.in);
-          this.form.controls.argumentsIn.setValue(a.out);
+          this.form.controls.argumentsOut.setValue(a.out);
 
           this.loading.set(false);
         },

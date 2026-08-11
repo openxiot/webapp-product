@@ -175,6 +175,7 @@ export class SpecPropertyEditComponent implements OnInit {
         },
         error: error => {
           this.msg.warning(error);
+          this.loading.set(false);
         }
       })
   }

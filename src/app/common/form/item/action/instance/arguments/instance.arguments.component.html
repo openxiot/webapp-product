@@ -1,6 +1,6 @@
 <nz-row [nzGutter]="[8, 8]">
 
-  @for (arg of arguments; track arg.piid) {
+  @for (arg of arguments(); track arg.piid) {
     <nz-col [nzSpan]="24">
       <nz-row [nzGutter]="[8, 8]">
         <nz-col [nzSpan]="6" class="argument">

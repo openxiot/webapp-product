@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal, ViewContainerRef} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -62,7 +62,7 @@ export class DescriptionComponent implements ControlValueAccessor {
   private bcp47LabelMap = new Map<string, string>();
 
   // 动态语言列表（初始只有英文，后续动态添加）
-  langList: LangDesc[] = [];
+  langList = signal<LangDesc[]>([]);
 
   constructor(
     private modal: NzModalService,
@@ -74,7 +74,7 @@ export class DescriptionComponent implements ControlValueAccessor {
       this.bcp47LabelMap.set(lang.bcp47, lang.name);
     }
     // 初始默认值
-    this.langList = [this.createLangDesc('en-US')];
+    this.langList.set([this.createLangDesc('en-US')]);
   }
 
   private createLangDesc(bcp47: string): LangDesc {
@@ -96,11 +96,11 @@ export class DescriptionComponent implements ControlValueAccessor {
       list.push({lang, label: this.bcp47LabelMap.get(lang) ?? lang, value: val});
     });
 
-    this.langList = list.length ? list : [this.createLangDesc('en-US')];
+    this.langList.set(list.length ? list : [this.createLangDesc('en-US')]);
   }
 
   private resetToDefault() {
-    this.langList = [this.createLangDesc('en-US')];
+    this.langList.set([this.createLangDesc('en-US')]);
   }
 
   registerOnChange(fn: any): void {
@@ -117,7 +117,7 @@ export class DescriptionComponent implements ControlValueAccessor {
 
   emitChange() {
     const map = new Map<string, string>();
-    this.langList.forEach(item => {
+    this.langList().forEach(item => {
       map.set(item.lang, item.value.trim());
     });
     this.onChange(map);
@@ -131,7 +131,7 @@ export class DescriptionComponent implements ControlValueAccessor {
       nzWidth: 1200,
       nzContent: LanguageAddComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: this.langList,
+      nzData: this.langList(),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -151,16 +151,18 @@ export class DescriptionComponent implements ControlValueAccessor {
         return;
       }
 
+      const list = [...this.langList()];
       selectedLangArray.forEach(langItem => {
-        const exist = this.langList.some(item => item.lang === langItem.lang);
+        const exist = list.some(item => item.lang === langItem.lang);
         if (!exist) {
-          this.langList.push({
+          list.push({
             lang: langItem.lang,
             label: langItem.label,
             value: this.candidate.get(langItem.lang) || ''
           });
         }
       });
+      this.langList.set(list);
 
       this.emitChange();
     });
@@ -168,17 +170,19 @@ export class DescriptionComponent implements ControlValueAccessor {
 
   // 删除语言（en-US 不可删）
   removeLang(index: number) {
-    const item = this.langList[index];
+    const item = this.langList()[index];
     if (item.lang === 'en-US') {
       return;
     }
 
-    this.langList.splice(index, 1);
+    const list = [...this.langList()];
+    list.splice(index, 1);
+    this.langList.set(list);
     this.emitChange();
   }
 
   protected get CurrentLangLabel(): string {
-    const found = this.langList.find(x => x.lang === this.i18n.getCurrentLang());
+    const found = this.langList().find(x => x.lang === this.i18n.getCurrentLang());
     if (found) {
       return found.label;
     }
@@ -187,7 +191,7 @@ export class DescriptionComponent implements ControlValueAccessor {
   }
 
   protected get CurrentLangValue(): string {
-    const found = this.langList.find(x => x.lang === this.i18n.getCurrentLang());
+    const found = this.langList().find(x => x.lang === this.i18n.getCurrentLang());
     if (found) {
       return found.value;
     }
@@ -196,15 +200,15 @@ export class DescriptionComponent implements ControlValueAccessor {
   }
 
   protected set CurrentLangValue(value: string) {
-    const found = this.langList.find(item => item.lang === this.i18n.getCurrentLang());
+    const found = this.langList().find(item => item.lang === this.i18n.getCurrentLang());
     if (found) {
       found.value = value;
     } else {
-      this.langList.push({
+      this.langList.set([...this.langList(), {
         lang: this.i18n.getCurrentLang(),
         label: this.i18n.getCurrentLang(),
         value: value
-      });
+      }]);
     }
 
     this.emitChange();

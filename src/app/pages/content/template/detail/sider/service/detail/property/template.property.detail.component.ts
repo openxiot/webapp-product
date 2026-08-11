@@ -5,6 +5,7 @@ import {
   OnChanges,
   OnInit,
   Output,
+  signal,
   SimpleChanges,
   ViewContainerRef
 } from '@angular/core';
@@ -104,7 +105,7 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
   @Output() removed = new EventEmitter<PropertyTemplate>();
 
   loadingFormats: boolean = false;
-  formats: FormatDefinition[] = [];
+  formats = signal<FormatDefinition[]>([]);
 
   loadingUnits: boolean = false;
   units: UnitDefinition[] = [];
@@ -191,7 +192,7 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
     this.main.getFormatDefinitions(this.account.ns().namespace)
       .subscribe({
         next: data => {
-          this.formats = data;
+          this.formats.set(data);
           this.loadingFormats = false;
         },
         error: error => {

@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
 
@@ -32,7 +32,7 @@ export class SpecIidComponent implements ControlValueAccessor {
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
   // 组件内部维护的值（自然数）
-  private _value: number = 0;
+  private _value = signal(0);
 
   // 禁用状态
   isDisabled = false;
@@ -49,14 +49,14 @@ export class SpecIidComponent implements ControlValueAccessor {
 
   // 获取当前值
   get value(): number {
-    return this._value;
+    return this._value();
   }
 
   // 设置当前值，并通知外部变化
   set value(val: number) {
     const num = this.toNaturalNumber(val);
-    if (num !== this._value) {
-      this._value = num;
+    if (num !== this._value()) {
+      this._value.set(num);
       this.validate(num);
       this.onChange(num);
       this.changed.emit();
@@ -92,9 +92,9 @@ export class SpecIidComponent implements ControlValueAccessor {
 
   writeValue(obj: any): void {
     const num = typeof obj === 'number' ? obj : Number(obj);
-    if (!isNaN(num) && num !== this._value) {
-      this._value = this.toNaturalNumber(num);
-      this.validate(this._value);
+    if (!isNaN(num) && num !== this._value()) {
+      this._value.set(this.toNaturalNumber(num));
+      this.validate(this._value());
     }
   }
 
