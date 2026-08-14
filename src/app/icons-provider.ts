@@ -71,7 +71,9 @@ import {
   GoogleOutline,
   TabletOutline,
   PlusCircleOutline,
-  ReadOutline
+  ReadOutline,
+  BarsOutline,
+  DingdingOutline
 } from '@ant-design/icons-angular/icons';
 
 export const icons = [
@@ -147,5 +149,7 @@ export const icons = [
   FacebookOutline,
   GoogleOutline,
   TabletOutline,
-  ReadOutline
+  ReadOutline,
+  BarsOutline,
+  DingdingOutline
 ];

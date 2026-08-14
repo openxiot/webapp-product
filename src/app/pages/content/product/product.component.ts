@@ -51,10 +51,10 @@ import {ProductBasic} from '@openxiot/xiot-core-spec-ts';
 export class ProductComponent implements OnInit {
 
   viewOptions: NzSegmentedOptions = [
-    {value: 'Card', icon: 'appstore'},
-    {value: 'List', icon: 'bars'}
+    {value: 0, icon: 'appstore'},
+    {value: 1, icon: 'bars'}
   ];
-  viewMode: number = 0;
+  viewMode = signal(0);
 
   current = signal<Organization>(new Organization());
   products = signal<ProductBasic[]>([]);
@@ -77,19 +77,20 @@ export class ProductComponent implements OnInit {
     }
   }
 
-  protected onViewModeChanged($event: any) {
+  protected onViewModeChanged(value: number) {
+    this.viewMode.set(value);
     this.saveProductViewMode();
   }
 
   private loadProductViewMode() {
-    const value = localStorage.getItem('productViewMode');
-    if (value) {
-      this.viewMode = Number.parseInt(value);
+    const value = Number.parseInt(localStorage.getItem('productViewMode') ?? '', 10);
+    if (!Number.isNaN(value)) {
+      this.viewMode.set(value);
     }
   }
 
   private saveProductViewMode() {
-    localStorage.setItem('productViewMode', this.viewMode.toString());
+    localStorage.setItem('productViewMode', this.viewMode().toString());
   }
 
   protected changeOrganization() {

@@ -54,10 +54,10 @@ import {NamespaceOption} from '../../../common/dialog/namespace/NamespaceOption'
 export class TemplateComponent implements OnInit {
 
   viewOptions: NzSegmentedOptions = [
-    {value: 'Card', icon: 'appstore'},
-    {value: 'List', icon: 'bars'}
+    {value: 0, icon: 'appstore'},
+    {value: 1, icon: 'bars'}
   ];
-  viewMode: number = 0;
+  viewMode = signal(0);
 
   loading = signal(false);
   templates = signal<TemplateSummary[]>([]);

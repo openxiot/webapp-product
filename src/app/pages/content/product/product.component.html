@@ -4,7 +4,7 @@
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
     <nz-page-header-tags>
-      <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"
+      <nz-segmented [nzOptions]="viewOptions" [ngModel]="viewMode()"
                     (ngModelChange)="onViewModeChanged($event)"></nz-segmented>
     </nz-page-header-tags>
 
@@ -42,7 +42,7 @@
       <!--      </div>-->
 
       <div nz-col [nzSpan]="24">
-        @switch (viewMode) {
+        @switch (viewMode()) {
           @case (0) {
             <product-grid [products]="products()"></product-grid>
           }

@@ -3,7 +3,8 @@
     <nz-breadcrumb [nzAutoGenerate]="true" nz-page-header-breadcrumb appBreadcrumbTranslate></nz-breadcrumb>
 
     <nz-page-header-tags>
-      <nz-segmented [nzOptions]="viewOptions" [(ngModel)]="viewMode"></nz-segmented>
+      <nz-segmented [nzOptions]="viewOptions" [ngModel]="viewMode()"
+                    (ngModelChange)="viewMode.set($event)"></nz-segmented>
     </nz-page-header-tags>
 
     <nz-page-header-extra>
@@ -42,7 +43,7 @@
         }
 
         <div nz-col [nzSpan]="24">
-          @switch (viewMode) {
+          @switch (viewMode()) {
             @case (0) {
               <template-grid [templates]="templates()"></template-grid>
             }
