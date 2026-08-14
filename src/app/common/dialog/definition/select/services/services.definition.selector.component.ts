@@ -46,7 +46,7 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
   loading = signal(false);
   services = signal<ServiceDefinition[]>([]);
   selected: Set<string> = new Set<string>();
-  disabled: boolean = true;
+  disabled = signal(true);
 
   constructor(
     public i18n: MainI18nService,
@@ -94,6 +94,6 @@ export class ServicesDefinitionSelectorComponent implements OnInit {
       this.selected.add(s.type.name);
     }
 
-    this.disabled = this.selected.size == 0;
+    this.disabled.set(this.selected.size == 0);
   }
 }

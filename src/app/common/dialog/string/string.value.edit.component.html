@@ -1,1 +1,1 @@
-<input nz-input [(ngModel)]="s.newValue" type="text" (ngModelChange)="onChange($event)"/>
+<input nz-input [ngModel]="s.newValue()" (ngModelChange)="s.newValue.set($event)" type="text"/>

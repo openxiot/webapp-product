@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {NZ_MODAL_DATA, NzModalRef} from 'ng-zorro-antd/modal';
 import {FormsModule} from '@angular/forms';
 import {NzInputModule} from 'ng-zorro-antd/input';
@@ -32,7 +32,7 @@ export class FormatsSelectorComponent {
 
   formats: FormatDefinition[] = [];
   selected: Set<string> = new Set();
-  disabled: boolean = true;
+  disabled = signal(true);
 
   constructor(
     public account: AccountService,
@@ -317,6 +317,6 @@ export class FormatsSelectorComponent {
       this.selected.add(format.type.name);
     }
 
-    this.disabled = this.selected.size == 0;
+    this.disabled.set(this.selected.size == 0);
   }
 }

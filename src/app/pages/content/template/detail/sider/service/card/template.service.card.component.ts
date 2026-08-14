@@ -158,7 +158,7 @@ export class TemplateServiceCardComponent implements OnInit {
           label: this.i18n.translate.instant('确认'),
           danger: false,
           type: 'primary',
-          disabled: component => component!.disabled || false,
+          disabled: component => component!.disabled(),
           onClick: component => component!.ok()
         }
       ],
@@ -198,7 +198,7 @@ export class TemplateServiceCardComponent implements OnInit {
           label: this.i18n.translate.instant('确认'),
           danger: false,
           type: 'primary',
-          disabled: component => component!.disabled || false,
+          disabled: component => component!.disabled(),
           onClick: component => component!.ok()
         }
       ],
@@ -238,7 +238,7 @@ export class TemplateServiceCardComponent implements OnInit {
           label: this.i18n.translate.instant('确认'),
           danger: false,
           type: 'primary',
-          disabled: component => component!.disabled || false,
+          disabled: component => component!.disabled(),
           onClick: component => component!.ok()
         }
       ],

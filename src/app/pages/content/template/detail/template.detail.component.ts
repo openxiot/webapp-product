@@ -180,7 +180,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
           label: this.i18n.translate.instant('确认'),
           danger: true,
           type: 'primary',
-          disabled: component => ! (component!.changed || false),
+          disabled: component => !(component!.changed() || false),
           onClick: component => component!.ok()
         }
       ],
