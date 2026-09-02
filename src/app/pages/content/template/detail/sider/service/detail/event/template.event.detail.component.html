@@ -7,7 +7,7 @@
       <span *nzSpaceItem>{{ '事件详情' | translate }}</span>
     </nz-space>
 
-    @if (editable) {
+    @if (editable()) {
       <span style="float: right">
         <span class="selector" (click)="onRemoved()">
           <span nz-icon nzType="delete" nzTheme="outline"></span>
@@ -20,14 +20,14 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '是否必选' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="16">
-        <spec-required formControlName="required" [updatable]="editable" (changed)="onRequiredChanged()"></spec-required>
+        <spec-required formControlName="required" [updatable]="editable()" (changed)="onRequiredChanged()"></spec-required>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '实例ID' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        <spec-iid formControlName="iid" [updatable]="editable"></spec-iid>
+        <spec-iid formControlName="iid" [updatable]="editable()" (changed)="onIIDChanged()"></spec-iid>
       </nz-form-control>
     </nz-form-item>
 
@@ -41,7 +41,7 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '描述' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        <description formControlName="description" [updatable]="editable"></description>
+        <description formControlName="description" [updatable]="editable()" (changed)="onDescriptionChanged()"></description>
       </nz-form-control>
     </nz-form-item>
 
@@ -55,7 +55,7 @@
                 <nz-form-item>
                   <nz-space>
                     <div *nzSpaceItem>
-                      <editor-service-action-argument id="arguments{{i}}" formControlName="argument"></editor-service-action-argument>
+                      <editor-service-action-argument id="arguments{{i}}" formControlName="argument" (changed)="onArgumentRowChanged()"></editor-service-action-argument>
                     </div>
 
                     <div *nzSpaceItem>

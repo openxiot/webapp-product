@@ -1,8 +1,7 @@
 import {
-  ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input, NgZone,
+  Input,
   OnDestroy,
   OnInit,
   Output,
@@ -78,7 +77,7 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
   private destroy$ = new Subject<void>();
 
   formArray: FormArray<PropertyItemFormGroup>;
-  viewItems: PropertyItemFormGroup[] = [];
+  viewItems = signal<PropertyItemFormGroup[]>([]);
 
   onChange: (val: ValueItem[]) => void = () => {
   };
@@ -89,8 +88,6 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
     private fb: FormBuilder,
     private modal: NzModalService,
     private viewRef: ViewContainerRef,
-    private ngZone: NgZone,
-    private cdr: ChangeDetectorRef
   ) {
     this.formArray = new FormArray<PropertyItemFormGroup>([]);
   }
@@ -177,10 +174,8 @@ export class PropertyListComponent implements ControlValueAccessor, OnInit, OnDe
   }
 
   refreshViewItems() {
-    // 1. 生成全新数组引用（不可变更新）
-    this.viewItems = [...this.formArray.controls];
-    // 2. 强制触发当前组件变更检测（立即生效）
-    this.cdr.detectChanges();
+    // 1. 生成全新数组引用（不可变更新），通过 signal 通知视图刷新
+    this.viewItems.set([...this.formArray.controls]);
   }
 
   protected readonly Array = Array;

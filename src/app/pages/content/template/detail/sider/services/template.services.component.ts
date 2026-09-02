@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, signal, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, input, OnInit, Output, signal, ViewContainerRef} from '@angular/core';
 import {
   ActionDefinition,
   DeviceTemplate,
@@ -25,7 +25,7 @@ import {ServicesOption} from '../../../../../../common/dialog/definition/select/
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {MainService} from '../../../../../../service/main.service';
 import {AccountService} from '../../../../../../service/account.service';
-import {DeviceTemplateHelper} from '../../../../../../typedef/template/DeviceTemplateHelper';
+import {TemplateOp} from '../../../../../../typedef/template/TemplateEditor';
 
 @Component({
   selector: 'template-services',
@@ -49,11 +49,11 @@ import {DeviceTemplateHelper} from '../../../../../../typedef/template/DeviceTem
 })
 export class TemplateServicesComponent implements OnInit {
 
-  @Input() showVersion: boolean = false;
-  @Input() editable: boolean = false;
-  @Input() device: DeviceTemplate | undefined = undefined;
+  showVersion = input(false);
+  editable = input(false);
+  device = input.required<DeviceTemplate>();
   @Output() selected = new EventEmitter<ServiceTemplate>();
-  @Output() changed = new EventEmitter<void>();
+  @Output() op = new EventEmitter<TemplateOp>();
 
   loading = signal(false);
   services: ServiceDefinition[] = [];
@@ -164,13 +164,17 @@ export class TemplateServicesComponent implements OnInit {
     });
 
     modal.afterClose.subscribe(result => {
-      if (result) {
-        if (result.length > 0) {
-          if (this.device) {
-            const helper = new DeviceTemplateHelper(this.device);
-            helper.addServiceDefinitions(result, this.device?.type?.version || 1);
-            this.changed.emit();
-          }
+      if (result && result.length > 0) {
+        if (this.device()) {
+          // 由顶层 reducer 在克隆体上执行 DeviceTemplateHelper，绝不在共享 device 上原地 add。
+          this.op.emit({
+            kind: 'addService',
+            defs: result,
+            version: this.device()!.type.version || 1,
+            properties: this.properties,
+            actions: this.actions,
+            events: this.events,
+          });
         }
       }
     });

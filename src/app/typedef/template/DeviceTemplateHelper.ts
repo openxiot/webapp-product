@@ -116,7 +116,7 @@ export class DeviceTemplateHelper {
   private addEvents(helper: ServiceTemplateHelper, def: ServiceDefinition, version: number) {
     let iid = 1;
 
-    for (let type of def.optionalEvents) {
+    for (let type of def.requiredEvents) {
       const event = this.events.get(type.name);
       if (event) {
         if (helper.addEvent(iid, event, true, version)) {

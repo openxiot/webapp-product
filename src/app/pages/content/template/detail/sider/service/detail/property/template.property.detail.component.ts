@@ -1,12 +1,11 @@
 import {
   Component,
+  effect,
   EventEmitter,
-  Input,
-  OnChanges,
+  input,
   OnInit,
   Output,
   signal,
-  SimpleChanges,
   ViewContainerRef
 } from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
@@ -22,7 +21,7 @@ import {
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import {DataFormat, ServiceTemplate, PropertyTemplate, FormatDefinition, UnitDefinition, Access} from '@openxiot/xiot-core-spec-ts';
+import {ConstraintValue, DataFormat, DataFormatFromString, ServiceTemplate, PropertyTemplate, FormatDefinition, UnitDefinition, Access, ValueDefinition, ValueList, ValueRange} from '@openxiot/xiot-core-spec-ts';
 import {NzFormModule} from 'ng-zorro-antd/form';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzInputNumberModule} from 'ng-zorro-antd/input-number';
@@ -62,6 +61,7 @@ import {SpecIidComponent} from '../../../../../../../../common/form/item/common/
 import {
   SpecRequiredComponent
 } from '../../../../../../../../common/form/item/common/required/spec.required.component';
+import {PropertyPatch, TemplateOp} from '../../../../../../../../typedef/template/TemplateEditor';
 
 @Component({
   selector: 'template-property-detail',
@@ -96,13 +96,12 @@ import {
     NzModalService
   ],
 })
-export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
+export class TemplatePropertyDetailComponent implements OnInit {
 
-  @Input() editable: boolean = false;
-  @Input() service!: ServiceTemplate;
-  @Input() property!: PropertyTemplate;
-  @Output() changed = new EventEmitter<void>();
-  @Output() removed = new EventEmitter<PropertyTemplate>();
+  editable = input(false);
+  service = input.required<ServiceTemplate>();
+  property = input.required<PropertyTemplate>();
+  @Output() op = new EventEmitter<TemplateOp>();
 
   loadingFormats: boolean = false;
   formats = signal<FormatDefinition[]>([]);
@@ -129,6 +128,17 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
 
   combinationValue: boolean = false;
   constrainable: boolean = false;
+
+  /**
+   * property-list 在 writeValue() 回填行时会经内部 formArray.valueChanges 连发 changed，
+   * 而 reload 是用 setValue() 回填的（程序性写入），这些回声必须抑制，否则会在打开/切换节点时
+   * 用半成品行误发 updateProperty 覆盖模型。Zoneless 用微任务调度渲染，setTimeout(0) 一定在
+   * reload 之后那次渲染（含挂载 list CVA 的 writeValue）全部完成之后才复位。
+   */
+  private suppressListEmit: boolean = false;
+
+  /** 已加载的属性 iid：只在切到别的节点时 reload，同 iid 自提交（含逐键描述）不复位表单。 */
+  private loadedIid: number | undefined = undefined;
 
   constructor(
     private modal: NzModalService,
@@ -159,16 +169,22 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
         }>
       >([]),
     });
-  }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['property']) {
-      this.reload();
-    }
+    effect(() => {
+      const p = this.property();
+      if (p && this.loadedIid !== p.iid) {
+        this.loadedIid = p.iid;
+        this.reload();
+      }
+    });
   }
 
   ngOnInit(): void {
-    this.reload();
+    const p = this.property();
+    if (p && this.loadedIid !== p.iid) {
+      this.loadedIid = p.iid;
+      this.reload();
+    }
     this.loadFormats();
     this.loadUnits();
   }
@@ -202,31 +218,39 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
   }
 
   private reload() {
-    this.form.controls.required.setValue(this.service.required);
-    this.form.controls.iid.setValue(this.property.iid);
-    this.form.controls.ns.setValue(this.property.type.ns);
-    this.form.controls.code.setValue(this.property.type.name);
-    this.form.controls.description.setValue(this.property.description);
-    this.form.controls.format.setValue(this.property.format.toString());
-    this.form.controls.access.setValue(this.property.access);
-    this.constrainable = this.getConstrainable(this.property.format);
-    this.form.controls.constraint.setValue(this.getConstrainType(this.property));
+    const p = this.property();
+    if (!p) return;
+
+    this.suppressListEmit = true;
+    setTimeout(() => {
+      this.suppressListEmit = false;
+    });
+
+    this.form.controls.required.setValue(p.required);
+    this.form.controls.iid.setValue(p.iid);
+    this.form.controls.ns.setValue(p.type.ns);
+    this.form.controls.code.setValue(p.type.name);
+    this.form.controls.description.setValue(p.description);
+    this.form.controls.format.setValue(p.format.toString());
+    this.form.controls.access.setValue(p.access);
+    this.constrainable = this.getConstrainable(p.format);
+    this.form.controls.constraint.setValue(this.getConstrainType(p));
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
         break;
 
       case ConstraintType.RANGE:
-        const min = this.property.valueRange()?.minValue?.rawValue() || 0;
-        const max = this.property.valueRange()?.maxValue?.rawValue() || 0;
-        const step = this.property.valueRange()?.stepValue?.rawValue() || 0;
+        const min = p.valueRange()?.minValue?.rawValue() || 0;
+        const max = p.valueRange()?.maxValue?.rawValue() || 0;
+        const step = p.valueRange()?.stepValue?.rawValue() || 0;
         this.form.controls.range.setValue({min: min, max: max, step: step});
         break;
 
       case ConstraintType.LIST:
         this.form.controls.list.setValue([]);
 
-        const list = this.property.valueList();
+        const list = p.valueList();
         if (list) {
           // 转换数据格式
           const array: ValueItem[] = list.values.map(value => ValueItem.of(value));
@@ -238,7 +262,7 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
 
     console.log('init combinationValue');
 
-    this.combinationValue = this.property.format === DataFormat.COMBINATION;
+    this.combinationValue = p.format === DataFormat.COMBINATION;
     if (this.combinationValue) {
       console.log('init combinationValue');
 
@@ -275,14 +299,123 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
   // }
 
   protected onRequiredChanged() {
-    this.property.required = this.form.value.required || false;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateProperty',
+      serviceIid: this.service().iid,
+      piid: this.property().iid,
+      patch: {required: this.form.value.required || false},
+    });
+  }
+
+  /** 每个控件把新值写进 control 后才 (changed)，所以 handler 读 control 即为最新值。 */
+  private emitPropertyPatch(patch: PropertyPatch) {
+    this.op.emit({
+      kind: 'updateProperty',
+      serviceIid: this.service().iid,
+      piid: this.property().iid,
+      patch,
+    });
+  }
+
+  /**
+   * 按当前 constraint 模式 + 当前 format 序列化取值约束（映射复用 spec/property/create 的 submitForm）。
+   *  - NONE → null
+   *  - RANGE → new ValueRange(format, [min, max, step])
+   *  - LIST  → new ValueList()，每行 new ValueDefinition(format, item.value, item.desc)
+   */
+  private serializeConstraint(): ConstraintValue | null {
+    const format = DataFormatFromString(this.form.controls.format.value);
+    switch (this.form.controls.constraint.value) {
+      case ConstraintType.RANGE: {
+        const range = this.form.controls.range.value ?? new RangeValue();
+        const min = range.min ?? 0;
+        const max = range.max ?? 100;
+        const step = range.step ?? 1;
+        return new ValueRange(format, [min, max, step]);
+      }
+
+      case ConstraintType.LIST: {
+        const list = new ValueList();
+        for (const item of this.form.controls.list.value) {
+          const description = item.desc ?? new Map<string, string>();
+          list.values.push(new ValueDefinition(format, item.value || 0, description));
+        }
+        return list;
+      }
+
+      case ConstraintType.NONE:
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * NONE→RANGE/LIST（或 RANGE↔LIST）切换时，目标控件可能还没有可用数据：
+   * 给一个合理默认值，避免序列化出空 ValueRange / 空 ValueList 把模型覆盖掉。
+   */
+  private seedConstraintDefaults(): void {
+    const ctrl = this.form.controls;
+    switch (ctrl.constraint.value) {
+      case ConstraintType.RANGE:
+        if (!ctrl.range.value) {
+          ctrl.range.setValue(new RangeValue());
+        }
+        break;
+
+      case ConstraintType.LIST:
+        if (!ctrl.list.value || ctrl.list.value.length === 0) {
+          ctrl.list.setValue([new ValueItem(0, new Map([['en-US', '']]))]);
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  protected onIIDChanged() {
+    this.emitPropertyPatch({iid: this.form.controls.iid.value});
+  }
+
+  protected onDescriptionChanged() {
+    this.emitPropertyPatch({description: this.form.controls.description.value});
+  }
+
+  protected onAccessChanged() {
+    this.emitPropertyPatch({access: this.form.controls.access.value});
   }
 
   protected onFormatChanged() {
-    this.constrainable = this.getConstrainable(this.form.controls.format.value);
-    this.combinationValue = this.form.controls.format.value === DataFormat.COMBINATION;
-    this.changed.emit();
+    const format = this.form.controls.format.value;
+    this.constrainable = this.getConstrainable(format);
+    this.combinationValue = format === DataFormat.COMBINATION;
+    // 格式一变，旧 format 的 ValueRange/ValueList 就失效，需按新格式重序列化约束。
+    // 若新格式不可约束（bool/string/hex/combination/...），约束模式一并清掉——既符合
+    // 「旧约束随格式失效」，也避免用不可约束格式重建 ValueRange/ValueList（构造器会抛错）。
+    if (!this.constrainable && this.form.controls.constraint.value !== ConstraintType.NONE) {
+      this.form.controls.constraint.setValue(ConstraintType.NONE);
+    }
+    this.emitPropertyPatch({
+      format: DataFormatFromString(format),
+      constraintValue: this.serializeConstraint(),
+    });
+  }
+
+  protected onConstraintChanged() {
+    this.seedConstraintDefaults();
+    this.emitPropertyPatch({constraintValue: this.serializeConstraint()});
+  }
+
+  protected onRangeChanged() {
+    this.emitPropertyPatch({constraintValue: this.serializeConstraint()});
+  }
+
+  protected onListChanged() {
+    // reload 回填行(writeValue) 触发的回声在 suppressListEmit 置位期间被忽略。
+    if (this.suppressListEmit) {
+      return;
+    }
+    this.emitPropertyPatch({constraintValue: this.serializeConstraint()});
   }
 
   private getConstrainable(format: string): boolean {
@@ -404,7 +537,7 @@ export class TemplatePropertyDetailComponent implements OnInit, OnChanges {
   // }
 
   onRemoved() {
-    this.removed.emit(this.property);
+    this.op.emit({kind: 'removeProperty', serviceIid: this.service().iid, piid: this.property().iid});
   }
 
   // onSubmit() {

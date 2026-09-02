@@ -1,5 +1,5 @@
-import {ChangeDetectorRef, Component, OnDestroy, OnInit, signal, ViewContainerRef} from '@angular/core';
-import {DeviceTemplate, LifeCycle, ServiceTemplate} from "@openxiot/xiot-core-spec-ts";
+import {Component, computed, OnInit, signal, ViewContainerRef} from '@angular/core';
+import {DeviceTemplate, LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzMessageService} from "ng-zorro-antd/message";
 import {ActivatedRoute, Router} from "@angular/router";
 import {NzBreadCrumbModule} from 'ng-zorro-antd/breadcrumb';
@@ -32,6 +32,7 @@ import {
   StringValueEditComponent
 } from '../../../../common/dialog/string/string.value.edit.component';
 import {StringValue} from '../../../../common/dialog/string/StringValue';
+import {reduceTemplate, TemplateOp} from '../../../../typedef/template/TemplateEditor';
 
 @Component({
   selector: 'template-detail',
@@ -64,17 +65,17 @@ import {StringValue} from '../../../../common/dialog/string/StringValue';
     NzModalService
   ],
 })
-export class TemplateDetailComponent implements OnInit, OnDestroy {
+export class TemplateDetailComponent implements OnInit {
 
   protected readonly LifeCycle = LifeCycle;
 
   changed = signal(false);
 
   /** 当前用户是否有生命周期编辑权限（已登录 + 组织匹配） */
-  canEditLifecycle = signal(false);
+  canEditLifecycle = computed(() => this.computeCanEditLifecycle());
 
   /** 是否有完整编辑权限（组织匹配 + 模板处于开发状态） */
-  editable = signal(false);
+  editable = computed(() => this.computeEditable());
 
   // 版本
   version: boolean = false;
@@ -86,7 +87,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
-    private cdr: ChangeDetectorRef,
     protected location : Location,
     protected account: AccountService,
     protected i18n: MainI18nService,
@@ -102,10 +102,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     console.log('ngOnInit');
     this.type = this.route.snapshot.params['type'];
     this.load(this.type);
-  }
-
-  ngOnDestroy(): void {
-    console.log('ngOnDestroy');
   }
 
   /**
@@ -140,8 +136,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     this.service.getTemplate(type).subscribe({
       next: data => {
         this.template.set(data);
-        this.canEditLifecycle.set(this.computeCanEditLifecycle());
-        this.editable.set(this.computeEditable());
         this.changed.set(false);
         this.loading.set(false);
       },
@@ -151,17 +145,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
       }
     })
   }
-
-  // protected readonly UrnType = UrnType;
-
-  // onReload() {
-  //   this.load(this.type);
-  //   this.changed.set(false);
-  // }
-
-  // onRemove(service: Service) {
-  //   this.instance?.services.delete(service.iid);
-  // }
 
   protected editTitle() {
     if (!this.editable()) return;
@@ -188,8 +171,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.template()?.description.set(this.i18n.getCurrentLang(), result);
-        this.changed.set(true);
+        this.onOp({kind: 'setDeviceDescription', lang: this.i18n.getCurrentLang(), value: result});
       }
     });
   }
@@ -216,20 +198,16 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  protected onChanged() {
+  /**
+   * 唯一变更入口：把子树冒泡上来的 TemplateOp 交给纯 reducer，
+   * 由 reducer 沿变更路径重建出【新】DeviceTemplate 引用（结构共享）。
+   * 顶层 template() 换新引用后，Zoneless 下每个读方因自己的 signal input /
+   * computed 值变化而被标记并重绘，不再依赖 Default 级联或手动 detectChanges()。
+   */
+  protected onOp(op: TemplateOp) {
+    const t = this.template();
+    if (!t) return;
+    this.template.set(reduceTemplate(t, op));
     this.changed.set(true);
-    this.cdr.detectChanges();
-  }
-
-  protected onRemoved(s: ServiceTemplate) {
-    this.template()?.services.delete(s.iid);
-    this.changed.set(true);
-    this.cdr.detectChanges();
-  }
-
-  /** 生命周期变更时重新计算 editable 状态 */
-  protected onLifecycleChanged() {
-    this.editable.set(this.computeEditable());
-    this.onChanged();
   }
 }

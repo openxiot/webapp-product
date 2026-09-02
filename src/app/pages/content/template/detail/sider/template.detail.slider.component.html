@@ -1,54 +1,22 @@
-@if (template) {
+@if (template(); as t) {
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="360px" nzTheme="light">
       <template-services
-        [editable]="editable"
-        [device]="template"
+        [editable]="editable()"
+        [device]="t"
         (selected)="onServiceSelected($event)"
-        (changed)="onChanged()"
+        (op)="onOp($event)"
       ></template-services>
     </nz-sider>
 
     <nz-content class="inner-content">
-      @if (service) {
+      @if (service(); as s) {
         <template-service
-          [editable]="editable"
-          [service]="service"
-          (changed)="onChanged()"
-          (removed)="onRemoved($event)"
+          [editable]="editable()"
+          [service]="s"
+          (op)="onOp($event)"
         ></template-service>
       }
     </nz-content>
   </nz-layout>
 }
-
-<!--@if (template) {-->
-<!--  <nz-row [nzGutter]="[8, 8]">-->
-<!--    <nz-col [nzSpan]="5">-->
-<!--      <template-detail-services-->
-<!--        [editable]="editable"-->
-<!--        [device]="template"-->
-<!--        (selected)="onServiceSelected($event)"-->
-<!--        (changed)="onChanged()"-->
-<!--      ></template-detail-services>-->
-<!--    </nz-col>-->
-
-<!--    @if (service) {-->
-<!--      @if (expert) {-->
-<!--        <nz-col [nzSpan]="19">-->
-<!--          <template-service-waterfall-->
-<!--            [editable]="editable"-->
-<!--            [service]="service"-->
-<!--          ></template-service-waterfall>-->
-<!--        </nz-col>-->
-<!--      } @else {-->
-<!--        <nz-col [nzSpan]="19">-->
-<!--          <template-service-split-->
-<!--            [editable]="editable"-->
-<!--            [service]="service"-->
-<!--          ></template-service-split>-->
-<!--        </nz-col>-->
-<!--      }-->
-<!--    }-->
-<!--  </nz-row>-->
-<!--}-->

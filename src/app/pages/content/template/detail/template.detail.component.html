@@ -20,7 +20,12 @@
         <nz-descriptions-item [nzTitle]="'状态' | translate" [nzSpan]="1">
           @if (template(); as t) {
             @if (canEditLifecycle()) {
-              <nz-radio-group nzSize="small" [(ngModel)]="t.lifecycle" nzButtonStyle="solid" (ngModelChange)="onLifecycleChanged()">
+              <nz-radio-group
+                nzSize="small"
+                nzButtonStyle="solid"
+                [ngModel]="t.lifecycle"
+                (ngModelChange)="onOp({kind: 'setDeviceLifecycle', lifecycle: $event})"
+              >
                 <label nz-radio-button [nzValue]="LifeCycle.DEVELOPMENT">{{ '开发中' | translate }}</label>
                 <label nz-radio-button [nzValue]="LifeCycle.PREVIEW">{{ '预览' | translate }}</label>
                 <label nz-radio-button [nzValue]="LifeCycle.RELEASED">{{ '上线' | translate }}</label>
@@ -77,8 +82,7 @@
       <template-detail-slider
         [editable]="editable()"
         [template]="t"
-        (changed)="onChanged()"
-        (removed)="onRemoved($event)"
+        (op)="onOp($event)"
       ></template-detail-slider>
     }
   </div>

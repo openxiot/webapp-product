@@ -1,12 +1,12 @@
-@if (service) {
+@if (service(); as svc) {
   <nz-layout class="inner-layout">
     <nz-sider nzWidth="360px" nzTheme="light">
       <template-service-card
-        [showVersion]="showVersion"
-        [editable]="editable"
-        [service]="service"
-        (changed)="onChanged()"
-        (titleSelected)="onTitleSelected($event)"
+        [showVersion]="showVersion()"
+        [editable]="editable()"
+        [service]="svc"
+        (op)="onOp($event)"
+        (titleSelected)="onTitleSelected()"
         (propertySelected)="onPropertySelected($event)"
         (actionSelected)="onActionSelected($event)"
         (eventSelected)="onEventSelected($event)"
@@ -14,42 +14,38 @@
     </nz-sider>
 
     <nz-content class="inner-content">
-      @if (showServiceDetail) {
+      @if (selection().kind === 'service') {
         <template-service-detail
-          [editable]="editable"
-          [service]="service"
-          (changed)="onChanged()"
-          (removed)="onRemoved()"
+          [editable]="editable()"
+          [service]="svc"
+          (op)="onOp($event)"
         ></template-service-detail>
       }
 
-      @if (property) {
+      @if (property(); as p) {
         <template-property-detail
-          [editable]="editable"
-          [service]="service"
-          [property]="property"
-          (changed)="onChanged()"
-          (removed)="onPropertyRemoved($event)"
+          [editable]="editable()"
+          [service]="svc"
+          [property]="p"
+          (op)="onOp($event)"
         ></template-property-detail>
       }
 
-      @if (action) {
+      @if (action(); as a) {
         <template-action-detail
-          [editable]="editable"
-          [service]="service"
-          [action]="action"
-          (changed)="onChanged()"
-          (removed)="onActionRemoved($event)"
+          [editable]="editable()"
+          [service]="svc"
+          [action]="a"
+          (op)="onOp($event)"
         ></template-action-detail>
       }
 
-      @if (event) {
+      @if (event(); as e) {
         <template-event-detail
-          [editable]="editable"
-          [service]="service"
-          [event]="event"
-          (changed)="onChanged()"
-          (removed)="onEventRemoved($event)"
+          [editable]="editable()"
+          [service]="svc"
+          [event]="e"
+          (op)="onOp($event)"
         ></template-event-detail>
       }
     </nz-content>

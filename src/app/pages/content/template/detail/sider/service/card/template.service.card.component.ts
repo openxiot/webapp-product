@@ -1,10 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, input, OnInit, Output, ViewContainerRef} from '@angular/core';
 import {
+  ActionDefinition,
   ActionTemplate,
+  EventDefinition,
   EventTemplate,
-  PropertyTemplate,
   PropertyDefinition,
-  ServiceTemplate, ActionDefinition, EventDefinition
+  PropertyTemplate,
+  ServiceTemplate
 } from '@openxiot/xiot-core-spec-ts';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
@@ -20,7 +22,6 @@ import {
   PropertiesDefinitionSelectorComponent
 } from '../../../../../../../common/dialog/definition/select/properties/properties.definition.selector.component';
 import {PropertiesOption} from '../../../../../../../common/dialog/definition/select/properties/PropertiesOption';
-import {ServiceTemplateHelper} from '../../../../../../../typedef/template/ServiceTemplateHelper';
 import {
   ActionsDefinitionSelectorComponent
 } from '../../../../../../../common/dialog/definition/select/actions/actions.definition.selector.component';
@@ -31,6 +32,7 @@ import {
 import {EventsOption} from '../../../../../../../common/dialog/definition/select/events/EventsOption';
 import {MainService} from '../../../../../../../service/main.service';
 import {AccountService} from '../../../../../../../service/account.service';
+import {TemplateOp} from '../../../../../../../typedef/template/TemplateEditor';
 
 @Component({
   selector: 'template-service-card',
@@ -52,10 +54,10 @@ import {AccountService} from '../../../../../../../service/account.service';
 })
 export class TemplateServiceCardComponent implements OnInit {
 
-  @Input() showVersion: boolean = false;
-  @Input() editable: boolean = false;
-  @Input() service!: ServiceTemplate;
-  @Output() changed = new EventEmitter<void>();
+  showVersion = input(false);
+  editable = input(false);
+  service = input.required<ServiceTemplate>();
+  @Output() op = new EventEmitter<TemplateOp>();
   @Output() titleSelected = new EventEmitter<ServiceTemplate>();
   @Output() propertySelected = new EventEmitter<PropertyTemplate>();
   @Output() actionSelected = new EventEmitter<ActionTemplate>();
@@ -122,8 +124,8 @@ export class TemplateServiceCardComponent implements OnInit {
       });
   }
 
-  onClickTitle(service: ServiceTemplate) {
-    this.titleSelected.emit(service);
+  onClickTitle() {
+    this.titleSelected.emit(this.service());
   }
 
   onClickProperty(p: PropertyTemplate) {
@@ -168,12 +170,13 @@ export class TemplateServiceCardComponent implements OnInit {
     });
 
     modal.afterClose.subscribe(result => {
-      if (result) {
-        if (result.length > 0) {
-          const helper = new ServiceTemplateHelper(this.service);
-          helper.addPropertyDefinitions(result, this.service?.type?.version || 1);
-          this.changed.emit();
-        }
+      if (result && result.length > 0) {
+        this.op.emit({
+          kind: 'addProperties',
+          serviceIid: this.service().iid,
+          defs: result,
+          version: this.service().type.version || 1,
+        });
       }
     });
   }
@@ -208,12 +211,15 @@ export class TemplateServiceCardComponent implements OnInit {
     });
 
     modal.afterClose.subscribe(result => {
-      if (result) {
-        if (result.length > 0) {
-          const helper = new ServiceTemplateHelper(this.service);
-          helper.addActionDefinitions(result, this.service?.type?.version || 1);
-          this.changed.emit();
-        }
+      if (result && result.length > 0) {
+        // action 的 in/out 参数引用可能指向 service 外的属性定义，需把属性定义 map 一并传 reducer。
+        this.op.emit({
+          kind: 'addActions',
+          serviceIid: this.service().iid,
+          defs: result,
+          properties: new Map(this.properties.map(item => [item.type.name, item])),
+          version: this.service().type.version || 1,
+        });
       }
     });
   }
@@ -248,12 +254,14 @@ export class TemplateServiceCardComponent implements OnInit {
     });
 
     modal.afterClose.subscribe(result => {
-      if (result) {
-        if (result.length > 0) {
-          const helper = new ServiceTemplateHelper(this.service);
-          helper.addEventDefinitions(result, this.service?.type?.version || 1);
-          this.changed.emit();
-        }
+      if (result && result.length > 0) {
+        this.op.emit({
+          kind: 'addEvents',
+          serviceIid: this.service().iid,
+          defs: result,
+          properties: new Map(this.properties.map(item => [item.type.name, item])),
+          version: this.service().type.version || 1,
+        });
       }
     });
   }

@@ -1,11 +1,10 @@
 import {
   Component,
+  effect,
   EventEmitter,
-  Input,
-  OnChanges,
+  input,
   OnInit,
   Output,
-  SimpleChanges,
   ViewContainerRef
 } from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
@@ -47,6 +46,9 @@ import {SpecIidComponent} from '../../../../../../../../common/form/item/common/
 import {
   SpecRequiredComponent
 } from '../../../../../../../../common/form/item/common/required/spec.required.component';
+import {TemplateOp} from '../../../../../../../../typedef/template/TemplateEditor';
+import {SelectArgument} from '../../../../../../../../common/dialog/instance/select/argument/SelectArgument';
+import {SelectArgumentComponent} from '../../../../../../../../common/dialog/instance/select/argument/select.argument.component';
 
 @Component({
   selector: 'template-action-detail',
@@ -77,13 +79,13 @@ import {
     NzModalService
   ],
 })
-export class TemplateActionDetailComponent implements OnInit, OnChanges {
+export class TemplateActionDetailComponent implements OnInit {
 
-  @Input() editable: boolean = false;
-  @Input() service!: ServiceTemplate;
-  @Input() action!: ActionTemplate;
-  @Output() changed = new EventEmitter<void>();
-  @Output() removed = new EventEmitter<ActionTemplate>();
+  editable = input(false);
+  service = input.required<ServiceTemplate>();
+  action = input.required<ActionTemplate>();
+  language = input('zh-CN');
+  @Output() op = new EventEmitter<TemplateOp>();
 
   form: FormGroup<{
     required: FormControl<boolean>,
@@ -98,6 +100,9 @@ export class TemplateActionDetailComponent implements OnInit, OnChanges {
       argument: FormControl<Arg>,
     }>>,
   }>;
+
+  /** 已加载的 action iid：只在切到别的节点时 reload，同 iid 自提交不复位表单。 */
+  private loadedIid: number | undefined = undefined;
 
   constructor(
     private modal: NzModalService,
@@ -125,29 +130,38 @@ export class TemplateActionDetailComponent implements OnInit, OnChanges {
         }>
       >([]),
     });
+
+    effect(() => {
+      const a = this.action();
+      if (a && this.loadedIid !== a.iid) {
+        this.loadedIid = a.iid;
+        this.reload();
+      }
+    });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['action']) {
+  ngOnInit(): void {
+    const a = this.action();
+    if (a && this.loadedIid !== a.iid) {
+      this.loadedIid = a.iid;
       this.reload();
     }
   }
 
-  ngOnInit(): void {
-    this.reload();
-  }
-
   private reload() {
-    this.form.controls.required.setValue(this.service.required);
-    this.form.controls.iid.setValue(this.action.iid);
-    this.form.controls.ns.setValue(this.action.type.ns);
-    this.form.controls.code.setValue(this.action.type.name);
-    this.form.controls.description.setValue(this.action.description);
+    const a = this.action();
+    const svc = this.service();
+    if (!a || !svc) return;
+    this.form.controls.required.setValue(a.required);
+    this.form.controls.iid.setValue(a.iid);
+    this.form.controls.ns.setValue(a.type.ns);
+    this.form.controls.code.setValue(a.type.name);
+    this.form.controls.description.setValue(a.description);
 
     this.argumentIn.clear();
 
-    for (const [iid, argument] of this.action.in.entries()) {
-      const property = this.service.properties.get(iid);
+    for (const [iid, argument] of a.in.entries()) {
+      const property = svc.properties.get(iid);
       if (property) {
         this.addArgumentIn(argument, property);
       }
@@ -155,8 +169,8 @@ export class TemplateActionDetailComponent implements OnInit, OnChanges {
 
     this.argumentOut.clear();
 
-    for (const [iid, argument] of this.action.out.entries()) {
-      const property = this.service.properties.get(iid);
+    for (const [iid, argument] of a.out.entries()) {
+      const property = svc.properties.get(iid);
       if (property) {
         this.addArgumentOut(argument, property);
       }
@@ -188,115 +202,159 @@ export class TemplateActionDetailComponent implements OnInit, OnChanges {
   createArgumentItem(argument: Argument, property: Property): FormGroup<{
     argument: FormControl<Arg>,
   }> {
+    // 行内永远持有一份克隆，编辑 min/max 不会原地改树上的 Argument。
+    const local = Argument.of(argument.piid, argument.minRepeat, argument.maxRepeat);
     return this.fb.group({
-      argument: new Arg(argument, property, 'zh-CN')
+      argument: new Arg(local, property, this.language())
     });
   }
 
   removeArgumentIn(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
     this.argumentIn.removeAt(i);
-    this.changed.emit();
+    this.emitArgumentsPatch('in');
   }
 
   addArgumentInItem() {
-    // const exclusion = new Set(this.action.getArgumentsIn().map(x => x.piid));
-    //
-    // const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
-    //   nzTitle: '选择属性作为参数',
-    //   nzWidth: 1000,
-    //   nzContent: SelectArgumentComponent,
-    //   nzViewContainerRef: this.viewContainerRef,
-    //   nzData: new SelectArgument(this.service, exclusion, this.language),
-    //   nzFooter: [
-    //     {
-    //       label: '取消',
-    //       onClick: component => component!.cancel()
-    //     },
-    //     {
-    //       label: '确认',
-    //       danger: true,
-    //       type: 'primary',
-    //       onClick: component => component!.ok()
-    //     }
-    //   ],
-    // });
-    //
-    // modal.afterClose.subscribe(result => {
-    //   if (result) {
-    //     const sortedResult = Array.from(result).sort((a, b) => a - b);
-    //     for (let iid of sortedResult) {
-    //         this.action.in.set(iid, new Argument(iid));
-    //     }
-    //
-    //     // 更新参数表
-    //     this.argumentIn.clear();
-    //     for (const [iid, argument] of this.action.in.entries()) {
-    //       const property = this.service.properties.get(iid);
-    //       if (property) {
-    //         this.addArgumentIn(argument, property);
-    //       }
-    //     }
-    //
-    //     this.onChanged();
-    //   }
-    // });
+    // 排除当前 in 行已在用的 piid，弹窗只列出尚未作为入参的属性
+    const exclusion = new Set(this.argumentIn.controls.map(r => r.controls.argument.value.argument.piid));
+
+    const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
+      nzTitle: this.i18n.translate.instant('选择属性作为参数'),
+      nzWidth: 1000,
+      nzContent: SelectArgumentComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: new SelectArgument(this.service(), exclusion, this.language()),
+      nzFooter: [
+        {
+          label: this.i18n.translate.instant('取消'),
+          onClick: component => component!.cancel()
+        },
+        {
+          label: this.i18n.translate.instant('确认'),
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        const sortedResult = Array.from(result).sort((a, b) => a - b);
+        for (let iid of sortedResult) {
+          const property = this.service().properties.get(iid);
+          if (property) {
+            this.argumentIn.push(this.createArgumentItem(Argument.of(iid, 1, 1), property));
+          }
+        }
+
+        // 手动推进 FormArray 后重建该方向 Map 持久化；同 iid 自提交不 reload。
+        this.emitArgumentsPatch('in');
+      }
+    });
   }
 
   removeArgumentOut(item: FormGroup<{ argument: FormControl<Arg> }>, i: number) {
     this.argumentOut.removeAt(i);
-    this.changed.emit();
+    this.emitArgumentsPatch('out');
   }
 
   addArgumentOutItem() {
-    // const exclusion = new Set(this.action.getArgumentsOut().map(x => x.piid));
-    //
-    // const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
-    //   nzTitle: '选择属性作为结果',
-    //   nzWidth: 1000,
-    //   nzContent: SelectArgumentComponent,
-    //   nzViewContainerRef: this.viewContainerRef,
-    //   nzData: new SelectArgument(this.service, exclusion, this.language),
-    //   nzFooter: [
-    //     {
-    //       label: '取消',
-    //       onClick: component => component!.cancel()
-    //     },
-    //     {
-    //       label: '确认',
-    //       danger: true,
-    //       type: 'primary',
-    //       onClick: component => component!.ok()
-    //     }
-    //   ],
-    // });
-    //
-    // modal.afterClose.subscribe(result => {
-    //   if (result) {
-    //     const sortedResult = Array.from(result).sort((a, b) => a - b);
-    //     for (let iid of sortedResult) {
-    //       this.action.out.set(iid, new Argument(iid));
-    //     }
-    //
-    //     // 更新参数表
-    //     this.argumentOut.clear();
-    //     for (const [iid, argument] of this.action.out.entries()) {
-    //       const property = this.service.properties.get(iid);
-    //       if (property) {
-    //         this.addArgumentOut(argument, property);
-    //       }
-    //     }
-    //
-    //     this.onChanged();
-    //   }
-    // });
+    // 排除当前 out 行已在用的 piid，弹窗只列出尚未作为出参的属性
+    const exclusion = new Set(this.argumentOut.controls.map(r => r.controls.argument.value.argument.piid));
+
+    const modal = this.modal.create<SelectArgumentComponent, SelectArgument, Set<number>>({
+      nzTitle: this.i18n.translate.instant('选择属性作为结果'),
+      nzWidth: 1000,
+      nzContent: SelectArgumentComponent,
+      nzViewContainerRef: this.viewContainerRef,
+      nzData: new SelectArgument(this.service(), exclusion, this.language()),
+      nzFooter: [
+        {
+          label: this.i18n.translate.instant('取消'),
+          onClick: component => component!.cancel()
+        },
+        {
+          label: this.i18n.translate.instant('确认'),
+          danger: true,
+          type: 'primary',
+          onClick: component => component!.ok()
+        }
+      ],
+    });
+
+    modal.afterClose.subscribe(result => {
+      if (result) {
+        const sortedResult = Array.from(result).sort((a, b) => a - b);
+        for (let iid of sortedResult) {
+          const property = this.service().properties.get(iid);
+          if (property) {
+            this.argumentOut.push(this.createArgumentItem(Argument.of(iid, 1, 1), property));
+          }
+        }
+
+        // 手动推进 FormArray 后重建该方向 Map 持久化；同 iid 自提交不 reload。
+        this.emitArgumentsPatch('out');
+      }
+    });
   }
 
   protected onRequiredChanged() {
-    this.action.required = this.form.value.required || false;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateAction',
+      serviceIid: this.service().iid,
+      actionIid: this.action().iid,
+      patch: {required: this.form.value.required || false},
+    });
   }
 
   onRemoved() {
-    this.removed.emit(this.action);
+    this.op.emit({kind: 'removeAction', serviceIid: this.service().iid, actionIid: this.action().iid});
+  }
+
+  protected onIIDChanged() {
+    this.op.emit({
+      kind: 'updateAction',
+      serviceIid: this.service().iid,
+      actionIid: this.action().iid,
+      patch: {iid: this.form.controls.iid.value},
+    });
+  }
+
+  protected onDescriptionChanged() {
+    this.op.emit({
+      kind: 'updateAction',
+      serviceIid: this.service().iid,
+      actionIid: this.action().iid,
+      patch: {description: this.form.controls.description.value},
+    });
+  }
+
+  /** 从当前行（行内是克隆 Argument）重建指定方向的 Map，key/Argument.piid 均为属性 iid。 */
+  private argumentMap(dir: 'in' | 'out'): Map<number, Argument> {
+    const arr = dir === 'in' ? this.argumentIn : this.argumentOut;
+    const map = new Map<number, Argument>();
+    for (const row of arr.controls) {
+      const a = row.controls.argument.value.argument;   // row-local clone，可能已被 editor onChanged 刷新
+      map.set(a.piid, Argument.of(a.piid, a.minRepeat, a.maxRepeat));
+    }
+    return map;
+  }
+
+  protected onArgumentInRowChanged() {
+    this.emitArgumentsPatch('in');
+  }
+
+  protected onArgumentOutRowChanged() {
+    this.emitArgumentsPatch('out');
+  }
+
+  private emitArgumentsPatch(dir: 'in' | 'out') {
+    this.op.emit({
+      kind: 'updateAction',
+      serviceIid: this.service().iid,
+      actionIid: this.action().iid,
+      patch: dir === 'in' ? {in: this.argumentMap('in')} : {out: this.argumentMap('out')},
+    });
   }
 }

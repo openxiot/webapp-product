@@ -129,12 +129,12 @@ export class ServiceTemplateHelper {
     for (let arg of def.out) {
       const found = this.findProperty(arg.type);
       if (found) {
-        argumentsIn.push(Argument.of(found.iid, arg.minRepeat, arg.maxRepeat));
+        argumentsOut.push(Argument.of(found.iid, arg.minRepeat, arg.maxRepeat));
       } else {
         const p = this.properties.get(arg.type.name);
         if (p) {
           const iid = this.addArgument(p, true, version)
-          argumentsIn.push(Argument.of(iid, arg.minRepeat, arg.maxRepeat));
+          argumentsOut.push(Argument.of(iid, arg.minRepeat, arg.maxRepeat));
         } else {
           console.log('error: property not found: ' + arg.type.toString())
         }

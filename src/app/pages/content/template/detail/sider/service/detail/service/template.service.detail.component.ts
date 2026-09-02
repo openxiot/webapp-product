@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef} from '@angular/core';
+import {Component, effect, EventEmitter, input, Output} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -26,6 +26,7 @@ import {DescriptionComponent} from '../../../../../../../../common/form/item/com
 import {SpecIidComponent} from '../../../../../../../../common/form/item/common/iid/spec.iid.component';
 import {SpecAddableComponent} from '../../../../../../../../common/form/item/common/addable/spec.addable.component';
 import {SpecRequiredComponent} from '../../../../../../../../common/form/item/common/required/spec.required.component';
+import {TemplateOp} from '../../../../../../../../typedef/template/TemplateEditor';
 
 @Component({
   selector: 'template-service-detail',
@@ -56,13 +57,11 @@ import {SpecRequiredComponent} from '../../../../../../../../common/form/item/co
     NzModalService
   ],
 })
-export class TemplateServiceDetailComponent implements OnInit {
+export class TemplateServiceDetailComponent {
 
-  @Input() editable: boolean = false;
-  @Input() service!: ServiceTemplate;
-  @Input() language!: string;
-  @Output() changed = new EventEmitter<void>();
-  @Output() removed = new EventEmitter<void>();
+  editable = input(false);
+  service = input.required<ServiceTemplate>();
+  @Output() op = new EventEmitter<TemplateOp>();
 
   form: FormGroup<{
     required: FormControl<boolean>,
@@ -74,9 +73,10 @@ export class TemplateServiceDetailComponent implements OnInit {
     eventAddable: FormControl<boolean>
   }>;
 
+  /** 已加载的服务 iid：只在服务切换 / 服务自身 iid 被改时 reload，同 iid 自提交不复位表单。 */
+  private loadedIid: number | undefined = undefined;
+
   constructor(
-    private modal: NzModalService,
-    private viewContainerRef: ViewContainerRef,
     private fb: NonNullableFormBuilder
   ) {
     this.form = this.fb.group({
@@ -91,74 +91,75 @@ export class TemplateServiceDetailComponent implements OnInit {
       actionAddable: this.fb.control(true, [Validators.required]),
       eventAddable: this.fb.control(true, [Validators.required]),
     });
+
+    effect(() => {
+      const s = this.service();
+      if (this.loadedIid !== s.iid) {
+        this.loadedIid = s.iid;
+        this.reload(s);
+      }
+    });
   }
 
-  ngOnInit(): void {
-    this.form.controls.required.setValue(this.service.required);
-    this.form.controls.iid.setValue(this.service.iid);
-    this.form.controls.code.setValue(this.service.type.name);
-    this.form.controls.description.setValue(this.service.description);
-    this.form.controls.propertyAddable.setValue(this.service.propertyAddable);
-    this.form.controls.actionAddable.setValue(this.service.actionAddable);
-    this.form.controls.eventAddable.setValue(this.service.eventAddable);
+  private reload(service: ServiceTemplate) {
+    this.form.controls.required.setValue(service.required);
+    this.form.controls.iid.setValue(service.iid);
+    this.form.controls.code.setValue(service.type.name);
+    this.form.controls.description.setValue(service.description);
+    this.form.controls.propertyAddable.setValue(service.propertyAddable);
+    this.form.controls.actionAddable.setValue(service.actionAddable);
+    this.form.controls.eventAddable.setValue(service.eventAddable);
   }
 
   protected onRequiredChanged() {
-    this.service.required = this.form.value.required || false;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {required: this.form.value.required || false},
+    });
   }
 
   protected onIIDChanged() {
-    this.service.iid = this.form.value.iid || 0;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {iid: this.form.value.iid || 0},
+    });
   }
 
   protected onDescriptionChanged() {
-    this.service.description = this.form.value.description || new Map<string, string>();
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {description: this.form.value.description || new Map<string, string>()},
+    });
   }
 
   protected onPropertyAddableChanged() {
-    this.service.propertyAddable = this.form.value.propertyAddable || false;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {propertyAddable: this.form.value.propertyAddable || false},
+    });
   }
 
   protected onActionAddableChanged() {
-    this.service.actionAddable = this.form.value.actionAddable || false;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {actionAddable: this.form.value.actionAddable || false},
+    });
   }
 
   protected onEventAddable() {
-    this.service.eventAddable = this.form.value.eventAddable || false;
-    this.changed.emit()
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {eventAddable: this.form.value.eventAddable || false},
+    });
   }
 
   onRemoved() {
-    this.removed.emit();
-
-    // const modal = this.modal.create<ConfirmComponent, string, string>({
-    //   nzTitle: '您真的要删除这个功能组吗？',
-    //   nzContent: ConfirmComponent,
-    //   nzViewContainerRef: this.viewContainerRef,
-    //   nzData: this.service.description.get('zh-CN'),
-    //   nzFooter: [
-    //     {
-    //       label: '取消',
-    //       onClick: component => component!.cancel()
-    //     },
-    //     {
-    //       label: '确认',
-    //       danger: true,
-    //       type: 'primary',
-    //       onClick: component => component!.ok()
-    //     }
-    //   ],
-    // });
-    //
-    // modal.afterClose.subscribe(result => {
-    //   if (result) {
-    //     this.removed.emit(this.service);
-    //   }
-    // });
+    this.op.emit({kind: 'removeService', serviceIid: this.service().iid});
   }
 }
