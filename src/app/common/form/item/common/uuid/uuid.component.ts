@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -28,8 +28,10 @@ export class UuidComponent implements ControlValueAccessor {
   // 内部真实值：number
   private innerValue = 0;
 
-  // 界面编辑用：原始输入字符串，不自动补0
-  inputHex = '';
+  // 界面编辑用：原始输入字符串，不自动补0。
+  // Zoneless 下模板绑定只在读取的 signal 变化时重新求值，普通字段在 writeValue()
+  // 后不会重绘组件自身视图（产品/规格表单 CVA 在 0.4.4-0.4.8 已统一迁移为 signal）。
+  inputHex = signal('');
 
   isDisabled = false;
 
@@ -55,7 +57,7 @@ export class UuidComponent implements ControlValueAccessor {
     if (num === this.innerValue) return;
 
     this.innerValue = num;
-    this.inputHex = this.toPaddedHex(num);
+    this.inputHex.set(this.toPaddedHex(num));
   }
 
   // ==========================
@@ -64,7 +66,7 @@ export class UuidComponent implements ControlValueAccessor {
   onInputChange(raw: string): void {
     // 只保留 0-9 A-F a-f
     const clean = raw.replace(/[^0-9a-fA-F]/g, '');
-    this.inputHex = clean;
+    this.inputHex.set(clean);
 
     // 转 number，但不格式化
     const num = parseInt(clean || '0', 16);
@@ -80,7 +82,7 @@ export class UuidComponent implements ControlValueAccessor {
   onBlur(): void {
     this.onTouched();
     // 失焦后格式化为标准 8 位
-    this.inputHex = this.toPaddedHex(this.innerValue);
+    this.inputHex.set(this.toPaddedHex(this.innerValue));
   }
 
   // ==========================

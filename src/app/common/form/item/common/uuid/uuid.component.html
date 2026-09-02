@@ -1,7 +1,7 @@
 <input
   nz-input
   type="text"
-  [(ngModel)]="inputHex"
+  [ngModel]="inputHex()"
   (ngModelChange)="onInputChange($event)"
   (blur)="onBlur()"
   [disabled]="! updatable"
