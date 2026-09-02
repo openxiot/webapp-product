@@ -48,37 +48,8 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '参数' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        @if (arguments.length > 0) {
-          <div formArrayName="arguments">
-            @for (item of arguments.controls; track item.controls.argument.value.argument.piid; let i = $index) {
-              <div [formGroupName]="i">
-                <nz-form-item>
-                  <nz-space>
-                    <div *nzSpaceItem>
-                      <editor-service-action-argument id="arguments{{i}}" formControlName="argument" (changed)="onArgumentRowChanged()"></editor-service-action-argument>
-                    </div>
-
-                    <div *nzSpaceItem>
-                      <button nz-button nzType="dashed" nzDanger (click)="removeArgument(item, i)" style="width: 40px" type="button">
-                        <span nz-icon nzType="delete"></span>
-                      </button>
-                    </div>
-                  </nz-space>
-                </nz-form-item>
-              </div>
-            }
-          </div>
-
-          <button nz-button nzType="dashed" (click)="addArgumentItem()" style="width: 100px" type="button">
-            <span nz-icon nzType="plus"></span>
-          </button>
-        } @else {
-          <button nz-button nzType="dashed" (click)="addArgumentItem()" style="width: 100px" type="button">
-            <span nz-icon nzType="plus"></span>
-          </button>
-        }
+        <template-arguments formControlName="arguments" [service]="service()" [language]="language()" [updatable]="editable()" (changed)="onArgumentsChanged()"></template-arguments>
       </nz-form-control>
     </nz-form-item>
   </form>
 </nz-card>
-

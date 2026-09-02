@@ -48,94 +48,15 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '输入参数' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        @if (argumentIn.length > 0) {
-          <div formArrayName="argumentIn">
-            @for (item of argumentIn.controls; track item.controls.argument.value.argument.piid; let i = $index) {
-              <div [formGroupName]="i">
-                <nz-form-item>
-                  <nz-space>
-                    <div *nzSpaceItem>
-                      <editor-service-action-argument id="argumentIn{{i}}" formControlName="argument" (changed)="onArgumentInRowChanged()"></editor-service-action-argument>
-                    </div>
-                    <div *nzSpaceItem>
-                      <button nz-button nzType="dashed" nzDanger (click)="removeArgumentIn(item, i)" style="width: 40px" type="button">
-                        <span nz-icon nzType="delete"></span>
-                      </button>
-                    </div>
-                  </nz-space>
-
-<!--                  <div nz-row [nzGutter]="[8, 8]">-->
-<!--                    <div nz-col [nzSpan]="19">-->
-<!--                      <editor-service-action-argument id="argumentIn{{i}}" formControlName="argument"></editor-service-action-argument>-->
-<!--                    </div>-->
-
-<!--                    <div nz-col [nzSpan]="1">-->
-<!--                      <button nz-button nzType="dashed" nzDanger (click)="removeArgumentIn(item, i)" style="width: 40px" type="button">-->
-<!--                        <span nz-icon nzType="delete"></span>-->
-<!--                      </button>-->
-<!--                    </div>-->
-<!--                  </div>-->
-                </nz-form-item>
-              </div>
-            }
-          </div>
-
-          <button nz-button nzType="dashed" (click)="addArgumentInItem()" style="width: 100px" type="button">
-            <span nz-icon nzType="plus"></span>
-          </button>
-        } @else {
-          <button nz-button nzType="dashed" (click)="addArgumentInItem()" style="width: 100px" type="button">
-            <span nz-icon nzType="plus"></span>
-          </button>
-        }
+        <template-arguments formControlName="argumentIn" [service]="service()" [language]="language()" [updatable]="editable()" (changed)="onArgumentInChanged()"></template-arguments>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '输出结果' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        @if (argumentOut.length > 0) {
-          <div formArrayName="argumentOut">
-            @for (item of argumentOut.controls; track item.controls.argument.value.argument.piid; let i = $index) {
-              <div [formGroupName]="i">
-                <nz-form-item>
-                  <nz-space>
-                    <div *nzSpaceItem>
-                      <editor-service-action-argument id="argumentOut{{i}}" formControlName="argument" (changed)="onArgumentOutRowChanged()"></editor-service-action-argument>
-                    </div>
-
-                    <div *nzSpaceItem>
-                      <button nz-button nzType="dashed" nzDanger (click)="removeArgumentOut(item, i)" style="width: 40px" type="button">
-                        <span nz-icon nzType="delete"></span>
-                      </button>
-                    </div>
-                  </nz-space>
-
-<!--                  <div nz-row [nzGutter]="[8, 8]">-->
-<!--                    <div nz-col [nzSpan]="19">-->
-<!--                      <editor-service-action-argument id="argumentOut{{i}}" formControlName="argument"></editor-service-action-argument>-->
-<!--                    </div>-->
-<!--                    <div nz-col [nzSpan]="1">-->
-<!--                      <button nz-button nzType="dashed" nzDanger (click)="removeArgumentOut(item, i)" style="width: 40px" type="button">-->
-<!--                        <span nz-icon nzType="delete"></span>-->
-<!--                      </button>-->
-<!--                    </div>-->
-<!--                  </div>-->
-                </nz-form-item>
-              </div>
-            }
-          </div>
-
-          <button nz-button nzType="dashed" (click)="addArgumentOutItem()" style="width: 100px" type="button">
-            <span nz-icon nzType="plus"></span>
-          </button>
-        } @else {
-          <button nz-button nzType="dashed" (click)="addArgumentOutItem()" style="width: 100px" type="button">
-            <span nz-icon nzType="plus"></span>
-          </button>
-        }
+        <template-arguments formControlName="argumentOut" [service]="service()" [language]="language()" [updatable]="editable()" pickTitle="选择属性作为结果" (changed)="onArgumentOutChanged()"></template-arguments>
       </nz-form-control>
     </nz-form-item>
   </form>
 </nz-card>
-
