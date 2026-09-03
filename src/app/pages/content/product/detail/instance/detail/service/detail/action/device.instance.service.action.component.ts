@@ -37,9 +37,6 @@ import {DeviceInstanceArgumentsComponent} from './arguments/device.instance.argu
 import {NzFlexDirective} from 'ng-zorro-antd/flex';
 import {TranslatePipe} from '@ngx-translate/core';
 import {InstanceOp} from '../../../../../../../../../typedef/instance/InstanceEditor';
-import {
-  DescriptionComponent
-} from '../../../../../../../../../common/form/item/common/description/description.component';
 
 @Component({
   selector: 'device-instance-service-action',
@@ -65,7 +62,6 @@ import {
     DeviceInstanceArgumentsComponent,
     NzFlexDirective,
     TranslatePipe,
-    DescriptionComponent,
   ],
   providers: [
     NzModalService
