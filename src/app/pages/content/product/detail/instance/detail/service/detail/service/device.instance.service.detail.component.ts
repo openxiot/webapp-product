@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewContainerRef, signal} from '@angular/core';
+import {Component, computed, effect, EventEmitter, input, Output, ViewContainerRef} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -19,15 +19,14 @@ import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzRadioModule} from 'ng-zorro-antd/radio';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzIconModule} from 'ng-zorro-antd/icon';
-import {DeviceInstanceNamespaceComponent} from '../property/namespace/device.instance.namespace.component';
 import {ConfirmComponent} from '../../../../../../../../../common/dialog/confirm/confirm.component';
 import {MainI18nService} from '../../../../../../../../../service/i18n.service';
 import {DeviceInstanceIdComponent} from '../property/iid/device.instance.id.component';
 import {DeviceInstanceNameComponent} from '../property/name/device.instance.name.component';
 import {DeviceInstanceDescriptionComponent} from '../property/description/device.instance.description.component';
-import {areMapsEqual} from '../../../../../../../../../typedef/utils/MapUtils';
 import {NzFlexModule} from 'ng-zorro-antd/flex';
 import {TranslatePipe} from '@ngx-translate/core';
+import {InstanceOp} from '../../../../../../../../../typedef/instance/InstanceEditor';
 
 @Component({
   selector: 'device-instance-service-detail',
@@ -48,7 +47,6 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzIconModule,
     NzCardModule,
     NzFlexModule,
-    DeviceInstanceNamespaceComponent,
     DeviceInstanceIdComponent,
     DeviceInstanceNameComponent,
     DeviceInstanceDescriptionComponent,
@@ -58,23 +56,25 @@ import {TranslatePipe} from '@ngx-translate/core';
     NzModalService
   ],
 })
-export class DeviceInstanceServiceDetailComponent implements OnInit {
+export class DeviceInstanceServiceDetailComponent {
 
   protected readonly LifeCycle = LifeCycle;
-  private loading = signal(false);
 
-  @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
-  @Input() service!: Service;
-  @Input() language!: string;
-  @Output() removed = new EventEmitter<Service>();
-  @Output() changed = new EventEmitter<Service>();
+  editable = input(false);
+  service = input.required<Service>();
+  @Output() op = new EventEmitter<InstanceOp>();
+
+  /** 子 CVA 仍按 lifecycle 门控：可编辑 ⇔ 组织匹配且 DEV，否则喂 RELEASED（只读）。 */
+  protected subLifecycle = computed(() => this.editable() ? LifeCycle.DEVELOPMENT : LifeCycle.RELEASED);
 
   form: FormGroup<{
     iid: FormControl<number>,
-    ns: FormControl<string>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
   }>;
+
+  /** 已加载的服务 iid：只在服务切换 / 服务自身 iid 被改时 reload，同 iid 自提交不复位表单。 */
+  private loadedIid: number | undefined = undefined;
 
   constructor(
     private modal: NzModalService,
@@ -84,21 +84,23 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
   ) {
     this.form = this.fb.group({
       iid: this.fb.control(0, [Validators.required]),
-      ns: this.fb.control('', [Validators.required]),
       code: this.fb.control('', [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
     });
+
+    effect(() => {
+      const s = this.service();
+      if (this.loadedIid !== s.iid) {
+        this.loadedIid = s.iid;
+        this.reload(s);
+      }
+    });
   }
 
-  ngOnInit(): void {
-    this.loading.set(true);
-
-    this.form.controls.iid.setValue(this.service.iid);
-    this.form.controls.ns.setValue(this.service.type.ns);
-    this.form.controls.code.setValue(this.service.type.name);
-    this.form.controls.description.setValue(this.service.description);
-
-    this.loading.set(false);
+  private reload(service: Service) {
+    this.form.controls.iid.setValue(service.iid);
+    this.form.controls.code.setValue(service.type.name);
+    this.form.controls.description.setValue(service.description);
   }
 
   onRemoved() {
@@ -106,7 +108,7 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
       nzTitle: this.i18n.translate.instant('您真的要删除这个功能吗？'),
       nzContent: ConfirmComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: this.service.description.get('zh-CN') || '?',
+      nzData: this.service().description.get('zh-CN') || '?',
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -125,50 +127,47 @@ export class DeviceInstanceServiceDetailComponent implements OnInit {
       console.log('onRemoved: ', result);
 
       if (result) {
-        this.removed.emit(this.service);
+        this.op.emit({kind: 'removeService', serviceIid: this.service().iid});
       }
     });
   }
 
   protected get updatable(): boolean {
-    if (this.service) {
-      return this.service.type.ns === this.service.type.organization;
-    }
-
-    return false;
+    const s = this.service();
+    return s.type.ns === s.type.organization;
   }
 
   protected onIIDChanged(): void {
     console.log('onIIDChanged');
 
-    if (! this.loading()) {
-      if (this.service.iid !== this.form.controls.iid.value) {
-        this.service.iid = this.form.controls.iid.value;
-        this.changed.emit(this.service);
-      }
+    if (this.service().iid !== this.form.controls.iid.value) {
+      this.op.emit({
+        kind: 'updateService',
+        serviceIid: this.service().iid,
+        patch: {iid: this.form.controls.iid.value},
+      });
     }
   }
 
   protected onCodeChanged(): void {
     console.log('onCodeChanged');
 
-    if (!this.loading()) {
-      if (this.service.type.name !== this.form.controls.code.value) {
-        this.service.type.name = this.form.controls.code.value;
-        this.changed.emit(this.service);
-      }
+    if (this.service().type.name !== this.form.controls.code.value) {
+      this.op.emit({
+        kind: 'updateService',
+        serviceIid: this.service().iid,
+        patch: {name: this.form.controls.code.value},
+      });
     }
   }
 
   protected onDescriptionChanged(): void {
     console.log('onDescriptionChanged');
 
-    if (!this.loading()) {
-      const value: Map<string, string> = this.form.controls.description.value;
-      if (! areMapsEqual(this.service.description, value)) {
-        this.service.description = value;
-        this.changed.emit(this.service);
-      }
-    }
+    this.op.emit({
+      kind: 'updateService',
+      serviceIid: this.service().iid,
+      patch: {description: this.form.controls.description.value},
+    });
   }
 }

@@ -80,7 +80,8 @@ export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, O
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
   writeValue(obj: any): void {
     if (obj !== undefined && obj !== null && obj !== this.arguments()) {
-      this.arguments.set(obj);
+      // 逐项克隆成新 Argument：表单行是副本，行内 min/max 编辑永不落到树上的共享参数对象。
+      this.arguments.set((obj as Argument[]).map(a => Argument.of(a.piid, a.minRepeat, a.maxRepeat)));
     }
   }
 
@@ -100,7 +101,10 @@ export class DeviceInstanceArgumentsComponent implements ControlValueAccessor, O
   }
 
   onChanged() {
-    this.onChange(this.arguments());
+    // 先整体克隆成新数组再通知：FormControl 值引用随之变化，读方看到的是行快照，
+    // 不会因「数组引用未变」而被 Zoneless 判定为未变。
+    const snapshot = this.arguments().map(a => Argument.of(a.piid, a.minRepeat, a.maxRepeat));
+    this.onChange(snapshot);
     this.changed.emit();
   }
 

@@ -2,10 +2,10 @@
   <div class="group-bar">
     <nz-space class="group-title">
       <span *nzSpaceItem><span nz-icon nzType="appstore" nzTheme="outline"></span></span>
-      <span *nzSpaceItem>{{ '服务' | translate }}({{ services.length }})</span>
+      <span *nzSpaceItem>{{ '服务' | translate }}({{ services().length }})</span>
     </nz-space>
 
-    @if (editable) {
+    @if (editable()) {
       <span style="float: right">
         <div class="selector" (click)="onAddService()">
           <span nz-icon nzType="plus" nzTheme="outline"></span>
@@ -15,7 +15,7 @@
   </div>
 
   <ul nz-menu nzMode="inline" nzTheme="light" class="service-group">
-    @for (s of services; track s.iid) {
+    @for (s of services(); track s.iid) {
       <li nz-menu-item (click)="onClickService(s)">
         <nz-tag [nzColor]="'blue'">{{ s.iid }}</nz-tag>
         <span class="service-title">{{ s.description.get(i18n.getCurrentLang()) }}</span>
@@ -27,7 +27,7 @@
 <!--            <nz-tag nzColor="green">{{ '可选' | translate }}</nz-tag>-->
 <!--          }-->
 
-          @if (showVersion) {
+          @if (showVersion()) {
             <nz-tag nzColor="blue">{{ '版本' | translate }} {{ s.type.version }}</nz-tag>
           }
         </span>

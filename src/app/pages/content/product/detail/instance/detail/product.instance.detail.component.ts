@@ -1,15 +1,12 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewContainerRef} from '@angular/core';
+import {Component, computed, EventEmitter, input, Output, signal} from '@angular/core';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzListModule} from 'ng-zorro-antd/list';
-import {DeviceInstance, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
-import {NzModalService} from 'ng-zorro-antd/modal';
-import {NzMessageService} from 'ng-zorro-antd/message';
-import {NzSelectModule} from 'ng-zorro-antd/select';
-import {FormsModule} from '@angular/forms';
-import {NzSpaceModule} from 'ng-zorro-antd/space';
+import {DeviceInstance, Service} from '@openxiot/xiot-core-spec-ts';
 import {InstanceServicesComponent} from './services/instance.services.component';
 import {InstanceServiceComponent} from './service/instance.service.component';
+import {NzCardModule} from 'ng-zorro-antd/card';
+import {InstanceOp} from '../../../../../../typedef/instance/InstanceEditor';
 
 @Component({
   selector: 'product-instance-detail',
@@ -20,71 +17,48 @@ import {InstanceServiceComponent} from './service/instance.service.component';
     NzMenuModule,
     NzLayoutModule,
     NzListModule,
-    NzSelectModule,
+    NzCardModule,
     InstanceServicesComponent,
     InstanceServiceComponent,
-    FormsModule,
-    NzSpaceModule,
   ],
-  providers: [
-    NzModalService
-  ],
+  providers: [],
 })
-export class ProductInstanceDetailComponent implements OnChanges {
+export class ProductInstanceDetailComponent {
 
-  @Input() editable: boolean = false;
-  @Input() version: boolean = false;
-  @Input() instance: DeviceInstance | undefined = undefined;
-  @Output() changed = new EventEmitter<DeviceInstance>();
-  @Output() removed = new EventEmitter<Service>();
+  version = input(false);
+  editable = input(false);
+  instance = input.required<DeviceInstance>();
+  @Output() op = new EventEmitter<InstanceOp>();
 
-  services: Service[] = [];
-  service: Service | undefined = undefined;
+  /** 当前选中的服务 iid；当服务 iid 被改时跟随（见 onOp 特判）。 */
+  serviceIid = signal<number | undefined>(undefined);
 
-  constructor(
-    private modal: NzModalService,
-    private viewContainerRef: ViewContainerRef,
-    private msg: NzMessageService
-  ) {
-  }
+  /** 从当前 instance 中按选中的 serviceIid 重解析出服务；同 iid 自提交只会换新引用、不丢面板。 */
+  services = computed(() => this.instance().getServices());
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['instance']) {
-      this.services = this.instance?.getServices() || [];
-
-      if (this.service) {
-        this.service = this.instance?.services.get(this.service.iid);
-      } else {
-        this.service = undefined;
-      }
-    }
-  }
+  service = computed(() => {
+    const iid = this.serviceIid();
+    if (iid === undefined) return undefined;
+    return this.instance().services.get(iid);
+  });
 
   onServiceSelected(s: Service) {
-    this.service = s;
+    this.serviceIid.set(s.iid);
   }
 
-  onServiceChanged(service: Service) {
-    this.changed.emit(this.instance);
-  }
-
-  onServiceAdded(service: Service) {
-    console.log('onServiceAdded: ', service.iid);
-
-    this.instance?.services.set(service.iid, service);
-    this.services = this.instance?.getServices() || [];
-    this.service = service;
-
-    this.changed.emit(this.instance);
-  }
-
-  onServiceRemoved(service: Service) {
-    console.log('onServiceRemoved: ', service.iid);
-
-    this.service = undefined;
-    this.instance?.services.delete(service.iid);
-    this.services = this.instance?.getServices() || [];
-
-    this.changed.emit(this.instance);
+  protected onOp(op: InstanceOp) {
+    // 选中服务自身改 iid：先把选中 key 跟随到新 iid 再转发，否则 reducer 重排顶层 Map 后
+    // service() 会因旧 key 消失而变 undefined（面板消失）。同 slider 注释：改名目标已存在则
+    // reducer 冲突守卫 no-op、旧 key 仍在，不跟随。
+    if (op.kind === 'updateService'
+      && op.serviceIid === this.serviceIid()
+      && typeof op.patch.iid === 'number') {
+      if (!this.instance().services.has(op.patch.iid)) {
+        this.serviceIid.set(op.patch.iid);
+      }
+      this.op.emit(op);
+      return;
+    }
+    this.op.emit(op);
   }
 }

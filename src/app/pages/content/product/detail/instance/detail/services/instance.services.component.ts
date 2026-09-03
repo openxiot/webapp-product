@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, input, Output, ViewContainerRef} from '@angular/core';
 import {DeviceType, LifeCycle, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
@@ -12,6 +12,7 @@ import {CreateServiceComponent} from '../../../../../../../common/dialog/instanc
 import {TranslatePipe} from '@ngx-translate/core';
 import {MainI18nService} from '../../../../../../../service/i18n.service';
 import {ServiceOption} from '../../../../../../../common/dialog/instance/create/service/ServiceOption';
+import {InstanceOp} from '../../../../../../../typedef/instance/InstanceEditor';
 
 @Component({
   selector: 'instance-services',
@@ -35,12 +36,12 @@ export class InstanceServicesComponent {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() editable: boolean = false;
-  @Input() showVersion: boolean = false;
-  @Input() type!: DeviceType;
-  @Input() services: Service[] = [];
+  editable = input(false);
+  showVersion = input(false);
+  type = input.required<DeviceType>();
+  services = input<Service[]>([]);
   @Output() selected = new EventEmitter<Service>();
-  @Output() serviceAdded = new EventEmitter<Service>();
+  @Output() op = new EventEmitter<InstanceOp>();
 
   constructor(
     public i18n: MainI18nService,
@@ -60,7 +61,7 @@ export class InstanceServicesComponent {
       nzWidth: 1000,
       nzContent: CreateServiceComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new ServiceOption(this.type, this.getNewServiceIID()),
+      nzData: new ServiceOption(this.type(), this.getNewServiceIID()),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -77,19 +78,15 @@ export class InstanceServicesComponent {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.addService(result);
+        this.op.emit({kind: 'addService', service: result});
       }
     });
-  }
-
-  private addService(service: Service) {
-    this.serviceAdded.emit(service);
   }
 
   private getNewServiceIID() {
     let siid: number = 1;
 
-    for (let service of this.services) {
+    for (let service of this.services()) {
       if (service.iid > siid) {
         siid = service.iid;
       }

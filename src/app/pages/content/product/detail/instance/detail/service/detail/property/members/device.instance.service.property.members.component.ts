@@ -82,10 +82,11 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
 
   // --- ControlValueAccessor 接口方法 ---
 
-  // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
+  // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法。
+  // 克隆成新数组：叶子 FormControl 的值(及其数组)只与本 CVA 共享，绝不落到模型的 members 数组上。
   writeValue(obj: any): void {
     if (obj !== undefined && obj !== null && obj !== this._value()) {
-      this._value.set(obj);
+      this._value.set([...(obj as number[])]);
     }
   }
 
@@ -142,6 +143,10 @@ export class DeviceInstanceServicePropertyMembersComponent implements ControlVal
   addMember(property: Property) {
     console.log('addMember: ', property.iid);
     this._value.update(list => [...list, property.iid]);
+    // 必须通知 FormControl：否则叶子 onMembersChanged() 读到的是没加进来之前的旧数组，
+    // 发出去的 updateProperty 会丢掉刚加入的成员。
+    this.onChange(this._value());
+    this.onTouched();
     this.changed.emit();
   }
 

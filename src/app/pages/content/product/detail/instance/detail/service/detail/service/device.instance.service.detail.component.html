@@ -7,7 +7,7 @@
       <span *nzSpaceItem>{{ '功能详情' | translate }}</span>
     </nz-space>
 
-    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+    @if (editable()) {
       <span style="float: right">
         <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()" type="button">{{ '删除' | translate }}</button>
       </span>
@@ -20,16 +20,9 @@
       <nz-form-control>
         <device-instance-id
           formControlName="iid"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           (changed)="onIIDChanged()"
         ></device-instance-id>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
-      <nz-form-control>
-        <device-instance-namespace formControlName="ns"></device-instance-namespace>
       </nz-form-control>
     </nz-form-item>
 
@@ -38,7 +31,7 @@
       <nz-form-control>
         <device-instance-name
           formControlName="code"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           [updatable]="updatable"
           (changed)="onCodeChanged()"
         ></device-instance-name>
@@ -50,11 +43,10 @@
       <nz-form-control>
         <device-instance-description
           formControlName="description"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           (changed)="onDescriptionChanged()"
         ></device-instance-description>
       </nz-form-control>
     </nz-form-item>
   </form>
 </nz-card>
-

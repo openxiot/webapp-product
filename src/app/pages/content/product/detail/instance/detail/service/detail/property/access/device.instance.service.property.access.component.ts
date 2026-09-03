@@ -93,9 +93,12 @@ export class DeviceInstanceServicePropertyAccessComponent implements ControlValu
 
   // --- ControlValueAccessor 接口方法 ---
 
-  // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
+  // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法。
+  // 必须逐位克隆：模板用 [(ngModel)]="...isReadable" 直接写内部对象的字段，
+  // 若不克隆，writeValue 会把叶子 form 控件乃至模型里的同一个 Access 对象别名进来，
+  // 用户在 checkox 上的勾选会原地改到共享模型对象上（违反「除 reducer 外不原地改」）。
   writeValue(value: Access): void {
-    this._value.set(value);
+    this._value.set(Access.of(value.isReadable, value.isWritable, value.isNotifiable));
   }
 
   // 注册变化回调：Angular 提供给你一个函数，当内部值变化时，你需要调用它来通知外部

@@ -1,24 +1,23 @@
-@if (instance) {
+@if (instance(); as inst) {
   <nz-layout class="inner-layout">
-    <nz-sider nzWidth="300px" nzTheme="light">
+    <nz-sider nzWidth="360px" nzTheme="light">
       <instance-services
-        [showVersion]="version"
-        [type]="instance.type"
-        [services]="services"
-        [editable]="editable"
+        [editable]="editable()"
+        [showVersion]="version()"
+        [type]="inst.type"
+        [services]="services()"
         (selected)="onServiceSelected($event)"
-        (serviceAdded)="onServiceAdded($event)"
+        (op)="onOp($event)"
       ></instance-services>
     </nz-sider>
 
     <nz-content class="inner-content">
-      @if (service) {
+      @if (service(); as s) {
         <instance-service
-          [version]="version"
-          [service]="service"
-          [editable]="editable"
-          (changed)="onServiceChanged($event)"
-          (removed)="onServiceRemoved($event)"
+          [version]="version()"
+          [service]="s"
+          [editable]="editable()"
+          (op)="onOp($event)"
         ></instance-service>
       }
     </nz-content>

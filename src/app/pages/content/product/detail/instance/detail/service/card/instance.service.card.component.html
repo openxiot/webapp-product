@@ -1,21 +1,21 @@
-@if (service) {
+@if (service(); as svc) {
   <nz-card nzSize="small" class="menu" [nzBodyStyle]="{ padding: 0}" nzBorderless>
 
     <ul nz-menu nzMode="inline" nzTheme="light">
-      <li nz-menu-item (click)="onClickTitle(service)" class="title-bar">
+      <li nz-menu-item (click)="onClickTitle(svc)" class="title-bar">
         <nz-space>
           <span *nzSpaceItem><span nz-icon nzType="database" nzTheme="outline"></span></span>
-          <span *nzSpaceItem class="menu-title">{{ service.description.get(i18n.getCurrentLang()) }}</span>
+          <span *nzSpaceItem class="menu-title">{{ svc.description.get(i18n.getCurrentLang()) }}</span>
         </nz-space>
       </li>
 
       <li nz-menu-group [nzTitle]="properties">
         <ul>
-          @for (p of service.getProperties(); track p.iid) {
+          @for (p of svc.getProperties(); track p.iid) {
             <li nz-menu-item (click)="onClickProperty(p)">
               <nz-tag [nzColor]="'blue'">{{ p.iid }}</nz-tag>
               <span class="menu-item">{{ p.description.get(i18n.getCurrentLang()) }}</span>
-              @if (showVersion) {
+              @if (showVersion()) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ p.type.version }}</nz-tag></span>
               }
             </li>
@@ -27,11 +27,11 @@
 
       <li nz-menu-group [nzTitle]="actions">
         <ul>
-          @for (a of service.getActions(); track a.iid) {
+          @for (a of svc.getActions(); track a.iid) {
             <li nz-menu-item (click)="onClickAction(a)">
               <nz-tag [nzColor]="'blue'">{{ a.iid }}</nz-tag>
               <span class="menu-item">{{ a.description.get(i18n.getCurrentLang()) }}</span>
-              @if (showVersion) {
+              @if (showVersion()) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ a.type.version }}</nz-tag></span>
               }
             </li>
@@ -43,11 +43,11 @@
 
       <li nz-menu-group [nzTitle]="events">
         <ul>
-          @for (e of service.getEvents(); track e.iid) {
+          @for (e of svc.getEvents(); track e.iid) {
             <li nz-menu-item (click)="onClickEvent(e)">
               <nz-tag [nzColor]="'blue'">{{ e.iid }}</nz-tag>
               <span class="menu-item">{{ e.description.get(i18n.getCurrentLang()) }}</span>
-              @if (showVersion) {
+              @if (showVersion()) {
                 <span style="float: right"><nz-tag nzColor="blue">{{ '版本' | translate }} {{ e.type.version }}</nz-tag></span>
               }
             </li>
@@ -59,10 +59,10 @@
         <div>
           <nz-space style="font-size: 14px; font-weight: bold;">
             <span *nzSpaceItem nz-icon nzType="setting" nzTheme="outline"></span>
-            <span *nzSpaceItem>{{ '属性(' | translate }}{{ service.properties.size }}{{ '个)' | translate }}</span>
+            <span *nzSpaceItem>{{ '属性(' | translate }}{{ svc.properties.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          @if (editable) {
+          @if (editable()) {
             <span style="float: right">
               <div class="selector" (click)="onAddProperty()">
                 <span nz-icon nzType="plus" nzTheme="outline"></span>
@@ -76,10 +76,10 @@
         <div>
           <nz-space style="font-size: 14px; font-weight: bold;">
             <span *nzSpaceItem nz-icon nzType="thunderbolt" nzTheme="outline"></span>
-            <span *nzSpaceItem>{{ '方法(' | translate }}{{ service.actions.size }}{{ '个)' | translate }}</span>
+            <span *nzSpaceItem>{{ '方法(' | translate }}{{ svc.actions.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          @if (editable) {
+          @if (editable()) {
             <span style="float: right">
               <div class="selector" (click)="onAddAction()">
                 <span nz-icon nzType="plus" nzTheme="outline"></span>
@@ -93,10 +93,10 @@
         <div>
           <nz-space style="font-size: 14px; font-weight: bold;">
             <span *nzSpaceItem nz-icon nzType="fire" nzTheme="outline"></span>
-            <span *nzSpaceItem>{{ '事件(' | translate }}{{ service.events.size }}{{ '个)' | translate }}</span>
+            <span *nzSpaceItem>{{ '事件(' | translate }}{{ svc.events.size }}{{ '个)' | translate }}</span>
           </nz-space>
 
-          @if (editable) {
+          @if (editable()) {
             <span style="float: right">
               <div class="selector" (click)="onAddEvent()">
                 <span nz-icon nzType="plus" nzTheme="outline"></span>

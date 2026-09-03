@@ -1,11 +1,10 @@
 import {
   Component,
-  EventEmitter,
   Input,
   OnChanges,
-  Output,
   SimpleChanges,
   ViewContainerRef,
+  computed,
   signal
 } from '@angular/core';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
@@ -17,7 +16,6 @@ import {
   LifeCycle,
   ProductBasic,
   ProductInstance,
-  Service,
   Urn,
   UrnStyle,
   UrnType
@@ -36,6 +34,10 @@ import {MainService} from '../../../../../service/main.service';
 import {NzSpinModule} from 'ng-zorro-antd/spin';
 import {TranslatePipe} from '@ngx-translate/core';
 import {ProductInstanceHelper} from '../../../../../typedef/instance/ProductInstanceHelper';
+import {
+  InstanceOp,
+  reduceInstance
+} from '../../../../../typedef/instance/InstanceEditor';
 import {AccountService} from '../../../../../service/account.service';
 import {ProductInstanceViewJsonComponent} from './dialog/product.instance.view.json.component';
 import {MainI18nService} from '../../../../../service/i18n.service';
@@ -70,13 +72,11 @@ import {NzWaveDirective} from 'ng-zorro-antd/core/wave';
 export class ProductInstanceComponent implements OnChanges {
 
   @Input() product: ProductBasic = new ProductBasic('', '', '', Urn.create('', UrnType.DEVICE, 'switch', '00000000'), '');
-  @Output() changed = new EventEmitter<DeviceInstance>();
-  @Output() removed = new EventEmitter<Service>();
 
   protected readonly LifeCycle = LifeCycle;
 
-  /** 是否有完整编辑权限（组织匹配 + 产品实例开发状态） */
-  editable = signal(false);
+  /** 是否有完整编辑权限（组织匹配 + 产品实例开发状态）：由 instance()/account 推导，Zoneless 下自动响应。 */
+  editable = computed(() => this.computeEditable());
 
   version: boolean = false;
   language: string = 'zh-CN';
@@ -173,7 +173,6 @@ export class ProductInstanceComponent implements OnChanges {
       this.service.getProductInstance(type).subscribe({
         next: data => {
           this.instance.set(data);
-          this.editable.set(this.computeEditable());
           this.loadingInstance.set(false);
 
           console.log('this.instance.services.size: ' + this.instance()!.services.size);
@@ -276,12 +275,9 @@ export class ProductInstanceComponent implements OnChanges {
 
               instance.lifecycle = lifecycle;
 
-              if (this.instance()) {
-                this.instance()!.lifecycle = lifecycle;
-              }
-
-              this.editable.set(this.computeEditable());
-              // 原地修改实例后替换数组引用，让模板中 currentInstance?.lifecycle 的 switch 在 Zoneless 下重新渲染
+              // 以 reducer 产出新实例对象更新详情（保持不可变）；editable 是 computed，自动随 lifecycle 切换。
+              this.onOp({kind: 'setInstanceLifecycle', lifecycle});
+              // 替换数组引用，让模板中 currentInstance?.lifecycle 的 switch 在 Zoneless 下重新渲染
               this.instances.update(list => [...list]);
             },
             error: error => {
@@ -351,10 +347,13 @@ export class ProductInstanceComponent implements OnChanges {
     });
   }
 
-  protected onChanged(device: DeviceInstance) {
-    console.log('onChanged!');
-
-    if (!this.loadingInstance()) {
+  /** 详情子树所有编辑的唯一入口：reducer 产出新 instance，Zoneless 自动沿脏路径重绘。 */
+  protected onOp(op: InstanceOp) {
+    const i = this.instance();
+    if (!i) return;
+    this.instance.set(reduceInstance(i, op));
+    // 生命周期切换不是内容修改；加载过渡期收到的编辑不标脏（同旧逻辑）。
+    if (op.kind !== 'setInstanceLifecycle' && !this.loadingInstance()) {
       this.isChanged.set(true);
     }
   }

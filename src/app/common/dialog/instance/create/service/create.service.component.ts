@@ -285,7 +285,7 @@ export class CreateServiceComponent implements OnInit {
       eiid ++;
     }
 
-    for (let event of this.form.controls.requiredEvents.value) {
+    for (let event of this.form.controls.optionalEvents.value) {
       if (event.type._checked) {
         event.iid = eiid;
         this.selected.events.set(event.iid, event);

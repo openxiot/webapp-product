@@ -7,9 +7,9 @@
       <span *nzSpaceItem>{{ '属性详情' | translate }}</span>
     </nz-space>
 
-    @if (lifecycle === LifeCycle.DEVELOPMENT) {
+    @if (editable()) {
       <span style="float: right">
-        <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()">{{ '删除' | translate }}</button>
+        <button nz-button nzType="primary" nzDanger nzSize="small" (click)="onRemoved()" type="button">{{ '删除' | translate }}</button>
       </span>
     }
   </div>
@@ -20,16 +20,9 @@
       <nz-form-control>
         <device-instance-id
           formControlName="iid"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           (changed)="onIIDChanged()"
         ></device-instance-id>
-      </nz-form-control>
-    </nz-form-item>
-
-    <nz-form-item nz-flex>
-      <nz-form-label [style.width.px]="120" nzRequired>{{ '名字空间' | translate }}</nz-form-label>
-      <nz-form-control>
-        <device-instance-namespace formControlName="ns"></device-instance-namespace>
       </nz-form-control>
     </nz-form-item>
 
@@ -38,7 +31,7 @@
       <nz-form-control>
         <device-instance-name
           formControlName="code"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           [updatable]="updatable"
           (changed)="onCodeChanged()"
         ></device-instance-name>
@@ -50,7 +43,7 @@
       <nz-form-control>
         <device-instance-description
           formControlName="description"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           (changed)="onDescriptionChanged()"
         ></device-instance-description>
       </nz-form-control>
@@ -61,7 +54,7 @@
       <nz-form-control>
         <device-instance-service-property-access
           formControlName="access"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           (changed)="onAccessChanged()"
         ></device-instance-service-property-access>
       </nz-form-control>
@@ -72,7 +65,7 @@
       <nz-form-control>
         <device-instance-service-property-format
           formControlName="format"
-          [lifecycle]="lifecycle"
+          [lifecycle]="subLifecycle()"
           (changed)="onFormatChanged()"
         ></device-instance-service-property-format>
       </nz-form-control>
@@ -84,8 +77,8 @@
         <nz-form-control>
           <device-instance-service-property-constraint
             formControlName="constraint"
-            [lifecycle]="lifecycle"
-            (changed)="onConstraintTypeChanged()"
+            [lifecycle]="subLifecycle()"
+            (changed)="onConstraintChanged()"
           ></device-instance-service-property-constraint>
         </nz-form-control>
       </nz-form-item>
@@ -97,8 +90,8 @@
             <nz-form-control>
               <device-instance-service-property-range
                 formControlName="range"
-                [lifecycle]="lifecycle"
-                (changed)="onConstraintRangeChanged()"
+                [lifecycle]="subLifecycle()"
+                (changed)="onRangeChanged()"
               ></device-instance-service-property-range>
             </nz-form-control>
           </nz-form-item>
@@ -109,8 +102,8 @@
             <nz-form-control>
               <device-instance-service-property-list
                 formControlName="list"
-                [lifecycle]="lifecycle"
-                (changed)="onConstraintListChanged()"
+                [lifecycle]="subLifecycle()"
+                (changed)="onListChanged()"
               ></device-instance-service-property-list>
             </nz-form-control>
           </nz-form-item>
@@ -124,9 +117,9 @@
         <nz-form-control>
           <device-instance-service-property-members
             formControlName="members"
-            [lifecycle]="lifecycle"
-            [service]="service"
-            [property]="property"
+            [lifecycle]="subLifecycle()"
+            [service]="service()"
+            [property]="property()"
             [language]="language"
             (changed)="onMembersChanged()"
           ></device-instance-service-property-members>
@@ -134,33 +127,31 @@
       </nz-form-item>
     }
 
-    @if (property) {
-      @if (property.formatNumber()) {
-        <nz-form-item nz-flex>
-          <nz-form-label [style.width.px]="120" nzRequired>{{ '单位' | translate }}</nz-form-label>
-          <nz-form-control>
-            <device-instance-service-property-unit
-              formControlName="unit"
-              [lifecycle]="lifecycle"
-              (changed)="onUnitChanged()"
-            ></device-instance-service-property-unit>
-          </nz-form-control>
-        </nz-form-item>
-      }
+    @if (property().formatNumber()) {
+      <nz-form-item nz-flex>
+        <nz-form-label [style.width.px]="120" nzRequired>{{ '单位' | translate }}</nz-form-label>
+        <nz-form-control>
+          <device-instance-service-property-unit
+            formControlName="unit"
+            [lifecycle]="subLifecycle()"
+            (changed)="onUnitChanged()"
+          ></device-instance-service-property-unit>
+        </nz-form-control>
+      </nz-form-item>
+    }
 
-      @if (property.format !== DataFormat.COMBINATION) {
-        <nz-form-item nz-flex>
-          <nz-form-label [style.width.px]="120" nzRequired>{{ '缺省值' | translate }}</nz-form-label>
-          <nz-form-control>
-            <device-instance-service-property-default-value
-              formControlName="defaultValue"
-              [property]="property"
-              [lifecycle]="lifecycle"
-              (changed)="onDefaultValueChanged()"
-            ></device-instance-service-property-default-value>
-          </nz-form-control>
-        </nz-form-item>
-      }
+    @if (property().format !== DataFormat.COMBINATION) {
+      <nz-form-item nz-flex>
+        <nz-form-label [style.width.px]="120" nzRequired>{{ '缺省值' | translate }}</nz-form-label>
+        <nz-form-control>
+          <device-instance-service-property-default-value
+            formControlName="defaultValue"
+            [property]="property()"
+            [lifecycle]="subLifecycle()"
+            (changed)="onDefaultValueChanged()"
+          ></device-instance-service-property-default-value>
+        </nz-form-control>
+      </nz-form-item>
     }
   </form>
 </nz-card>

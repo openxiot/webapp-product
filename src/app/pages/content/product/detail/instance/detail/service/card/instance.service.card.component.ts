@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output, ViewContainerRef} from '@angular/core';
+import {Component, EventEmitter, input, Output, ViewContainerRef} from '@angular/core';
 import {Action, Event, LifeCycle, Property, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzTagComponent} from 'ng-zorro-antd/tag';
 import {NzMenuModule} from 'ng-zorro-antd/menu';
@@ -16,6 +16,7 @@ import {MainI18nService} from '../../../../../../../../service/i18n.service';
 import {PropertyOption} from '../../../../../../../../common/dialog/instance/create/property/PropertyOption';
 import {ActionOption} from '../../../../../../../../common/dialog/instance/create/action/ActionOption';
 import {EventOption} from '../../../../../../../../common/dialog/instance/create/event/EventOption';
+import {InstanceOp} from '../../../../../../../../typedef/instance/InstanceEditor';
 
 @Component({
   selector: 'instance-service-card',
@@ -39,14 +40,14 @@ export class InstanceServiceCardComponent {
 
   protected readonly LifeCycle = LifeCycle;
 
-  @Input() showVersion: boolean = false;
-  @Input() editable: boolean = false;
-  @Input() service!: Service;
+  showVersion = input(false);
+  editable = input(false);
+  service = input.required<Service>();
   @Output() titleSelected = new EventEmitter<Service>();
   @Output() propertySelected = new EventEmitter<Property>();
   @Output() actionSelected = new EventEmitter<Action>();
   @Output() eventSelected = new EventEmitter<Event>();
-  @Output() changed = new EventEmitter<Service>();
+  @Output() op = new EventEmitter<InstanceOp>();
 
   constructor(
     private modal: NzModalService,
@@ -78,7 +79,7 @@ export class InstanceServiceCardComponent {
       nzWidth: 1000,
       nzContent: CreatePropertyComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new PropertyOption(this.service.type, this.getNewPropertyIID()),
+      nzData: new PropertyOption(this.service().type, this.getNewPropertyIID()),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -95,7 +96,7 @@ export class InstanceServiceCardComponent {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.addProperty(result);
+        this.op.emit({kind: 'addProperties', serviceIid: this.service().iid, properties: [result]});
       }
     });
   }
@@ -106,7 +107,7 @@ export class InstanceServiceCardComponent {
       nzWidth: 1000,
       nzContent: CreateActionComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new ActionOption(this.service.type, this.getNewActionIID()),
+      nzData: new ActionOption(this.service().type, this.getNewActionIID()),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -123,7 +124,7 @@ export class InstanceServiceCardComponent {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.addAction(result);
+        this.op.emit({kind: 'addActions', serviceIid: this.service().iid, actions: [result]});
       }
     });
   }
@@ -134,7 +135,7 @@ export class InstanceServiceCardComponent {
       nzWidth: 1000,
       nzContent: CreateEventComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new EventOption(this.service.type, this.getNewEventIID()),
+      nzData: new EventOption(this.service().type, this.getNewEventIID()),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -151,71 +152,45 @@ export class InstanceServiceCardComponent {
 
     modal.afterClose.subscribe(result => {
       if (result) {
-        this.addEvent(result);
+        this.op.emit({kind: 'addEvents', serviceIid: this.service().iid, events: [result]});
       }
     });
-  }
-
-  private addProperty(property: Property) {
-    this.service?.properties.set(property.iid, property);
-    this.changed.emit(this.service);
-  }
-
-  private addAction(action: Action) {
-    this.service?.actions.set(action.iid, action);
-    this.changed.emit(this.service);
-  }
-
-  private addEvent(event: Event) {
-    this.service?.events.set(event.iid, event);
-    this.changed.emit(this.service);
   }
 
   private getNewPropertyIID() {
     let iid: number = 1;
 
-    if (this.service) {
-      for (let item of this.service.properties.values()) {
-        if (item.iid > iid) {
-          iid = item.iid;
-        }
+    for (let item of this.service().properties.values()) {
+      if (item.iid > iid) {
+        iid = item.iid;
       }
-
-      iid ++;
     }
 
-    return iid;
+    return iid + 1;
   }
 
   private getNewActionIID() {
     let iid: number = 1;
 
-    if (this.service) {
-      for (let item of this.service.actions.values()) {
-        if (item.iid > iid) {
-          iid = item.iid;
-        }
+    for (let item of this.service().actions.values()) {
+      if (item.iid > iid) {
+        iid = item.iid;
       }
-
-      iid ++;
     }
 
-    return iid;
+    return iid + 1;
   }
 
   private getNewEventIID() {
     let iid: number = 1;
 
-    if (this.service) {
-      for (let item of this.service.actions.values()) {
-        if (item.iid > iid) {
-          iid = item.iid;
-        }
+    // 修复：原先误遍历 actions，导致事件 iid 与已有事件冲突。
+    for (let item of this.service().events.values()) {
+      if (item.iid > iid) {
+        iid = item.iid;
       }
-
-      iid ++;
     }
 
-    return iid;
+    return iid + 1;
   }
 }

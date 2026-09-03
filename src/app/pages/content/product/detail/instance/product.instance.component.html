@@ -103,12 +103,12 @@
 
   <nz-col [nzSpan]="24">
     <nz-spin [nzSpinning]="loadingInstance()">
-      @if (instance()) {
+      @if (instance(); as inst) {
         <product-instance-detail
           [version]="true"
-          [instance]="instance()"
+          [instance]="inst"
           [editable]="editable()"
-          (changed)="onChanged($event)"
+          (op)="onOp($event)"
         ></product-instance-detail>
       }
     </nz-spin>

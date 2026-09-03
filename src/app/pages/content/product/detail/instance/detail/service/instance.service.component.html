@@ -1,59 +1,51 @@
-@if (service) {
+@if (service(); as svc) {
   <nz-layout class="inner-layout">
-    <nz-sider nzWidth="300px" nzTheme="light">
+    <nz-sider nzWidth="360px" nzTheme="light">
       <instance-service-card
-        [showVersion]="version"
-        [editable]="editable"
-        [service]="service"
-        (titleSelected)="onTitleSelected($event)"
+        [showVersion]="version()"
+        [editable]="editable()"
+        [service]="svc"
+        (titleSelected)="onTitleSelected()"
         (propertySelected)="onPropertySelected($event)"
         (actionSelected)="onActionSelected($event)"
         (eventSelected)="onEventSelected($event)"
-        (changed)="onServiceChanged($event)"
+        (op)="onOp($event)"
       ></instance-service-card>
     </nz-sider>
 
     <nz-content class="inner-content">
-      @if (showServiceDetail) {
+      @if (selection().kind === 'service') {
         <device-instance-service-detail
-          [lifecycle]="lifecycle"
-          [service]="service"
-          [language]="language"
-          (removed)="onServiceRemoved($event)"
-          (changed)="onServiceChanged($event)"
+          [editable]="editable()"
+          [service]="svc"
+          (op)="onOp($event)"
         ></device-instance-service-detail>
       }
 
-      @if (property) {
+      @if (property(); as p) {
         <device-instance-service-property
-          [lifecycle]="lifecycle"
-          [service]="service"
-          [property]="property"
-          [language]="language"
-          (removed)="onPropertyRemoved($event)"
-          (changed)="onPropertyChanged($event)"
+          [editable]="editable()"
+          [service]="svc"
+          [property]="p"
+          (op)="onOp($event)"
         ></device-instance-service-property>
       }
 
-      @if (action) {
+      @if (action(); as a) {
         <device-instance-service-action
-          [lifecycle]="lifecycle"
-          [service]="service"
-          [action]="action"
-          [language]="language"
-          (removed)="onActionRemoved($event)"
-          (changed)="onActionChanged($event)"
+          [editable]="editable()"
+          [service]="svc"
+          [action]="a"
+          (op)="onOp($event)"
         ></device-instance-service-action>
       }
 
-      @if (event) {
+      @if (event(); as e) {
         <device-instance-service-event
-          [lifecycle]="lifecycle"
-          [service]="service"
-          [event]="event"
-          [language]="language"
-          (removed)="onEventRemoved($event)"
-          (changed)="onEventChanged($event)"
+          [editable]="editable()"
+          [service]="svc"
+          [event]="e"
+          (op)="onOp($event)"
         ></device-instance-service-event>
       }
     </nz-content>
