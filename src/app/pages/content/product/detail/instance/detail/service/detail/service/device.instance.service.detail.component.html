@@ -41,11 +41,11 @@
     <nz-form-item nz-flex>
       <nz-form-label [style.width.px]="120" nzRequired>{{ '描述' | translate }}</nz-form-label>
       <nz-form-control>
-        <device-instance-description
+        <description
           formControlName="description"
-          [lifecycle]="subLifecycle()"
+          [updatable]="editable()"
           (changed)="onDescriptionChanged()"
-        ></device-instance-description>
+        ></description>
       </nz-form-control>
     </nz-form-item>
   </form>

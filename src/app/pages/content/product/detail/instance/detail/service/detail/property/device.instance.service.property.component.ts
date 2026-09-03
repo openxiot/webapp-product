@@ -40,7 +40,7 @@ import {
 } from './members/device.instance.service.property.members.component';
 import {DeviceInstanceIdComponent} from './iid/device.instance.id.component';
 import {DeviceInstanceNameComponent} from './name/device.instance.name.component';
-import {DeviceInstanceDescriptionComponent} from './description/device.instance.description.component';
+import {DescriptionComponent} from '../../../../../../../../../common/form/item/common/description/description.component';
 import {DeviceInstanceServicePropertyAccessComponent} from './access/device.instance.service.property.access.component';
 import {DeviceInstanceServicePropertyFormatComponent} from './format/device.instance.service.property.format.component';
 import {
@@ -81,7 +81,7 @@ import {InstanceOp, PropertyPatch} from '../../../../../../../../../typedef/inst
     DeviceInstanceServicePropertyMembersComponent,
     DeviceInstanceIdComponent,
     DeviceInstanceNameComponent,
-    DeviceInstanceDescriptionComponent,
+    DescriptionComponent,
     DeviceInstanceServicePropertyAccessComponent,
     DeviceInstanceServicePropertyFormatComponent,
     DeviceInstanceServicePropertyConstraintComponent,

@@ -32,7 +32,7 @@ import {ConfirmComponent} from '../../../../../../../../../common/dialog/confirm
 import {MainI18nService} from '../../../../../../../../../service/i18n.service';
 import {DeviceInstanceIdComponent} from '../property/iid/device.instance.id.component';
 import {DeviceInstanceNameComponent} from '../property/name/device.instance.name.component';
-import {DeviceInstanceDescriptionComponent} from '../property/description/device.instance.description.component';
+import {DescriptionComponent} from '../../../../../../../../../common/form/item/common/description/description.component';
 import {DeviceInstanceArgumentsComponent} from '../action/arguments/device.instance.arguments.component';
 import {NzFlexDirective} from 'ng-zorro-antd/flex';
 import {TranslatePipe} from '@ngx-translate/core';
@@ -59,7 +59,7 @@ import {InstanceOp} from '../../../../../../../../../typedef/instance/InstanceEd
     NzFlexDirective,
     DeviceInstanceIdComponent,
     DeviceInstanceNameComponent,
-    DeviceInstanceDescriptionComponent,
+    DescriptionComponent,
     DeviceInstanceArgumentsComponent,
     TranslatePipe
   ],
