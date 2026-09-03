@@ -31,14 +31,14 @@
                 @if (isChanged()) {
                   {{ '产品功能已修改，请保存！' | translate }}
                 } @else {
-                  {{ '产品功能处于“开发中”，最终用户不可见，如需最终用户可见，需要上线。' | translate }}
+                  {{ '产品功能处于开发中，最终用户不可见，如需最终用户可见，需要上线。' | translate }}
                 }
               }
               @case (LifeCycle.PREVIEW) {
                 {{ '产品功正在上线，等待管理员审批' | translate }}
               }
               @case (LifeCycle.RELEASED) {
-                {{ '产品功能已“上线”，不能“修改”功能，最终用户可见，最后一个版本可以升级功能。' | translate }}
+                {{ '产品功能已上线，不能修改功能，最终用户可见，最后一个版本可以升级功能。' | translate }}
               }
             }
           </div>

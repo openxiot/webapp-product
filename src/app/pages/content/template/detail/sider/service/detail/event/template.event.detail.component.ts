@@ -62,7 +62,6 @@ export class TemplateEventDetailComponent implements OnInit {
   editable = input(false);
   service = input.required<ServiceTemplate>();
   event = input.required<EventTemplate>();
-  language = input('zh-CN');
   @Output() op = new EventEmitter<TemplateOp>();
 
   form: FormGroup<{

@@ -48,14 +48,14 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '输入参数' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        <template-arguments formControlName="argumentIn" [service]="service()" [language]="language()" [updatable]="editable()" (changed)="onArgumentInChanged()"></template-arguments>
+        <template-arguments formControlName="argumentIn" [service]="service()" [updatable]="editable()" (changed)="onArgumentInChanged()"></template-arguments>
       </nz-form-control>
     </nz-form-item>
 
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '输出结果' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        <template-arguments formControlName="argumentOut" [service]="service()" [language]="language()" [updatable]="editable()" pickTitle="选择属性作为结果" (changed)="onArgumentOutChanged()"></template-arguments>
+        <template-arguments formControlName="argumentOut" [service]="service()" [updatable]="editable()" pickTitle="选择属性作为结果" (changed)="onArgumentOutChanged()"></template-arguments>
       </nz-form-control>
     </nz-form-item>
   </form>

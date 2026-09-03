@@ -62,7 +62,6 @@ export class TemplateActionDetailComponent implements OnInit {
   editable = input(false);
   service = input.required<ServiceTemplate>();
   action = input.required<ActionTemplate>();
-  language = input('zh-CN');
   @Output() op = new EventEmitter<TemplateOp>();
 
   form: FormGroup<{

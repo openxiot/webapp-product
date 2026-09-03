@@ -55,8 +55,6 @@ export class TemplateArgumentsComponent implements ControlValueAccessor {
   /** 行内按 piid 解析属性 + 加参数弹窗的候选列表来源。 */
   service = input.required<ServiceLike>();
 
-  language = input('zh-CN');
-
   /** 加参数弹窗标题的 i18n key：默认「参数」，action 出参父级传「结果」。 */
   pickTitle = input('选择属性作为参数');
 
@@ -126,7 +124,7 @@ export class TemplateArgumentsComponent implements ControlValueAccessor {
       nzWidth: 1000,
       nzContent: SelectArgumentComponent,
       nzViewContainerRef: this.viewContainerRef,
-      nzData: new SelectArgument(this.service(), exclusion, this.language()),
+      nzData: new SelectArgument(this.service(), exclusion, this.i18n.getCurrentLang()),
       nzFooter: [
         {
           label: this.i18n.translate.instant('取消'),
@@ -160,7 +158,7 @@ export class TemplateArgumentsComponent implements ControlValueAccessor {
   protected propertyDescription(arg: Argument): string {
     const p = this.service().getProperties().find(x => x.iid === arg.piid);
     if (p) {
-      return p.description.get(this.language()) || p.description.get('en-US') || '';
+      return p.description.get(this.i18n.getCurrentLang()) || p.description.get('en-US') || '';
     }
     return '?';
   }

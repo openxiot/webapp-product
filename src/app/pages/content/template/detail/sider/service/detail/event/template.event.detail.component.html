@@ -48,7 +48,7 @@
     <nz-form-item>
       <nz-form-label [nzSpan]="5" nzRequired>{{ '参数' | translate }}</nz-form-label>
       <nz-form-control [nzSpan]="19">
-        <template-arguments formControlName="arguments" [service]="service()" [language]="language()" [updatable]="editable()" (changed)="onArgumentsChanged()"></template-arguments>
+        <template-arguments formControlName="arguments" [service]="service()" [updatable]="editable()" (changed)="onArgumentsChanged()"></template-arguments>
       </nz-form-control>
     </nz-form-item>
   </form>
