@@ -1,4 +1,11 @@
 {
+  "直连设备": "Directly Connected",
+  "非直连设备": "Non-Directly",
+  "以太网": "Ethernet",
+  "以太网 + BLE": "Ethernet + BLE",
+  "蓝牙Mesh": "Bluetooth Mesh",
+  "CAN总线": "CAN Bus",
+  "其他": "Other",
   "下线": "Unpublish",
   "产品功能": "Product Functions",
   "修改模板描述": "Cuir síos ar an teimpléad in eagar",

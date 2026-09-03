@@ -1,6 +1,7 @@
-import {Component, Input, OnChanges, provideZonelessChangeDetection, signal} from '@angular/core';
+import {Component, Input, OnChanges, Provider, provideZonelessChangeDetection, signal} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {TranslateService} from '@ngx-translate/core';
 import {ProductBasic, Urn, UrnType} from '@openxiot/xiot-core-spec-ts';
 
 import {ProductBasicIdComponent} from './id/product.basic.id.component';
@@ -96,10 +97,10 @@ class TestHostComponent {
 // 2. 真实 CVA 子组件：writeValue() 后视图必须自动重绘
 //------------------------------------------------------------------------------
 
-async function setupZoneless<T>(componentType: new () => T): Promise<ComponentFixture<T>> {
+async function setupZoneless<T>(componentType: new () => T, providers: Provider[] = []): Promise<ComponentFixture<T>> {
   await TestBed.configureTestingModule({
     imports: [componentType as any],
-    providers: [provideZonelessChangeDetection()]
+    providers: [provideZonelessChangeDetection(), ...providers]
   }).compileComponents();
 
   const fixture = TestBed.createComponent(componentType);
@@ -158,7 +159,18 @@ describe('Zoneless CVA 表单值重绘回归测试', () => {
     });
 
     it('ProductBasicProtocolComponent：writeValue() 后只读标签应显示协议分类与名称', async () => {
-      const fixture = await setupZoneless(ProductBasicProtocolComponent);
+      // 组件注入 MainI18nService，其构造器依赖 TranslateService；未加载语言字典时
+      // instant(key) 原样返回 key，正好断言只读标签文本。
+      const fixture = await setupZoneless(ProductBasicProtocolComponent, [
+        {
+          provide: TranslateService,
+          useValue: {
+            instant: (key: string) => key,
+            getBrowserLang: () => null,
+            use: () => undefined
+          }
+        }
+      ]);
       fixture.componentInstance.updatable = false;
 
       fixture.componentInstance.writeValue(['Directly', 'wifi']);

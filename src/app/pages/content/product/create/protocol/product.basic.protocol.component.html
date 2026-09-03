@@ -1,6 +1,6 @@
 @if (updatable) {
-  <nz-cascader [nzOptions]="nzOptions" [(ngModel)]="value"></nz-cascader>
+  <nz-cascader [nzOptions]="nzOptions()" [(ngModel)]="value"></nz-cascader>
 } @else {
-  <nz-tag nzColor="green">{{ protocolCategory }}</nz-tag>
-  <nz-tag nzColor="blue">{{ protocolName }}</nz-tag>
+  <nz-tag nzColor="green">{{ categoryLabel() }}</nz-tag>
+  <nz-tag nzColor="blue">{{ nameLabel() }}</nz-tag>
 }
