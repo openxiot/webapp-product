@@ -3,10 +3,11 @@
   @for (arg of arguments(); track arg.piid) {
     <nz-col [nzSpan]="24">
       <nz-row [nzGutter]="[8, 8]">
-        <nz-col [nzSpan]="6" class="argument">
-          <span><nz-tag nzColor="blue">{{ arg.piid }}</nz-tag></span>
-          <span>{{ getDescription(arg) }}</span>
-        </nz-col>
+        <div nz-col [nzSpan]="6">
+          <nz-input-wrapper [nzAddonBefore]="arg.piid.toString()">
+            <input nz-input [ngModel]="getDescription(arg)" [disabled]="true"/>
+          </nz-input-wrapper>
+        </div>
 
         <nz-col [nzSpan]="15">
           <nz-space nzDirection="horizontal">

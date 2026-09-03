@@ -1,7 +1,7 @@
-@if (items().length > 0) {
-  <div nz-row [nzGutter]="[8, 8]">
+<div nz-row [nzGutter]="[8, 8]">
+  @if (items().length > 0) {
     @for (arg of items(); track arg.piid) {
-      <div nz-col [nzSpan]="24" class="argument-row">
+      <div nz-col [nzSpan]="24">
         <div nz-row [nzGutter]="[8, 8]">
           <div nz-col [nzSpan]="6">
             <nz-input-wrapper [nzAddonBefore]="arg.piid.toString()">
@@ -11,15 +11,20 @@
 
           <div nz-col [nzSpan]="16">
             <nz-space nzDirection="horizontal">
-              <nz-input-number *nzSpaceItem [nzAddonBefore]="'最少' | translate" [nzAddonAfter]="'次' | translate" [(ngModel)]="arg.minRepeat" (ngModelChange)="onChanged()" [nzDisabled]="!updatable() || isDisabled"></nz-input-number>
+              <nz-input-number *nzSpaceItem [nzAddonBefore]="'最少' | translate" [nzAddonAfter]="'次' | translate"
+                               [(ngModel)]="arg.minRepeat" (ngModelChange)="onChanged()"
+                               [nzDisabled]="!updatable() || isDisabled"></nz-input-number>
 
-              <nz-input-number *nzSpaceItem [nzAddonBefore]="'最多' | translate" [nzAddonAfter]="'次' | translate" [(ngModel)]="arg.maxRepeat" (ngModelChange)="onChanged()" [nzDisabled]="!updatable() || isDisabled"></nz-input-number>
+              <nz-input-number *nzSpaceItem [nzAddonBefore]="'最多' | translate" [nzAddonAfter]="'次' | translate"
+                               [(ngModel)]="arg.maxRepeat" (ngModelChange)="onChanged()"
+                               [nzDisabled]="!updatable() || isDisabled"></nz-input-number>
             </nz-space>
           </div>
 
           @if (updatable() && !isDisabled) {
             <div nz-col [nzSpan]="2">
-              <button nz-button nzType="dashed" nzDanger (click)="removeArgument(arg)" style="width: 40px" type="button">
+              <button nz-button nzType="dashed" nzDanger (click)="removeArgument(arg)" style="width: 40px"
+                      type="button">
                 <span nz-icon nzType="delete"></span>
               </button>
             </div>
@@ -27,11 +32,14 @@
         </div>
       </div>
     }
-  </div>
-}
+  }
 
-@if (updatable() && !isDisabled) {
-  <button nz-button nzType="dashed" (click)="addArgument()" style="width: 100px" type="button">
-    <span nz-icon nzType="plus"></span>
-  </button>
-}
+  @if (updatable() && !isDisabled) {
+    <div nz-col [nzSpan]="24">
+      <button nz-button nzType="dashed" (click)="addArgument()" style="width: 100px" type="button">
+        <span nz-icon nzType="plus"></span>
+      </button>
+    </div>
+  }
+
+</div>
