@@ -1,15 +1,16 @@
-import {Component, EventEmitter, Input, Output, signal} from '@angular/core';
+import {Component, EventEmitter, input, Input, Output, signal} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule} from '@angular/forms';
 import {NzButtonModule} from 'ng-zorro-antd/button';
 import {NzInputModule} from 'ng-zorro-antd/input';
 import {NzTooltipModule} from 'ng-zorro-antd/tooltip';
 import {NzIconModule} from 'ng-zorro-antd/icon';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {DataFormat, LifeCycle} from "@openxiot/xiot-core-spec-ts";
+import {FormatDefinition, LifeCycle} from "@openxiot/xiot-core-spec-ts";
 import {NzCheckboxModule} from 'ng-zorro-antd/checkbox';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzOptionComponent, NzSelectComponent} from 'ng-zorro-antd/select';
 import {TranslatePipe} from '@ngx-translate/core';
+import {MainI18nService} from '../../../../../../../../../../service/i18n.service';
 
 @Component({
   selector: 'device-instance-service-property-format',
@@ -43,47 +44,33 @@ export class DeviceInstanceServicePropertyFormatComponent implements ControlValu
 
   protected readonly LifeCycle = LifeCycle;
 
+  formats = input.required<FormatDefinition[]>();
+
   @Input() lifecycle: LifeCycle = LifeCycle.DEVELOPMENT;
   @Output() changed: EventEmitter<void> = new EventEmitter<void>();
 
-// 使用 readonly 确保 formats 不会被修改
-  readonly formats: Array<{ value: DataFormat, label: string }> = [
-    { value: DataFormat.BOOL, label: '布尔值' },
-    { value: DataFormat.UINT8, label: '无符号8位整型' },
-    { value: DataFormat.UINT16, label: '无符号16位整型' },
-    { value: DataFormat.UINT32, label: '无符号32位整型' },
-    { value: DataFormat.INT8, label: '8位整型' },
-    { value: DataFormat.INT16, label: '16位整型' },
-    { value: DataFormat.INT32, label: '32位整型' },
-    { value: DataFormat.INT64, label: '64位整型' },
-    { value: DataFormat.FLOAT, label: '浮点数' },
-    { value: DataFormat.STRING, label: '字符串' },
-    { value: DataFormat.HEX, label: '16进制字符串' },
-    { value: DataFormat.TLV8, label: 'TLV8字符串' },
-    { value: DataFormat.COMBINATION, label: '组合值' },
-  ];
-
-  // 组件内部维护的值
-  _value = signal<DataFormat>(DataFormat.BOOL);
+  // 组件内部维护的值（与模板侧一致：UI 层存格式 code 字符串，模型边界再转 DataFormat）
+  _value = signal<string>('bool');
 
   // 禁用状态
   isDisabled = signal(false);
 
   // 定义变化回调和触摸回调
-  onChange: (value: DataFormat) => void = () => {};
+  onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
 
   constructor(
+    public i18n: MainI18nService
   ) {
   }
 
   // 获取当前值
-  get value(): DataFormat {
+  get value(): string {
     return this._value();
   }
 
   // 设置当前值，并通知外部变化
-  set value(val: DataFormat) {
+  set value(val: string) {
     if (val !== this._value()) {
       this._value.set(val);
       this.onChange(val); // 重要：通知外部表单值已变化
@@ -93,12 +80,12 @@ export class DeviceInstanceServicePropertyFormatComponent implements ControlValu
 
   // 获取当前选中项的显示标签
   get selectedLabel(): string {
-    const selected = this.formats.find(item => item.value === this._value());
-    return selected ? selected.label : '未知格式';
+    const selected = this.formats().find(item => item.type.name === this._value());
+    return selected ? (selected.description.get(this.i18n.getCurrentLang()) || selected.type.name) : 'unknown';
   }
 
   // 选择变化处理
-  onSelectionChange(value: DataFormat): void {
+  onSelectionChange(value: string): void {
     console.log('onSelectionChange: ', value);
 
     if (this.isDisabled()) {
@@ -122,7 +109,7 @@ export class DeviceInstanceServicePropertyFormatComponent implements ControlValu
   // --- ControlValueAccessor 接口方法 ---
 
   // 外部程序设置表单值（如 patchValue、setValue）时，Angular 会调用此方法
-  writeValue(value: DataFormat): void {
+  writeValue(value: string): void {
     this._value.set(value);
   }
 

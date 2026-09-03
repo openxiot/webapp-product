@@ -13,6 +13,8 @@ import {NzFormControlComponent, NzFormDirective, NzFormItemComponent, NzFormLabe
 import {
   Access,
   DataFormat,
+  DataFormatFromString,
+  FormatDefinition,
   LifeCycle,
   Property,
   PropertyDefinition, PropertyType, ValueDefinition, ValueList, ValueRange,
@@ -97,7 +99,7 @@ export class CreatePropertyComponent implements OnInit {
     ns: FormControl<string>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
-    format: FormControl<DataFormat>,
+    format: FormControl<string>,
     access: FormControl<Access>,
     constraint: FormControl<ConstraintType>,
     range: FormControl<RangeValue>,
@@ -117,6 +119,9 @@ export class CreatePropertyComponent implements OnInit {
   loading = signal(true);
   definitions: Map<string, PropertyDefinition> = new Map<string, PropertyDefinition>();
 
+  loadingFormats = signal(false);
+  formats = signal<FormatDefinition[]>([]);
+
   constructor(
     public i18n: MainI18nService,
     private account: AccountService,
@@ -129,7 +134,7 @@ export class CreatePropertyComponent implements OnInit {
       ns: this.fb.control('', [Validators.required]),
       code: this.fb.control('', [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
-      format: this.fb.control(DataFormat.BOOL, [Validators.required]),
+      format: this.fb.control<string>(DataFormat.BOOL.toString(), [Validators.required]),
       access: this.fb.control(new Access(), [Validators.required]),
       constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
       range: this.fb.control(new RangeValue()),
@@ -161,6 +166,22 @@ export class CreatePropertyComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProperties();
+    this.loadFormats();
+  }
+
+  private loadFormats(): void {
+    this.loadingFormats.set(true);
+    this.main.getFormatDefinitions(this.option.type.ns)
+      .subscribe({
+        next: data => {
+          this.formats.set(data);
+          this.loadingFormats.set(false);
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loadingFormats.set(false);
+        }
+      })
   }
 
   private loadProperties(): void {
@@ -266,7 +287,7 @@ export class CreatePropertyComponent implements OnInit {
     this.selected.access.isReadable = this.form.controls.access.defaultValue.isReadable;
     this.selected.access.isWritable = this.form.controls.access.defaultValue.isWritable;
     this.selected.access.isNotifiable = this.form.controls.access.defaultValue.isNotifiable;
-    this.selected.format = this.form.controls.format.value;
+    this.selected.format = DataFormatFromString(this.form.controls.format.value);
 
     switch (this.form.controls.constraint.value) {
       case ConstraintType.NONE:
@@ -329,7 +350,7 @@ export class CreatePropertyComponent implements OnInit {
     console.log('onFormatChanged');
 
     if (!this.loading()) {
-      this.combinationValue.set(this.form.controls.format.value === DataFormat.COMBINATION);
+      this.combinationValue.set(DataFormatFromString(this.form.controls.format.value) === DataFormat.COMBINATION);
       this.constrainable.set(this.toConstrainable(this.form.controls.format.value));
     }
   }

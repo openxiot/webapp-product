@@ -1,5 +1,5 @@
 import {Component, computed, effect, EventEmitter, input, Output, signal} from '@angular/core';
-import {Action, Event, Property, Service} from '@openxiot/xiot-core-spec-ts';
+import {Action, Event, FormatDefinition, Property, Service} from '@openxiot/xiot-core-spec-ts';
 import {NzTabsModule} from 'ng-zorro-antd/tabs';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzDescriptionsModule} from 'ng-zorro-antd/descriptions';
@@ -49,6 +49,8 @@ export class InstanceServiceComponent {
   version = input(false);
   editable = input(false);
   service = input.required<Service>();
+  formats = input.required<FormatDefinition[]>();
+
   @Output() op = new EventEmitter<InstanceOp>();
 
   /** 原子面板选择：kind=service 显示功能详情，其余按 iid 显示对应编辑页。 */

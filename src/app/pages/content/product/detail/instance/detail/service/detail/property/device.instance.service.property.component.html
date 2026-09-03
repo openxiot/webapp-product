@@ -66,6 +66,7 @@
         <device-instance-service-property-format
           formControlName="format"
           [lifecycle]="subLifecycle()"
+          [formats]="formats()"
           (changed)="onFormatChanged()"
         ></device-instance-service-property-format>
       </nz-form-control>

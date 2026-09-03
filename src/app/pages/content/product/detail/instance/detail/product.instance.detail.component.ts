@@ -2,7 +2,7 @@ import {Component, computed, EventEmitter, input, Output, signal} from '@angular
 import {NzMenuModule} from 'ng-zorro-antd/menu';
 import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzListModule} from 'ng-zorro-antd/list';
-import {DeviceInstance, Service} from '@openxiot/xiot-core-spec-ts';
+import {DeviceInstance, FormatDefinition, Service} from '@openxiot/xiot-core-spec-ts';
 import {InstanceServicesComponent} from './services/instance.services.component';
 import {InstanceServiceComponent} from './service/instance.service.component';
 import {NzCardModule} from 'ng-zorro-antd/card';
@@ -28,6 +28,7 @@ export class ProductInstanceDetailComponent {
   version = input(false);
   editable = input(false);
   instance = input.required<DeviceInstance>();
+  formats = input.required<FormatDefinition[]>();
   @Output() op = new EventEmitter<InstanceOp>();
 
   /** 当前选中的服务 iid；当服务 iid 被改时跟随（见 onOp 特判）。 */

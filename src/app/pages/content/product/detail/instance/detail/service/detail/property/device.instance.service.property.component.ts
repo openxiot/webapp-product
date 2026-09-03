@@ -1,4 +1,4 @@
-import {Component, computed, effect, EventEmitter, input, Output, ViewContainerRef} from '@angular/core';
+import {Component, computed, effect, EventEmitter, input, Output, signal, ViewContainerRef} from '@angular/core';
 import {NzCardModule} from 'ng-zorro-antd/card';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzModalService} from 'ng-zorro-antd/modal';
@@ -15,6 +15,8 @@ import {
   Access,
   ConstraintValue,
   DataFormat,
+  DataFormatFromString,
+  FormatDefinition,
   LifeCycle,
   Property,
   Service,
@@ -102,6 +104,8 @@ export class DeviceInstanceServicePropertyComponent {
   editable = input(false);
   service = input.required<Service>();
   property = input.required<Property>();
+  formats = input.required<FormatDefinition[]>();
+
   @Output() op = new EventEmitter<InstanceOp>();
 
   /** 子 CVA 仍按 lifecycle 门控：可编辑 ⇔ 组织匹配且 DEV，否则喂 RELEASED（只读）。 */
@@ -116,7 +120,7 @@ export class DeviceInstanceServicePropertyComponent {
     iid: FormControl<number>,
     code: FormControl<string>,
     description: FormControl<Map<string, string>>,
-    format: FormControl<DataFormat>,
+    format: FormControl<string>,
     access: FormControl<Access>,
     constraint: FormControl<ConstraintType>,
     range: FormControl<RangeValue>,
@@ -149,7 +153,7 @@ export class DeviceInstanceServicePropertyComponent {
       iid: this.fb.control(0, [Validators.required]),
       code: this.fb.control('', [Validators.required]),
       description: this.fb.control<Map<string, string>>(new Map<string, string>(), [Validators.required]),
-      format: this.fb.control(DataFormat.BOOL, [Validators.required]),
+      format: this.fb.control<string>(DataFormat.BOOL.toString(), [Validators.required]),
       access: this.fb.control(new Access(), [Validators.required]),
       constraint: this.fb.control(ConstraintType.NONE, [Validators.required]),
       range: this.fb.control(new RangeValue()),
@@ -178,7 +182,7 @@ export class DeviceInstanceServicePropertyComponent {
     this.form.controls.iid.setValue(p.iid);
     this.form.controls.code.setValue(p.type.name);
     this.form.controls.description.setValue(p.description);
-    this.form.controls.format.setValue(p.format);
+    this.form.controls.format.setValue(p.format.toString());
     this.form.controls.access.setValue(p.access);
     this.constrainable = this.toConstrainable(p.format);
     this.form.controls.constraint.setValue(this.getConstrainType(p));
@@ -279,7 +283,7 @@ export class DeviceInstanceServicePropertyComponent {
    *  - LIST  → new ValueList()，每行 new ValueDefinition(format, item.value, desc)
    */
   private serializeConstraint(): ConstraintValue | null {
-    const format = this.form.controls.format.value;
+    const format = DataFormatFromString(this.form.controls.format.value);
     switch (this.form.controls.constraint.value) {
       case ConstraintType.RANGE: {
         const range = this.form.controls.range.value ?? new RangeValue();
@@ -390,7 +394,7 @@ export class DeviceInstanceServicePropertyComponent {
   protected onFormatChanged(): void {
     console.log('onFormatChanged');
 
-    const format = this.form.controls.format.value;
+    const format = DataFormatFromString(this.form.controls.format.value);
     this.combinationValue = format === DataFormat.COMBINATION;
     this.constrainable = this.toConstrainable(format);
     // 格式一变，旧 format 的 ValueRange/ValueList 就失效，需按新格式重序列化约束。

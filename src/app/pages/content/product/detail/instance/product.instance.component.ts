@@ -12,7 +12,7 @@ import {NzLayoutModule} from 'ng-zorro-antd/layout';
 import {NzListModule} from 'ng-zorro-antd/list';
 import {
   DeviceInstance,
-  DeviceInstanceCodec,
+  DeviceInstanceCodec, FormatDefinition,
   LifeCycle,
   ProductBasic,
   ProductInstance,
@@ -94,6 +94,9 @@ export class ProductInstanceComponent implements OnChanges {
   loadingTemplate = signal(false);
   loadingDeviceDefinition = signal(false);
 
+  loadingFormats = signal(false);
+  formats = signal<FormatDefinition[]>([]);
+
   constructor(
     private modal: NzModalService,
     private viewContainerRef: ViewContainerRef,
@@ -108,6 +111,21 @@ export class ProductInstanceComponent implements OnChanges {
     if (changes['product']) {
       this.loadInstances(this.product.id);
     }
+  }
+
+  private loadFormats(ns: string): void {
+    this.loadingFormats.set(true);
+    this.service.getFormatDefinitions(ns)
+      .subscribe({
+        next: data => {
+          this.formats.set(data);
+          this.loadingFormats.set(false);
+        },
+        error: error => {
+          this.msg.warning(error);
+          this.loadingFormats.set(false);
+        }
+      })
   }
 
   /**
@@ -158,6 +176,10 @@ export class ProductInstanceComponent implements OnChanges {
         if (this.instances().length > 0) {
           this.currentVersion.set(this.instances()[0].type?.version.toString() || '0');
           this.loadInstance(this.instances()[0].type?.toString() || '');
+          this.loadFormats(this.instances()[0].type?.ns || '');
+        } else {
+          // 无版本：清掉上一产品残留的 formats，避免 create-first 误用过期 ns 的格式集。
+          this.formats.set([]);
         }
       },
       error: error => {
@@ -317,6 +339,8 @@ export class ProductInstanceComponent implements OnChanges {
         this.isChanged.set(true);
         this.instances.update(list => [...list, new ProductInstance(LifeCycle.DEVELOPMENT, this.instance()!.type)]);
         this.firstInstance.set(true);
+        // create-first：实例已存在，按其实例类型 ns 加载属性格式集，避免下拉为空/残留。
+        this.loadFormats(this.instance()!.type?.ns || '');
 
         this.loadingTemplate.set(false);
       },
@@ -337,6 +361,8 @@ export class ProductInstanceComponent implements OnChanges {
         this.isChanged.set(true);
         this.instances.update(list => [...list, new ProductInstance(LifeCycle.DEVELOPMENT, this.instance()!.type)]);
         this.firstInstance.set(true);
+        // create-first：实例已存在，按其实例类型 ns 加载属性格式集，避免下拉为空/残留。
+        this.loadFormats(this.instance()!.type?.ns || '');
 
         this.loadingDeviceDefinition.set(false);
       },
