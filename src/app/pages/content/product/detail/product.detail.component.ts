@@ -19,7 +19,7 @@ import {ObjectWithLifecycle, DeviceInstance, ProductBasic, Urn, UrnType} from '@
 import {MainService} from '../../../../service/main.service';
 import {NzSpaceModule} from 'ng-zorro-antd/space';
 import {NzTagModule} from 'ng-zorro-antd/tag';
-import {ProductPanelComponent} from './panel/product.panel.component';
+import {ProductControllerComponent} from './controller/product.controller.component';
 import {ProductInstanceComponent} from './instance/product.instance.component';
 import {ProductVisibilityComponent} from './visibility/product.visibility.component';
 import {Location} from '@angular/common';
@@ -50,7 +50,7 @@ import {MainI18nService} from '../../../../service/i18n.service';
     ProductManualComponent,
     NzTagModule,
     ProductInstanceComponent,
-    ProductPanelComponent,
+    ProductControllerComponent,
     ProductVisibilityComponent,
     TranslatePipe,
     BreadcrumbTranslateDirective,

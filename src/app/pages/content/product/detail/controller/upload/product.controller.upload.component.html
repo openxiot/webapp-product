@@ -1,0 +1,37 @@
+<nz-row [nzGutter]="[8, 8]">
+  <nz-col [nzSpan]="24">
+    <nz-upload
+      class="icon-uploader"
+      nzType="drag"
+      nzListType="text"
+      [nzCustomRequest]="customUpload"
+      [nzBeforeUpload]="beforeUpload"
+      [nzMultiple]="false"
+      (nzChange)="handleChange($event)"
+      [nzShowUploadList]="false"
+      [nzDisabled]="loading() || disabled()"
+    >
+      @if (!value.url) {
+        <span class="upload-icon" nz-icon [nzType]="loading() ? 'loading' : 'upload'"></span>
+        <div class="ant-upload-text">{{ '上传控制页' | translate }}</div>
+        <div class="ant-upload-hint">{{ '仅支持 html 或 zip，大小不超过1024M' | translate }}</div>
+      } @else {
+        <div class="file-info">
+          <span nz-icon nzType="file-text" class="file-icon"></span>
+          <span class="file-name">{{ value.fileName }}</span>
+          <button class="delete-btn" nz-icon nzType="delete" (click)="handleDelete($event)"></button>
+        </div>
+      }
+    </nz-upload>
+  </nz-col>
+
+  @if (value.url) {
+    <nz-col [nzSpan]="24">
+      <a [href]="value.url" target="_blank">{{ '下载链接' | translate }}</a>
+    </nz-col>
+
+    <nz-col [nzSpan]="24">
+      {{ '控制页大小:' | translate }} {{ value.fileSize }} bytes
+    </nz-col>
+  }
+</nz-row>

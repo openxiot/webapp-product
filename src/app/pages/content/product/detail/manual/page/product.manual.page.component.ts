@@ -110,8 +110,10 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
    * @param downloadUrl 上传成功后的访问地址
    */
   private uploadToServer(item: NzUploadXHRArgs, uploadUrl: string, downloadUrl: string) {
-    // S3 预签名 URL 不需要额外请求头，保持 headers 为空
-    const headers = new HttpHeaders({});
+    const headers = new HttpHeaders({
+      'x-ms-blob-type': 'BlockBlob',
+      'Content-Type': item.file.type || 'application/octet-stream'
+    });
 
     return this.http.put(uploadUrl, item.file, {
       headers,
@@ -144,7 +146,7 @@ export class ProductManualPageComponent implements OnInit, OnDestroy {
 
       case 4: // Response 事件：上传完成（成功收到响应）
               // 验证 S3 成功响应状态码（200 或 204）
-        if (event.status === 200 || event.status === 204) {
+        if (event.status === 200 || event.status === 201 || event.status === 204) {
           this.page.url = downloadUrl;
           item.onSuccess?.(event.body, item.file, event); // 通知组件成功
         } else {

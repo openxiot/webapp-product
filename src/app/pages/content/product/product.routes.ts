@@ -2,7 +2,7 @@ import {Routes} from '@angular/router';
 import {ProductComponent} from './product.component';
 import {ProductDetailComponent} from './detail/product.detail.component';
 import {ProductCreateComponent} from './create/product.create.component';
-import {ProductPanelViewComponent} from './detail/panel/view/product.panel.view.component';
+import {ProductControllerViewComponent} from './detail/controller/view/product.controller.view.component';
 
 export const PRODUCT_ROUTES: Routes = [
   {
@@ -20,8 +20,8 @@ export const PRODUCT_ROUTES: Routes = [
     component: ProductDetailComponent
   },
   {
-    path: 'detail/:productId/panel',
+    path: 'detail/:productId/controller',
     data: { breadcrumb: '控制页' },
-    component: ProductPanelViewComponent
+    component: ProductControllerViewComponent
   },
 ];

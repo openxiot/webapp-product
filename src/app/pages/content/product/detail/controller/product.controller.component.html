@@ -7,13 +7,13 @@
         <div style="color: gray">{{ '产品控制页面' | translate }}</div>
 
         <div style="margin-left: auto;">
-          <button nz-button nzType="primary" (click)="create()">{{ '添加' | translate }}</button>
+          <button nz-button nzType="primary" [nzLoading]="loading()" (click)="onCreate()">{{ '上传控制页' | translate }}</button>
         </div>
       </toolbar>
     </nz-col>
 
     <nz-col [nzSpan]="24">
-      <product-panel-list [product]="product" #productPanel></product-panel-list>
+      <product-controller-list [product]="product" #ProductController></product-controller-list>
     </nz-col>
   </nz-row>
 </nz-spin>

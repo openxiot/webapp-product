@@ -3,26 +3,24 @@
   nzSize="small"
   nzBordered
   #panelTable
-  [nzData]="panels()"
+  [nzData]="controllers()"
 >
   <thead>
     <tr>
       <th>{{ '分类' | translate }}</th>
       <th>{{ '页面类型' | translate }}</th>
       <th>{{ 'Web页面' | translate }}</th>
-      <th>{{ '小程序' | translate }}</th>
       <th>{{ '版本名称' | translate }}</th>
       <th>{{ '版本编码' | translate }}</th>
       <th>{{ '支持的功能版本' | translate }}</th>
       <th>{{ '状态' | translate }}</th>
-      <th>{{ '备注' | translate }}</th>
       <th>{{ '创建者' | translate }}</th>
       <th>{{ '创建时间' | translate }}</th>
       <th>{{ '操作' | translate }}</th>
     </tr>
   </thead>
   <tbody>
-    @for (p of panelTable.data; track p) {
+    @for (p of panelTable.data; track p.instance + p.category + p.version.code) {
       <tr>
         <td>
           @switch (p.category) {
@@ -33,7 +31,7 @@
               {{ '平板版本' | translate }}
             }
             @default {
-              {{ p.type }}
+              {{ p.category }}
             }
           }
         </td>
@@ -45,21 +43,19 @@
             @case ('miniapp') {
               {{ '小程序' | translate }}
             }
+            @default {
+              {{ p.type }}
+            }
           }
         </td>
         <td>
-          @if (p.type === 'web') {
-            <a [href]="p.web?.url" target="_blank">{{ '点击' | translate }}</a>
-          }
-        </td>
-        <td>
-          @if (p.type === 'miniapp') {
-            {{ p.miniapp?.appId }}
+          @if (p.web?.url) {
+            <a [href]="p.web.url" target="_blank">{{ '点击打开' | translate }}</a>
           }
         </td>
         <td>{{ p.version.name }}</td>
         <td>{{ p.version.code }}</td>
-        <td>{{ '版本' | translate }} {{ p.instance.version}}</td>
+        <td>{{ '版本' | translate }} {{ p.instance.version }}</td>
         <td>
           @switch (p.lifecycle) {
             @case (LifeCycle.DEVELOPMENT) {
@@ -73,33 +69,26 @@
             }
           }
         </td>
-        <td>
-          @switch (p.status) {
-            @case ('generating') {
-              <nz-tag nzColor="green">{{ 'AI正在生成' | translate }}</nz-tag>
-            }
-            @case ('generating-failed') {
-              <nz-tag nzColor="red">{{ 'AI生成失败' | translate }}</nz-tag>
-            }
-            @case ('completed') {
-              <nz-tag nzColor="blue">{{ 'AI生成完成' | translate }}</nz-tag>
-            }
-          }
-        </td>
         <td>{{ p.creator?.name }}</td>
-        <td>{{ p.creator?.timestamp  | date:'yyyy-MM-dd HH:mm:ss' }}<td>
+        <td>{{ p.creator?.timestamp | date:'yyyy-MM-dd HH:mm:ss' }}</td>
+        <td>
           @switch (p.lifecycle) {
             @case (LifeCycle.DEVELOPMENT) {
-
-
+              <a (click)="onView(p)">{{ '查看' | translate }}</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a (click)="onEdit(p)">{{ '编辑' | translate }}</a>
+              <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onPreview(p)">{{ '上线' | translate }}</a>
               <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onDelete(p)">{{ '删除' | translate }}</a>
             }
             @case (LifeCycle.PREVIEW) {
-
-
+              <a (click)="onView(p)">{{ '查看' | translate }}</a>
+              <nz-divider nzType="vertical"></nz-divider>
               <a (click)="onCancelPreview(p)">{{ '取消上线' | translate }}</a>
+            }
+            @case (LifeCycle.RELEASED) {
+              <a (click)="onView(p)">{{ '查看' | translate }}</a>
             }
           }
         </td>

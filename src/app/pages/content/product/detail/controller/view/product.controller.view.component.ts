@@ -17,10 +17,10 @@ import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {ControlPageComponent} from '../../../../../../components/control-page/control-page.component';
 
 @Component({
-  selector: 'product-panel-view',
+  selector: 'product-controller-view',
   standalone: true,
-  templateUrl: './product.panel.view.component.html',
-  styleUrl: './product.panel.view.component.less',
+  templateUrl: './product.controller.view.component.html',
+  styleUrl: './product.controller.view.component.less',
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -38,7 +38,7 @@ import {ControlPageComponent} from '../../../../../../components/control-page/co
     ControlPageComponent,
   ],
 })
-export class ProductPanelViewComponent {
+export class ProductControllerViewComponent {
 
   constructor(
     private route: ActivatedRoute,

@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
-import {lastValueFrom, map, Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {OxResponse} from "./response/OxResponse";
 import {
   DeviceInstance,
@@ -19,8 +19,8 @@ import {
   ProductInstanceCodec,
   ProductManual,
   ProductManualCodec,
-  ProductPanel,
-  ProductPanelCodec,
+  ProductController,
+  ProductControllerCodec,
   ProductWizard,
   ProductWizardCodec,
   Oauth2Configuration,
@@ -687,68 +687,72 @@ export class MainService {
   /**
    * 创建产品控制页
    */
-  createProductPanel(productId: string, panel: ProductPanel): Observable<void> {
-    const body = {
-      productId: productId,
-      panel: ProductPanelCodec.encode(panel)
-    };
-
+  createProductController(controller: ProductController): Observable<void> {
     return this.http
-      .post<OxResponse>(`${this.server}/v1/product/panel/one`, body)
+      .post<OxResponse>(`${this.server}/v1/product/controller/one`, ProductControllerCodec.encode(controller))
+      .pipe(map(() => undefined));
+  }
+
+  /**
+   * 修改产品控制页
+   */
+  updateProductController(controller: ProductController): Observable<void> {
+    return this.http
+      .put<OxResponse>(`${this.server}/v1/product/controller/one`, ProductControllerCodec.encode(controller))
       .pipe(map(() => undefined));
   }
 
   /**
    * 删除产品控制页
    */
-  deleteProductPanel(productId: string, category: string, versionCode: number): Observable<void> {
+  deleteProductController(instance: string, category: string, versionCode: number): Observable<void> {
     const params = {
-      productId: productId,
+      instance: instance,
       category: category,
       versionCode: versionCode
     }
     return this.http
-      .delete<OxResponse>(`${this.server}/v1/product/panel/one/`, {params})
+      .delete<OxResponse>(`${this.server}/v1/product/controller/one`, {params})
       .pipe(map(() => undefined));
   }
 
   /**
-   * 读取产品控制页
+   * 读取产品控制页列表（按产品）
    */
-  getProductPanels(productId: string): Observable<ProductPanel[]> {
+  getProductControllers(productId: string): Observable<ProductController[]> {
     const params = {
       productId: productId,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v1/product/panel/all`, {params})
-      .pipe(map(response => ProductPanelCodec.decodeArray(response.data.panels)));
+      .get<OxResponse>(`${this.server}/v1/product/controller/many`, {params})
+      .pipe(map(response => ProductControllerCodec.decodeArray(response.data)));
   }
 
   /**
-   * 读取产品控制页(指定设备功能版本)
+   * 读取产品控制页列表（按设备功能版本）
    */
-  getProductPanelsByInstanceVersion(type: string): Observable<ProductPanel[]> {
+  getProductControllersByInstance(instance: string): Observable<ProductController[]> {
     const params = {
-      type: type,
+      instance: instance,
     }
     return this.http
-      .get<OxResponse>(`${this.server}/v1/product/panel/all`, {params})
-      .pipe(map(response => ProductPanelCodec.decodeArray(response.data.panels)));
+      .get<OxResponse>(`${this.server}/v1/product/controller/many`, {params})
+      .pipe(map(response => ProductControllerCodec.decodeArray(response.data)));
   }
 
   /**
    * 申请上线（开发者），取消上线申请（开发者）， 批准上线（管理员，或QA）
    */
-  setProductPanelLifecycle(productId: string, category: string, versionCode: number, lifecycle: LifeCycle): Observable<void> {
+  setProductControllerLifecycle(instance: string, category: string, versionCode: number, lifecycle: LifeCycle): Observable<void> {
     const body = {
-      productId: productId,
+      instance: instance,
       category: category,
       version: {
         code: versionCode
       }
     }
     return this.http
-      .put<OxResponse>(`${this.server}/v1/product/panel/lifecycle/${lifecycle.toString()}`, body)
+      .put<OxResponse>(`${this.server}/v1/product/controller/one/lifecycle/${lifecycle.toString()}`, body)
       .pipe(map(() => undefined));
   }
 
@@ -961,133 +965,5 @@ export class MainService {
     return this.http
       .delete<OxResponse>(`${this.storage}/storage/upload/url`, {params})
       .pipe(map(() => undefined));
-  }
-
-  /**------------------------------------------------------------------------------------------------
-   * 借助AI生成设备控制界面
-   *------------------------------------------------------------------------------------------------*/
-
-  /**
-   * 设计文档
-   */
-  private getDesignDoc(): Promise<string> {
-    return lastValueFrom(this.http.get('/DESIGN.md', {responseType: 'text'}));
-  }
-
-  /**
-   * 设备文档
-   */
-  private getDeviceDoc(): Promise<string> {
-    return lastValueFrom(this.http.get('/DEVICE.md', {responseType: 'text'}));
-  }
-
-  /**
-   * 提示文档
-   */
-  private getPromptDoc(): Promise<string> {
-    return lastValueFrom(this.http.get('/prompt/deepseek.md', {responseType: 'text'}));
-  }
-
-  /**
-   * 设备实例定义
-   * @param type
-   */
-  private getDeviceInstance(type: string): Promise<string> {
-    const params = {
-      type: type,
-    };
-
-    return lastValueFrom(
-      this.http
-        .get<OxResponse>(`${this.server}/v1/product/instance/one`, {params})
-        .pipe(map(response => response.data.definition))
-    );
-  }
-
-  async createDeviceUI(productId: string, type: string): Promise<any> {
-    const design = await this.getDesignDoc();
-    const device = await this.getDeviceDoc();
-    const prompt = await this.getPromptDoc();
-    const instance = await this.getDeviceInstance(type);
-    const body = {
-      productId: productId,
-      panel: {
-        category: 'mobile',
-        type: 'web',
-        version: {name: 'xxx'},
-        instance: type
-      },
-      prompt: {
-        model: 'Chatrhino-750B',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: device
-              },
-              {
-                type: 'text',
-                text: JSON.stringify(instance)
-              },
-              {
-                type: 'text',
-                text: design
-              },
-              {
-                type: 'text',
-                text: prompt
-              },
-            ]
-          }
-        ],
-        stream: false,
-        chat_template_kwargs: {
-          enable_thinking: true
-        }
-      }
-    };
-
-    console.log('body: ', JSON.stringify(body));
-
-    // const deepseek = {
-    //   model: 'deepseek-chat',
-    //   messages: [
-    //     {
-    //       role: 'user',
-    //       content: [
-    //         {
-    //           type: 'text',
-    //           text: device
-    //         },
-    //         {
-    //           type: 'text',
-    //           text: JSON.stringify(instance)
-    //         },
-    //         {
-    //           type: 'text',
-    //           text: design
-    //         },
-    //         {
-    //           type: 'text',
-    //           text: prompt
-    //         },
-    //       ]
-    //     }
-    //   ],
-    //   stream: false,
-    //   thinking: {
-    //     type: 'enabled'
-    //   }
-    // };
-    //
-    // console.log('body for deepseek: ', JSON.stringify(deepseek));
-
-    return lastValueFrom(
-      this.http
-        .post<OxResponse>(`${this.server}/v1/product/panel/one/ai`, body)
-        .pipe(map(response => response.data))
-    );
   }
 }

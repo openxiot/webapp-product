@@ -1,0 +1,46 @@
+<form nz-form [formGroup]="form">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8">{{ '支持的功能版本' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input [value]="data.instance.toString()" disabled/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired nzFor="category">{{ '分类' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <nz-radio-group formControlName="category">
+        <label nz-radio nzValue="mobile">{{ '移动版本' | translate }}</label>
+        <label nz-radio nzValue="tablet">{{ '平板版本' | translate }}</label>
+      </nz-radio-group>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired nzFor="type">{{ '页面类型' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input formControlName="type"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired nzFor="versionName">{{ '版本名称' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="14" nzErrorTip="{{ '请输入版本名称' | translate }}">
+      <input nz-input formControlName="versionName" placeholder="{{ '请输入版本名称' | translate }}"/>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8">{{ '版本号' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <nz-input-number formControlName="versionCode" style="width: 100%"></nz-input-number>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="8" nzRequired nzFor="web">{{ '控制页文件' | translate }}</nz-form-label>
+    <nz-form-control [nzSpan]="14" nzErrorTip="{{ '请上传 html 或 zip 控制页文件' | translate }}">
+      <product-controller-upload formControlName="web"></product-controller-upload>
+    </nz-form-control>
+  </nz-form-item>
+</form>

@@ -6,8 +6,8 @@
       <nz-tabs [(nzSelectedIndex)]="tabIndex" nzSize="small">
         <nz-tab [nzTitle]="'基本信息' | translate"></nz-tab>
         <nz-tab [nzTitle]="'功能' | translate"></nz-tab>
+        <nz-tab [nzTitle]="'控制页' | translate"></nz-tab>
 <!--        <nz-tab [nzTitle]="'配网引导' | translate"></nz-tab>-->
-<!--        <nz-tab [nzTitle]="'控制页' | translate"></nz-tab>-->
 <!--        @if (product().upgrade.length > 0) {-->
 <!--          <nz-tab [nzTitle]="'固件' | translate"></nz-tab>-->
 <!--        }-->
@@ -24,7 +24,6 @@
     {{ '型号:' | translate }} {{ product().model }}
   </ng-template>
 
-<!--  <div style="padding: 20px 20px; margin-top: 110px;">-->
   <div style="padding: 20px 20px;">
     @switch (tabIndex) {
       @case (0) {
@@ -34,10 +33,10 @@
         <product-instance [product]="product()"></product-instance>
       }
       @case (2) {
-        <product-wizard [product]="product()"></product-wizard>
+        <product-controller [product]="product()"></product-controller>
       }
       @case (3) {
-        <product-panel [product]="product()"></product-panel>
+        <product-wizard [product]="product()"></product-wizard>
       }
       @case (4) {
         @if (product().upgrade.length > 0) {
